@@ -144,3 +144,10 @@ Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralm
 - Dimensione sprite definitiva (16x16 vs 32x32): da decidere dopo un primo test visivo in arena con la UI reale.
 - Persistenza meta-progressione: `ConfigFile`/risorse `.tres` locali sono sufficienti per l'MVP; un salvataggio cloud non è nello scope iniziale.
 - Durata target di una run (utile per bilanciare drop rate e timer di estrazione): da definire con il primo playtest.
+
+## 12. Processo e versionamento
+
+- Repo git locale inizializzato (nessun remote ancora collegato).
+- Task tracking: GitHub Issues + Projects, da attivare quando viene collegato un remote GitHub. Fino ad allora nessun sistema di task parallelo.
+- Vedi `docs/BEST_PRACTICES.md` per convenzioni di codice, architettura e testing (GdUnit4). Vedi `docs/CHANGELOG.md` per lo storico modifiche.
+- **Regola fissa**: ogni modifica a feature/grafica/scope/genere/gameplay loop va riportata in questo documento (sezione pertinente) e come voce in `docs/CHANGELOG.md`, nello stesso commit della modifica.
