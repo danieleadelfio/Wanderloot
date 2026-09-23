@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
+
+[sub_resource type="Resource" id="mod_1"]
+script = ExtResource("2")
+stat = 4
+amount = 2.0
+is_multiplier = false
+
+[resource]
+script = ExtResource("1")
+id = &"core_amulet"
+display_name = "Amuleto del nucleo"
+description = "+2 HP massimi"
+slot = 1
+modifiers = Array[ExtResource("2")]([SubResource("mod_1")])

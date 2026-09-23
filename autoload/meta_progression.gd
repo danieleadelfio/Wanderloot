@@ -1,6 +1,6 @@
 extends Node
-## Progressione permanente (meta): inventario materiali persistito in user:// (ConfigFile).
-## Unico punto di scrittura dall'esterno: deposit_run_loot(), chiamato solo dopo un'estrazione riuscita.
+## Progressione permanente (meta): materiali ed equipaggiamento, persistiti in user:// (ConfigFile).
+## Il loot entra solo da deposit_run_loot(), chiamato solo dopo un'estrazione riuscita.
 
 signal changed
 
@@ -10,6 +10,9 @@ const SECTION_META: String = "meta"
 const SECTION_MATERIALS: String = "materials"
 
 var inventory: MetaInventory = MetaInventory.new()
+var loadout: EquipmentLoadout = EquipmentLoadout.new()
+## Risolve gli id di equipaggiamento in Resource. Sovrascrivibile nei test.
+var catalog: EquipmentCatalog = preload("res://data/equipment/equipment_catalog.tres")
 ## Sovrascrivibile nei test per non toccare il salvataggio reale.
 var save_path: String = SAVE_PATH
 
@@ -24,6 +27,26 @@ func deposit_run_loot(loot: Dictionary[StringName, int]) -> void:
 	inventory.deposit(loot)
 	save_to_disk()
 	changed.emit()
+
+
+func equip(item: EquipmentData) -> void:
+	if loadout.equip(item):
+		changed.emit()
+
+
+func unequip(slot: EquipmentData.Slot) -> void:
+	loadout.unequip(slot)
+	changed.emit()
+
+
+## Pezzi equipaggiati, risolti dal catalogo: e' cio' che la run applica alle stats iniziali.
+func equipped_items() -> Array[EquipmentData]:
+	var items: Array[EquipmentData] = []
+	for id in loadout.equipped_ids().values():
+		var item := catalog.find(id)
+		if item != null:
+			items.append(item)
+	return items
 
 
 func save_to_disk() -> Error:

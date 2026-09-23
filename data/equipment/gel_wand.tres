@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
+
+[sub_resource type="Resource" id="mod_1"]
+script = ExtResource("2")
+stat = 0
+amount = 1.0
+is_multiplier = false
+
+[resource]
+script = ExtResource("1")
+id = &"gel_wand"
+display_name = "Bacchetta di gelatina"
+description = "+1 danno per proiettile"
+slot = 0
+modifiers = Array[ExtResource("2")]([SubResource("mod_1")])

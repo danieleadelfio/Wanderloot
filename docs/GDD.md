@@ -66,6 +66,8 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - **Stato M2 (drop)**: alla morte di un nemico `Arena` tira la sua drop table e aggiunge direttamente all'inventario di run (nessun pickup fisico da raccogliere: pickup/magnete valutabili in M4). HUD: "Loot a rischio: N" in ambra.
 - Crafting MVP: sistema semplice "materiali → oggetto", con ricette fisse (niente crafting proceduralmente generato in v1).
 - Equipaggiamento MVP: slot minimi (arma, 1 accessorio) per non esplodere lo scope.
+- **Stato M3 (#12, dati)**: `EquipmentData` (id, nome, descrizione, slot `WEAPON`/`ACCESSORY`, lista di `StatModifier`) in `data/equipment/`, tutti elencati in `EquipmentCatalog` (risolve gli id salvati). `StatModifier` riusa l'enum di `UpgradeData.Stat` (danno, cadenza, velocità proiettili, movimento, HP max). Pezzi iniziali: Bacchetta di gelatina (+1 danno), Bacchetta rapida (+25% cadenza), Amuleto del nucleo (+2 HP), Stivali viscosi (+10% movimento). **Decisione**: lo slot arma modifica la bacchetta base, non la sostituisce (nuovi tipi di arma: v2). L'equipaggiamento grezzo droppato in run resta fuori dall'MVP: i pezzi si ottengono solo col crafting.
+- `EquipmentLoadout` (logica pura, in `MetaProgression.loadout`): pezzi posseduti per id, un pezzo equipaggiato per slot; si può equipaggiare solo ciò che si possiede.
 
 ## 7. Hub centrale (scope MVP)
 
@@ -139,7 +141,7 @@ res://
 res://
   autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni, loot di run
   autoload/meta_progression.gd       # MetaProgression: inventario permanente + salvataggio su disco
-  scripts/meta/                      # meta_inventory (logica pura dell'inventario permanente)
+  scripts/meta/                      # meta_inventory, equipment_loadout (logica pura dello stato permanente)
   scripts/core/scene_routes.gd       # percorsi delle scene principali (Hub, Arena)
   scenes/hub/Hub/                    # Hub.tscn + hub.gd (scena principale, composition root dell'hub)
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
@@ -155,8 +157,8 @@ res://
   scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
-  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry
-  data/{weapons,enemies,player,waves,run,upgrades,materials}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry, stat_modifier, equipment_data, equipment_catalog
+  data/{weapons,enemies,player,waves,run,upgrades,materials,equipment}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core, equipment_catalog + pezzi
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
