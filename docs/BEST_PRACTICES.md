@@ -46,7 +46,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
   - Il proprietario tiene il riferimento al `.tres` base e ricrea le copie a ogni inizio run (`Player.begin_run()`); tutti i modificatori (equip, upgrade) passano da un'unica funzione pura (`StatApplier`), mai `match` sulle stat duplicati in più punti.
 - **Pausa**: si usa `get_tree().paused`; la UI che deve funzionare in pausa ha `process_mode = ALWAYS`. La pausa segue lo stato della run: `RunManager` cambia solo stato (nessun accesso alla scena, così resta testabile come logica pura) e la composition root applica `paused` reagendo a `state_changed`.
 
-- **Persistenza**: solo `MetaProgression` legge/scrive su disco, in `user://` con `ConfigFile` e chiave `version` per future migrazioni. Mai caricare `.tres`/`.res` da `user://` (possono contenere script eseguibili). Logica di inventario in classi pure (`MetaInventory`) separate dall'I/O, così si testano senza file.
+- **Persistenza**: solo `MetaProgression` legge/scrive su disco, in `user://` con `ConfigFile` e chiave `version` per future migrazioni. Ogni cambio di formato alza `SAVE_VERSION`, resta compatibile con le versioni precedenti (sezioni mancanti = default) e ha un test che carica un file della versione vecchia. Sul disco si salvano id, mai Resource: al caricamento si risolvono via catalogo (`EquipmentCatalog`) e gli id sconosciuti si scartano. Mai caricare `.tres`/`.res` da `user://` (possono contenere script eseguibili). Logica di inventario in classi pure (`MetaInventory`) separate dall'I/O, così si testano senza file.
 
 ## 3.1 Componenti di combattimento
 
@@ -79,6 +79,8 @@ Framework scelto: **GdUnit4** (attivamente mantenuto, nativo per Godot 4, scene 
 - Logica da testare = classi pure o autoload senza accesso alla scena (`RunManager`, `MetaInventory`, `LootTransfer`…): si istanziano direttamente nel test con `auto_free(preload(...).new())`. Dipendenze esterne (salvataggio, depositi) si iniettano (`Callable`, `save_path` di test), mai usare il file di salvataggio reale.
 - Esecuzione: dal pannello GdUnit4 dell'editor, oppure da terminale nella root del progetto:
   `addons/gdUnit4/runtest.sh --godot_binary "/Applications/Godot.app/Contents/MacOS/Godot" -a res://tests`
+- Headless (CI/VM senza display, dove `runtest.sh` si ferma): `godot --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://tests`. Adatto alla logica pura; i test con input/UI vanno lanciati con display.
+- Scene semplici (es. `Player`) si testano istanziandole con `add_child(auto_free(scene.instantiate()))`, senza scene runner, quando basta verificarne lo stato.
 - Regola: una feature che tocca loot/estrazione/progressione non si committa con test rossi.
 
 ## 5. Versionamento e workflow

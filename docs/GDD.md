@@ -4,7 +4,7 @@ Nome del gioco: **Wanderloot** ("wanderlust" + "loot"). Nome di lavoro precedent
 
 Ultimo aggiornamento: 2026-09-23
 Engine: Godot 4.6
-Stato: M3 (hub minimo) in corso
+Stato: M3 (hub minimo) completato — prossimo M4
 
 ## 1. Pitch
 
@@ -33,6 +33,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 ### 3.2 Progressione esterna alla run (permanente, meta)
 - Alimentata **solo** dal loot estratto con successo.
 - **Stato M2**: autoload `MetaProgression` con `MetaInventory` (id materiale → quantità, logica pura). Salvato in `user://meta_progression.cfg` (`ConfigFile`, con numero di versione) a ogni deposito, caricato all'avvio. Unico punto di scrittura esterno: `deposit_run_loot()`.
+- **Stato M3 (#15)**: salvataggio versione 2 = materiali + equipaggiamento (`[equipment] owned`, `[equipped] weapon/accessory`), scritto a ogni deposito, craft, equip e unequip. Un salvataggio v1 si carica con loadout vuoto. Al caricamento gli id assenti dal catalogo e i pezzi equipaggiati ma non posseduti (o nello slot sbagliato) vengono scartati. Il loot entra ancora solo da `deposit_run_loot()`; i materiali escono solo da `craft()`.
 - Due filoni:
   - **Materiali da crafting** (comuni/rari) → usati per craftare o potenziare equipaggiamento nell'hub.
   - **Equipaggiamento grezzo/non identificato** → utilizzabile solo dopo l'estrazione; una volta in hub può essere equipaggiato o smontato in materiali.
@@ -183,7 +184,7 @@ Note tecniche:
 **M0 — Skeleton tecnico** ✅ (2026-09-23): player che si muove e spara in un'arena vuota, un nemico che insegue, proiettili con pool, HUD minimale (HP/exp). Dettagli in §5 e §9.1.
 **M1 — Run loop completo** ✅ (2026-09-23): level-up con scelta di 3 upgrade, spawn di nemici a ondate, punto di estrazione funzionante, morte = reset run.
 **M2 — Loot ed extraction** ✅ (2026-09-23): inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
-**M3 — Hub minimo**: scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.
+**M3 — Hub minimo** ✅ (2026-09-23): scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.
 **M4 — Rifinitura MVP**: combat feel (knockback, hitstop), bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.

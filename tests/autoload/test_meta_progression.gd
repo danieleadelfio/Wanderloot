@@ -28,3 +28,59 @@ func test_deposit_is_saved_and_reloaded() -> void:
 	assert_int(reloaded.load_from_disk()).is_equal(OK)
 	assert_int(reloaded.inventory.amount_of(&"gel")).is_equal(4)
 	assert_int(reloaded.inventory.amount_of(&"core")).is_equal(1)
+
+
+func test_craft_and_equip_are_saved_and_reloaded() -> void:
+	_meta.deposit_run_loot({&"slime_gel": 10} as Dictionary[StringName, int])
+	var recipe: RecipeData = load("res://data/recipes/gel_wand.tres")
+	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
+	_meta.equip(recipe.result)
+
+	var reloaded := _reload()
+
+	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(4)
+	assert_bool(reloaded.loadout.owns(&"gel_wand")).is_true()
+	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_equal("gel_wand")
+	assert_array(reloaded.equipped_items()).contains([recipe.result])
+
+
+func test_unequip_is_saved() -> void:
+	_meta.loadout.add_owned(&"core_amulet")
+	_meta.equip(load("res://data/equipment/core_amulet.tres"))
+	_meta.unequip(EquipmentData.Slot.ACCESSORY)
+
+	assert_array(_reload().equipped_items()).is_empty()
+
+
+func test_v1_save_loads_materials_with_empty_loadout() -> void:
+	var config := ConfigFile.new()
+	config.set_value("meta", "version", 1)
+	config.set_value("materials", "slime_gel", 7)
+	config.save(TEST_PATH)
+
+	var reloaded := _reload()
+
+	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(7)
+	assert_array(reloaded.loadout.owned_ids()).is_empty()
+
+
+func test_unknown_or_not_owned_equipment_is_discarded_on_load() -> void:
+	var config := ConfigFile.new()
+	config.set_value("meta", "version", 2)
+	config.set_value("equipment", "owned", PackedStringArray(["gel_wand", "removed_item"]))
+	config.set_value("equipped", "weapon", "gel_wand")
+	config.set_value("equipped", "accessory", "core_amulet")
+	config.save(TEST_PATH)
+
+	var reloaded := _reload()
+
+	assert_array(reloaded.loadout.owned_ids()).contains_exactly([&"gel_wand"])
+	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.ACCESSORY))).is_empty()
+	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_equal("gel_wand")
+
+
+func _reload() -> Node:
+	var reloaded: Node = auto_free(preload("res://autoload/meta_progression.gd").new())
+	reloaded.save_path = TEST_PATH
+	reloaded.load_from_disk()
+	return reloaded
