@@ -26,4 +26,7 @@ max_hp = 3
 move_speed = 110.0
 contact_damage = 1
 exp_reward = 1
+contact_knockback = 380.0
+knockback_resistance = 0.0
+hit_freeze = 0.05
 drops = Array[ExtResource("2")]([SubResource("drop_gel"), SubResource("drop_core")])

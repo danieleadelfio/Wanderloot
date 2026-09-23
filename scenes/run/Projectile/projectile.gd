@@ -30,6 +30,8 @@ func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 	_velocity = direction * weapon.projectile_speed
 	_time_left = weapon.projectile_lifetime
 	_hitbox.damage = weapon.damage
+	_hitbox.knockback = weapon.knockback
+	_hitbox.knockback_direction = direction
 	_active = true
 	_set_enabled(true)
 

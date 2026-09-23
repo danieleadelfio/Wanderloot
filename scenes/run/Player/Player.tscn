@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/combat/weapon.gd" id="5"]
 [ext_resource type="Resource" path="res://data/weapons/starter_wand.tres" id="6"]
 [ext_resource type="Script" path="res://scripts/combat/hit_flash.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/combat/knockback.gd" id="k1"]
+[ext_resource type="Script" path="res://scripts/combat/blink.gd" id="k2"]
 
 [sub_resource type="CircleShape2D" id="body_shape"]
 radius = 12.0
@@ -52,4 +54,14 @@ data = ExtResource("6")
 script = ExtResource("7")
 target = NodePath("../Body")
 
+[node name="Knockback" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("k1")
+decay = 14.0
+
+[node name="Blink" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("k2")
+target = NodePath("../Body")
+
 [connection signal="hurt" from="Hurtbox" to="HitFlash" method="flash"]
+[connection signal="invulnerable_changed" from="Hurtbox" to="Blink" method="set_active"]

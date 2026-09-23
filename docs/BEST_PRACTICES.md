@@ -51,6 +51,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 ## 3.1 Componenti di combattimento
 
 - `Health` (HP + segnali `changed`/`damaged`/`died`, nessuna logica di morte), `Hitbox` (infligge danno), `Hurtbox` (riceve danno, inoltra a `Health`, i-frames opzionali), `HitFlash`, `Weapon` (cooldown + segnale `fired`, non istanzia proiettili).
+- `Knockback` (spinta, il corpo chiama `step()` e somma `velocity`), `HitStop` (unico punto che tocca `Engine.time_scale`, ripristino garantito in `_exit_tree`), `Blink` (i-frames visibili). Segnali `Hurtbox.knocked(impulse)` e `invulnerable_changed(active)`.
 - Rilevazione unidirezionale: l'`Hurtbox` è `monitoring` (mask sul layer di attacco avversario), l'`Hitbox` è solo `monitorable`. Nessun doppio conteggio.
 - Riferimenti tra componenti della stessa scena: `@export` con NodePath impostato nella scena, o `%UniqueName`.
 - **Composition root**: la scena di livello (es. `Arena`) collega i segnali tra entità, pool, HUD e autoload. Le entità non si conoscono tra loro.

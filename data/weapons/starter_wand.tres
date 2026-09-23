@@ -9,3 +9,4 @@ damage = 1
 fire_rate = 4.0
 projectile_speed = 650.0
 projectile_lifetime = 1.0
+knockback = 320.0

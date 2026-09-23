@@ -3,6 +3,8 @@ extends Area2D
 ## Rileva Hitbox e inoltra il danno a un Health. I-frames opzionali (invulnerability_time > 0).
 
 signal hurt(amount: int)
+signal knocked(impulse: Vector2)
+signal invulnerable_changed(active: bool)
 
 @export var health: Health
 @export var invulnerability_time: float = 0.0
@@ -29,13 +31,20 @@ func _try_hit(area: Area2D) -> void:
 	health.take_damage(hitbox.damage)
 	hitbox.notify_hit(self)
 	hurt.emit(hitbox.damage)
+	if hitbox.knockback > 0.0:
+		var direction := hitbox.knockback_direction
+		if direction == Vector2.ZERO:
+			direction = hitbox.global_position.direction_to(global_position)
+		knocked.emit(direction.normalized() * hitbox.knockback)
 	if invulnerability_time > 0.0:
 		_invulnerable = true
+		invulnerable_changed.emit(true)
 		_iframe_timer.start(invulnerability_time)
 
 
 func _on_iframe_timeout() -> void:
 	_invulnerable = false
+	invulnerable_changed.emit(false)
 	# Contatto continuo: area_entered non riscatta se l'Hitbox e' ancora sovrapposta.
 	for area in get_overlapping_areas():
 		_try_hit(area)

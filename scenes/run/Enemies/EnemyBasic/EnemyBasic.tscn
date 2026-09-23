@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hurtbox.gd" id="4"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox.gd" id="5"]
 [ext_resource type="Script" path="res://scripts/combat/hit_flash.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/combat/knockback.gd" id="k1"]
 
 [sub_resource type="CircleShape2D" id="body_shape"]
 radius = 11.0
@@ -56,5 +57,10 @@ shape = SubResource("box_shape")
 [node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("6")
 target = NodePath("../Body")
+
+[node name="Knockback" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("k1")
+decay = 8.0
 
 [connection signal="hurt" from="Hurtbox" to="HitFlash" method="flash"]

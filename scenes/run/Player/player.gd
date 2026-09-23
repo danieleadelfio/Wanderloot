@@ -16,6 +16,7 @@ var _base_weapon: WeaponData
 @onready var health: Health = %Health
 @onready var _hurtbox: Hurtbox = %Hurtbox
 @onready var _weapon: Weapon = %Weapon
+@onready var _knockback: Knockback = %Knockback
 
 
 func _ready() -> void:
@@ -23,6 +24,7 @@ func _ready() -> void:
 	_base_weapon = _weapon.data
 	_weapon.fired.connect(shot_requested.emit)
 	health.died.connect(died.emit)
+	_hurtbox.knocked.connect(_knockback.apply)
 	begin_run([])
 
 
@@ -33,12 +35,14 @@ func begin_run(equipment: Array[EquipmentData]) -> void:
 	_weapon.data = _base_weapon.duplicate()
 	StatApplier.apply_equipment(equipment, stats, _weapon.data)
 	health.reset(stats.max_hp)
+	_knockback.reset()
 	_hurtbox.invulnerability_time = stats.invulnerability_time
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	var move_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	velocity = move_dir * stats.move_speed
+	_knockback.step(delta)
+	velocity = move_dir * stats.move_speed + _knockback.velocity
 	move_and_slide()
 	var aim := _get_aim_direction()
 	if aim != Vector2.ZERO:

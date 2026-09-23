@@ -19,6 +19,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _extraction_point: ExtractionPoint = %ExtractionPoint
 @onready var _extraction_timer: Timer = %ExtractionTimer
 @onready var _run_end_screen: RunEndScreen = %RunEndScreen
+@onready var _hit_stop: HitStop = %HitStop
 
 
 func _ready() -> void:
@@ -32,6 +33,7 @@ func _ready() -> void:
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
 	_player.died.connect(_on_player_died)
+	_player.health.damaged.connect(_hit_stop.trigger)
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
 	_player.begin_run(MetaProgression.equipped_items())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)

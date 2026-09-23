@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/run/ExtractionPoint/ExtractionPoint.tscn" id="13"]
 [ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="14"]
 [ext_resource type="PackedScene" path="res://scenes/ui/RunEndScreen/RunEndScreen.tscn" id="15"]
+[ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="16"]
 
 [sub_resource type="RectangleShape2D" id="wall_h"]
 size = Vector2(1680, 40)
@@ -86,6 +87,11 @@ limit_top = -500
 limit_right = 800
 limit_bottom = 500
 position_smoothing_enabled = true
+
+[node name="HitStop" type="Node" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("16")
 
 [node name="HUD" parent="." instance=ExtResource("6")]
 unique_name_in_owner = true

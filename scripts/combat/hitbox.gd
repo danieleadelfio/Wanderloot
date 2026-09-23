@@ -5,6 +5,10 @@ extends Area2D
 signal hit(hurtbox: Hurtbox)
 
 @export var damage: int = 1
+## Intensita' della spinta (px/s) applicata all'Hurtbox colpita. 0 = nessuna.
+@export var knockback: float = 0.0
+## Direzione della spinta; se zero si spinge via dal centro della Hitbox (es. contatto nemico).
+var knockback_direction: Vector2 = Vector2.ZERO
 
 ## Se false l'Hurtbox la ignora (es. proiettile gia' consumato nello stesso frame).
 var active: bool = true

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Combat feel: knockback data-driven (`Knockback`), freeze locale sui nemici colpiti, hitstop globale solo sul danno al player (`HitStop`), lampeggio durante gli i-frames (`Blink`) (#16).
 - Persistenza dell'equipaggiamento (salvataggio v2, compatibile con v1, id sconosciuti scartati) e 17 nuovi test GdUnit4 (38 totali): crafting, loadout, spesa materiali, `StatApplier`, `Player.begin_run`, persistenza equip e migrazione v1 (#15). M3 completato.
 - Equipaggiamento applicato alle stats di inizio run (`Player.begin_run()`, `StatApplier` condiviso con gli upgrade) e pannello Equipaggiamento nell'hub (#14).
 - Fabbro nell'hub: ricette fisse (`RecipeData`, `MaterialCost`, `RecipeBook`), regole in `Crafting`, `MetaProgression.craft()` scala i materiali e salva; `MetaInventory.can_afford/spend` (#13).
