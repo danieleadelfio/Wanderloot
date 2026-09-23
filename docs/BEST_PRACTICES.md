@@ -8,7 +8,8 @@ Linee guida vincolanti per lo sviluppo di questo progetto. Aggiornare questo fil
 res://
   scenes/<dominio>/<NomeScena>/   # una cartella per scena complessa, script+scena+asset locali insieme
   scripts/<dominio>/              # script condivisi/non legati a una scena singola
-  data/                            # Resource custom (.tres) per armi, nemici, upgrade, ricette — mai hardcoded in script
+  scripts/data/                   # classi Resource (class_name WeaponData, EnemyData, ...)
+  data/                            # istanze Resource (.tres) per armi, nemici, upgrade, ricette — mai hardcoded in script
   assets/{sprites,tiles,audio}/
   autoload/                       # singleton globali (vedi §3)
   tests/                          # test GdUnit4, rispecchia la struttura di scripts/
@@ -27,6 +28,8 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - Tipizzazione statica sempre: `var hp: int = 10`, `func take_damage(amount: int) -> void:`. Previene una classe intera di bug a runtime ed è richiesta in questo progetto, non opzionale.
 - Ordine dentro un file: `@tool`, `class_name`, `extends`, docstring, `signal`, `enum`, `const`, `@export var`, altre `var` pubbliche, `var _private` (prefisso `_`), `@onready var`, `_init`/metodi virtuali (`_ready`, `_process`...), metodi pubblici, metodi privati.
 - Un solo `class_name` pubblico per file quando serve essere referenziato altrove; altrimenti nodo/scena senza `class_name` se uso puramente locale.
+- Gli script autoload non hanno `class_name` (conflitto col nome del singleton).
+- Evitare nomi che oscurano funzioni built-in (es. `exp` → usare `experience`).
 
 ## 3. Architettura: pattern obbligatori
 
@@ -36,6 +39,27 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - **Dati fuori dal codice**: armi, nemici, upgrade, ricette come `Resource` custom (`.tres`), mai liste hardcoded in GDScript. Bilanciare il gioco deve significare modificare dati, non ricompilare logica.
 - **Unique nodes (`%NodeName`)** invece di `get_node("../../UI/Label")`: i percorsi lunghi si rompono al primo refactor.
 - **Object pooling** per proiettili e nemici comuni (arena a ondate): niente `instantiate()`/`queue_free()` ad ogni colpo.
+  - API standard di un oggetto poolable: `activate(...)` / `deactivate()`, mai `queue_free()`. Il ritorno al pool avviene via segnale (`expired(obj)`), non con riferimento diretto al pool.
+  - In activate/deactivate: `visible`, `set_physics_process` e toggle di `monitoring`/`monitorable`/`disabled` sempre con `set_deferred` (si è spesso dentro un callback fisico).
+
+## 3.1 Componenti di combattimento
+
+- `Health` (HP + segnali `changed`/`damaged`/`died`, nessuna logica di morte), `Hitbox` (infligge danno), `Hurtbox` (riceve danno, inoltra a `Health`, i-frames opzionali), `HitFlash`, `Weapon` (cooldown + segnale `fired`, non istanzia proiettili).
+- Rilevazione unidirezionale: l'`Hurtbox` è `monitoring` (mask sul layer di attacco avversario), l'`Hitbox` è solo `monitorable`. Nessun doppio conteggio.
+- Riferimenti tra componenti della stessa scena: `@export` con NodePath impostato nella scena, o `%UniqueName`.
+- **Composition root**: la scena di livello (es. `Arena`) collega i segnali tra entità, pool, HUD e autoload. Le entità non si conoscono tra loro.
+
+## 3.2 Collision layers (vincolanti)
+
+| Layer | Nome | Chi ci sta |
+|---|---|---|
+| 1 | world | muri/ostacoli |
+| 2 | player | corpo player |
+| 3 | enemy | corpi nemici |
+| 4 | player_attack | Hitbox dei proiettili del player |
+| 5 | enemy_attack | Hitbox nemiche (contatto/proiettili) |
+
+Hurtbox: `collision_layer = 0`, mask sul layer di attacco avversario. Nuovi layer vanno aggiunti qui e nei Project Settings.
 
 ## 4. Testing
 

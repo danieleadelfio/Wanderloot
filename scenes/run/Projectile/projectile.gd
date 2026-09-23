@@ -1,0 +1,58 @@
+class_name Projectile
+extends Node2D
+## Proiettile poolable: activate()/deactivate(), mai queue_free. Emette expired al ritorno nel pool.
+
+signal expired(projectile: Projectile)
+
+var _velocity: Vector2 = Vector2.ZERO
+var _time_left: float = 0.0
+var _active: bool = false
+
+@onready var _hitbox: Hitbox = %Hitbox
+
+
+func _ready() -> void:
+	_hitbox.hit.connect(_on_hit)
+	_hitbox.body_entered.connect(_on_body_entered)
+	_set_enabled(false)
+
+
+func _physics_process(delta: float) -> void:
+	global_position += _velocity * delta
+	_time_left -= delta
+	if _time_left <= 0.0:
+		deactivate()
+
+
+func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
+	global_position = origin
+	rotation = direction.angle()
+	_velocity = direction * weapon.projectile_speed
+	_time_left = weapon.projectile_lifetime
+	_hitbox.damage = weapon.damage
+	_active = true
+	_set_enabled(true)
+
+
+func deactivate() -> void:
+	if not _active:
+		return
+	_active = false
+	_set_enabled(false)
+	expired.emit(self)
+
+
+func _set_enabled(enabled: bool) -> void:
+	visible = enabled
+	set_physics_process(enabled)
+	_hitbox.active = enabled
+	_hitbox.set_deferred("monitoring", enabled)
+	_hitbox.set_deferred("monitorable", enabled)
+
+
+func _on_hit(_hurtbox: Hurtbox) -> void:
+	deactivate()
+
+
+func _on_body_entered(_body: Node2D) -> void:
+	deactivate()

@@ -1,8 +1,8 @@
 # FirstAiGame — Game Design Document (MVP)
 
-Ultimo aggiornamento: 2026-09-22
+Ultimo aggiornamento: 2026-09-23
 Engine: Godot 4.6
-Stato: MVP scope — prima versione giocabile
+Stato: M0 (skeleton tecnico) completato — prossimo M1
 
 ## 1. Pitch
 
@@ -49,6 +49,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - I proiettili sono sprite semplici (piccoli cerchi/frecce), riutilizzabili via object pooling per performance.
 - Nemici: pattern semplici (inseguimento diretto, mantenimento distanza + attacco ranged, pattern a pattuglia). Nessuna animazione complessa richiesta: 1-2 frame di movimento + 1 di attacco/morte sono sufficienti in stile pixel art.
 - Combat feel gestito via codice: knockback, hit-flash, hitstop leggero, i-frames sul player — nessun bisogno di asset aggiuntivi per "sentire" l'impatto.
+- **Stato M0**: movimento 8 direzioni (WASD/frecce/stick sinistro), mira col mouse tenendo premuto il tasto sinistro oppure stick destro con auto-fire, fire-rate da `WeaponData`. Implementati hit-flash (nemici e player) e i-frames del player (0.8s, danno da contatto ripetuto finché si resta a contatto). Knockback e hitstop rinviati a M1/M4.
 
 ## 6. Loot e crafting (scope MVP)
 
@@ -75,7 +76,7 @@ Fuori scope MVP ma parte della visione a lungo termine (da aggiungere per fasi s
 
 ## 9. Struttura tecnica (Godot 4.6)
 
-Struttura scene proposta (indicativa, da rifinire in fase di implementazione):
+Struttura scene target (indicativa; lo stato reale è in §9.1):
 
 ```
 res://
@@ -122,6 +123,29 @@ res://
     audio/
 ```
 
+### 9.1 Struttura attuale (M0)
+
+```
+res://
+  autoload/run_manager.gd            # RunManager: exp della run (reset a ogni run)
+  scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
+  scenes/run/Player/                 # Player.tscn + player.gd
+  scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
+  scenes/run/Enemies/EnemyBasic/     # EnemyBasic.tscn (inseguimento diretto)
+  scenes/run/Projectile/             # Projectile.tscn + projectile.gd (poolable)
+  scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP + EXP)
+  scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats
+  data/{weapons,enemies,player}/     # .tres: starter_wand, enemy_basic, player_default
+```
+
+- Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
+- Autoload attivi: solo `RunManager`. `MetaProgression` verrà aggiunto con M2/M3 (primo momento in cui esiste stato persistente).
+- Nemico: API già poolable (`activate`/`deactivate`), in M0 una sola istanza che rinasce 1.5s dopo la morte in un punto casuale lontano dal player. Pool nemici + ondate in M1.
+- Morte player: placeholder M0 = ricarica scena (`RunManager.reset()` in `Arena._ready`). Il flusso completo è M1.
+- Collision layers (nomi in Project Settings): 1 `world`, 2 `player`, 3 `enemy`, 4 `player_attack`, 5 `enemy_attack`.
+- Input map: `move_*` (WASD, frecce, stick sinistro), `aim_*` (stick destro), `shoot` (mouse sinistro).
+
 Note tecniche:
 - Autoload consigliati: `RunManager` (stato run corrente, azzerato ad ogni run) e `MetaProgression` (persistito su disco, es. tramite `ConfigFile` o risorse `.tres`/JSON in `user://`).
 - Separare nettamente lo stato "run" da quello "meta" fin dall'inizio: è la base tecnica di tutta la meccanica extraction/estrazione (vedi §4). Il `RunManager` non deve mai scrivere direttamente su `MetaProgression`: lo fa solo l'evento "estrazione riuscita".
@@ -130,7 +154,7 @@ Note tecniche:
 
 ## 10. Roadmap per milestone
 
-**M0 — Skeleton tecnico**: player che si muove e spara in un'arena vuota, un nemico che insegue, proiettili con pool, HUD minimale (HP/exp).
+**M0 — Skeleton tecnico** ✅ (2026-09-23): player che si muove e spara in un'arena vuota, un nemico che insegue, proiettili con pool, HUD minimale (HP/exp). Dettagli in §5 e §9.1.
 **M1 — Run loop completo**: level-up con scelta di 3 upgrade, spawn di nemici a ondate, punto di estrazione funzionante, morte = reset run.
 **M2 — Loot ed extraction**: inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
 **M3 — Hub minimo**: scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.

@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/run/Player/player.gd" id="1"]
+[ext_resource type="Resource" path="res://data/player/player_default.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/combat/health.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/combat/weapon.gd" id="5"]
+[ext_resource type="Resource" path="res://data/weapons/starter_wand.tres" id="6"]
+[ext_resource type="Script" path="res://scripts/combat/hit_flash.gd" id="7"]
+
+[sub_resource type="CircleShape2D" id="body_shape"]
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id="hurt_shape"]
+radius = 10.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1")
+stats = ExtResource("2")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.35, 0.65, 1, 1)
+polygon = PackedVector2Array(12.00, 0.00, 8.49, 8.49, 0.00, 12.00, -8.49, 8.49, -12.00, 0.00, -8.49, -8.49, -0.00, -12.00, 8.49, -8.49)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("body_shape")
+
+[node name="Health" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3")
+
+[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 16
+monitorable = false
+script = ExtResource("4")
+health = NodePath("../Health")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("hurt_shape")
+
+[node name="Weapon" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5")
+data = ExtResource("6")
+
+[node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("7")
+target = NodePath("../Body")
+
+[connection signal="hurt" from="Hurtbox" to="HitFlash" method="flash"]
