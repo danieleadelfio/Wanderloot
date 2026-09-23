@@ -26,6 +26,26 @@ func to_dictionary() -> Dictionary[StringName, int]:
 	return _amounts.duplicate()
 
 
+func can_afford(costs: Dictionary[StringName, int]) -> bool:
+	for id in costs:
+		if amount_of(id) < costs[id]:
+			return false
+	return true
+
+
+## Scala i costi solo se tutti coperti; altrimenti non tocca nulla. I materiali a zero vengono rimossi.
+func spend(costs: Dictionary[StringName, int]) -> bool:
+	if not can_afford(costs):
+		return false
+	for id in costs:
+		if costs[id] <= 0:
+			continue
+		_amounts[id] -= costs[id]
+		if _amounts[id] <= 0:
+			_amounts.erase(id)
+	return true
+
+
 func load_dictionary(amounts: Dictionary[StringName, int]) -> void:
 	_amounts.clear()
 	deposit(amounts)

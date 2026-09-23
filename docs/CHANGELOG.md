@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Fabbro nell'hub: ricette fisse (`RecipeData`, `MaterialCost`, `RecipeBook`), regole in `Crafting`, `MetaProgression.craft()` scala i materiali e salva; `MetaInventory.can_afford/spend` (#13).
 - Modello dati dell'equipaggiamento: `EquipmentData` (slot arma/accessorio), `StatModifier`, `EquipmentCatalog` con 4 pezzi; `EquipmentLoadout` in `MetaProgression` (posseduti/equipaggiati) (#12).
 - Scena Hub come scena principale: baule con i materiali permanenti e partenza della run; a fine run si torna all'hub (#11).
 - Trasferimento del loot su estrazione riuscita e perdita su morte (`LootTransfer`), riepilogo loot nella schermata di fine run (#10).

@@ -29,6 +29,15 @@ func deposit_run_loot(loot: Dictionary[StringName, int]) -> void:
 	changed.emit()
 
 
+## Unico punto di crafting: regole in Crafting (logica pura), qui solo salvataggio e notifica.
+func craft(recipe: RecipeData) -> Crafting.Result:
+	var result := Crafting.craft(recipe, inventory, loadout)
+	if result == Crafting.Result.OK:
+		save_to_disk()
+		changed.emit()
+	return result
+
+
 func equip(item: EquipmentData) -> void:
 	if loadout.equip(item):
 		changed.emit()

@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/Blacksmith/blacksmith.gd" id="1"]
+[ext_resource type="Resource" path="res://data/recipes/recipe_book.tres" id="2"]
+
+[node name="Blacksmith" type="PanelContainer"]
+size_flags_horizontal = 3
+script = ExtResource("1")
+recipe_book = ExtResource("2")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Fabbro"
+
+[node name="RecipeList" type="VBoxContainer" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2

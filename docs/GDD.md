@@ -73,6 +73,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 
 Per l'MVP, hub ridotto a:
 - **1 NPC "Fabbro/Blacksmith"**: crafting base e potenziamento equipaggiamento con i materiali estratti.
+  - **Stato M3 (#13)**: pannello "Fabbro" nell'hub con le ricette fisse di `data/recipes/recipe_book.tres` (`RecipeData`: risultato + righe `MaterialCost`). Costi iniziali: Bacchetta di gelatina 6 Gelatina, Stivali viscosi 8 Gelatina, Bacchetta rapida 10 Gelatina + 1 Nucleo, Amuleto del nucleo 4 Gelatina + 2 Nuclei. Bottone disabilitato se mancano materiali o il pezzo è già posseduto. **Decisione**: ogni pezzo si crafta una sola volta (niente duplicati né potenziamento nell'MVP: potenziamento/smontaggio in v2). Regole in `Crafting` (logica pura); `MetaProgression.craft()` è l'unico punto che scala i materiali e salva.
 - **1 baule/inventario permanente**: dove finisce il loot dopo un'estrazione riuscita.
 - **1 portale/punto di partenza run**.
 - **Stato M3 (#11)**: l'hub è una schermata UI (`scenes/hub/Hub/`), non ancora un ambiente esplorabile: pannello "Baule" con i materiali permanenti e bottone "Parti per la run". È la scena principale del gioco. A fine run (morte o estrazione) "Torna all'hub" sostituisce "Nuova run". **Decisione**: hub esplorabile con NPC fisici rinviato (M4 o v2), per l'MVP conta il ciclo hub→run→hub. Cambi scena via `change_scene_to_file` con percorsi in `SceneRoutes` (nessun autoload aggiuntivo).
@@ -141,9 +142,10 @@ res://
 res://
   autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni, loot di run
   autoload/meta_progression.gd       # MetaProgression: inventario permanente + salvataggio su disco
-  scripts/meta/                      # meta_inventory, equipment_loadout (logica pura dello stato permanente)
+  scripts/meta/                      # meta_inventory, equipment_loadout, crafting (logica pura dello stato permanente)
   scripts/core/scene_routes.gd       # percorsi delle scene principali (Hub, Arena)
   scenes/hub/Hub/                    # Hub.tscn + hub.gd (scena principale, composition root dell'hub)
+  scenes/hub/Blacksmith/             # pannello fabbro (ricette, richiesta craft via segnale)
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
   scenes/run/Player/                 # Player.tscn + player.gd
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
@@ -157,8 +159,8 @@ res://
   scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
-  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry, stat_modifier, equipment_data, equipment_catalog
-  data/{weapons,enemies,player,waves,run,upgrades,materials,equipment}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core, equipment_catalog + pezzi
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry, stat_modifier, equipment_data, equipment_catalog, material_cost, recipe_data, recipe_book
+  data/{weapons,enemies,player,waves,run,upgrades,materials,equipment,recipes}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core, equipment_catalog + pezzi, recipe_book + ricette
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
