@@ -1,4 +1,6 @@
-# FirstAiGame — Game Design Document (MVP)
+# Wanderloot — Game Design Document (MVP)
+
+Nome del gioco: **Wanderloot** ("wanderlust" + "loot"). Nome di lavoro precedente: FirstAiGame.
 
 Ultimo aggiornamento: 2026-09-23
 Engine: Godot 4.6
@@ -49,7 +51,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - I proiettili sono sprite semplici (piccoli cerchi/frecce), riutilizzabili via object pooling per performance.
 - Nemici: pattern semplici (inseguimento diretto, mantenimento distanza + attacco ranged, pattern a pattuglia). Nessuna animazione complessa richiesta: 1-2 frame di movimento + 1 di attacco/morte sono sufficienti in stile pixel art.
 - Combat feel gestito via codice: knockback, hit-flash, hitstop leggero, i-frames sul player — nessun bisogno di asset aggiuntivi per "sentire" l'impatto.
-- **Stato M0**: movimento 8 direzioni (WASD/frecce/stick sinistro), mira col mouse tenendo premuto il tasto sinistro oppure stick destro con auto-fire, fire-rate da `WeaponData`. Implementati hit-flash (nemici e player) e i-frames del player (0.8s, danno da contatto ripetuto finché si resta a contatto). Knockback e hitstop rinviati a M1/M4.
+- **Stato M0**: movimento 8 direzioni (WASD/frecce/stick sinistro), mira col mouse tenendo premuto il tasto sinistro oppure stick destro con auto-fire, fire-rate da `WeaponData`. Implementati hit-flash (nemici e player) e i-frames del player (0.8s, danno da contatto ripetuto finché si resta a contatto). Knockback e hitstop rinviati a M4 (rifinitura).
 
 ## 6. Loot e crafting (scope MVP)
 
@@ -158,7 +160,7 @@ Note tecniche:
 **M1 — Run loop completo**: level-up con scelta di 3 upgrade, spawn di nemici a ondate, punto di estrazione funzionante, morte = reset run.
 **M2 — Loot ed extraction**: inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
 **M3 — Hub minimo**: scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.
-**M4 — Rifinitura MVP**: bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.
+**M4 — Rifinitura MVP**: combat feel (knockback, hitstop), bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.
 
@@ -171,7 +173,7 @@ Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralm
 
 ## 12. Processo e versionamento
 
-- Repo git locale inizializzato (nessun remote ancora collegato).
-- Task tracking: GitHub Issues + Projects, da attivare quando viene collegato un remote GitHub. Fino ad allora nessun sistema di task parallelo.
+- Repo GitHub: `danieleadelfio/Wanderloot` (remote `origin`, branch `main`).
+- Task tracking: GitHub Issues + Projects, attivo. Una milestone per ogni M del §10; nessun sistema di task parallelo.
 - Vedi `docs/BEST_PRACTICES.md` per convenzioni di codice, architettura e testing (GdUnit4). Vedi `docs/CHANGELOG.md` per lo storico modifiche.
 - **Regola fissa**: ogni modifica a feature/grafica/scope/genere/gameplay loop va riportata in questo documento (sezione pertinente) e come voce in `docs/CHANGELOG.md`, nello stesso commit della modifica.

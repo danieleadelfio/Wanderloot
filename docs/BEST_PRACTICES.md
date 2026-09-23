@@ -1,4 +1,4 @@
-# Best Practices — FirstAiGame (Godot 4.6)
+# Best Practices — Wanderloot (Godot 4.6)
 
 Linee guida vincolanti per lo sviluppo di questo progetto. Aggiornare questo file solo se si trova un metodo oggettivamente migliore (più semplice, non duplicato, più mantenibile), non per preferenza estetica.
 
@@ -75,7 +75,8 @@ Framework scelto: **GdUnit4** (attivamente mantenuto, nativo per Godot 4, scene 
 
 - Repo git locale (inizializzato). Un commit per unità di lavoro coerente, messaggio in stile convenzionale (`feat:`, `fix:`, `chore:`, `docs:`, `test:`).
 - Ogni commit che cambia feature/scope/gameplay: aggiornare `docs/GDD.md` (sezione toccata) e aggiungere voce in `docs/CHANGELOG.md` nello stesso commit — non a posteriori.
-- Task tracking: GitHub Issues + Projects una volta collegato il remote (nessun sistema duplicato nel frattempo — vedi `docs/GDD.md` §11 per lo stato del remote).
+- Task tracking: GitHub Issues + Projects su `danieleadelfio/Wanderloot`, una milestone per ogni M del GDD. Nessun sistema duplicato.
+- Referenziare la issue nel messaggio di commit (`feat: enemy pool (#1)`, `Closes #1` per chiuderla col push).
 
 ## 6. Regola generale
 

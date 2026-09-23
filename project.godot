@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="FirstAiGame"
+config/name="Wanderloot"
 run/main_scene="res://scenes/run/Arena/Arena.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
