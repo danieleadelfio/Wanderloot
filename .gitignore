@@ -16,3 +16,6 @@ mono_crash.*.json
 
 # Claude desktop app
 Claude outputs/
+
+# GdUnit4 test reports
+reports/

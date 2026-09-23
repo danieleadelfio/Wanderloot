@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 RunManager="*res://autoload/run_manager.gd"
 MetaProgression="*res://autoload/meta_progression.gd"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
 [input]
 
 move_left={
