@@ -89,6 +89,7 @@ Framework scelto: **GdUnit4** (attivamente mantenuto, nativo per Godot 4, scene 
 - Headless (CI/VM senza display, dove `runtest.sh` si ferma): `godot --headless --path . -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://tests`. Adatto alla logica pura; i test con input/UI vanno lanciati con display.
 - Scene semplici (es. `Player`) si testano istanziandole con `add_child(auto_free(scene.instantiate()))`, senza scene runner, quando basta verificarne lo stato.
 - Regola: una feature che tocca loot/estrazione/progressione non si committa con test rossi.
+- Bilanciamento: prima e dopo una modifica ai `.tres` di ondate/drop/estrazione si lancia `tools/autoplay.gd` (stesse N run) e si annotano i numeri in GDD §10.1. Il bot confronta configurazioni, non sostituisce il playtest umano.
 
 ## 5. Versionamento e workflow
 

@@ -8,14 +8,14 @@
 [sub_resource type="Resource" id="drop_gel"]
 script = ExtResource("2")
 material = ExtResource("3")
-chance = 0.35
+chance = 0.2
 min_amount = 1
-max_amount = 2
+max_amount = 1
 
 [sub_resource type="Resource" id="drop_core"]
 script = ExtResource("2")
 material = ExtResource("4")
-chance = 0.03
+chance = 0.015
 min_amount = 1
 max_amount = 1
 

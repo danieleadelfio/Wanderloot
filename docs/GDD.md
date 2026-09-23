@@ -165,6 +165,8 @@ res://
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool, knockback, hit_stop, blink, frame_cycler
   assets/sprites/                    # PNG 16x16 (player, slime, proiettile, tile, icone)
   tools/sprites.py                   # generatore degli sprite (Python + Pillow)
+  tools/autoplay.gd                  # bot di playtest per il bilanciamento (metriche su N run)
+  tools/bot_driver.gd                # guida del bot (kiting, mira, estrazione), condivisa dagli strumenti
   assets/audio/                      # WAV di SFX e musiche (generati da tools/audio.py)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
   data/audio/sound_bank.tres         # id suono -> stream + volume
@@ -198,12 +200,31 @@ Note tecniche:
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.
 
+### 10.1 Bilanciamento M4 (#17)
+
+Metodo: bot di playtest `tools/autoplay.gd` (kiting dai nemici vicini, mira automatica sul più vicino, va all'estrazione appena appare, upgrade casuale al level-up), 20–30 run per configurazione a velocità massima (`--fixed-fps`). Il bot mira meglio di un umano e schiva peggio: i numeri servono a confrontare configurazioni, non come verità assoluta.
+
+| Configurazione | Estrazioni | Durata media | Uccisioni | Gelatina / run | Nuclei / run |
+|---|---|---|---|---|---|
+| Valori M3 (zona a 60s) | 70% | 74s | 88 | 46,6 | 2,3 |
+| Zona a 120s, ondate M3 | 0% | 96s | 188 | — | — |
+| **Finale** senza equip | 63% | 129s | 182 | 34,5 | 3,5 |
+| Finale, Bacchetta di gelatina + Amuleto | 90% | 132s | 200 | — | — |
+| Finale, Bacchetta rapida + Stivali | 80% | 134s | 200 | — | — |
+
+Problemi trovati e scelte:
+- Con la zona a 60s la run era troppo corta e l'economia regalava tutto: una sola estrazione bastava per craftare tutti e 4 i pezzi. Zona portata a **120s**, canale **6s**.
+- Con la zona a 120s e le ondate di M3 il bot moriva sempre prima di 130s: intervallo tra batch che si riduce più lentamente (`interval_decay` 0.015 → **0.008**), batch che cresce ogni **40s** (era 25s), tetto iniziale **45** nemici vivi (era 60).
+- **Bug di design trovato dal bot**: con un tetto fisso di nemici la pressione si fermava attorno ai 3 minuti e una run è durata 45 minuti, cioè farming infinito senza rischio. Ora il tetto cresce di **+5 ogni 30s** (`WaveData.max_alive_at`, coperto da test).
+- Economia: Gelatina **20% ×1** (era 35% ×1–2), Nucleo **1,5%** (era 3%). Costi: Bacchetta di gelatina 25 Gelatina, Stivali 30, Amuleto 20 + 3 Nuclei, Bacchetta rapida 40 + 4 Nuclei. Obiettivo: primo pezzo dopo la prima estrazione riuscita, tutti e 4 dopo circa 4–5 estrazioni (6–8 run).
+- L'equipaggiamento pesa: con 2 pezzi le estrazioni salgono dal 63% all'80–90%.
+
 ## 11. Open questions
 
 - Godot version confermata: 4.6 (da project.godot). Se si prevede export mobile o console, valutare per tempo eventuali limitazioni.
 - ~~Dimensione sprite definitiva~~ → decisa in M4: **16x16**, disegnati a scala 2 (32px a schermo), filtro nearest. Arena 1600x1000 con UI reale: a 32x32 i personaggi sarebbero stati troppo grandi rispetto al campo visivo e alla densità di nemici.
 - ~~Persistenza meta-progressione~~ → decisa in M2: `ConfigFile` in `user://` (leggibile, versionato; niente `.tres` caricati da `user://`, che possono eseguire script). Cloud save fuori scope.
-- Durata target di una run (utile per bilanciare drop rate e timer di estrazione): da definire con il primo playtest.
+- ~~Durata target di una run~~ → M4: **~2–2,5 minuti** fino alla prima estrazione possibile (zona a 120s + 6s di canale); chi resta oltre rischia di più (tetto nemici crescente). Da confermare con playtest umano.
 
 ## 12. Processo e versionamento
 

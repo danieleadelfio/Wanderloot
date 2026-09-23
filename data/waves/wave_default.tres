@@ -6,7 +6,9 @@
 script = ExtResource("1")
 start_interval = 2.0
 min_interval = 0.5
-interval_decay = 0.015
+interval_decay = 0.008
 start_batch = 1
-batch_growth_period = 25.0
-max_alive = 60
+batch_growth_period = 40.0
+max_alive = 45
+max_alive_growth_period = 30.0
+max_alive_growth = 5

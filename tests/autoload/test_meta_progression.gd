@@ -31,14 +31,14 @@ func test_deposit_is_saved_and_reloaded() -> void:
 
 
 func test_craft_and_equip_are_saved_and_reloaded() -> void:
-	_meta.deposit_run_loot({&"slime_gel": 10} as Dictionary[StringName, int])
+	_meta.deposit_run_loot({&"slime_gel": 30} as Dictionary[StringName, int])
 	var recipe: RecipeData = load("res://data/recipes/gel_wand.tres")
 	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
 	_meta.equip(recipe.result)
 
 	var reloaded := _reload()
 
-	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(4)
+	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(30 - recipe.cost_dictionary()[&"slime_gel"])
 	assert_bool(reloaded.loadout.owns(&"gel_wand")).is_true()
 	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_equal("gel_wand")
 	assert_array(reloaded.equipped_items()).contains([recipe.result])

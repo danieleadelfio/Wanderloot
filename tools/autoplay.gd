@@ -1,0 +1,77 @@
+extends SceneTree
+## Bot di playtest: gioca N run nell'Arena (kiting + mira automatica + va all'estrazione) e stampa metriche.
+## Uso (dalla root del progetto): godot --headless --fixed-fps 60 --path . -s tools/autoplay.gd -- <runs> [equip_ids...]
+## --fixed-fps fa girare la simulazione alla massima velocita' con delta fisso. Il salvataggio usato e' user://bot.cfg.
+## Non e' un test: serve a confrontare i .tres di bilanciamento a parita' di giocatore.
+var runs := 10
+var equip: Array = []
+var done := 0
+var results: Array = []
+var rng := RandomNumberGenerator.new()
+var arena: Node = null
+var ended := false
+var damage_taken := 0
+var last_gel := 0
+var last_core := 0
+
+func _initialize() -> void:
+	var args := OS.get_cmdline_user_args()
+	if args.size() > 0: runs = int(args[0])
+	for i in range(1, args.size()): equip.append(StringName(args[i]))
+	rng.seed = 42
+	_start()
+
+func _start() -> void:
+	ended = false
+	damage_taken = 0
+	arena = null
+	change_scene_to_file("res://scenes/run/Arena/Arena.tscn")
+
+func _physics_process(_d: float) -> bool:
+	var a = current_scene
+	if a == null or a.name != "Arena": return false
+	if arena != a:
+		arena = a
+		var m = root.get_node("MetaProgression")
+		m.save_path = "user://bot.cfg"
+		for id in equip:
+			m.loadout.add_owned(id)
+			m.loadout.equip(m.catalog.find(id))
+		a.get_node("%Player").begin_run(m.equipped_items())
+		a.get_node("%Player").health.damaged.connect(func(n): damage_taken += n)
+		root.get_node("RunManager").run_ended.connect(_on_end, CONNECT_ONE_SHOT)
+	if ended: return false
+	var rm = root.get_node("RunManager")
+	last_gel = rm.loot.amount_of(&"slime_gel")
+	last_core = rm.loot.amount_of(&"slime_core")
+	if rm.elapsed > 600: rm.end_run(0); return false
+	if rm.state == 2:  # LEVEL_UP
+		var lvl = a.get_node("%LevelUpChoice")
+		var picks = a.upgrade_table.pick(1, rng)
+		lvl._on_choice_pressed(picks[0])
+		return false
+	BotDriver.drive(a)
+	return false
+
+func _on_end(result) -> void:
+	ended = true
+	var rm = root.get_node("RunManager")
+	var gel = last_gel
+	var core = last_core
+	results.append({"r": "EXT" if result == 1 else "DIE", "t": rm.elapsed, "lv": rm.level, "k": rm.kills, "gel": gel, "core": core, "dmg": damage_taken})
+	done += 1
+	if done >= runs:
+		_report()
+		quit()
+	else:
+		_start.call_deferred()
+
+func _report() -> void:
+	var ext := 0; var t := 0.0; var k := 0; var gel := 0; var core := 0; var lv := 0; var tdie := []
+	for r in results:
+		if r.r == "EXT": ext += 1
+		else: tdie.append(snappedf(r.t, 1))
+		t += r.t; k += r.k; gel += r.gel; core += r.core; lv += r.lv
+	var n := float(results.size())
+	print("per-run: ", results.map(func(r): return "%s%d/%dk" % [r.r[0], int(r.t), r.k]))
+	print("RUNS=%d extract=%d%% avg_t=%.0fs avg_lv=%.1f avg_kills=%.0f gel/run=%.1f core/run=%.2f death_times=%s" % [n, ext * 100 / n, t / n, lv / n, k / n, gel / n, core / n, tdie])

@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-appear_after = 60.0
-channel_time = 5.0
+appear_after = 120.0
+channel_time = 6.0
 decay_rate = 0.5
 spawn_min_distance = 400.0

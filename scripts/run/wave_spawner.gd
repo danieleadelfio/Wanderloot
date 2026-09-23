@@ -22,7 +22,7 @@ func _physics_process(delta: float) -> void:
 	if _cooldown > 0.0:
 		return
 	_cooldown = wave_data.interval_at(_elapsed)
-	var free_slots := wave_data.max_alive - enemy_pool.active_count()
+	var free_slots := wave_data.max_alive_at(_elapsed) - enemy_pool.active_count()
 	for i in mini(wave_data.batch_at(_elapsed), free_slots):
 		var spawn_position := SpawnUtils.random_point_away(spawn_rect, _target.global_position, spawn_min_distance)
 		enemy_pool.spawn(spawn_position, _target)

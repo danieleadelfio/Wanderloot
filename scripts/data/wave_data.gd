@@ -13,6 +13,10 @@ extends Resource
 @export var batch_growth_period: float = 25.0
 ## Tetto di nemici vivi contemporaneamente.
 @export var max_alive: int = 60
+## Ogni N secondi il tetto di nemici vivi cresce di max_alive_growth: la pressione non si ferma
+## mai, restare in arena oltre l'estrazione non diventa farming senza rischio. 0 = tetto fisso.
+@export var max_alive_growth_period: float = 30.0
+@export var max_alive_growth: int = 5
 
 
 func interval_at(elapsed: float) -> float:
@@ -21,3 +25,9 @@ func interval_at(elapsed: float) -> float:
 
 func batch_at(elapsed: float) -> int:
 	return start_batch + int(elapsed / batch_growth_period)
+
+
+func max_alive_at(elapsed: float) -> int:
+	if max_alive_growth_period <= 0.0:
+		return max_alive
+	return max_alive + int(elapsed / max_alive_growth_period) * max_alive_growth

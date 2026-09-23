@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Bilanciamento guidato dal bot di playtest `tools/autoplay.gd`: zona di estrazione a 120s (canale 6s), ondate più graduali, tetto di nemici che cresce nel tempo (`WaveData.max_alive_at`, niente farming infinito), drop e costi delle ricette ricalibrati; tabella dei risultati in GDD §10.1 (#17).
 - Audio minimo: SFX chiptune e due musiche in loop generati da `tools/audio.py`, `SoundBank`/`SfxPlayer`/`MusicPlayer`, bus Music/SFX, suoni collegati via segnali in Arena e Hub (#19).
 - Asset pixel art 16x16 (scala 2, filtro nearest): player, slime e proiettile sprite al posto dei `Polygon2D`, pavimento e muri a tile, icone di materiali ed equipaggiamento nell'hub; generatore `tools/sprites.py`. Decisa la open question 16x16 vs 32x32 (#18).
 - Combat feel: knockback data-driven (`Knockback`), freeze locale sui nemici colpiti, hitstop globale solo sul danno al player (`HitStop`), lampeggio durante gli i-frames (`Blink`) (#16).
