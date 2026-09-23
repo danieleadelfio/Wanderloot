@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/floor.png" id="17"]
 [ext_resource type="Texture2D" path="res://assets/sprites/wall.png" id="18"]
 [ext_resource type="Script" path="res://scripts/audio/sfx_player.gd" id="19"]
+[ext_resource type="Script" path="res://scenes/ui/ExtractionIndicator/extraction_indicator.gd" id="23"]
 [ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="20"]
 [ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="21"]
 [ext_resource type="AudioStream" path="res://assets/audio/music_arena.wav" id="22"]
@@ -139,6 +140,20 @@ script = ExtResource("21")
 unique_name_in_owner = true
 process_mode = 3
 script = ExtResource("16")
+
+[node name="IndicatorLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="ExtractionIndicator" type="Control" parent="IndicatorLayer"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("23")
 
 [node name="HUD" parent="." instance=ExtResource("6")]
 unique_name_in_owner = true

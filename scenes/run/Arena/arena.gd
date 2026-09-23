@@ -21,6 +21,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _run_end_screen: RunEndScreen = %RunEndScreen
 @onready var _hit_stop: HitStop = %HitStop
 @onready var _sfx: SfxPlayer = %Sfx
+@onready var _extraction_indicator: ExtractionIndicator = %ExtractionIndicator
 
 
 func _ready() -> void:
@@ -44,6 +45,7 @@ func _ready() -> void:
 	_enemy_pool.enemy_hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
 	_wave_spawner.start(_player)
 	_extraction_point.data = extraction_data
+	_extraction_indicator.target = _extraction_point
 	_extraction_point.progress_changed.connect(_hud.set_extraction_progress)
 	_extraction_point.extracted.connect(_on_extracted)
 	_extraction_timer.timeout.connect(_open_extraction)

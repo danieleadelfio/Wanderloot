@@ -40,6 +40,9 @@ func _refresh() -> void:
 
 ## Il refresh ricrea i bottoni: se il focus e' andato perso (tastiera/pad), torna su "Parti".
 func _ensure_focus() -> void:
+	# Chiamata differita: se nel frattempo si e' cambiata scena l'hub non e' piu' nell'albero.
+	if not is_inside_tree():
+		return
 	if get_viewport().gui_get_focus_owner() == null:
 		_start_button.grab_focus()
 

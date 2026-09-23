@@ -4,7 +4,7 @@ Nome del gioco: **Wanderloot** ("wanderlust" + "loot"). Nome di lavoro precedent
 
 Ultimo aggiornamento: 2026-09-23
 Engine: Godot 4.6
-Stato: M3 (hub minimo) completato — prossimo M4
+Stato: MVP completato (M0–M4) — prossimo: playtest umano e roadmap v2
 
 ## 1. Pitch
 
@@ -48,7 +48,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - **Morte prima dell'estrazione = perdita totale del loot di run.** (Regola scelta per l'MVP: nessuna mitigazione parziale, per mantenere la tensione rischio/ricompensa netta.)
   - **Stato M2**: a fine run `Arena` chiama `LootTransfer.resolve()` (logica pura, coperta da test GdUnit4): con esito `EXTRACTED` il loot va in `MetaProgression.deposit_run_loot()` (salvato su disco), con `DEATH` viene scartato; in entrambi i casi l'inventario di run si svuota. La schermata di fine run mostra “Loot estratto: N · Totale nel baule: M” oppure “Loot perso: N”.
 - L'estrazione è un punto/area che appare dopo un certo tempo o dopo un trigger (es. uccisione di un'elite), e richiede di rimanere nella zona per N secondi (rischio: i nemici continuano ad arrivare durante il canale).
-  - **Stato M1** (`ExtractionData`, `data/run/extraction_default.tres`): la zona (cerchio verde, raggio 48px) appare dopo 60s di run in un punto casuale ad almeno 400px dal player; servono 5s dentro la zona. **Decisione:** uscendo il progresso non si azzera ma cala di 0.5s per ogni secondo fuori (un'uscita breve per schivare non vanifica tutto). HUD: countdown, poi percentuale di estrazione. Nessun indicatore fuori schermo per ora (valutare in M4).
+  - **Stato M1** (`ExtractionData`, `data/run/extraction_default.tres`): la zona (cerchio verde, raggio 48px) appare dopo 60s di run in un punto casuale ad almeno 400px dal player; servono 5s dentro la zona. **Decisione:** uscendo il progresso non si azzera ma cala di 0.5s per ogni secondo fuori (un'uscita breve per schivare non vanifica tutto). HUD: countdown, poi percentuale di estrazione. Da M4 (#20): freccia verde sul bordo dello schermo verso la zona quando è fuori vista (`ExtractionIndicator`).
 - Possibile estensione futura (fuori scope MVP): possibilità di estrarre "in anticipo" con meno loot ma meno rischio, o zone a rischio/reward crescente.
 
 ## 5. Combattimento (ranged)
@@ -166,6 +166,8 @@ res://
   assets/sprites/                    # PNG 16x16 (player, slime, proiettile, tile, icone)
   tools/sprites.py                   # generatore degli sprite (Python + Pillow)
   tools/autoplay.gd                  # bot di playtest per il bilanciamento (metriche su N run)
+  tools/flow.gd                      # playtest end-to-end automatico hub→run→hub
+  scenes/ui/ExtractionIndicator/     # freccia a bordo schermo verso la zona di estrazione
   tools/bot_driver.gd                # guida del bot (kiting, mira, estrazione), condivisa dagli strumenti
   assets/audio/                      # WAV di SFX e musiche (generati da tools/audio.py)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
@@ -196,7 +198,7 @@ Note tecniche:
 **M1 — Run loop completo** ✅ (2026-09-23): level-up con scelta di 3 upgrade, spawn di nemici a ondate, punto di estrazione funzionante, morte = reset run.
 **M2 — Loot ed extraction** ✅ (2026-09-23): inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
 **M3 — Hub minimo** ✅ (2026-09-23): scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.
-**M4 — Rifinitura MVP**: combat feel (knockback, hitstop), bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.
+**M4 — Rifinitura MVP** ✅ (2026-09-23): combat feel (knockback, hitstop), bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.
 
@@ -218,6 +220,15 @@ Problemi trovati e scelte:
 - **Bug di design trovato dal bot**: con un tetto fisso di nemici la pressione si fermava attorno ai 3 minuti e una run è durata 45 minuti, cioè farming infinito senza rischio. Ora il tetto cresce di **+5 ogni 30s** (`WaveData.max_alive_at`, coperto da test).
 - Economia: Gelatina **20% ×1** (era 35% ×1–2), Nucleo **1,5%** (era 3%). Costi: Bacchetta di gelatina 25 Gelatina, Stivali 30, Amuleto 20 + 3 Nuclei, Bacchetta rapida 40 + 4 Nuclei. Obiettivo: primo pezzo dopo la prima estrazione riuscita, tutti e 4 dopo circa 4–5 estrazioni (6–8 run).
 - L'equipaggiamento pesa: con 2 pezzi le estrazioni salgono dal 63% all'80–90%.
+
+### 10.2 Playtest M4 (#20)
+
+Playtest end-to-end automatico `tools/flow.gd` (bot): hub → run fino a un'estrazione riuscita → hub (baule aggiornato) → craft dal fabbro → equip → run con equip applicato → morte → hub (baule invariato) → ricarica del salvataggio da disco. Tutti i passi verificati; `Engine.time_scale` e pausa tornano sempre a normale. Trovati e corretti:
+- **Crash**: il ripristino differito del focus nell'hub partiva dopo il cambio scena (`gui_get_focus_owner` su null) → controllo `is_inside_tree()`.
+- **Blocco di UX**: con la zona a 120s in un'arena più grande dello schermo non c'era modo di sapere dove fosse → indicatore a bordo schermo.
+- **Farming infinito** (vedi §10.1) → tetto di nemici crescente.
+
+Non verificabile da bot, resta da fare a mano: feeling di controlli e mira col mouse, leggibilità degli sprite a 2x, volumi reali di SFX/musica, chiarezza di hub e fabbro per chi non conosce il gioco. Noti e accettati per l'MVP: nessun menu di pausa/uscita durante la run, nessun menu opzioni (volumi), nessuna schermata titolo.
 
 ## 11. Open questions
 
