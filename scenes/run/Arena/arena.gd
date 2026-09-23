@@ -102,8 +102,12 @@ func _on_run_state_changed(state: RunManager.State) -> void:
 func _on_run_ended(result: RunManager.Result) -> void:
 	_pending_level_ups = 0
 	_level_up_choice.hide()
+	var extracted := result == RunManager.Result.EXTRACTED
+	# Unico punto in cui il loot di run raggiunge MetaProgression (GDD §4).
+	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot)
 	_run_end_screen.present(
-		result == RunManager.Result.EXTRACTED, RunManager.level, RunManager.elapsed, RunManager.kills
+		extracted, RunManager.level, RunManager.elapsed, RunManager.kills,
+		loot_amount, MetaProgression.inventory.total()
 	)
 
 

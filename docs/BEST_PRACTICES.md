@@ -74,7 +74,11 @@ Framework scelto: **GdUnit4** (attivamente mantenuto, nativo per Godot 4, scene 
 - Scene test (via scene runner) solo per flussi critici end-to-end: level-up → scelta upgrade, morte → azzeramento loot run, estrazione riuscita → trasferimento loot a meta.
 - Non testare rendering/asset grafici: tempo perso, valore basso.
 - I test vivono in `tests/`, uno a uno con lo script sotto test (`scripts/run/run_manager.gd` → `tests/run/test_run_manager.gd`).
-- Verrà introdotto quando si arriva a M2 (loot/estrazione) del GDD: prima di allora la logica è troppo instabile perché valga la pena, dopo diventa la rete di sicurezza per non rompere la regola "morte = perdita loot" mentre si aggiungono feature.
+- Attivo da M2. Addon vendored in `addons/gdUnit4` (v6.2.1, plugin abilitato); report in `reports/` (ignorato da git).
+- Logica da testare = classi pure o autoload senza accesso alla scena (`RunManager`, `MetaInventory`, `LootTransfer`…): si istanziano direttamente nel test con `auto_free(preload(...).new())`. Dipendenze esterne (salvataggio, depositi) si iniettano (`Callable`, `save_path` di test), mai usare il file di salvataggio reale.
+- Esecuzione: dal pannello GdUnit4 dell'editor, oppure da terminale nella root del progetto:
+  `addons/gdUnit4/runtest.sh --godot_binary "/Applications/Godot.app/Contents/MacOS/Godot" -a res://tests`
+- Regola: una feature che tocca loot/estrazione/progressione non si committa con test rossi.
 
 ## 5. Versionamento e workflow
 

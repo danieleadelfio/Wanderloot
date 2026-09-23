@@ -4,7 +4,7 @@ Nome del gioco: **Wanderloot** ("wanderlust" + "loot"). Nome di lavoro precedent
 
 Ultimo aggiornamento: 2026-09-23
 Engine: Godot 4.6
-Stato: M1 (run loop completo) completato — prossimo M2
+Stato: M2 (loot ed extraction) completato — prossimo M3
 
 ## 1. Pitch
 
@@ -44,6 +44,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - Il loot grezzo vive in un "inventario di run" separato da quello permanente.
   - **Stato M2**: `LootRunInventory` (classe pura `RefCounted`, id materiale → quantità) posseduta da `RunManager.loot`; si svuota a ogni `start_run()` e accetta loot solo a run in corso. Nessun autoload aggiuntivo.
 - **Morte prima dell'estrazione = perdita totale del loot di run.** (Regola scelta per l'MVP: nessuna mitigazione parziale, per mantenere la tensione rischio/ricompensa netta.)
+  - **Stato M2**: a fine run `Arena` chiama `LootTransfer.resolve()` (logica pura, coperta da test GdUnit4): con esito `EXTRACTED` il loot va in `MetaProgression.deposit_run_loot()` (salvato su disco), con `DEATH` viene scartato; in entrambi i casi l'inventario di run si svuota. La schermata di fine run mostra “Loot estratto: N · Totale nel baule: M” oppure “Loot perso: N”.
 - L'estrazione è un punto/area che appare dopo un certo tempo o dopo un trigger (es. uccisione di un'elite), e richiede di rimanere nella zona per N secondi (rischio: i nemici continuano ad arrivare durante il canale).
   - **Stato M1** (`ExtractionData`, `data/run/extraction_default.tres`): la zona (cerchio verde, raggio 48px) appare dopo 60s di run in un punto casuale ad almeno 400px dal player; servono 5s dentro la zona. **Decisione:** uscendo il progresso non si azzera ma cala di 0.5s per ogni secondo fuori (un'uscita breve per schivare non vanifica tutto). HUD: countdown, poi percentuale di estrazione. Nessun indicatore fuori schermo per ora (valutare in M4).
 - Possibile estensione futura (fuori scope MVP): possibilità di estrarre "in anticipo" con meno loot ma meno rischio, o zone a rischio/reward crescente.
@@ -148,7 +149,9 @@ res://
   scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
   scenes/ui/RunEndScreen/            # schermata di fine run (morte/estrazione) + riavvio
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
-  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory
+  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer
+  addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
+  tests/                             # test GdUnit4, specchio di scripts/ e autoload/
   scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry
   data/{weapons,enemies,player,waves,run,upgrades,materials}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core
 ```
@@ -170,7 +173,7 @@ Note tecniche:
 
 **M0 — Skeleton tecnico** ✅ (2026-09-23): player che si muove e spara in un'arena vuota, un nemico che insegue, proiettili con pool, HUD minimale (HP/exp). Dettagli in §5 e §9.1.
 **M1 — Run loop completo** ✅ (2026-09-23): level-up con scelta di 3 upgrade, spawn di nemici a ondate, punto di estrazione funzionante, morte = reset run.
-**M2 — Loot ed extraction**: inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
+**M2 — Loot ed extraction** ✅ (2026-09-23): inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
 **M3 — Hub minimo**: scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.
 **M4 — Rifinitura MVP**: combat feel (knockback, hitstop), bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.
 

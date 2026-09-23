@@ -5,6 +5,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Trasferimento del loot su estrazione riuscita e perdita su morte (`LootTransfer`), riepilogo loot nella schermata di fine run (#10).
+- Test GdUnit4 (21 casi): trasferimento loot, inventari run/meta, persistenza, `RunManager`, drop, curva exp, estrazione upgrade. M2 completato.
 - Autoload `MetaProgression` con inventario permanente `MetaInventory`, salvataggio/caricamento `ConfigFile` versionato in `user://` (#9).
 - Drop di materiali alla morte dei nemici nell'inventario di run, contatore "Loot a rischio" in HUD (#8).
 - Inventario di run `LootRunInventory` separato dal permanente, posseduto da `RunManager` e svuotato a ogni run (#7).

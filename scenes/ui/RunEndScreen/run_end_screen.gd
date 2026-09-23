@@ -6,6 +6,7 @@ signal restart_requested
 
 @onready var _title_label: Label = %TitleLabel
 @onready var _summary_label: Label = %SummaryLabel
+@onready var _loot_label: Label = %LootLabel
 @onready var _restart_button: Button = %RestartButton
 
 
@@ -14,10 +15,14 @@ func _ready() -> void:
 	_restart_button.pressed.connect(_on_restart_pressed)
 
 
-func present(extracted: bool, level: int, elapsed: float, kills: int) -> void:
+func present(extracted: bool, level: int, elapsed: float, kills: int, loot_amount: int, stash_total: int) -> void:
 	_title_label.text = "Estrazione riuscita!" if extracted else "Sei morto"
 	var seconds := int(elapsed)
 	_summary_label.text = "Livello %d  ·  Tempo %d:%02d  ·  Uccisioni %d" % [level, seconds / 60, seconds % 60, kills]
+	if extracted:
+		_loot_label.text = "Loot estratto: %d  ·  Totale nel baule: %d" % [loot_amount, stash_total]
+	else:
+		_loot_label.text = "Loot perso: %d" % loot_amount
 	show()
 	_restart_button.grab_focus()
 
