@@ -22,6 +22,8 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _hit_stop: HitStop = %HitStop
 @onready var _sfx: SfxPlayer = %Sfx
 @onready var _extraction_indicator: ExtractionIndicator = %ExtractionIndicator
+@onready var _pause: PauseController = %PauseController
+@onready var _pause_menu: PauseMenu = %PauseMenu
 
 
 func _ready() -> void:
@@ -31,6 +33,8 @@ func _ready() -> void:
 	RunManager.run_ended.connect(_on_run_ended)
 	RunManager.leveled_up.connect(_on_leveled_up)
 	_run_end_screen.restart_requested.connect(_on_restart_requested)
+	_pause.mode_changed.connect(_on_pause_mode_changed)
+	_pause_menu.action_requested.connect(_pause.request)
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
@@ -109,7 +113,18 @@ func _on_player_died() -> void:
 
 
 func _on_run_state_changed(state: RunManager.State) -> void:
-	get_tree().paused = state != RunManager.State.RUNNING
+	_pause.enabled = state == RunManager.State.RUNNING
+	_refresh_pause()
+
+
+func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
+	_pause_menu.show_mode(mode)
+	_refresh_pause()
+
+
+## Due fonti di pausa: lo stato della run (level-up, fine run) e le pause del giocatore (ESC, P).
+func _refresh_pause() -> void:
+	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused()
 
 
 func _on_run_ended(result: RunManager.Result) -> void:

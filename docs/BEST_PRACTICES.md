@@ -44,6 +44,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 
 - **Resource condivise sono read-only a runtime.** Un `.tres` caricato è la stessa istanza per tutti: per stato che cambia durante la run (stats potenziate dagli upgrade) lavorare su una copia fatta con `duplicate()` a inizio run.
   - Il proprietario tiene il riferimento al `.tres` base e ricrea le copie a ogni inizio run (`Player.begin_run()`); tutti i modificatori (equip, upgrade) passano da un'unica funzione pura (`StatApplier`), mai `match` sulle stat duplicati in più punti.
+- **Più fonti di pausa**: `get_tree().paused` lo scrive solo la composition root, combinando le fonti (stato della run, pause del giocatore) in un unico `_refresh_pause()`. Nessun altro nodo lo imposta direttamente.
 - **Chiamate differite (`call_deferred`) e `await`**: al rientro il nodo può essere uscito dall'albero (cambio scena). Controllare `is_inside_tree()` prima di usare viewport/tree.
 - **Pausa**: si usa `get_tree().paused`; la UI che deve funzionare in pausa ha `process_mode = ALWAYS`. La pausa segue lo stato della run: `RunManager` cambia solo stato (nessun accesso alla scena, così resta testabile come logica pura) e la composition root applica `paused` reagendo a `state_changed`.
 
