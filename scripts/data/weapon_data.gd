@@ -4,7 +4,8 @@ extends Resource
 
 @export var display_name: String = ""
 @export var damage: int = 1
-@export_range(0.1, 30.0, 0.1, "suffix:shots/s") var fire_rate: float = 4.0
+## Nessun tetto: gli upgrade possono spingerla oltre i tick di fisica (piu' colpi per tick).
+@export_range(0.1, 30.0, 0.1, "or_greater", "suffix:shots/s") var fire_rate: float = 4.0
 @export var projectile_speed: float = 600.0
 @export var projectile_lifetime: float = 1.0
 ## Spinta sul nemico colpito (px/s).

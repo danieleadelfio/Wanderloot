@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Cadenza di fuoco senza tetto: cooldown ad accumulatore, più proiettili nello stesso tick oltre i 60 colpi/s, test dedicati (#21).
 - Playtest end-to-end automatico `tools/flow.gd` (hub→run→estrazione→craft→equip→morte→hub→ricarica) con correzioni: crash del focus differito nell'hub dopo il cambio scena, indicatore a bordo schermo verso la zona di estrazione (#20). MVP completato.
 - Bilanciamento guidato dal bot di playtest `tools/autoplay.gd`: zona di estrazione a 120s (canale 6s), ondate più graduali, tetto di nemici che cresce nel tempo (`WaveData.max_alive_at`, niente farming infinito), drop e costi delle ricette ricalibrati; tabella dei risultati in GDD §10.1 (#17).
 - Audio minimo: SFX chiptune e due musiche in loop generati da `tools/audio.py`, `SoundBank`/`SfxPlayer`/`MusicPlayer`, bus Music/SFX, suoni collegati via segnali in Arena e Hub (#19).
