@@ -4,7 +4,7 @@ extends Node
 
 @export var wave_data: WaveData
 @export var enemy_pool: EnemyPool
-@export var spawn_rect: Rect2 = Rect2(-760.0, -460.0, 1520.0, 920.0)
+@export var spawn_rect: Rect2 = Rect2(-740.0, -440.0, 1480.0, 880.0)
 @export var spawn_min_distance: float = 300.0
 
 var _target: Node2D

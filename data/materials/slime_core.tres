@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="MaterialData" format=3]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_slime_core.png" id="ic"]
 
 [ext_resource type="Script" path="res://scripts/data/material_data.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
+icon = ExtResource("ic")
 id = &"slime_core"
 display_name = "Nucleo di slime"
 rarity = 1

@@ -90,6 +90,8 @@ Fuori scope MVP ma parte della visione a lungo termine (da aggiungere per fasi s
 - Fonte asset consigliata: pacchetti pronti stile Kenney.nl (gratuiti) o pacchetti a pagamento coerenti (es. "Tiny Dungeon", "Cute Fantasy RPG") su itch.io, integrati con generazione AI mirata (sprite singoli, icone oggetti, tileset) per colmare i buchi specifici del proprio gioco.
 - Nessuna animazione complessa richiesta per l'MVP: idle, movimento (2-4 frame), attacco, hit, morte per player e nemici base.
 
+- **Stato M4 (#18)**: primo set di asset in pixel art 16x16 (scala 2, filtro nearest), palette ristretta derivata da Sweetie-16, contorno scuro su tutti gli sprite. Generati da `tools/sprites.py` (sprite descritti come griglie di caratteri: modificabili e rigenerabili senza editor grafico). **Nota**: è programmer art coerente, non arte finale da artista; la pipeline permette di sostituire i PNG in `assets/sprites/` a parità di dimensioni senza toccare scene o codice.
+
 ## 9. Struttura tecnica (Godot 4.6)
 
 Struttura scene target (indicativa; lo stato reale è in §9.1):
@@ -159,7 +161,9 @@ res://
   scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP, livello, barra EXP)
   scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
   scenes/ui/RunEndScreen/            # schermata di fine run (morte/estrazione) + riavvio
-  scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
+  scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool, knockback, hit_stop, blink, frame_cycler
+  assets/sprites/                    # PNG 16x16 (player, slime, proiettile, tile, icone)
+  tools/sprites.py                   # generatore degli sprite (Python + Pillow)
   scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer, stat_applier
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
@@ -167,7 +171,7 @@ res://
   data/{weapons,enemies,player,waves,run,upgrades,materials,equipment,recipes}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core, equipment_catalog + pezzi, recipe_book + ricette
 ```
 
-- Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
+- Grafica (M4): sprite 16x16 in `assets/sprites/` (player mago incappucciato e slime a 2 frame via `FrameCycler`, proiettile 8x8, pavimento e muri a tile ripetute, icone 16x16 di materiali ed equipaggiamento usate nell'hub). Arena 1600x1000: muri visibili larghi 32px sul bordo, area giocabile ±768x±468, camera sul player con limiti arena.
 - Autoload attivi: `RunManager` (stato run) e `MetaProgression` (stato permanente, da M2). Nessun altro.
 - Nemici: `EnemyPool` (un pool per tipo di nemico, 32 pre-istanziati, cresce se serve) + `WaveSpawner` guidato da `WaveData`: l'intervallo tra batch scende da 2.0s a 0.5s (−0.015s per secondo di run), il batch cresce di 1 nemico ogni 25s, tetto 60 nemici vivi. Spawn in punto casuale ad almeno 300px dal player.
 - Flusso di run (M1): `RunManager` è una macchina a stati `IDLE → RUNNING ⇄ LEVEL_UP → ENDED` con esito `DEATH` o `EXTRACTED`. `Arena` mette in pausa il gioco quando lo stato non è `RUNNING`. A fine run: schermata con esito, livello, tempo e uccisioni, bottone “Torna all'hub” (da M3; nuova run = scena `Arena` nuova + `start_run()`). Il canale di estrazione non è uno stato globale: vive in `ExtractionPoint` (nessun altro sistema ne dipende). `RunManager` non scrive mai su `MetaProgression` (vedi §4).
@@ -193,7 +197,7 @@ Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralm
 ## 11. Open questions
 
 - Godot version confermata: 4.6 (da project.godot). Se si prevede export mobile o console, valutare per tempo eventuali limitazioni.
-- Dimensione sprite definitiva (16x16 vs 32x32): da decidere dopo un primo test visivo in arena con la UI reale.
+- ~~Dimensione sprite definitiva~~ → decisa in M4: **16x16**, disegnati a scala 2 (32px a schermo), filtro nearest. Arena 1600x1000 con UI reale: a 32x32 i personaggi sarebbero stati troppo grandi rispetto al campo visivo e alla densità di nemici.
 - ~~Persistenza meta-progressione~~ → decisa in M2: `ConfigFile` in `user://` (leggibile, versionato; niente `.tres` caricati da `user://`, che possono eseguire script). Cloud save fuori scope.
 - Durata target di una run (utile per bilanciare drop rate e timer di estrazione): da definire con il primo playtest.
 

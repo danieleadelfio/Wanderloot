@@ -15,10 +15,16 @@ func refresh(inventory: MetaInventory, loadout: EquipmentLoadout, material_names
 	for recipe in recipe_book.recipes:
 		var state := Crafting.check(recipe, inventory, loadout)
 		var button := Button.new()
-		button.text = "%s  —  %s" % [recipe.result.display_name, _cost_text(recipe, material_names)]
-		if state == Crafting.Result.ALREADY_OWNED:
-			button.text += "  (posseduto)"
+		var detail := "posseduto" if state == Crafting.Result.ALREADY_OWNED else _cost_text(recipe, material_names)
+		button.text = "%s  —  %s" % [recipe.result.display_name, detail]
 		button.tooltip_text = recipe.result.description
+		button.icon = recipe.result.icon
+		button.add_theme_constant_override("icon_max_width", 32)
+		button.expand_icon = true
+		button.custom_minimum_size.y = 36
+		# Testo lungo: si tronca il testo, non l'icona.
+		button.clip_text = true
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		button.disabled = state != Crafting.Result.OK
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.pressed.connect(craft_requested.emit.bind(recipe))

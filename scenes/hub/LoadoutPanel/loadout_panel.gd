@@ -38,8 +38,16 @@ func refresh(loadout: EquipmentLoadout) -> void:
 
 func _item_button(item: EquipmentData, equipped: bool) -> Button:
 	var button := Button.new()
-	button.text = "%s  (%s)%s" % [item.display_name, item.description, "  [equipaggiato]" if equipped else ""]
+	button.text = "%s  —  %s" % [item.display_name, "equipaggiato" if equipped else item.description]
+	button.tooltip_text = item.description
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.icon = item.icon
+	button.add_theme_constant_override("icon_max_width", 32)
+	button.expand_icon = true
+	button.custom_minimum_size.y = 36
+	# Testo lungo: si tronca il testo, non l'icona.
+	button.clip_text = true
+	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if equipped:
 		button.pressed.connect(unequip_requested.emit.bind(item.slot))
 	else:

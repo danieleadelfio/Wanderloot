@@ -16,6 +16,8 @@
 [ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="14"]
 [ext_resource type="PackedScene" path="res://scenes/ui/RunEndScreen/RunEndScreen.tscn" id="15"]
 [ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="16"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor.png" id="17"]
+[ext_resource type="Texture2D" path="res://assets/sprites/wall.png" id="18"]
 
 [sub_resource type="RectangleShape2D" id="wall_h"]
 size = Vector2(1680, 40)
@@ -29,30 +31,60 @@ level_curve = ExtResource("10")
 upgrade_table = ExtResource("11")
 extraction_data = ExtResource("14")
 
-[node name="Floor" type="ColorRect" parent="."]
-offset_left = -800.0
-offset_top = -500.0
-offset_right = 800.0
-offset_bottom = 500.0
-mouse_filter = 2
-color = Color(0.16, 0.15, 0.2, 1)
+[node name="Floor" type="Sprite2D" parent="."]
+texture_repeat = 2
+scale = Vector2(2, 2)
+texture = ExtResource("17")
+region_enabled = true
+region_rect = Rect2(0, 0, 800, 500)
+
+[node name="WallTiles" type="Node2D" parent="."]
+texture_repeat = 2
+
+[node name="Top" type="Sprite2D" parent="WallTiles"]
+position = Vector2(0, -484)
+scale = Vector2(2, 2)
+texture = ExtResource("18")
+region_enabled = true
+region_rect = Rect2(0, 0, 800, 16)
+
+[node name="Bottom" type="Sprite2D" parent="WallTiles"]
+position = Vector2(0, 484)
+scale = Vector2(2, 2)
+texture = ExtResource("18")
+region_enabled = true
+region_rect = Rect2(0, 0, 800, 16)
+
+[node name="Left" type="Sprite2D" parent="WallTiles"]
+position = Vector2(-784, 0)
+scale = Vector2(2, 2)
+texture = ExtResource("18")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 500)
+
+[node name="Right" type="Sprite2D" parent="WallTiles"]
+position = Vector2(784, 0)
+scale = Vector2(2, 2)
+texture = ExtResource("18")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 500)
 
 [node name="Walls" type="StaticBody2D" parent="."]
 
 [node name="Top" type="CollisionShape2D" parent="Walls"]
-position = Vector2(0, -520)
+position = Vector2(0, -488)
 shape = SubResource("wall_h")
 
 [node name="Bottom" type="CollisionShape2D" parent="Walls"]
-position = Vector2(0, 520)
+position = Vector2(0, 488)
 shape = SubResource("wall_h")
 
 [node name="Left" type="CollisionShape2D" parent="Walls"]
-position = Vector2(-820, 0)
+position = Vector2(-788, 0)
 shape = SubResource("wall_v")
 
 [node name="Right" type="CollisionShape2D" parent="Walls"]
-position = Vector2(820, 0)
+position = Vector2(788, 0)
 shape = SubResource("wall_v")
 
 [node name="ExtractionPoint" parent="." instance=ExtResource("13")]

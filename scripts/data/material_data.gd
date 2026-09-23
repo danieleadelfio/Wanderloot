@@ -9,3 +9,4 @@ enum Rarity { COMMON, RARE }
 @export var rarity: Rarity = Rarity.COMMON
 ## Colore placeholder finche' non ci sono icone.
 @export var color: Color = Color.WHITE
+@export var icon: Texture2D

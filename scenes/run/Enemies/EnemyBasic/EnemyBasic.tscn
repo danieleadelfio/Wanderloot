@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/combat/hitbox.gd" id="5"]
 [ext_resource type="Script" path="res://scripts/combat/hit_flash.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/combat/knockback.gd" id="k1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/slime.png" id="s1"]
+[ext_resource type="Script" path="res://scripts/combat/frame_cycler.gd" id="s2"]
 
 [sub_resource type="CircleShape2D" id="body_shape"]
 radius = 11.0
@@ -21,9 +23,13 @@ motion_mode = 1
 script = ExtResource("1")
 data = ExtResource("2")
 
-[node name="Body" type="Polygon2D" parent="."]
-color = Color(0.9, 0.3, 0.3, 1)
-polygon = PackedVector2Array(-11, -11, 11, -11, 11, 11, -11, 11)
+[node name="Body" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("s1")
+offset = Vector2(0, -2)
+hframes = 2
+script = ExtResource("s2")
+frame_time = 0.3
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true

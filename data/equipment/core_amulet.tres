@@ -1,4 +1,5 @@
 [gd_resource type="Resource" script_class="EquipmentData" format=3]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_core_amulet.png" id="ic"]
 
 [ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
@@ -11,6 +12,7 @@ is_multiplier = false
 
 [resource]
 script = ExtResource("1")
+icon = ExtResource("ic")
 id = &"core_amulet"
 display_name = "Amuleto del nucleo"
 description = "+2 HP massimi"

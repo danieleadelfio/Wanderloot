@@ -8,5 +8,6 @@ enum Slot { WEAPON, ACCESSORY }
 @export var display_name: String = ""
 @export_multiline var description: String = ""
 @export var slot: Slot = Slot.WEAPON
+@export var icon: Texture2D
 ## Applicati alle copie di run di PlayerStats/WeaponData all'inizio di ogni run.
 @export var modifiers: Array[StatModifier] = []
