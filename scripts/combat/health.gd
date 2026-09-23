@@ -22,6 +22,14 @@ func reset(new_max: int = -1) -> void:
 	changed.emit(current, max_hp)
 
 
+## Cambia gli HP massimi; se aumentano, cura della differenza.
+func set_max_hp(new_max: int) -> void:
+	var gained := new_max - max_hp
+	max_hp = maxi(new_max, 1)
+	current = clampi(current + maxi(gained, 0), 0, max_hp)
+	changed.emit(current, max_hp)
+
+
 func take_damage(amount: int) -> void:
 	if is_dead() or amount <= 0:
 		return

@@ -42,6 +42,9 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
   - API standard di un oggetto poolable: `activate(...)` / `deactivate()`, mai `queue_free()`. Il ritorno al pool avviene via segnale (`expired(obj)`), non con riferimento diretto al pool.
   - In activate/deactivate: `visible`, `set_physics_process` e toggle di `monitoring`/`monitorable`/`disabled` sempre con `set_deferred` (si è spesso dentro un callback fisico).
 
+- **Resource condivise sono read-only a runtime.** Un `.tres` caricato è la stessa istanza per tutti: per stato che cambia durante la run (stats potenziate dagli upgrade) lavorare su una copia fatta con `duplicate()` a inizio run.
+- **Pausa**: si usa `get_tree().paused`; la UI che deve funzionare in pausa ha `process_mode = ALWAYS`. Solo la composition root (o, da #5, il flusso di stato della run) decide quando mettere in pausa.
+
 ## 3.1 Componenti di combattimento
 
 - `Health` (HP + segnali `changed`/`damaged`/`died`, nessuna logica di morte), `Hitbox` (infligge danno), `Hurtbox` (riceve danno, inoltra a `Health`, i-frames opzionali), `HitFlash`, `Weapon` (cooldown + segnale `fired`, non istanzia proiettili).

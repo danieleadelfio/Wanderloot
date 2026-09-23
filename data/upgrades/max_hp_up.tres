@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Vigore"
+description = "+1 HP massimi (e cura 1)"
+stat = 4
+amount = 1.0
+is_multiplier = false
+weight = 1.0

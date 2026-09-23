@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Raffica"
+description = "+20% cadenza di fuoco"
+stat = 1
+amount = 1.2
+is_multiplier = true
+weight = 1.0

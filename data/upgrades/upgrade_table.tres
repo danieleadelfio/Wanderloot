@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_table.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/upgrade_data.gd" id="0"]
+[ext_resource type="Resource" path="res://data/upgrades/damage_up.tres" id="2"]
+[ext_resource type="Resource" path="res://data/upgrades/fire_rate_up.tres" id="3"]
+[ext_resource type="Resource" path="res://data/upgrades/projectile_speed_up.tres" id="4"]
+[ext_resource type="Resource" path="res://data/upgrades/move_speed_up.tres" id="5"]
+[ext_resource type="Resource" path="res://data/upgrades/max_hp_up.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+upgrades = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")])

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Agilita'"
+description = "+10% velocita' di movimento"
+stat = 3
+amount = 1.1
+is_multiplier = true
+weight = 1.0

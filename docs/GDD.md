@@ -27,6 +27,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 ### 3.1 Progressione interna alla run (temporanea)
 - Exp guadagnata uccidendo nemici → level-up. Curva in `LevelCurve` (`data/run/level_curve.tres`): exp per passare da N a N+1 = `5 * 1.35^(N-1)` arrotondato (5, 7, 9, 12, 17…). L'exp in eccesso passa al livello successivo; più level-up in un colpo sono gestiti uno alla volta.
 - Ad ogni level-up: pausa, 3 scelte casuali (pesate) tra potenziamenti d'arma, abilità passive, statistiche.
+  - **Stato M1**: 5 upgrade di statistica in `data/upgrades/` (Potenza +1 danno, Raffica +20% cadenza, Gittata +20% velocità proiettili, Agilità +10% movimento, Vigore +1 HP max e cura 1), tutti con peso 1, estratti senza ripetizioni da `UpgradeTable`. Scelta con mouse o tastiera/pad (focus sul primo). Abilità passive/nuove armi: dopo l'MVP.
 - Tutto ciò che riguarda questa progressione si azzera all'inizio di ogni run, indipendentemente dall'esito.
 
 ### 3.2 Progressione esterna alla run (permanente, meta)
@@ -136,10 +137,11 @@ res://
   scenes/run/Enemies/EnemyBasic/     # EnemyBasic.tscn (inseguimento diretto)
   scenes/run/Projectile/             # Projectile.tscn + projectile.gd (poolable)
   scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP, livello, barra EXP)
+  scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
   scripts/run/                       # enemy_pool, wave_spawner
-  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve
-  data/{weapons,enemies,player,waves,run}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table
+  data/{weapons,enemies,player,waves,run,upgrades}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, upgrade_*
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
