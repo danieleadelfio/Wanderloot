@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/LevelUpChoice/LevelUpChoice.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://scenes/run/ExtractionPoint/ExtractionPoint.tscn" id="13"]
 [ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/ui/RunEndScreen/RunEndScreen.tscn" id="15"]
 
 [sub_resource type="RectangleShape2D" id="wall_h"]
 size = Vector2(1680, 40)
@@ -90,4 +91,7 @@ position_smoothing_enabled = true
 unique_name_in_owner = true
 
 [node name="LevelUpChoice" parent="." instance=ExtResource("12")]
+unique_name_in_owner = true
+
+[node name="RunEndScreen" parent="." instance=ExtResource("15")]
 unique_name_in_owner = true

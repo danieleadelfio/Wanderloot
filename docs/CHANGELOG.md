@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Flusso di fine run: `RunManager` a stati (RUNNING/LEVEL_UP/ENDED) con esito morte/estrazione, pausa guidata dallo stato, schermata di fine run con riepilogo e “Nuova run” (#5). M1 completato.
 - Punto di estrazione: appare dopo 60s, 5s di canale nella zona, progresso che cala fuori dalla zona; HUD con countdown e percentuale. `SpawnUtils` condiviso con il wave spawner (#4).
 - Scelta di 3 upgrade al level-up: `UpgradeData`/`UpgradeTable` (estrazione pesata), overlay `LevelUpChoice` in pausa, upgrade applicati a copie di run delle stats (#3).
 - Livelli di run: `LevelCurve` data-driven, `RunManager.start_run()` / segnale `leveled_up`, HUD con livello e barra EXP (#2).

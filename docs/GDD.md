@@ -4,7 +4,7 @@ Nome del gioco: **Wanderloot** ("wanderlust" + "loot"). Nome di lavoro precedent
 
 Ultimo aggiornamento: 2026-09-23
 Engine: Godot 4.6
-Stato: M0 (skeleton tecnico) completato — prossimo M1
+Stato: M1 (run loop completo) completato — prossimo M2
 
 ## 1. Pitch
 
@@ -131,7 +131,7 @@ res://
 
 ```
 res://
-  autoload/run_manager.gd            # RunManager: exp e livello della run (reset a ogni run)
+  autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni della run
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
   scenes/run/Player/                 # Player.tscn + player.gd
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
@@ -140,6 +140,7 @@ res://
   scenes/run/ExtractionPoint/        # zona di estrazione (Area2D + _draw del progresso)
   scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP, livello, barra EXP)
   scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
+  scenes/ui/RunEndScreen/            # schermata di fine run (morte/estrazione) + riavvio
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
   scripts/run/                       # enemy_pool, wave_spawner, spawn_utils
   scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data
@@ -149,7 +150,7 @@ res://
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
 - Autoload attivi: solo `RunManager`. `MetaProgression` verrà aggiunto con M2/M3 (primo momento in cui esiste stato persistente).
 - Nemici: `EnemyPool` (un pool per tipo di nemico, 32 pre-istanziati, cresce se serve) + `WaveSpawner` guidato da `WaveData`: l'intervallo tra batch scende da 2.0s a 0.5s (−0.015s per secondo di run), il batch cresce di 1 nemico ogni 25s, tetto 60 nemici vivi. Spawn in punto casuale ad almeno 300px dal player.
-- Morte player: placeholder M0 = ricarica scena (`RunManager.reset()` in `Arena._ready`). Il flusso completo è M1.
+- Flusso di run (M1): `RunManager` è una macchina a stati `IDLE → RUNNING ⇄ LEVEL_UP → ENDED` con esito `DEATH` o `EXTRACTED`. `Arena` mette in pausa il gioco quando lo stato non è `RUNNING`. A fine run: schermata con esito, livello, tempo e uccisioni, bottone “Nuova run” che ricarica la scena `Arena` (nuova run = scena nuova + `start_run()`). Il canale di estrazione non è uno stato globale: vive in `ExtractionPoint` (nessun altro sistema ne dipende). `MetaProgression` non viene toccato (non esiste ancora; arriva con M2).
 - Collision layers (nomi in Project Settings): 1 `world`, 2 `player`, 3 `enemy`, 4 `player_attack`, 5 `enemy_attack`.
 - Input map: `move_*` (WASD, frecce, stick sinistro), `aim_*` (stick destro), `shoot` (mouse sinistro).
 
@@ -162,7 +163,7 @@ Note tecniche:
 ## 10. Roadmap per milestone
 
 **M0 — Skeleton tecnico** ✅ (2026-09-23): player che si muove e spara in un'arena vuota, un nemico che insegue, proiettili con pool, HUD minimale (HP/exp). Dettagli in §5 e §9.1.
-**M1 — Run loop completo**: level-up con scelta di 3 upgrade, spawn di nemici a ondate, punto di estrazione funzionante, morte = reset run.
+**M1 — Run loop completo** ✅ (2026-09-23): level-up con scelta di 3 upgrade, spawn di nemici a ondate, punto di estrazione funzionante, morte = reset run.
 **M2 — Loot ed extraction**: inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
 **M3 — Hub minimo**: scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.
 **M4 — Rifinitura MVP**: combat feel (knockback, hitstop), bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.

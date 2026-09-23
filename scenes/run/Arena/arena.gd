@@ -18,13 +18,16 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _level_up_choice: LevelUpChoice = %LevelUpChoice
 @onready var _extraction_point: ExtractionPoint = %ExtractionPoint
 @onready var _extraction_timer: Timer = %ExtractionTimer
+@onready var _run_end_screen: RunEndScreen = %RunEndScreen
 
 
 func _ready() -> void:
 	get_tree().paused = false
 	_rng.randomize()
-	RunManager.start_run(level_curve)
+	RunManager.state_changed.connect(_on_run_state_changed)
+	RunManager.run_ended.connect(_on_run_ended)
 	RunManager.leveled_up.connect(_on_leveled_up)
+	_run_end_screen.restart_requested.connect(_on_restart_requested)
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
@@ -37,6 +40,7 @@ func _ready() -> void:
 	_extraction_point.extracted.connect(_on_extracted)
 	_extraction_timer.timeout.connect(_open_extraction)
 	_extraction_timer.start(extraction_data.appear_after)
+	RunManager.start_run(level_curve)
 
 
 func _process(_delta: float) -> void:
@@ -45,7 +49,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_enemy_died(enemy: Enemy) -> void:
-	RunManager.add_exp(enemy.data.exp_reward)
+	RunManager.register_kill(enemy.data.exp_reward)
 
 
 func _open_extraction() -> void:
@@ -56,18 +60,17 @@ func _open_extraction() -> void:
 
 
 func _on_extracted() -> void:
-	# Placeholder: riavvio immediato. Schermata di fine run e reset completo in #5.
-	get_tree().reload_current_scene.call_deferred()
+	RunManager.end_run(RunManager.Result.EXTRACTED)
 
 
 func _on_leveled_up(_level: int) -> void:
 	_pending_level_ups += 1
-	if not _level_up_choice.visible:
+	if RunManager.state == RunManager.State.RUNNING:
+		RunManager.begin_level_up()
 		_present_level_up()
 
 
 func _present_level_up() -> void:
-	get_tree().paused = true
 	_level_up_choice.present(upgrade_table.pick(choices_per_level, _rng))
 
 
@@ -77,9 +80,26 @@ func _on_upgrade_chosen(upgrade: UpgradeData) -> void:
 	if _pending_level_ups > 0:
 		_present_level_up()
 	else:
-		get_tree().paused = false
+		RunManager.end_level_up()
 
 
 func _on_player_died() -> void:
-	# Placeholder: riavvio immediato. Il flusso completo morte = reset run e' #5.
+	RunManager.end_run(RunManager.Result.DEATH)
+
+
+func _on_run_state_changed(state: RunManager.State) -> void:
+	get_tree().paused = state != RunManager.State.RUNNING
+
+
+func _on_run_ended(result: RunManager.Result) -> void:
+	_pending_level_ups = 0
+	_level_up_choice.hide()
+	_run_end_screen.present(
+		result == RunManager.Result.EXTRACTED, RunManager.level, RunManager.elapsed, RunManager.kills
+	)
+
+
+func _on_restart_requested() -> void:
+	# Nuova run = scena Arena nuova: tutto lo stato di scena riparte da zero, RunManager da start_run().
+	get_tree().paused = false
 	get_tree().reload_current_scene.call_deferred()
