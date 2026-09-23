@@ -24,6 +24,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _extraction_indicator: ExtractionIndicator = %ExtractionIndicator
 @onready var _pause: PauseController = %PauseController
 @onready var _pause_menu: PauseMenu = %PauseMenu
+@onready var _run_inventory: RunInventory = %RunInventory
 
 
 func _ready() -> void:
@@ -119,6 +120,10 @@ func _on_run_state_changed(state: RunManager.State) -> void:
 
 func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_pause_menu.show_mode(mode)
+	if mode == PauseState.Mode.INVENTORY:
+		_run_inventory.present(MetaProgression.equipped_items(), RunManager.loot.to_dictionary())
+	else:
+		_run_inventory.close()
 	_refresh_pause()
 
 

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Inventario di run con il tasto I: pannello sulla metà destra, gioco in pausa, equipaggiamento indossato e loot a rischio della run (#24).
 - Menu di pausa con ESC (Riprendi, Pausa) e pausa diretta con P, scritta PAUSA al centro; `PauseState` testato, pausa combinata con quella del level-up (#23).
 - HUD: barra HP rossa e barra EXP blu; scalatura della finestra `canvas_items` (base 1280x720, aspect expand) per lo schermo intero (#26).
 - Cadenza di fuoco senza tetto: cooldown ad accumulatore, più proiettili nello stesso tick oltre i 60 colpi/s, test dedicati (#21).

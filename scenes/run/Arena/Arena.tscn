@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://scenes/ui/ExtractionIndicator/extraction_indicator.gd" id="23"]
 [ext_resource type="Script" path="res://scripts/run/pause_controller.gd" id="24"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu/PauseMenu.tscn" id="25"]
+[ext_resource type="PackedScene" path="res://scenes/ui/RunInventory/RunInventory.tscn" id="26"]
 [ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="20"]
 [ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="21"]
 [ext_resource type="AudioStream" path="res://assets/audio/music_arena.wav" id="22"]
@@ -172,4 +173,7 @@ process_mode = 3
 script = ExtResource("24")
 
 [node name="PauseMenu" parent="." instance=ExtResource("25")]
+unique_name_in_owner = true
+
+[node name="RunInventory" parent="." instance=ExtResource("26")]
 unique_name_in_owner = true

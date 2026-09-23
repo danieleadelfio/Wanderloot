@@ -16,6 +16,15 @@ func test_p_toggles_direct_pause_and_escape_closes_it() -> void:
 	assert_int(state.handle(PauseState.Action.MENU)).is_equal(PauseState.Mode.NONE)
 
 
+func test_inventory_toggles_and_escape_closes_it() -> void:
+	var state := PauseState.new()
+	assert_int(state.handle(PauseState.Action.INVENTORY)).is_equal(PauseState.Mode.INVENTORY)
+	assert_bool(state.is_paused()).is_true()
+	assert_int(state.handle(PauseState.Action.INVENTORY)).is_equal(PauseState.Mode.NONE)
+	state.handle(PauseState.Action.INVENTORY)
+	assert_int(state.handle(PauseState.Action.MENU)).is_equal(PauseState.Mode.NONE)
+
+
 func test_menu_pause_option_switches_to_direct_pause() -> void:
 	var state := PauseState.new()
 	state.handle(PauseState.Action.MENU)

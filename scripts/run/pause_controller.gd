@@ -1,6 +1,6 @@
 class_name PauseController
 extends Node
-## Traduce l'input (ESC, P) in azioni su PauseState ed emette mode_changed. Gira anche in pausa
+## Traduce l'input (ESC, P, I) in azioni su PauseState ed emette mode_changed. Gira anche in pausa
 ## (process_mode ALWAYS nella scena). Non tocca il tree: la pausa la applica la composition root.
 
 signal mode_changed(mode: PauseState.Mode)
@@ -32,4 +32,6 @@ func _action_for(event: InputEvent) -> int:
 		return PauseState.Action.MENU
 	if event.is_action_pressed("pause"):
 		return PauseState.Action.PAUSE
+	if event.is_action_pressed("inventory"):
+		return PauseState.Action.INVENTORY
 	return -1
