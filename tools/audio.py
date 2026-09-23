@@ -137,4 +137,8 @@ for i in range(64):
         drums[i * step:i * step + len(kick)] += kick[:len(drums) - i * step]
 music = render(140, 8, [(bass, lambda p: square(p, 0.5), 0.28), (lead, lambda p: square(p, 0.25), 0.16)])
 save("music_arena", mix(music, drums), 0.6)
+# --- raccolta (M5): exp = blip breve che sale, materiali = due note a campanella ---
+d = 0.06; save("pickup_exp", triangle(sweep(1300, 2100, d)) * env(int(SR * d), curve=1.8), 0.35)
+chime = lambda n, dur: triangle(np.cumsum(np.full(int(SR * dur), note(n))) / SR) * env(int(SR * dur), curve=2.2)
+save("pickup_item", mix(chime(88, 0.16), np.pad(chime(95, 0.2), (int(SR * 0.06), 0))), 0.5)
 print("audio:", sorted(os.listdir(OUT)))

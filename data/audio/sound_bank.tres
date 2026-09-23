@@ -11,6 +11,8 @@
 [ext_resource type="AudioStream" path="res://assets/audio/player_death.wav" id="a6"]
 [ext_resource type="AudioStream" path="res://assets/audio/craft.wav" id="a7"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui_select.wav" id="a8"]
+[ext_resource type="AudioStream" path="res://assets/audio/pickup_exp.wav" id="a9"]
+[ext_resource type="AudioStream" path="res://assets/audio/pickup_item.wav" id="a10"]
 
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("2")
@@ -75,6 +77,20 @@ stream = ExtResource("a8")
 volume_db = -6.0
 pitch_variance = 0.0
 
+[sub_resource type="Resource" id="e9"]
+script = ExtResource("2")
+id = &"pickup_exp"
+stream = ExtResource("a9")
+volume_db = -10.0
+pitch_variance = 0.12
+
+[sub_resource type="Resource" id="e10"]
+script = ExtResource("2")
+id = &"pickup_item"
+stream = ExtResource("a10")
+volume_db = -3.0
+pitch_variance = 0.05
+
 [resource]
 script = ExtResource("1")
-entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8")])
+entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10")])

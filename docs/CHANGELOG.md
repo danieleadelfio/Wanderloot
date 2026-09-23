@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Raccolta a magnete: gemme di exp e materiali restano a terra, entro un raggio volano verso il player e vengono assorbiti con due suoni distinti; `PickupPool` testato. Exp e loot contano solo se raccolti (#22).
 - Inventario di run con il tasto I: pannello sulla metà destra, gioco in pausa, equipaggiamento indossato e loot a rischio della run (#24).
 - Menu di pausa con ESC (Riprendi, Pausa) e pausa diretta con P, scritta PAUSA al centro; `PauseState` testato, pausa combinata con quella del level-up (#23).
 - HUD: barra HP rossa e barra EXP blu; scalatura della finestra `canvas_items` (base 1280x720, aspect expand) per lo schermo intero (#26).

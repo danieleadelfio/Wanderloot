@@ -25,7 +25,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 ## 3. Le due progressioni
 
 ### 3.1 Progressione interna alla run (temporanea)
-- Exp guadagnata uccidendo nemici → level-up. Curva in `LevelCurve` (`data/run/level_curve.tres`): exp per passare da N a N+1 = `5 * 1.35^(N-1)` arrotondato (5, 7, 9, 12, 17…). L'exp in eccesso passa al livello successivo; più level-up in un colpo sono gestiti uno alla volta.
+- Exp guadagnata raccogliendo le gemme lasciate dai nemici (da M5; prima era immediata) → level-up. Curva in `LevelCurve` (`data/run/level_curve.tres`): exp per passare da N a N+1 = `5 * 1.35^(N-1)` arrotondato (5, 7, 9, 12, 17…). L'exp in eccesso passa al livello successivo; più level-up in un colpo sono gestiti uno alla volta.
 - Ad ogni level-up: pausa, 3 scelte casuali (pesate) tra potenziamenti d'arma, abilità passive, statistiche.
   - **Stato M1**: 5 upgrade di statistica in `data/upgrades/` (Potenza +1 danno, Raffica +20% cadenza, Gittata +20% velocità proiettili, Agilità +10% movimento, Vigore +1 HP max e cura 1), tutti con peso 1, estratti senza ripetizioni da `UpgradeTable`. Scelta con mouse o tastiera/pad (focus sul primo). Abilità passive/nuove armi: dopo l'MVP.
 - Tutto ciò che riguarda questa progressione si azzera all'inizio di ogni run, indipendentemente dall'esito.
@@ -67,7 +67,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - I nemici droppano: exp (sempre) + eventualmente 1 tipo di materiale comune.
 - Rari drop: pezzo di equipaggiamento grezzo (non identificato/non equipaggiabile finché non estratto).
 - **Stato M2 (dati)**: `MaterialData` (id, nome, rarità comune/raro, colore placeholder) in `data/materials/`; drop table come array di `DropEntry` (materiale, probabilità, quantità min/max) dentro `EnemyData`, ogni riga tirata indipendentemente. Slime: Gelatina (comune) 35% ×1–2, Nucleo di slime (raro) 3% ×1. L'equipaggiamento grezzo arriva con M3 (crafting/equip), in M2 solo materiali.
-- **Stato M2 (drop)**: alla morte di un nemico `Arena` tira la sua drop table e aggiunge direttamente all'inventario di run (nessun pickup fisico da raccogliere: pickup/magnete valutabili in M4). HUD: "Loot a rischio: N" in ambra.
+- ~~Stato M2 (drop)~~: il loot andava direttamente nell'inventario di run. **Sostituito in M5 (#22)**: alla morte il nemico lascia a terra una gemma di exp (blu) e i materiali tirati dalla drop table (icona del materiale). Entro `PlayerStats.pickup_radius` (90px) vengono attratti verso il player con accelerazione (effetto magnete) e assorbiti al contatto, con due suoni distinti (`pickup_exp`, `pickup_item`). Exp e loot contano solo quando assorbiti; ciò che resta a terra a fine run è perso. Pool e movimento in `PickupPool` (un solo `_physics_process` per tutti gli oggetti), coperto da test. HUD: "Loot a rischio: N" in ambra.
 - Crafting MVP: sistema semplice "materiali → oggetto", con ricette fisse (niente crafting proceduralmente generato in v1).
 - Equipaggiamento MVP: slot minimi (arma, 1 accessorio) per non esplodere lo scope.
 - **Stato M3 (#12, dati)**: `EquipmentData` (id, nome, descrizione, slot `WEAPON`/`ACCESSORY`, lista di `StatModifier`) in `data/equipment/`, tutti elencati in `EquipmentCatalog` (risolve gli id salvati). `StatModifier` riusa l'enum di `UpgradeData.Stat` (danno, cadenza, velocità proiettili, movimento, HP max). Pezzi iniziali: Bacchetta di gelatina (+1 danno), Bacchetta rapida (+25% cadenza), Amuleto del nucleo (+2 HP), Stivali viscosi (+10% movimento). **Decisione**: lo slot arma modifica la bacchetta base, non la sostituisce (nuovi tipi di arma: v2). L'equipaggiamento grezzo droppato in run resta fuori dall'MVP: i pezzi si ottengono solo col crafting.
@@ -174,7 +174,8 @@ res://
   assets/audio/                      # WAV di SFX e musiche (generati da tools/audio.py)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
   data/audio/sound_bank.tres         # id suono -> stream + volume
-  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer, stat_applier
+  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer, stat_applier, pickup_pool, pause_state, pause_controller
+  scenes/run/Pickup/                 # oggetto a terra (gemma exp o materiale), poolable
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
   scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry, stat_modifier, equipment_data, equipment_catalog, material_cost, recipe_data, recipe_book
@@ -233,6 +234,10 @@ Playtest end-to-end automatico `tools/flow.gd` (bot): hub → run fino a un'estr
 - **Farming infinito** (vedi §10.1) → tetto di nemici crescente.
 
 Non verificabile da bot, resta da fare a mano: feeling di controlli e mira col mouse, leggibilità degli sprite a 2x, volumi reali di SFX/musica, chiarezza di hub e fabbro per chi non conosce il gioco. Noti e accettati per l'MVP: nessun menu di pausa/uscita durante la run, nessun menu opzioni (volumi), nessuna schermata titolo.
+
+### 10.3 Verifica M5 (#22, raccolta a magnete)
+
+Con exp e materiali da raccogliere il bot che si limita a scappare crolla (estrazioni 20%, livello medio 4,2): conferma che la raccolta è una scelta attiva di rischio. Con il bot aggiornato (raccoglie gli oggetti quando non ha nemici vicini) i numeri tornano a quelli di M4 senza ritoccare i dati: estrazioni 65%, livello medio 8,8, ~31 gelatine per run (20 run). Raggio del magnete lasciato a 90px.
 
 ## 11. Open questions
 

@@ -65,4 +65,6 @@ def wand(gem, spark):
 save("icon_gel_wand", wand('g', None)); save("icon_rapid_wand", wand('c', 'y'))
 save("icon_core_amulet", img(mirror(["..k.....","..kk....","...kk...","....kk..","....kyk.",".....ky.",".....kyk","....kkkk","...krppp","...krpPw","...krppp","....krrp",".....kkk","........","........","........"])))
 save("icon_slime_boots", img(["................","....kkkk........","....kgGk........","....kggk........","....kggk........","....kggk........","....kggkk.......","....kgggkk......","...kggggGgkk....","...kgggggggGk...","...kDgggggggk...","...kkkkkkkkkk...","................","................","................","................"]))
+# gemma di exp (8x8, disegnata a 2x)
+save("exp_gem", img(mirror(["...k", "..kc", ".kcl", "kclb", "kclb", ".kbb", "..kb", "...k"])))
 print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

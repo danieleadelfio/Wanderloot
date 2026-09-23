@@ -1,6 +1,7 @@
 class_name BotDriver
 extends RefCounted
-## Guida del bot di playtest: kiting dai nemici vicini, mira sul piu' vicino, va all'estrazione. Usata da
+## Guida del bot di playtest: kiting dai nemici vicini, mira sul piu' vicino, raccoglie gli oggetti a terra
+## quando e' al sicuro, va all'estrazione. Usata da
 ## tools/autoplay.gd (bilanciamento) e tools/flow.gd (playtest end-to-end). Agisce solo via Input actions.
 
 
@@ -25,6 +26,15 @@ static func drive(a: Node) -> void:
 		var to: Vector2 = ep.global_position - pos
 		goal = to.normalized() * (1.2 if to.length() > 30 else 0.0)
 		if to.length() < 40: flee *= 0.25
+	# Raccolta (M5): se non ci sono nemici vicini va verso l'oggetto a terra piu' vicino.
+	if goal == Vector2.ZERO and flee.length() < 0.4 and a.has_node("%PickupPool"):
+		var best := INF
+		for pk in a.get_node("%PickupPool").get_children():
+			if pk.visible:
+				var dp: float = pos.distance_to(pk.global_position)
+				if dp < best and dp < 400.0:
+					best = dp
+					goal = pos.direction_to(pk.global_position) * 0.8
 	var move := (flee + center + goal).limit_length(1.0)
 	set_axis("move_left", "move_right", move.x)
 	set_axis("move_up", "move_down", move.y)

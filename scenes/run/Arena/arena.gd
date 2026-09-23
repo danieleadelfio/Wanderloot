@@ -14,6 +14,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _enemy_pool: EnemyPool = %EnemyPool
 @onready var _wave_spawner: WaveSpawner = %WaveSpawner
 @onready var _projectile_pool: ProjectilePool = %ProjectilePool
+@onready var _pickup_pool: PickupPool = %PickupPool
 @onready var _hud: Hud = %HUD
 @onready var _level_up_choice: LevelUpChoice = %LevelUpChoice
 @onready var _extraction_point: ExtractionPoint = %ExtractionPoint
@@ -47,6 +48,10 @@ func _ready() -> void:
 	_player.begin_run(MetaProgression.equipped_items())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_enemy_pool.enemy_died.connect(_on_enemy_died)
+	_pickup_pool.target = _player
+	_pickup_pool.attract_radius = _player.stats.pickup_radius
+	_pickup_pool.exp_collected.connect(_on_exp_collected)
+	_pickup_pool.material_collected.connect(_on_material_collected)
 	_enemy_pool.enemy_hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
 	_wave_spawner.start(_player)
 	_extraction_point.data = extraction_data
@@ -65,15 +70,27 @@ func _process(_delta: float) -> void:
 
 func _on_enemy_died(enemy: Enemy) -> void:
 	_sfx.play(&"enemy_die")
-	RunManager.register_kill(enemy.data.exp_reward)
-	_roll_drops(enemy.data)
+	# Exp e materiali restano a terra: contano solo quando il player li raccoglie (magnete).
+	RunManager.register_kill(0)
+	_pickup_pool.spawn_exp(enemy.global_position, enemy.data.exp_reward)
+	_roll_drops(enemy)
 
 
-func _roll_drops(data: EnemyData) -> void:
-	for entry in data.drops:
+func _roll_drops(enemy: Enemy) -> void:
+	for entry in enemy.data.drops:
 		var amount := entry.roll(_rng)
-		if amount > 0:
-			RunManager.add_loot(entry.material, amount)
+		for i in amount:
+			_pickup_pool.spawn_material(enemy.global_position, entry.material, 1)
+
+
+func _on_exp_collected(amount: int) -> void:
+	_sfx.play(&"pickup_exp")
+	RunManager.add_exp(amount)
+
+
+func _on_material_collected(material: MaterialData, amount: int) -> void:
+	_sfx.play(&"pickup_item")
+	RunManager.add_loot(material, amount)
 
 
 func _open_extraction() -> void:
