@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="2"]
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/hub/Blacksmith/Blacksmith.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/hub/LoadoutPanel/LoadoutPanel.tscn" id="5"]
 
 [node name="Hub" type="Control"]
 layout_mode = 3
@@ -70,6 +71,10 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 1)
 
 [node name="Blacksmith" parent="Margin/VBox/Panels" instance=ExtResource("4")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LoadoutPanel" parent="Margin/VBox/Panels" instance=ExtResource("5")]
 unique_name_in_owner = true
 layout_mode = 2
 

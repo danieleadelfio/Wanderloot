@@ -32,6 +32,8 @@ func _ready() -> void:
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
 	_player.died.connect(_on_player_died)
+	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
+	_player.begin_run(MetaProgression.equipped_items())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_enemy_pool.enemy_died.connect(_on_enemy_died)
 	_wave_spawner.start(_player)

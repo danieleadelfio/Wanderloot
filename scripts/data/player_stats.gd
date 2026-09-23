@@ -1,6 +1,6 @@
 class_name PlayerStats
 extends Resource
-## Statistiche base del player. In futuro modificate da upgrade di run ed equip permanente.
+## Statistiche base del player. Mai modificate a runtime: upgrade ed equip lavorano su copie di run (Player.begin_run).
 
 @export var max_hp: int = 5
 @export var move_speed: float = 220.0

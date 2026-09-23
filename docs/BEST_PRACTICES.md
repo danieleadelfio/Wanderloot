@@ -43,6 +43,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
   - In activate/deactivate: `visible`, `set_physics_process` e toggle di `monitoring`/`monitorable`/`disabled` sempre con `set_deferred` (si è spesso dentro un callback fisico).
 
 - **Resource condivise sono read-only a runtime.** Un `.tres` caricato è la stessa istanza per tutti: per stato che cambia durante la run (stats potenziate dagli upgrade) lavorare su una copia fatta con `duplicate()` a inizio run.
+  - Il proprietario tiene il riferimento al `.tres` base e ricrea le copie a ogni inizio run (`Player.begin_run()`); tutti i modificatori (equip, upgrade) passano da un'unica funzione pura (`StatApplier`), mai `match` sulle stat duplicati in più punti.
 - **Pausa**: si usa `get_tree().paused`; la UI che deve funzionare in pausa ha `process_mode = ALWAYS`. La pausa segue lo stato della run: `RunManager` cambia solo stato (nessun accesso alla scena, così resta testabile come logica pura) e la composition root applica `paused` reagendo a `state_changed`.
 
 - **Persistenza**: solo `MetaProgression` legge/scrive su disco, in `user://` con `ConfigFile` e chiave `version` per future migrazioni. Mai caricare `.tres`/`.res` da `user://` (possono contenere script eseguibili). Logica di inventario in classi pure (`MetaInventory`) separate dall'I/O, così si testano senza file.

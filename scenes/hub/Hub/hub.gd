@@ -1,5 +1,5 @@
 extends Control
-## Hub fuori dalla run (GDD §7): baule permanente, fabbro e partenza della run. Composition root dell'hub.
+## Hub fuori dalla run (GDD §7): baule permanente, fabbro, equipaggiamento e partenza della run. Composition root dell'hub.
 
 ## Solo per mostrare i nomi nel baule; id sconosciuti vengono mostrati grezzi.
 @export var materials: Array[MaterialData] = []
@@ -8,6 +8,7 @@ var _material_names: Dictionary[StringName, String] = {}
 
 @onready var _stash_label: Label = %StashLabel
 @onready var _blacksmith: Blacksmith = %Blacksmith
+@onready var _loadout_panel: LoadoutPanel = %LoadoutPanel
 @onready var _start_button: Button = %StartButton
 
 
@@ -18,6 +19,8 @@ func _ready() -> void:
 	MetaProgression.changed.connect(_refresh)
 	_start_button.pressed.connect(_on_start_pressed)
 	_blacksmith.craft_requested.connect(MetaProgression.craft)
+	_loadout_panel.equip_requested.connect(MetaProgression.equip)
+	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
 	_refresh()
 	_start_button.grab_focus()
 
@@ -25,6 +28,7 @@ func _ready() -> void:
 func _refresh() -> void:
 	_stash_label.text = _format_stash(MetaProgression.inventory.to_dictionary())
 	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names)
+	_loadout_panel.refresh(MetaProgression.loadout)
 	_ensure_focus.call_deferred()
 
 

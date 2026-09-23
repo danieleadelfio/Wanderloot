@@ -37,6 +37,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
   - **Materiali da crafting** (comuni/rari) → usati per craftare o potenziare equipaggiamento nell'hub.
   - **Equipaggiamento grezzo/non identificato** → utilizzabile solo dopo l'estrazione; una volta in hub può essere equipaggiato o smontato in materiali.
 - L'equipaggiamento permanente scelto in hub prima della run (arma di partenza, oggetti passivi permanenti) influenza il power level di partenza della run successiva.
+  - **Stato M3 (#14)**: pannello "Equipaggiamento" nell'hub (un pezzo per slot, click per equipaggiare/togliere). A inizio run `Arena` passa `MetaProgression.equipped_items()` a `Player.begin_run()`, che riparte da copie fresche di `PlayerStats`/`WeaponData` e applica i modificatori (`StatApplier`, stessa logica degli upgrade di run, che si sommano sopra). L'equip è letto una sola volta: cambiarlo vale dalla run successiva.
 - Sblocco progressivo di strutture/NPC nell'hub in base a milestone (es. numero di estrazioni riuscite, materiali totali raccolti, boss sconfitti).
 
 ## 4. Extraction shooter layer — regole di rischio
@@ -146,6 +147,7 @@ res://
   scripts/core/scene_routes.gd       # percorsi delle scene principali (Hub, Arena)
   scenes/hub/Hub/                    # Hub.tscn + hub.gd (scena principale, composition root dell'hub)
   scenes/hub/Blacksmith/             # pannello fabbro (ricette, richiesta craft via segnale)
+  scenes/hub/LoadoutPanel/           # pannello equipaggiamento (equip/unequip via segnale)
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
   scenes/run/Player/                 # Player.tscn + player.gd
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
@@ -156,7 +158,7 @@ res://
   scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
   scenes/ui/RunEndScreen/            # schermata di fine run (morte/estrazione) + riavvio
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
-  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer
+  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer, stat_applier
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
   scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry, stat_modifier, equipment_data, equipment_catalog, material_cost, recipe_data, recipe_book
