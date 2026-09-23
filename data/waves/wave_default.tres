@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WaveData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/wave_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+start_interval = 2.0
+min_interval = 0.5
+interval_decay = 0.015
+start_batch = 1
+batch_growth_period = 25.0
+max_alive = 60

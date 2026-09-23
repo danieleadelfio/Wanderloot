@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" path="res://scenes/run/Enemies/EnemyBasic/EnemyBasic.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/run/Player/Player.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD/HUD.tscn" id="6"]
+[ext_resource type="Script" path="res://scripts/run/enemy_pool.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/run/wave_spawner.gd" id="8"]
+[ext_resource type="Resource" path="res://data/waves/wave_default.tres" id="9"]
 
 [sub_resource type="RectangleShape2D" id="wall_h"]
 size = Vector2(1680, 40)
@@ -47,8 +50,16 @@ unique_name_in_owner = true
 script = ExtResource("2")
 projectile_scene = ExtResource("3")
 
-[node name="EnemyBasic" parent="." instance=ExtResource("4")]
+[node name="EnemyPool" type="Node2D" parent="."]
 unique_name_in_owner = true
+script = ExtResource("7")
+enemy_scene = ExtResource("4")
+
+[node name="WaveSpawner" type="Node" parent="." node_paths=PackedStringArray("enemy_pool")]
+unique_name_in_owner = true
+script = ExtResource("8")
+wave_data = ExtResource("9")
+enemy_pool = NodePath("../EnemyPool")
 
 [node name="Player" parent="." instance=ExtResource("5")]
 unique_name_in_owner = true
@@ -59,10 +70,6 @@ limit_top = -500
 limit_right = 800
 limit_bottom = 500
 position_smoothing_enabled = true
-
-[node name="RespawnTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-one_shot = true
 
 [node name="HUD" parent="." instance=ExtResource("6")]
 unique_name_in_owner = true

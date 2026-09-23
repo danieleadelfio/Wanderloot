@@ -125,7 +125,7 @@ res://
     audio/
 ```
 
-### 9.1 Struttura attuale (M0)
+### 9.1 Struttura attuale
 
 ```
 res://
@@ -137,13 +137,14 @@ res://
   scenes/run/Projectile/             # Projectile.tscn + projectile.gd (poolable)
   scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP + EXP)
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
-  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats
-  data/{weapons,enemies,player}/     # .tres: starter_wand, enemy_basic, player_default
+  scripts/run/                       # enemy_pool, wave_spawner
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data
+  data/{weapons,enemies,player,waves}/ # .tres: starter_wand, enemy_basic, player_default, wave_default
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
 - Autoload attivi: solo `RunManager`. `MetaProgression` verrà aggiunto con M2/M3 (primo momento in cui esiste stato persistente).
-- Nemico: API già poolable (`activate`/`deactivate`), in M0 una sola istanza che rinasce 1.5s dopo la morte in un punto casuale lontano dal player. Pool nemici + ondate in M1.
+- Nemici: `EnemyPool` (un pool per tipo di nemico, 32 pre-istanziati, cresce se serve) + `WaveSpawner` guidato da `WaveData`: l'intervallo tra batch scende da 2.0s a 0.5s (−0.015s per secondo di run), il batch cresce di 1 nemico ogni 25s, tetto 60 nemici vivi. Spawn in punto casuale ad almeno 300px dal player.
 - Morte player: placeholder M0 = ricarica scena (`RunManager.reset()` in `Arena._ready`). Il flusso completo è M1.
 - Collision layers (nomi in Project Settings): 1 `world`, 2 `player`, 3 `enemy`, 4 `player_attack`, 5 `enemy_attack`.
 - Input map: `move_*` (WASD, frecce, stick sinistro), `aim_*` (stick destro), `shoot` (mouse sinistro).
