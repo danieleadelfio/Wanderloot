@@ -1,6 +1,6 @@
 class_name Hud
 extends CanvasLayer
-## HUD minimale: HP ed estrazione (da Arena), livello ed exp (da RunManager).
+## HUD minimale: HP ed estrazione (da Arena), livello, exp e loot di run (da RunManager).
 
 @onready var _hp_label: Label = %HpLabel
 @onready var _hp_bar: ProgressBar = %HpBar
@@ -8,13 +8,16 @@ extends CanvasLayer
 @onready var _exp_label: Label = %ExpLabel
 @onready var _exp_bar: ProgressBar = %ExpBar
 @onready var _extraction_label: Label = %ExtractionLabel
+@onready var _loot_label: Label = %LootLabel
 
 
 func _ready() -> void:
 	RunManager.exp_changed.connect(set_exp)
 	RunManager.leveled_up.connect(set_level)
+	RunManager.loot.changed.connect(set_loot)
 	set_level(RunManager.level)
 	set_exp(RunManager.experience, RunManager.exp_to_next())
+	set_loot(RunManager.loot.total())
 
 
 func set_hp(current: int, maximum: int) -> void:
@@ -31,6 +34,10 @@ func set_exp(current: int, required: int) -> void:
 	_exp_bar.max_value = maxi(required, 1)
 	_exp_bar.value = current
 	_exp_label.text = "EXP %d/%d" % [current, required]
+
+
+func set_loot(total: int) -> void:
+	_loot_label.text = "Loot a rischio: %d" % total
 
 
 func set_extraction_countdown(seconds: float) -> void:

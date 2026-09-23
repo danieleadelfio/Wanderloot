@@ -50,6 +50,14 @@ func _process(_delta: float) -> void:
 
 func _on_enemy_died(enemy: Enemy) -> void:
 	RunManager.register_kill(enemy.data.exp_reward)
+	_roll_drops(enemy.data)
+
+
+func _roll_drops(data: EnemyData) -> void:
+	for entry in data.drops:
+		var amount := entry.roll(_rng)
+		if amount > 0:
+			RunManager.add_loot(entry.material, amount)
 
 
 func _open_extraction() -> void:

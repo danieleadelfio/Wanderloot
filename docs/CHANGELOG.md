@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Drop di materiali alla morte dei nemici nell'inventario di run, contatore "Loot a rischio" in HUD (#8).
 - Inventario di run `LootRunInventory` separato dal permanente, posseduto da `RunManager` e svuotato a ogni run (#7).
 - Modello dati del loot: `MaterialData`, `DropEntry` e drop table in `EnemyData`; materiali Gelatina e Nucleo di slime (#6).
 - Flusso di fine run: `RunManager` a stati (RUNNING/LEVEL_UP/ENDED) con esito morte/estrazione, pausa guidata dallo stato, schermata di fine run con riepilogo e “Nuova run” (#5). M1 completato.

@@ -61,6 +61,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - I nemici droppano: exp (sempre) + eventualmente 1 tipo di materiale comune.
 - Rari drop: pezzo di equipaggiamento grezzo (non identificato/non equipaggiabile finché non estratto).
 - **Stato M2 (dati)**: `MaterialData` (id, nome, rarità comune/raro, colore placeholder) in `data/materials/`; drop table come array di `DropEntry` (materiale, probabilità, quantità min/max) dentro `EnemyData`, ogni riga tirata indipendentemente. Slime: Gelatina (comune) 35% ×1–2, Nucleo di slime (raro) 3% ×1. L'equipaggiamento grezzo arriva con M3 (crafting/equip), in M2 solo materiali.
+- **Stato M2 (drop)**: alla morte di un nemico `Arena` tira la sua drop table e aggiunge direttamente all'inventario di run (nessun pickup fisico da raccogliere: pickup/magnete valutabili in M4). HUD: "Loot a rischio: N" in ambra.
 - Crafting MVP: sistema semplice "materiali → oggetto", con ricette fisse (niente crafting proceduralmente generato in v1).
 - Equipaggiamento MVP: slot minimi (arma, 1 accessorio) per non esplodere lo scope.
 
