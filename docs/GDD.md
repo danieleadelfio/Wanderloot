@@ -43,6 +43,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - Il loot grezzo vive in un "inventario di run" separato da quello permanente.
 - **Morte prima dell'estrazione = perdita totale del loot di run.** (Regola scelta per l'MVP: nessuna mitigazione parziale, per mantenere la tensione rischio/ricompensa netta.)
 - L'estrazione è un punto/area che appare dopo un certo tempo o dopo un trigger (es. uccisione di un'elite), e richiede di rimanere nella zona per N secondi (rischio: i nemici continuano ad arrivare durante il canale).
+  - **Stato M1** (`ExtractionData`, `data/run/extraction_default.tres`): la zona (cerchio verde, raggio 48px) appare dopo 60s di run in un punto casuale ad almeno 400px dal player; servono 5s dentro la zona. **Decisione:** uscendo il progresso non si azzera ma cala di 0.5s per ogni secondo fuori (un'uscita breve per schivare non vanifica tutto). HUD: countdown, poi percentuale di estrazione. Nessun indicatore fuori schermo per ora (valutare in M4).
 - Possibile estensione futura (fuori scope MVP): possibilità di estrarre "in anticipo" con meno loot ma meno rischio, o zone a rischio/reward crescente.
 
 ## 5. Combattimento (ranged)
@@ -136,12 +137,13 @@ res://
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
   scenes/run/Enemies/EnemyBasic/     # EnemyBasic.tscn (inseguimento diretto)
   scenes/run/Projectile/             # Projectile.tscn + projectile.gd (poolable)
+  scenes/run/ExtractionPoint/        # zona di estrazione (Area2D + _draw del progresso)
   scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP, livello, barra EXP)
   scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
-  scripts/run/                       # enemy_pool, wave_spawner
-  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table
-  data/{weapons,enemies,player,waves,run,upgrades}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, upgrade_*
+  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data
+  data/{weapons,enemies,player,waves,run,upgrades}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.

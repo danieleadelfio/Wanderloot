@@ -4,6 +4,8 @@ extends Node2D
 @export var level_curve: LevelCurve
 @export var upgrade_table: UpgradeTable
 @export var choices_per_level: int = 3
+@export var extraction_data: ExtractionData
+@export var extraction_spawn_rect: Rect2 = Rect2(-700.0, -400.0, 1400.0, 800.0)
 
 var _pending_level_ups: int = 0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -14,6 +16,8 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _projectile_pool: ProjectilePool = %ProjectilePool
 @onready var _hud: Hud = %HUD
 @onready var _level_up_choice: LevelUpChoice = %LevelUpChoice
+@onready var _extraction_point: ExtractionPoint = %ExtractionPoint
+@onready var _extraction_timer: Timer = %ExtractionTimer
 
 
 func _ready() -> void:
@@ -28,10 +32,32 @@ func _ready() -> void:
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_enemy_pool.enemy_died.connect(_on_enemy_died)
 	_wave_spawner.start(_player)
+	_extraction_point.data = extraction_data
+	_extraction_point.progress_changed.connect(_hud.set_extraction_progress)
+	_extraction_point.extracted.connect(_on_extracted)
+	_extraction_timer.timeout.connect(_open_extraction)
+	_extraction_timer.start(extraction_data.appear_after)
+
+
+func _process(_delta: float) -> void:
+	if not _extraction_timer.is_stopped():
+		_hud.set_extraction_countdown(_extraction_timer.time_left)
 
 
 func _on_enemy_died(enemy: Enemy) -> void:
 	RunManager.add_exp(enemy.data.exp_reward)
+
+
+func _open_extraction() -> void:
+	var spawn_position := SpawnUtils.random_point_away(
+		extraction_spawn_rect, _player.global_position, extraction_data.spawn_min_distance
+	)
+	_extraction_point.activate(spawn_position)
+
+
+func _on_extracted() -> void:
+	# Placeholder: riavvio immediato. Schermata di fine run e reset completo in #5.
+	get_tree().reload_current_scene.call_deferred()
 
 
 func _on_leveled_up(_level: int) -> void:

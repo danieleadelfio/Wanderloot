@@ -12,6 +12,8 @@
 [ext_resource type="Resource" path="res://data/run/level_curve.tres" id="10"]
 [ext_resource type="Resource" path="res://data/upgrades/upgrade_table.tres" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/ui/LevelUpChoice/LevelUpChoice.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/run/ExtractionPoint/ExtractionPoint.tscn" id="13"]
+[ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="14"]
 
 [sub_resource type="RectangleShape2D" id="wall_h"]
 size = Vector2(1680, 40)
@@ -23,6 +25,7 @@ size = Vector2(40, 1080)
 script = ExtResource("1")
 level_curve = ExtResource("10")
 upgrade_table = ExtResource("11")
+extraction_data = ExtResource("14")
 
 [node name="Floor" type="ColorRect" parent="."]
 offset_left = -800.0
@@ -49,6 +52,13 @@ shape = SubResource("wall_v")
 [node name="Right" type="CollisionShape2D" parent="Walls"]
 position = Vector2(820, 0)
 shape = SubResource("wall_v")
+
+[node name="ExtractionPoint" parent="." instance=ExtResource("13")]
+unique_name_in_owner = true
+
+[node name="ExtractionTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
 
 [node name="ProjectilePool" type="Node2D" parent="."]
 unique_name_in_owner = true

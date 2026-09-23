@@ -1,12 +1,13 @@
 class_name Hud
 extends CanvasLayer
-## HUD minimale: HP (da Arena via set_hp), livello ed exp (da RunManager).
+## HUD minimale: HP ed estrazione (da Arena), livello ed exp (da RunManager).
 
 @onready var _hp_label: Label = %HpLabel
 @onready var _hp_bar: ProgressBar = %HpBar
 @onready var _level_label: Label = %LevelLabel
 @onready var _exp_label: Label = %ExpLabel
 @onready var _exp_bar: ProgressBar = %ExpBar
+@onready var _extraction_label: Label = %ExtractionLabel
 
 
 func _ready() -> void:
@@ -30,3 +31,14 @@ func set_exp(current: int, required: int) -> void:
 	_exp_bar.max_value = maxi(required, 1)
 	_exp_bar.value = current
 	_exp_label.text = "EXP %d/%d" % [current, required]
+
+
+func set_extraction_countdown(seconds: float) -> void:
+	_extraction_label.text = "Estrazione tra %ds" % ceili(seconds)
+
+
+func set_extraction_progress(ratio: float) -> void:
+	if ratio > 0.0:
+		_extraction_label.text = "Estrazione %d%%" % roundi(ratio * 100.0)
+	else:
+		_extraction_label.text = "Estrazione disponibile: raggiungi la zona verde"

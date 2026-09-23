@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ExtractionData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/extraction_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+appear_after = 60.0
+channel_time = 5.0
+decay_rate = 0.5
+spawn_min_distance = 400.0
