@@ -41,6 +41,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 ## 4. Extraction shooter layer — regole di rischio
 
 - Il loot grezzo vive in un "inventario di run" separato da quello permanente.
+  - **Stato M2**: `LootRunInventory` (classe pura `RefCounted`, id materiale → quantità) posseduta da `RunManager.loot`; si svuota a ogni `start_run()` e accetta loot solo a run in corso. Nessun autoload aggiuntivo.
 - **Morte prima dell'estrazione = perdita totale del loot di run.** (Regola scelta per l'MVP: nessuna mitigazione parziale, per mantenere la tensione rischio/ricompensa netta.)
 - L'estrazione è un punto/area che appare dopo un certo tempo o dopo un trigger (es. uccisione di un'elite), e richiede di rimanere nella zona per N secondi (rischio: i nemici continuano ad arrivare durante il canale).
   - **Stato M1** (`ExtractionData`, `data/run/extraction_default.tres`): la zona (cerchio verde, raggio 48px) appare dopo 60s di run in un punto casuale ad almeno 400px dal player; servono 5s dentro la zona. **Decisione:** uscendo il progresso non si azzera ma cala di 0.5s per ogni secondo fuori (un'uscita breve per schivare non vanifica tutto). HUD: countdown, poi percentuale di estrazione. Nessun indicatore fuori schermo per ora (valutare in M4).
@@ -132,7 +133,7 @@ res://
 
 ```
 res://
-  autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni della run
+  autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni, loot di run
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
   scenes/run/Player/                 # Player.tscn + player.gd
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
@@ -143,7 +144,7 @@ res://
   scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
   scenes/ui/RunEndScreen/            # schermata di fine run (morte/estrazione) + riavvio
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
-  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils
+  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory
   scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry
   data/{weapons,enemies,player,waves,run,upgrades,materials}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core
 ```

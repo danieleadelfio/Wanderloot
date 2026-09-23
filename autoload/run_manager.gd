@@ -1,5 +1,5 @@
 extends Node
-## Stato della run corrente: fase, exp, livello, tempo, uccisioni. Azzerato a ogni run.
+## Stato della run corrente: fase, exp, livello, tempo, uccisioni, loot a rischio. Azzerato a ogni run.
 ## Non tocca la scena (pausa, UI): la composition root reagisce a state_changed.
 ## Non scrive mai su MetaProgression: lo fa solo l'estrazione riuscita (da M2).
 
@@ -18,6 +18,8 @@ var experience: int = 0
 ## Secondi di gioco effettivi (esclusi pausa/level-up).
 var elapsed: float = 0.0
 var kills: int = 0
+## Loot raccolto nella run: si svuota a ogni start_run(), mai scritto su MetaProgression da qui.
+var loot: LootRunInventory = LootRunInventory.new()
 
 var _curve: LevelCurve
 
@@ -33,6 +35,7 @@ func start_run(curve: LevelCurve) -> void:
 	experience = 0
 	elapsed = 0.0
 	kills = 0
+	loot.clear()
 	exp_changed.emit(experience, exp_to_next())
 	_set_state(State.RUNNING)
 
@@ -63,6 +66,12 @@ func add_exp(amount: int) -> void:
 		level += 1
 		leveled_up.emit(level)
 	exp_changed.emit(experience, exp_to_next())
+
+
+func add_loot(material: MaterialData, amount: int) -> void:
+	if not is_running():
+		return
+	loot.add(material, amount)
 
 
 func begin_level_up() -> void:
