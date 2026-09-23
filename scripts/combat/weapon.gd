@@ -27,8 +27,13 @@ func try_fire(direction: Vector2) -> int:
 	while _cooldown <= 0.0:
 		_cooldown += interval
 		shots += 1
+	var count := maxi(data.projectile_count, 1)
+	# Ventaglio centrato sulla mira; oltre 360° gli spazi si comprimono per coprire il cerchio.
+	var step := deg_to_rad(minf(data.spread_degrees, 360.0 / count))
 	for i in shots:
 		# Colpi dello stesso tick sfalsati lungo la traiettoria, come se sparati in istanti diversi.
 		var age := (shots - 1 - i) * interval
-		fired.emit(global_position + aim * data.projectile_speed * age, aim, data)
+		for k in count:
+			var direction_k := aim.rotated((k - (count - 1) * 0.5) * step)
+			fired.emit(global_position + direction_k * data.projectile_speed * age, direction_k, data)
 	return shots

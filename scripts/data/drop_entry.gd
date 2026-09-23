@@ -9,7 +9,8 @@ extends Resource
 
 
 ## Quantita' droppata (0 se il tiro fallisce).
-func roll(rng: RandomNumberGenerator) -> int:
-	if material == null or rng.randf() >= chance:
+## chance_multiplier: upgrade "Fortuna" (oltre 1.0 di probabilità il drop è sicuro).
+func roll(rng: RandomNumberGenerator, chance_multiplier: float = 1.0) -> int:
+	if material == null or rng.randf() >= chance * chance_multiplier:
 		return 0
 	return rng.randi_range(mini(min_amount, max_amount), maxi(min_amount, max_amount))

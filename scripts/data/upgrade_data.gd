@@ -2,7 +2,12 @@ class_name UpgradeData
 extends Resource
 ## Potenziamento temporaneo di run. Il bilanciamento si fa solo nei .tres in res://data/upgrades/.
 
-enum Stat { DAMAGE, FIRE_RATE, PROJECTILE_SPEED, MOVE_SPEED, MAX_HP }
+## Nuove voci sempre in coda: i .tres salvano l'indice numerico.
+enum Stat {
+	DAMAGE, FIRE_RATE, PROJECTILE_SPEED, MOVE_SPEED, MAX_HP,
+	PROJECTILE_LIFETIME, PICKUP_RADIUS, EXP_GAIN, DROP_CHANCE, INVULNERABILITY, KNOCKBACK,
+	PROJECTILE_COUNT, PIERCE,
+}
 
 @export var display_name: String = ""
 @export_multiline var description: String = ""

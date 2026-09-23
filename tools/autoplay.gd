@@ -47,8 +47,7 @@ func _physics_process(_d: float) -> bool:
 	if rm.elapsed > 600: rm.end_run(0); return false
 	if rm.state == 2:  # LEVEL_UP
 		var lvl = a.get_node("%LevelUpChoice")
-		var picks = a.upgrade_table.pick(1, rng)
-		lvl._on_choice_pressed(picks[0])
+		lvl._on_choice_pressed(BotDriver.choose(a.upgrade_table.pick(a.choices_per_level, rng)))
 		return false
 	BotDriver.drive(a)
 	return false

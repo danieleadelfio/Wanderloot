@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Saggezza"
+description = "+15% exp raccolta"
+stat = 7
+amount = 0.15
+is_multiplier = false
+weight = 1.0

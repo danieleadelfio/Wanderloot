@@ -28,6 +28,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - Exp guadagnata raccogliendo le gemme lasciate dai nemici (da M5; prima era immediata) → level-up. Curva in `LevelCurve` (`data/run/level_curve.tres`): exp per passare da N a N+1 = `5 * 1.35^(N-1)` arrotondato (5, 7, 9, 12, 17…). L'exp in eccesso passa al livello successivo; più level-up in un colpo sono gestiti uno alla volta.
 - Ad ogni level-up: pausa, 3 scelte casuali (pesate) tra potenziamenti d'arma, abilità passive, statistiche.
   - **Stato M1**: 5 upgrade di statistica in `data/upgrades/` (Potenza +1 danno, Raffica +20% cadenza, Gittata +20% velocità proiettili, Agilità +10% movimento, Vigore +1 HP max e cura 1), tutti con peso 1, estratti senza ripetizioni da `UpgradeTable`. Scelta con mouse o tastiera/pad (focus sul primo). Abilità passive/nuove armi: dopo l'MVP.
+  - **Stato M5 (#25)**: 8 potenziamenti in più (13 totali), tutti cumulabili senza tetto. Statistiche: Persistenza +25% durata proiettili, Magnete +30% raggio di raccolta, Saggezza +15% exp raccolta, Fortuna +15% probabilità di drop, Guardia +0,2s di invulnerabilità, Impatto +30% spinta. Meccaniche (peso 0,6, più rari): Ventaglio +1 proiettile per colpo (ventaglio centrato, 10° tra i proiettili, compresso se supera 360°), Perforazione +1 nemico attraversato. Nuove voci di `UpgradeData.Stat` sempre in coda all'enum (i `.tres` salvano l'indice).
 - Tutto ciò che riguarda questa progressione si azzera all'inizio di ogni run, indipendentemente dall'esito.
 
 ### 3.2 Progressione esterna alla run (permanente, meta)
@@ -238,6 +239,9 @@ Non verificabile da bot, resta da fare a mano: feeling di controlli e mira col m
 ### 10.3 Verifica M5 (#22, raccolta a magnete)
 
 Con exp e materiali da raccogliere il bot che si limita a scappare crolla (estrazioni 20%, livello medio 4,2): conferma che la raccolta è una scelta attiva di rischio. Con il bot aggiornato (raccoglie gli oggetti quando non ha nemici vicini) i numeri tornano a quelli di M4 senza ritoccare i dati: estrazioni 65%, livello medio 8,8, ~31 gelatine per run (20 run). Raggio del magnete lasciato a 90px.
+
+Con i nuovi potenziamenti (#25) il bot sceglie al level-up come un giocatore (prima combattimento: danno, cadenza, Ventaglio, Perforazione, HP). Risultato: **100% di estrazioni** su 20 run, ma lo stesso bot con i soli 5 potenziamenti di M4 fa ugualmente 100% (12 run). Il 63% misurato in M4 dipendeva dalla scelta casuale del bot, non dal gioco. **Da verificare con il playtest umano**: se chi sceglie bene estrae quasi sempre, la run a 120s è troppo facile e va alzata la pressione (ondate o zona più tardi). Non ritoccato ora per non bilanciare contro un bot.
+Stress test "rompere tutto": 300 colpi/s × 20 proiettili × perforazione 5 → ~5.800 proiettili attivi, il gioco resta stabile ma la simulazione scende a circa metà velocità su una CPU cloud. Accettato: nessun tetto per scelta; eventuale ottimizzazione (proiettili fusi o fisica più leggera) solo se diventa un problema nel gioco reale.
 
 ## 11. Open questions
 

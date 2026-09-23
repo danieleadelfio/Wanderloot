@@ -47,3 +47,20 @@ static func set_axis(neg: String, pos_a: String, v: float) -> void:
 	Input.action_release(neg); Input.action_release(pos_a)
 	if v < -0.05: Input.action_press(neg, -v)
 	elif v > 0.05: Input.action_press(pos_a, v)
+
+
+## Scelta del bot al level-up (M5): tra le opzioni offerte preferisce quelle di combattimento,
+## come farebbe un giocatore; con 13 potenziamenti la scelta casuale lo rendeva artificialmente debole.
+const PRIORITY: Array[int] = [
+	UpgradeData.Stat.DAMAGE, UpgradeData.Stat.FIRE_RATE, UpgradeData.Stat.PROJECTILE_COUNT,
+	UpgradeData.Stat.PIERCE, UpgradeData.Stat.MAX_HP, UpgradeData.Stat.MOVE_SPEED,
+	UpgradeData.Stat.PICKUP_RADIUS, UpgradeData.Stat.PROJECTILE_SPEED,
+]
+
+
+static func choose(options: Array[UpgradeData]) -> UpgradeData:
+	for stat in PRIORITY:
+		for option in options:
+			if option.stat == stat:
+				return option
+	return options[0]

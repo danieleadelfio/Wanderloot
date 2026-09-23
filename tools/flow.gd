@@ -29,7 +29,7 @@ func _physics_process(_d: float) -> bool:
 		1, 4:
 			if s.name == "Arena":
 				if rm.state == 2:
-					s._on_upgrade_chosen(s.upgrade_table.pick(1, RandomNumberGenerator.new())[0])
+					s.get_node("%LevelUpChoice")._on_choice_pressed(BotDriver.choose(s.upgrade_table.pick(3, RandomNumberGenerator.new())))
 				elif rm.state == 3:
 					var end = s.get_node("%RunEndScreen")
 					if end.visible:

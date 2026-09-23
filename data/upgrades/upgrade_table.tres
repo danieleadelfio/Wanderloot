@@ -7,7 +7,15 @@
 [ext_resource type="Resource" path="res://data/upgrades/projectile_speed_up.tres" id="4"]
 [ext_resource type="Resource" path="res://data/upgrades/move_speed_up.tres" id="5"]
 [ext_resource type="Resource" path="res://data/upgrades/max_hp_up.tres" id="6"]
+[ext_resource type="Resource" path="res://data/upgrades/lifetime_up.tres" id="7"]
+[ext_resource type="Resource" path="res://data/upgrades/magnet_up.tres" id="8"]
+[ext_resource type="Resource" path="res://data/upgrades/exp_up.tres" id="9"]
+[ext_resource type="Resource" path="res://data/upgrades/luck_up.tres" id="10"]
+[ext_resource type="Resource" path="res://data/upgrades/guard_up.tres" id="11"]
+[ext_resource type="Resource" path="res://data/upgrades/impact_up.tres" id="12"]
+[ext_resource type="Resource" path="res://data/upgrades/multishot_up.tres" id="13"]
+[ext_resource type="Resource" path="res://data/upgrades/pierce_up.tres" id="14"]
 
 [resource]
 script = ExtResource("1")
-upgrades = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")])
+upgrades = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14")])

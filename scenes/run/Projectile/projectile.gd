@@ -7,6 +7,7 @@ signal expired(projectile: Projectile)
 var _velocity: Vector2 = Vector2.ZERO
 var _time_left: float = 0.0
 var _active: bool = false
+var _pierce_left: int = 0
 
 @onready var _hitbox: Hitbox = %Hitbox
 
@@ -32,6 +33,7 @@ func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 	_hitbox.damage = weapon.damage
 	_hitbox.knockback = weapon.knockback
 	_hitbox.knockback_direction = direction
+	_pierce_left = weapon.pierce
 	_active = true
 	_set_enabled(true)
 
@@ -53,6 +55,10 @@ func _set_enabled(enabled: bool) -> void:
 
 
 func _on_hit(_hurtbox: Hurtbox) -> void:
+	# Perforazione: attraversa pierce nemici prima di sparire; i muri lo fermano sempre.
+	if _pierce_left > 0:
+		_pierce_left -= 1
+		return
 	deactivate()
 
 

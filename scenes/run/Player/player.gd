@@ -51,8 +51,11 @@ func _physics_process(delta: float) -> void:
 
 func apply_upgrade(upgrade: UpgradeData) -> void:
 	StatApplier.apply(upgrade.stat, upgrade.amount, upgrade.is_multiplier, stats, _weapon.data)
-	if upgrade.stat == UpgradeData.Stat.MAX_HP:
-		health.set_max_hp(stats.max_hp)
+	match upgrade.stat:
+		UpgradeData.Stat.MAX_HP:
+			health.set_max_hp(stats.max_hp)
+		UpgradeData.Stat.INVULNERABILITY:
+			_hurtbox.invulnerability_time = stats.invulnerability_time
 
 
 func _get_aim_direction() -> Vector2:

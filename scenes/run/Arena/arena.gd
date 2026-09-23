@@ -9,6 +9,8 @@ extends Node2D
 
 var _pending_level_ups: int = 0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+## Exp frazionaria dovuta al moltiplicatore "Saggezza", accumulata fino all'unità successiva.
+var _exp_remainder: float = 0.0
 
 @onready var _player: Player = %Player
 @onready var _enemy_pool: EnemyPool = %EnemyPool
@@ -78,14 +80,17 @@ func _on_enemy_died(enemy: Enemy) -> void:
 
 func _roll_drops(enemy: Enemy) -> void:
 	for entry in enemy.data.drops:
-		var amount := entry.roll(_rng)
+		var amount := entry.roll(_rng, _player.stats.drop_chance_multiplier)
 		for i in amount:
 			_pickup_pool.spawn_material(enemy.global_position, entry.material, 1)
 
 
 func _on_exp_collected(amount: int) -> void:
 	_sfx.play(&"pickup_exp")
-	RunManager.add_exp(amount)
+	var total := amount * _player.stats.exp_multiplier + _exp_remainder
+	var whole := floori(total)
+	_exp_remainder = total - whole
+	RunManager.add_exp(whole)
 
 
 func _on_material_collected(material: MaterialData, amount: int) -> void:
@@ -119,6 +124,7 @@ func _present_level_up() -> void:
 
 func _on_upgrade_chosen(upgrade: UpgradeData) -> void:
 	_player.apply_upgrade(upgrade)
+	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pending_level_ups -= 1
 	if _pending_level_ups > 0:
 		_present_level_up()

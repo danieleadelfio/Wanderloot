@@ -16,6 +16,22 @@ static func apply(stat: UpgradeData.Stat, amount: float, is_multiplier: bool, st
 			stats.move_speed = _modify(stats.move_speed, amount, is_multiplier)
 		UpgradeData.Stat.MAX_HP:
 			stats.max_hp = maxi(roundi(_modify(stats.max_hp, amount, is_multiplier)), 1)
+		UpgradeData.Stat.PROJECTILE_LIFETIME:
+			weapon.projectile_lifetime = _modify(weapon.projectile_lifetime, amount, is_multiplier)
+		UpgradeData.Stat.PICKUP_RADIUS:
+			stats.pickup_radius = _modify(stats.pickup_radius, amount, is_multiplier)
+		UpgradeData.Stat.EXP_GAIN:
+			stats.exp_multiplier = _modify(stats.exp_multiplier, amount, is_multiplier)
+		UpgradeData.Stat.DROP_CHANCE:
+			stats.drop_chance_multiplier = _modify(stats.drop_chance_multiplier, amount, is_multiplier)
+		UpgradeData.Stat.INVULNERABILITY:
+			stats.invulnerability_time = maxf(_modify(stats.invulnerability_time, amount, is_multiplier), 0.0)
+		UpgradeData.Stat.KNOCKBACK:
+			weapon.knockback = _modify(weapon.knockback, amount, is_multiplier)
+		UpgradeData.Stat.PROJECTILE_COUNT:
+			weapon.projectile_count = maxi(roundi(_modify(weapon.projectile_count, amount, is_multiplier)), 1)
+		UpgradeData.Stat.PIERCE:
+			weapon.pierce = maxi(roundi(_modify(weapon.pierce, amount, is_multiplier)), 0)
 
 
 static func apply_equipment(items: Array[EquipmentData], stats: PlayerStats, weapon: WeaponData) -> void:
