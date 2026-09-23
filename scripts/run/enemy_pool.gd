@@ -3,6 +3,7 @@ extends Node2D
 ## Pool di nemici di un singolo tipo (una scena). Deve stare all'origine.
 
 signal enemy_died(enemy: Enemy)
+signal enemy_hurt(enemy: Enemy)
 
 @export var enemy_scene: PackedScene
 @export var initial_size: int = 32
@@ -36,6 +37,7 @@ func active_count() -> int:
 func _create() -> Enemy:
 	var enemy := enemy_scene.instantiate() as Enemy
 	enemy.died.connect(_on_enemy_died)
+	enemy.hurt.connect(enemy_hurt.emit)
 	add_child(enemy)
 	return enemy
 

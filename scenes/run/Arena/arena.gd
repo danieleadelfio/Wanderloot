@@ -20,6 +20,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _extraction_timer: Timer = %ExtractionTimer
 @onready var _run_end_screen: RunEndScreen = %RunEndScreen
 @onready var _hit_stop: HitStop = %HitStop
+@onready var _sfx: SfxPlayer = %Sfx
 
 
 func _ready() -> void:
@@ -34,10 +35,13 @@ func _ready() -> void:
 	_player.health.changed.connect(_hud.set_hp)
 	_player.died.connect(_on_player_died)
 	_player.health.damaged.connect(_hit_stop.trigger)
+	_player.health.damaged.connect(_sfx.play.bind(&"player_hurt").unbind(1))
+	_player.shot_requested.connect(_sfx.play.bind(&"shoot").unbind(3))
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
 	_player.begin_run(MetaProgression.equipped_items())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_enemy_pool.enemy_died.connect(_on_enemy_died)
+	_enemy_pool.enemy_hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
 	_wave_spawner.start(_player)
 	_extraction_point.data = extraction_data
 	_extraction_point.progress_changed.connect(_hud.set_extraction_progress)
@@ -53,6 +57,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_enemy_died(enemy: Enemy) -> void:
+	_sfx.play(&"enemy_die")
 	RunManager.register_kill(enemy.data.exp_reward)
 	_roll_drops(enemy.data)
 
@@ -69,6 +74,7 @@ func _open_extraction() -> void:
 		extraction_spawn_rect, _player.global_position, extraction_data.spawn_min_distance
 	)
 	_extraction_point.activate(spawn_position)
+	_sfx.play(&"ui_select")
 
 
 func _on_extracted() -> void:
@@ -76,6 +82,7 @@ func _on_extracted() -> void:
 
 
 func _on_leveled_up(_level: int) -> void:
+	_sfx.play(&"level_up")
 	_pending_level_ups += 1
 	if RunManager.state == RunManager.State.RUNNING:
 		RunManager.begin_level_up()
@@ -107,6 +114,7 @@ func _on_run_ended(result: RunManager.Result) -> void:
 	_pending_level_ups = 0
 	_level_up_choice.hide()
 	var extracted := result == RunManager.Result.EXTRACTED
+	_sfx.play(&"extract" if extracted else &"player_death")
 	# Unico punto in cui il loot di run raggiunge MetaProgression (GDD §4).
 	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot)
 	_run_end_screen.present(

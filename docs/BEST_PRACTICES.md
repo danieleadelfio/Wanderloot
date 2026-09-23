@@ -56,6 +56,12 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - Riferimenti tra componenti della stessa scena: `@export` con NodePath impostato nella scena, o `%UniqueName`.
 - **Composition root**: la scena di livello (es. `Arena`) collega i segnali tra entità, pool, HUD e autoload. Le entità non si conoscono tra loro.
 
+## 3.1.1 Audio
+
+- Suoni sempre per id tramite `SfxPlayer.play(&"id")` e `SoundBank` (`.tres`): mai `AudioStreamPlayer` sparsi con stream hardcoded. Un id nuovo va aggiunto al banco e alla lista del test `tests/audio/test_sound_bank.gd`.
+- Collegamento via segnali nella composition root (`Arena`, `Hub`), mai chiamate audio dalle entità.
+- Bus: `Music`, `SFX` (Master sopra). Asset sorgente riproducibili: `tools/audio.py`.
+
 ## 3.2 Collision layers (vincolanti)
 
 | Layer | Nome | Chi ci sta |

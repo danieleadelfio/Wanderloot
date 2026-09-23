@@ -18,6 +18,10 @@
 [ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="16"]
 [ext_resource type="Texture2D" path="res://assets/sprites/floor.png" id="17"]
 [ext_resource type="Texture2D" path="res://assets/sprites/wall.png" id="18"]
+[ext_resource type="Script" path="res://scripts/audio/sfx_player.gd" id="19"]
+[ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="20"]
+[ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="21"]
+[ext_resource type="AudioStream" path="res://assets/audio/music_arena.wav" id="22"]
 
 [sub_resource type="RectangleShape2D" id="wall_h"]
 size = Vector2(1680, 40)
@@ -119,6 +123,17 @@ limit_top = -500
 limit_right = 800
 limit_bottom = 500
 position_smoothing_enabled = true
+
+[node name="Sfx" type="Node" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("19")
+bank = ExtResource("20")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("22")
+script = ExtResource("21")
 
 [node name="HitStop" type="Node" parent="."]
 unique_name_in_owner = true

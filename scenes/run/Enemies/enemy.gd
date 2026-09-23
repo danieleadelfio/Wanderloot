@@ -3,6 +3,7 @@ extends CharacterBody2D
 ## Nemico base guidato da EnemyData. Insegue il target. API poolable: activate()/deactivate().
 
 signal died(enemy: Enemy)
+signal hurt(enemy: Enemy)
 
 @export var data: EnemyData
 
@@ -63,6 +64,7 @@ func _set_enabled(enabled: bool) -> void:
 
 func _on_hurt(_amount: int) -> void:
 	_freeze_left = data.hit_freeze
+	hurt.emit(self)
 
 
 func _on_health_died() -> void:

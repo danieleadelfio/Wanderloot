@@ -11,6 +11,7 @@ var _material_icons: Dictionary[StringName, Texture2D] = {}
 @onready var _stash_list: VBoxContainer = %StashList
 @onready var _blacksmith: Blacksmith = %Blacksmith
 @onready var _loadout_panel: LoadoutPanel = %LoadoutPanel
+@onready var _sfx: SfxPlayer = %Sfx
 @onready var _start_button: Button = %StartButton
 
 
@@ -21,9 +22,11 @@ func _ready() -> void:
 		_material_icons[material.id] = material.icon
 	MetaProgression.changed.connect(_refresh)
 	_start_button.pressed.connect(_on_start_pressed)
-	_blacksmith.craft_requested.connect(MetaProgression.craft)
+	_blacksmith.craft_requested.connect(_on_craft_requested)
 	_loadout_panel.equip_requested.connect(MetaProgression.equip)
 	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
+	_loadout_panel.equip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
+	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_refresh()
 	_start_button.grab_focus()
 
@@ -58,6 +61,11 @@ func _refresh_stash(amounts: Dictionary[StringName, int]) -> void:
 		row.add_child(icon)
 		row.add_child(label)
 		_stash_list.add_child(row)
+
+
+func _on_craft_requested(recipe: RecipeData) -> void:
+	if MetaProgression.craft(recipe) == Crafting.Result.OK:
+		_sfx.play(&"craft")
 
 
 func _on_start_pressed() -> void:
