@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Autoload `MetaProgression` con inventario permanente `MetaInventory`, salvataggio/caricamento `ConfigFile` versionato in `user://` (#9).
 - Drop di materiali alla morte dei nemici nell'inventario di run, contatore "Loot a rischio" in HUD (#8).
 - Inventario di run `LootRunInventory` separato dal permanente, posseduto da `RunManager` e svuotato a ogni run (#7).
 - Modello dati del loot: `MaterialData`, `DropEntry` e drop table in `EnemyData`; materiali Gelatina e Nucleo di slime (#6).

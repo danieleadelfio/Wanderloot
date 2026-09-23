@@ -32,6 +32,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 
 ### 3.2 Progressione esterna alla run (permanente, meta)
 - Alimentata **solo** dal loot estratto con successo.
+- **Stato M2**: autoload `MetaProgression` con `MetaInventory` (id materiale → quantità, logica pura). Salvato in `user://meta_progression.cfg` (`ConfigFile`, con numero di versione) a ogni deposito, caricato all'avvio. Unico punto di scrittura esterno: `deposit_run_loot()`.
 - Due filoni:
   - **Materiali da crafting** (comuni/rari) → usati per craftare o potenziare equipaggiamento nell'hub.
   - **Equipaggiamento grezzo/non identificato** → utilizzabile solo dopo l'estrazione; una volta in hub può essere equipaggiato o smontato in materiali.
@@ -135,6 +136,8 @@ res://
 ```
 res://
   autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni, loot di run
+  autoload/meta_progression.gd       # MetaProgression: inventario permanente + salvataggio su disco
+  scripts/meta/                      # meta_inventory (logica pura dell'inventario permanente)
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
   scenes/run/Player/                 # Player.tscn + player.gd
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
@@ -151,9 +154,9 @@ res://
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
-- Autoload attivi: solo `RunManager`. `MetaProgression` verrà aggiunto con M2/M3 (primo momento in cui esiste stato persistente).
+- Autoload attivi: `RunManager` (stato run) e `MetaProgression` (stato permanente, da M2). Nessun altro.
 - Nemici: `EnemyPool` (un pool per tipo di nemico, 32 pre-istanziati, cresce se serve) + `WaveSpawner` guidato da `WaveData`: l'intervallo tra batch scende da 2.0s a 0.5s (−0.015s per secondo di run), il batch cresce di 1 nemico ogni 25s, tetto 60 nemici vivi. Spawn in punto casuale ad almeno 300px dal player.
-- Flusso di run (M1): `RunManager` è una macchina a stati `IDLE → RUNNING ⇄ LEVEL_UP → ENDED` con esito `DEATH` o `EXTRACTED`. `Arena` mette in pausa il gioco quando lo stato non è `RUNNING`. A fine run: schermata con esito, livello, tempo e uccisioni, bottone “Nuova run” che ricarica la scena `Arena` (nuova run = scena nuova + `start_run()`). Il canale di estrazione non è uno stato globale: vive in `ExtractionPoint` (nessun altro sistema ne dipende). `MetaProgression` non viene toccato (non esiste ancora; arriva con M2).
+- Flusso di run (M1): `RunManager` è una macchina a stati `IDLE → RUNNING ⇄ LEVEL_UP → ENDED` con esito `DEATH` o `EXTRACTED`. `Arena` mette in pausa il gioco quando lo stato non è `RUNNING`. A fine run: schermata con esito, livello, tempo e uccisioni, bottone “Nuova run” che ricarica la scena `Arena` (nuova run = scena nuova + `start_run()`). Il canale di estrazione non è uno stato globale: vive in `ExtractionPoint` (nessun altro sistema ne dipende). `RunManager` non scrive mai su `MetaProgression` (vedi §4).
 - Collision layers (nomi in Project Settings): 1 `world`, 2 `player`, 3 `enemy`, 4 `player_attack`, 5 `enemy_attack`.
 - Input map: `move_*` (WASD, frecce, stick sinistro), `aim_*` (stick destro), `shoot` (mouse sinistro).
 
@@ -177,7 +180,7 @@ Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralm
 
 - Godot version confermata: 4.6 (da project.godot). Se si prevede export mobile o console, valutare per tempo eventuali limitazioni.
 - Dimensione sprite definitiva (16x16 vs 32x32): da decidere dopo un primo test visivo in arena con la UI reale.
-- Persistenza meta-progressione: `ConfigFile`/risorse `.tres` locali sono sufficienti per l'MVP; un salvataggio cloud non è nello scope iniziale.
+- ~~Persistenza meta-progressione~~ → decisa in M2: `ConfigFile` in `user://` (leggibile, versionato; niente `.tres` caricati da `user://`, che possono eseguire script). Cloud save fuori scope.
 - Durata target di una run (utile per bilanciare drop rate e timer di estrazione): da definire con il primo playtest.
 
 ## 12. Processo e versionamento

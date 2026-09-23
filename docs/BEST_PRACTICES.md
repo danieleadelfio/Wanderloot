@@ -45,6 +45,8 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - **Resource condivise sono read-only a runtime.** Un `.tres` caricato è la stessa istanza per tutti: per stato che cambia durante la run (stats potenziate dagli upgrade) lavorare su una copia fatta con `duplicate()` a inizio run.
 - **Pausa**: si usa `get_tree().paused`; la UI che deve funzionare in pausa ha `process_mode = ALWAYS`. La pausa segue lo stato della run: `RunManager` cambia solo stato (nessun accesso alla scena, così resta testabile come logica pura) e la composition root applica `paused` reagendo a `state_changed`.
 
+- **Persistenza**: solo `MetaProgression` legge/scrive su disco, in `user://` con `ConfigFile` e chiave `version` per future migrazioni. Mai caricare `.tres`/`.res` da `user://` (possono contenere script eseguibili). Logica di inventario in classi pure (`MetaInventory`) separate dall'I/O, così si testano senza file.
+
 ## 3.1 Componenti di combattimento
 
 - `Health` (HP + segnali `changed`/`damaged`/`died`, nessuna logica di morte), `Hitbox` (infligge danno), `Hurtbox` (riceve danno, inoltra a `Health`, i-frames opzionali), `HitFlash`, `Weapon` (cooldown + segnale `fired`, non istanzia proiettili).
