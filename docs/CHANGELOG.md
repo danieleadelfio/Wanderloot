@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Livelli di run: `LevelCurve` data-driven, `RunManager.start_run()` / segnale `leveled_up`, HUD con livello e barra EXP (#2).
 - Enemy pool + wave spawner data-driven (`WaveData`), sostituisce il nemico singolo con respawn di M0 (#1).
 - M0 skeleton tecnico: arena 1600x1000 con muri e camera, player twin-stick (movimento 8 dir, mira mouse/stick destro), arma con fire-rate da `WeaponData`, proiettili con object pool, nemico base che insegue e rinasce, danno da contatto con i-frames, hit-flash, HUD HP/EXP.
 - Componenti riusabili `Health`, `Hitbox`, `Hurtbox`, `HitFlash`, `Weapon`, `ProjectilePool`.

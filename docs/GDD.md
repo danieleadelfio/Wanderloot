@@ -25,7 +25,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 ## 3. Le due progressioni
 
 ### 3.1 Progressione interna alla run (temporanea)
-- Exp guadagnata uccidendo nemici → level-up.
+- Exp guadagnata uccidendo nemici → level-up. Curva in `LevelCurve` (`data/run/level_curve.tres`): exp per passare da N a N+1 = `5 * 1.35^(N-1)` arrotondato (5, 7, 9, 12, 17…). L'exp in eccesso passa al livello successivo; più level-up in un colpo sono gestiti uno alla volta.
 - Ad ogni level-up: pausa, 3 scelte casuali (pesate) tra potenziamenti d'arma, abilità passive, statistiche.
 - Tutto ciò che riguarda questa progressione si azzera all'inizio di ogni run, indipendentemente dall'esito.
 
@@ -129,17 +129,17 @@ res://
 
 ```
 res://
-  autoload/run_manager.gd            # RunManager: exp della run (reset a ogni run)
+  autoload/run_manager.gd            # RunManager: exp e livello della run (reset a ogni run)
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
   scenes/run/Player/                 # Player.tscn + player.gd
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
   scenes/run/Enemies/EnemyBasic/     # EnemyBasic.tscn (inseguimento diretto)
   scenes/run/Projectile/             # Projectile.tscn + projectile.gd (poolable)
-  scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP + EXP)
+  scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP, livello, barra EXP)
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
   scripts/run/                       # enemy_pool, wave_spawner
-  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data
-  data/{weapons,enemies,player,waves}/ # .tres: starter_wand, enemy_basic, player_default, wave_default
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve
+  data/{weapons,enemies,player,waves,run}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.

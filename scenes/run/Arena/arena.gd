@@ -1,6 +1,8 @@
 extends Node2D
 ## Composition root della run: collega i segnali tra player, nemici, pool, HUD e RunManager.
 
+@export var level_curve: LevelCurve
+
 @onready var _player: Player = %Player
 @onready var _enemy_pool: EnemyPool = %EnemyPool
 @onready var _wave_spawner: WaveSpawner = %WaveSpawner
@@ -9,7 +11,7 @@ extends Node2D
 
 
 func _ready() -> void:
-	RunManager.reset()
+	RunManager.start_run(level_curve)
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
 	_player.died.connect(_on_player_died)
