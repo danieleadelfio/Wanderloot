@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/drop_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="3"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="4"]
+
+[sub_resource type="Resource" id="drop_gel"]
+script = ExtResource("2")
+material = ExtResource("3")
+chance = 0.35
+min_amount = 1
+max_amount = 2
+
+[sub_resource type="Resource" id="drop_core"]
+script = ExtResource("2")
+material = ExtResource("4")
+chance = 0.03
+min_amount = 1
+max_amount = 1
 
 [resource]
 script = ExtResource("1")
@@ -9,3 +26,4 @@ max_hp = 3
 move_speed = 110.0
 contact_damage = 1
 exp_reward = 1
+drops = Array[ExtResource("2")]([SubResource("drop_gel"), SubResource("drop_core")])

@@ -59,6 +59,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 
 - I nemici droppano: exp (sempre) + eventualmente 1 tipo di materiale comune.
 - Rari drop: pezzo di equipaggiamento grezzo (non identificato/non equipaggiabile finché non estratto).
+- **Stato M2 (dati)**: `MaterialData` (id, nome, rarità comune/raro, colore placeholder) in `data/materials/`; drop table come array di `DropEntry` (materiale, probabilità, quantità min/max) dentro `EnemyData`, ogni riga tirata indipendentemente. Slime: Gelatina (comune) 35% ×1–2, Nucleo di slime (raro) 3% ×1. L'equipaggiamento grezzo arriva con M3 (crafting/equip), in M2 solo materiali.
 - Crafting MVP: sistema semplice "materiali → oggetto", con ricette fisse (niente crafting proceduralmente generato in v1).
 - Equipaggiamento MVP: slot minimi (arma, 1 accessorio) per non esplodere lo scope.
 
@@ -143,8 +144,8 @@ res://
   scenes/ui/RunEndScreen/            # schermata di fine run (morte/estrazione) + riavvio
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool
   scripts/run/                       # enemy_pool, wave_spawner, spawn_utils
-  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data
-  data/{weapons,enemies,player,waves,run,upgrades}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*
+  scripts/data/                      # classi Resource: weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry
+  data/{weapons,enemies,player,waves,run,upgrades,materials}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core
 ```
 
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.

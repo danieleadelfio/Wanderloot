@@ -7,3 +7,5 @@ extends Resource
 @export var move_speed: float = 100.0
 @export var contact_damage: int = 1
 @export var exp_reward: int = 1
+## Drop table: ogni riga viene tirata indipendentemente alla morte.
+@export var drops: Array[DropEntry] = []
