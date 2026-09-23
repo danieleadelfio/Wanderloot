@@ -112,6 +112,6 @@ func _on_run_ended(result: RunManager.Result) -> void:
 
 
 func _on_restart_requested() -> void:
-	# Nuova run = scena Arena nuova: tutto lo stato di scena riparte da zero, RunManager da start_run().
+	# Si torna all'hub; la prossima run ricrea la scena Arena da zero (RunManager riparte da start_run()).
 	get_tree().paused = false
-	get_tree().reload_current_scene.call_deferred()
+	get_tree().change_scene_to_file.call_deferred(SceneRoutes.HUB)

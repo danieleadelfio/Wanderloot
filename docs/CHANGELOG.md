@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Scena Hub come scena principale: baule con i materiali permanenti e partenza della run; a fine run si torna all'hub (#11).
 - Trasferimento del loot su estrazione riuscita e perdita su morte (`LootTransfer`), riepilogo loot nella schermata di fine run (#10).
 - Test GdUnit4 (21 casi): trasferimento loot, inventari run/meta, persistenza, `RunManager`, drop, curva exp, estrazione upgrade. M2 completato.
 - Autoload `MetaProgression` con inventario permanente `MetaInventory`, salvataggio/caricamento `ConfigFile` versionato in `user://` (#9).

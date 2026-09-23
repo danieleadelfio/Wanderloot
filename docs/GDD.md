@@ -4,7 +4,7 @@ Nome del gioco: **Wanderloot** ("wanderlust" + "loot"). Nome di lavoro precedent
 
 Ultimo aggiornamento: 2026-09-23
 Engine: Godot 4.6
-Stato: M2 (loot ed extraction) completato — prossimo M3
+Stato: M3 (hub minimo) in corso
 
 ## 1. Pitch
 
@@ -73,6 +73,7 @@ Per l'MVP, hub ridotto a:
 - **1 NPC "Fabbro/Blacksmith"**: crafting base e potenziamento equipaggiamento con i materiali estratti.
 - **1 baule/inventario permanente**: dove finisce il loot dopo un'estrazione riuscita.
 - **1 portale/punto di partenza run**.
+- **Stato M3 (#11)**: l'hub è una schermata UI (`scenes/hub/Hub/`), non ancora un ambiente esplorabile: pannello "Baule" con i materiali permanenti e bottone "Parti per la run". È la scena principale del gioco. A fine run (morte o estrazione) "Torna all'hub" sostituisce "Nuova run". **Decisione**: hub esplorabile con NPC fisici rinviato (M4 o v2), per l'MVP conta il ciclo hub→run→hub. Cambi scena via `change_scene_to_file` con percorsi in `SceneRoutes` (nessun autoload aggiuntivo).
 
 Fuori scope MVP ma parte della visione a lungo termine (da aggiungere per fasi successive): NPC mercante (compra/vendi), NPC alchimista (pozioni/buff), strutture che si sbloccano con la progressione (nuova ala dell'hub, arena di addestramento, ecc.), più tipi di run/arena, più armi ranged ed elite/boss.
 
@@ -139,6 +140,8 @@ res://
   autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni, loot di run
   autoload/meta_progression.gd       # MetaProgression: inventario permanente + salvataggio su disco
   scripts/meta/                      # meta_inventory (logica pura dell'inventario permanente)
+  scripts/core/scene_routes.gd       # percorsi delle scene principali (Hub, Arena)
+  scenes/hub/Hub/                    # Hub.tscn + hub.gd (scena principale, composition root dell'hub)
   scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
   scenes/run/Player/                 # Player.tscn + player.gd
   scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
@@ -159,7 +162,7 @@ res://
 - Grafica placeholder: `Polygon2D` (player ottagono blu, nemico quadrato rosso, proiettile rombo giallo). Arena 1600x1000 con muri, camera sul player con limiti arena.
 - Autoload attivi: `RunManager` (stato run) e `MetaProgression` (stato permanente, da M2). Nessun altro.
 - Nemici: `EnemyPool` (un pool per tipo di nemico, 32 pre-istanziati, cresce se serve) + `WaveSpawner` guidato da `WaveData`: l'intervallo tra batch scende da 2.0s a 0.5s (−0.015s per secondo di run), il batch cresce di 1 nemico ogni 25s, tetto 60 nemici vivi. Spawn in punto casuale ad almeno 300px dal player.
-- Flusso di run (M1): `RunManager` è una macchina a stati `IDLE → RUNNING ⇄ LEVEL_UP → ENDED` con esito `DEATH` o `EXTRACTED`. `Arena` mette in pausa il gioco quando lo stato non è `RUNNING`. A fine run: schermata con esito, livello, tempo e uccisioni, bottone “Nuova run” che ricarica la scena `Arena` (nuova run = scena nuova + `start_run()`). Il canale di estrazione non è uno stato globale: vive in `ExtractionPoint` (nessun altro sistema ne dipende). `RunManager` non scrive mai su `MetaProgression` (vedi §4).
+- Flusso di run (M1): `RunManager` è una macchina a stati `IDLE → RUNNING ⇄ LEVEL_UP → ENDED` con esito `DEATH` o `EXTRACTED`. `Arena` mette in pausa il gioco quando lo stato non è `RUNNING`. A fine run: schermata con esito, livello, tempo e uccisioni, bottone “Torna all'hub” (da M3; nuova run = scena `Arena` nuova + `start_run()`). Il canale di estrazione non è uno stato globale: vive in `ExtractionPoint` (nessun altro sistema ne dipende). `RunManager` non scrive mai su `MetaProgression` (vedi §4).
 - Collision layers (nomi in Project Settings): 1 `world`, 2 `player`, 3 `enemy`, 4 `player_attack`, 5 `enemy_attack`.
 - Input map: `move_*` (WASD, frecce, stick sinistro), `aim_*` (stick destro), `shoot` (mouse sinistro).
 

@@ -1,6 +1,6 @@
 class_name RunEndScreen
 extends CanvasLayer
-## Schermata di fine run (morte o estrazione) con riepilogo e riavvio. Funziona in pausa.
+## Schermata di fine run (morte o estrazione) con riepilogo e ritorno all'hub. Funziona in pausa.
 
 signal restart_requested
 

@@ -1,0 +1,6 @@
+class_name SceneRoutes
+extends RefCounted
+## Percorsi delle scene principali. Unico posto dove sono scritti: niente stringhe duplicate in giro.
+
+const HUB: String = "res://scenes/hub/Hub/Hub.tscn"
+const ARENA: String = "res://scenes/run/Arena/Arena.tscn"
