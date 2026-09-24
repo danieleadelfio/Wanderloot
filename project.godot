@@ -36,6 +36,10 @@ mouse_cursor/custom_image_hotspot=Vector2(6, 4)
 
 enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
 
+[gui]
+
+theme/custom="res://data/ui/wanderloot_theme.tres"
+
 [input]
 
 move_left={

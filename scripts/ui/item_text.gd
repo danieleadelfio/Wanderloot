@@ -80,7 +80,7 @@ static func tooltip_panel(item: ItemInstance, header: String = "") -> Control:
 	for affix in item.affixes:
 		var row := HBoxContainer.new()
 		row.add_child(_line("• " + modifier_text(affix), Color(0.75, 1, 0.75), 14))
-		row.add_child(_line(range_text(affix, item.rarity), Color(1, 1, 1, 0.5), 12))
+		row.add_child(_line(range_text(affix, item.rarity), Color(1, 1, 1, 0.95), 12))
 		box.add_child(row)
 	if item.ability:
 		box.add_child(_line(TranslationServer.translate("ITEM_ABILITY") % _ability_name(item), Color(1, 0.85, 0.4), 14))
