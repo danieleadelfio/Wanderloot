@@ -95,6 +95,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Fulmini della Tempesta gialli, per distinguerli da quelli azzurri del Fulmine errante (#82).
 - Niente bonus duplicati: un bonus tirato non ripete una statistica dei bonus fissi dell'oggetto; nome unico *Cadenza di fuoco*; test (#71).
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 

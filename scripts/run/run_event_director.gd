@@ -15,7 +15,8 @@ signal candle_out
 
 const TELEGRAPH := preload("res://scenes/run/Telegraph/Telegraph.tscn")
 const PENTAGRAM := preload("res://scenes/run/Pentagram/Pentagram.tscn")
-const STRIKE_COLOR := Color(0.5, 0.8, 1.0)
+## Giallo: si distingue dai fulmini azzurri del Fulmine errante (M11.4, #82).
+const STRIKE_COLOR := Color(1.0, 0.85, 0.25)
 const POOL_SIZE := 8
 
 var events: Array[RunEventData] = []
