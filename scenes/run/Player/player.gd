@@ -4,6 +4,8 @@ extends CharacterBody2D
 
 signal shot_requested(origin: Vector2, direction: Vector2, data: WeaponData)
 signal died
+## Scatto del Passo d'ombra (per il suono).
+signal dashed
 
 const AIM_DEADZONE: float = 0.3
 
@@ -15,6 +17,13 @@ const AIM_DEADZONE: float = 0.3
 var _base_stats: PlayerStats
 var _frenzy_token: int = 0
 var _base_weapon: WeaponData
+## Passo d'ombra (M11.1): niente sparo, lo sparo diventa uno scatto invulnerabile a cariche.
+var dash_mode: bool = false
+var dash_charges := DashCharges.new()
+var _dash_speed: float = 0.0
+var _dash_duration: float = 0.0
+var _dash_left: float = 0.0
+var _dash_direction: Vector2 = Vector2.ZERO
 
 @onready var health: Health = %Health
 @onready var _hurtbox: Hurtbox = %Hurtbox
@@ -23,6 +32,8 @@ var _base_weapon: WeaponData
 ## Luce portata dal player (atmosfera cupa, M7): colore/energia/raggio li imposta la scena che lo ospita.
 @onready var light: PointLight2D = %Light
 @onready var _shield: Node2D = %Shield
+@onready var _body: CanvasItem = %Body
+@onready var _dash_ring: DashRing = %DashRing
 
 
 func _ready() -> void:
@@ -50,11 +61,82 @@ func begin_run(equipment: Array[StatModifier]) -> void:
 func _physics_process(delta: float) -> void:
 	var move_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	_knockback.step(delta)
+	if dash_mode:
+		_dash_step(delta, move_dir)
+		return
 	velocity = move_dir * stats.move_speed + _knockback.velocity
 	move_and_slide()
 	var aim := _get_aim_direction()
 	if weapon_enabled and aim != Vector2.ZERO:
 		_weapon.try_fire(aim)
+
+
+## Passo d'ombra: cariche e secondi dal .tres dell'evento. Lo sparo resta bloccato fino a stop_dash_mode().
+func start_dash_mode(event: RunEventData) -> void:
+	dash_mode = true
+	dash_charges.reset(event.dash_charges, event.dash_recharge)
+	_dash_speed = event.dash_speed
+	_dash_duration = event.dash_duration
+	_dash_ring.show()
+	_refresh_dash_ring()
+
+
+func stop_dash_mode() -> void:
+	_end_dash()
+	dash_mode = false
+	_dash_ring.hide()
+
+
+## Scatto verso direction (se nulla: verso il mouse). false senza cariche, fuori dall'evento o gia' in scatto.
+func try_dash(direction: Vector2) -> bool:
+	if not dash_mode or is_dashing() or not dash_charges.try_use():
+		return false
+	if direction == Vector2.ZERO:
+		direction = global_position.direction_to(get_global_mouse_position())
+	_dash_direction = direction.normalized() if direction != Vector2.ZERO else Vector2.RIGHT
+	_dash_left = _dash_duration
+	_hurtbox.set_immune(true)
+	_body.modulate = Color(0.55, 0.7, 1.0, 0.45)
+	_refresh_dash_ring()
+	dashed.emit()
+	return true
+
+
+func is_dashing() -> bool:
+	return _dash_left > 0.0
+
+
+func is_immune() -> bool:
+	return _hurtbox.immune
+
+
+func _dash_step(delta: float, move_dir: Vector2) -> void:
+	dash_charges.tick(delta)
+	if is_dashing():
+		_dash_left -= delta
+		velocity = _dash_direction * _dash_speed
+		move_and_slide()
+		if _dash_left <= 0.0:
+			_end_dash()
+	else:
+		velocity = move_dir * stats.move_speed + _knockback.velocity
+		move_and_slide()
+		if Input.is_action_just_pressed("shoot") or Input.is_action_just_pressed("dash"):
+			var aim := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down", AIM_DEADZONE)
+			try_dash(move_dir if move_dir != Vector2.ZERO else aim)
+	_refresh_dash_ring()
+
+
+func _end_dash() -> void:
+	if _dash_left <= 0.0 and not _hurtbox.immune:
+		return
+	_dash_left = 0.0
+	_body.modulate = Color.WHITE
+	_hurtbox.set_immune(false)
+
+
+func _refresh_dash_ring() -> void:
+	_dash_ring.show_charges(dash_charges.charges, dash_charges.max_charges, dash_charges.partial())
 
 
 ## Arma della run (copia con equip e potenziamenti applicati): letta per le statistiche a schermo.

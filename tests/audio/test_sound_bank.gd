@@ -6,7 +6,7 @@ const USED_IDS: Array[StringName] = [
 	&"extract", &"player_death", &"craft", &"ui_select", &"pickup_exp", &"pickup_item",
 	&"enemy_shoot", &"boss_appear", &"boss_warn", &"boss_slam", &"event_start", &"lightning", &"power_up", &"candle_out",
 	&"drop_common", &"drop_uncommon", &"drop_rare", &"drop_super_rare", &"drop_legendary", &"drop_mythic",
-	&"overtime_warn", &"overtime_start",
+	&"overtime_warn", &"overtime_start", &"dash",
 ]
 
 

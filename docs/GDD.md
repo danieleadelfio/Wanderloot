@@ -68,6 +68,8 @@ A tempi fissi della run (`ArenaData.event_times`) parte un evento scelto tra que
 
 **Pentagramma di sangue** (M10.2, #53): in un punto a caso (ad almeno 320 px dal player) compare un pentagramma di sangue di 110 px di raggio con **15 candele** attorno; titolo "PENTAGRAMMA DI SANGUE", sottotitolo "Entra nel cerchio di candele" e barra di **20 s**: se il player non entra in tempo l'evento fallisce. Appena entra i mostri aumentano subito del **30%** (almeno 5 in più), il tetto dei vivi sale del 30% e i nuovi mostri compaiono **già in rage**; bisogna restare nel cerchio **15 s** mentre si spegne una candela al secondo. Uscire anche un attimo = fallimento, il pentagramma scompare. Essere colpiti non lo fa fallire. Riuscita: **un boss in più** in questa run (se i boss sono già comparsi arriva subito). Nessuna abilità in premio: la ricompensa è il loot del boss in più. Il catalogo degli eventi pianificati è in `docs/catalog/`.
 
+**Passo d'ombra** (M11.1, #63): per 10 s **non si spara**; il tasto di sparo (o Spazio, tasto destro, A del pad) fa uno **scatto** nella direzione di movimento (o verso il mouse) a 850 px/s per 0,2 s, **invulnerabile** per tutto lo scatto (player semitrasparente azzurro). **6 cariche**, mostrate da un cerchio bianco in 6 spicchi accanto al player: ogni scatto consuma uno spicchio, uno spicchio si ricarica ogni **2 s** (quello in ricarica si riempie dal centro). Come la Tempesta fallisce al primo colpo subito; superato = scelta di un'abilità. Le abilità della bacchetta sempre attive continuano a funzionare. Valori in `data/events/shadow_step.tres` (gruppo *Passo d'ombra*), cariche in `DashCharges` (testata). Nella Cripta e nell'Ossario esce tra i tre eventi (due per run, mai lo stesso due volte di fila).
+
 ## 4. Extraction shooter layer — regole di rischio
 
 - Il loot grezzo vive in un "inventario di run" separato da quello permanente.
@@ -266,6 +268,7 @@ Note tecniche:
 **M9 — Rifiniture dal playtest** ✅ (2026-09-24): statistiche, inventario nell'hub con I/C, opzioni in pausa, posizione salvata nella piazza, 4 lingue.
 **M10 — Abilità ed eventi** ✅ (2026-09-24): abilità della bacchetta (3 slot), eventi della run (Tempesta di fulmini), catalogo PDF, progetto di rarità/slot/mitici/enciclopedia (§6.1–6.4).
 **M11 — Rarità ed equipaggiamento** ✅ (2026-09-24): istanze uniche con rarità e bonus casuali, 9 slot con manichino, drop in run fino a Leggendario, fusione di due oggetti identici, modificatori da Super raro (§6.1–6.3).
+**M11.1 — Overtime e Passo d'ombra** ✅ (2026-09-24): smontaggio in lavorazione, alone e suono dei drop per rarità, overtime dopo l'apertura dell'estrazione, evento Passo d'ombra (§4, §3, §6.3).
 **M12 — Mitici, enciclopedia, achievement** (pianificata): ricette mitiche dai boss, materiali composti, enciclopedia in gioco, achievement (§6.4, §13).
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.
@@ -355,6 +358,15 @@ Bot: va nel pentagramma e ci resta schivando solo dentro il cerchio.
 | Cripta, gelatina + amuleto, resta per i boss (6 run) | 6/6 | 11/12 | 6/6 (spesso 2 Re Slime) | 100% | 169 Gelatina, 17,8 Nuclei |
 
 Lettura: il Pentagramma è un rischio breve (ondata di mostri in rage per 15 s) che il bot regge sempre; il costo vero è il boss in più, che con l'equipaggiamento vale molto loot. Da rivedere col playtest umano: se è troppo facile alzare `monster_bonus` o ridurre `circle_radius`.
+
+### 10.9 Verifica M11.1 (#62 overtime, #63 Passo d'ombra)
+
+| Configurazione | Risultato |
+|---|---|
+| Cripta, bot che non estrae mai (`stay`, 2 run) | una morte normale a 87 s; l'altra regge fino a 334 s, cioè a overtime x4 (estrazione aperta a 120 s, x1 a 170 s) |
+| Cripta, solo Passo d'ombra (`event=shadow_step`, 6 run) | 8/12 eventi superati (67%), 100% estrazioni; la Tempesta nelle stesse condizioni ~80% |
+
+Lettura: il bot schiva quasi perfettamente e arriva a x4; un giocatore umano dovrebbe cedere tra x2 e x3, come richiesto. Il Passo d'ombra è l'evento più difficile per il bot (scatta solo quando un nemico è a meno di 70 px). Da rivedere col playtest umano.
 
 ## 11. Open questions
 

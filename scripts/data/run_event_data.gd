@@ -3,7 +3,7 @@ extends Resource
 ## Evento a tempo della run (M10): titolo e sottotitolo a schermo, durata, regole, ricompensa.
 ## Nuovi tipi solo in coda all'enum (valore salvato nei .tres).
 
-enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM }
+enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP }
 
 @export var id: StringName = &""
 ## Chiavi di traduzione: titolo grande e obiettivo in poche parole.
@@ -42,3 +42,11 @@ enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM }
 @export var spawn_raged: bool = true
 ## Distanza minima dal player del punto in cui compare il pentagramma.
 @export var min_player_distance: float = 320.0
+
+@export_group("Passo d'ombra")
+## Niente sparo: il tasto di sparo (o Spazio / tasto destro) scatta. Cariche e secondi per ricaricarne una.
+@export var dash_charges: int = 6
+@export var dash_recharge: float = 2.0
+## Velocita' e durata dello scatto: il player e' invulnerabile per tutta la durata.
+@export var dash_speed: float = 850.0
+@export var dash_duration: float = 0.2

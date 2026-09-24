@@ -103,6 +103,7 @@ func _ready() -> void:
 	_events.bounds = extraction_spawn_rect
 	_events.setup(arena, _player)
 	_events.event_started.connect(_on_event_started)
+	_player.dashed.connect(_sfx.play.bind(&"dash"))
 	_events.event_progress.connect(_hud.set_event_progress)
 	_events.event_completed.connect(_on_event_completed)
 	_events.event_failed.connect(_on_event_failed)

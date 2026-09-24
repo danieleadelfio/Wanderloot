@@ -14,6 +14,8 @@ signal shield_broken
 var _invulnerable: bool = false
 ## Colpi assorbiti prima di subire danno (barriera). 0 = nessuna.
 var shield_charges: int = 0
+## Immunita' comandata dall'esterno (scatto del Passo d'ombra): nessun colpo passa finche' e' attiva.
+var immune: bool = false
 var _iframe_timer: Timer
 
 
@@ -28,7 +30,7 @@ func _ready() -> void:
 
 func _try_hit(area: Area2D) -> void:
 	var hitbox := area as Hitbox
-	if hitbox == null or not hitbox.active or _invulnerable:
+	if hitbox == null or not hitbox.active or _invulnerable or immune:
 		return
 	if health == null or health.is_dead():
 		return
@@ -49,6 +51,15 @@ func _try_hit(area: Area2D) -> void:
 		_invulnerable = true
 		invulnerable_changed.emit(true)
 		_iframe_timer.start(invulnerability_time)
+
+
+func set_immune(active: bool) -> void:
+	immune = active
+	if not active and not _invulnerable:
+		for area in get_overlapping_areas():
+			_try_hit(area)
+			if _invulnerable:
+				return
 
 
 func _on_iframe_timeout() -> void:

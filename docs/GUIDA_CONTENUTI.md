@@ -387,6 +387,7 @@ Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s) ed `eve
 | Evento | File | Campi principali | Attuale |
 |---|---|---|---|
 | Tempesta di fulmini | `data/events/lightning_storm.tres` | `duration`, `strike_interval`, `strike_telegraph`, `strike_radius`, `strike_damage`, `aimed_chance`, `reward_choices` | 10 s, 0,55 s, 0,8 s, 70 px, 1, 35%, 3 abilità |
+| Passo d'ombra | `data/events/shadow_step.tres` | `duration`, `dash_charges`, `dash_recharge`, `dash_speed`, `dash_duration` (= invulnerabilità), `reward_choices` | 10 s, 6, 2 s, 850 px/s, 0,2 s, 3 abilità |
 | Pentagramma di sangue | `data/events/blood_pentagram.tres` | `activation_timeout`, `duration`, `candle_count`, `circle_radius`, `monster_bonus`, `spawn_raged`, `bonus_bosses` | 20 s, 15 s, 15, 110 px, +30%, sì, +1 boss |
 
 ### 8.7b Rarità e bonus dell'equipaggiamento

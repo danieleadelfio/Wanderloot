@@ -5,6 +5,9 @@ extends SceneTree
 ## Non e' un test: serve a confrontare i .tres di bilanciamento a parita' di giocatore.
 var runs := 10
 var equip: Array = []
+## event=<id>: solo quell'evento in ogni run (misura un evento alla volta).
+var only_event: StringName = &""
+var per_event: Dictionary = {}
 var done := 0
 var results: Array = []
 var rng := RandomNumberGenerator.new()
@@ -26,6 +29,8 @@ func _initialize() -> void:
 	for i in range(1, args.size()):
 		if args[i] == "boss":
 			BotDriver.fight_boss = true
+		elif args[i].begins_with("event="):
+			only_event = StringName(args[i].trim_prefix("event="))
 		elif args[i] == "stay":
 			BotDriver.stay = true
 		elif args[i].begins_with("arena="):
@@ -57,6 +62,13 @@ func _physics_process(_d: float) -> bool:
 		a.get_node("%Player").health.damaged.connect(func(n): damage_taken += n)
 		root.get_node("RunManager").run_ended.connect(_on_end, CONNECT_ONE_SHOT)
 		var ev = a.get_node("%EventDirector")
+		if only_event != &"":
+			var only: Array[RunEventData] = []
+			for e in ev.events:
+				if e.id == only_event: only.append(e)
+			ev.events = only
+		ev.event_completed.connect(func(e): per_event[e.id] = per_event.get(e.id, 0) + 1)
+		ev.event_failed.connect(func(e): per_event[String(e.id) + "_fail"] = per_event.get(String(e.id) + "_fail", 0) + 1)
 		ev.event_completed.connect(func(_e): events_won += 1)
 		ev.event_failed.connect(func(e): events_lost += 1; pentas_lost += 1 if e.kind == 1 else 0)
 		ev.event_completed.connect(func(e): pentas_won += 1 if e.kind == 1 else 0)
@@ -103,6 +115,7 @@ func _report() -> void:
 		for id in r.loot: per_material[id] = per_material.get(id, 0) + r.loot[id]
 	for id in per_material: per_material[id] = snappedf(per_material[id] / float(results.size()), 0.1)
 	print("eventi superati: %d/%d (pentagrammi %d/%d)" % [events_won, events_won + events_lost, pentas_won, pentas_won + pentas_lost])
+	print("per evento: ", per_event)
 	print("boss sconfitti: %d/%d" % [results.filter(func(r): return r.boss).size(), results.size()])
 	print("loot medio per run (raccolto, anche se poi perso): ", per_material)
 	print("oggetti trovati (base/rarita'): ", results.map(func(r): return r.items))

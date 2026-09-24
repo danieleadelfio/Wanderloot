@@ -32,6 +32,8 @@
 [ext_resource type="AudioStream" path="res://assets/audio/overtime_warn.wav" id="s_overtime_warn"]
 [ext_resource type="AudioStream" path="res://assets/audio/overtime_start.wav" id="s_overtime_start"]
 
+[ext_resource type="AudioStream" path="res://assets/audio/dash.wav" id="s_dash"]
+
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("2")
 id = &"shoot"
@@ -211,6 +213,13 @@ stream = ExtResource("s_overtime_start")
 volume_db = -2.0
 pitch_variance = 0.0
 
+[sub_resource type="Resource" id="e_dash"]
+script = ExtResource("2")
+id = &"dash"
+stream = ExtResource("s_dash")
+volume_db = -6.0
+pitch_variance = 0.1
+
 [resource]
 script = ExtResource("1")
-entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10"), SubResource("e11"), SubResource("e_boss_appear"), SubResource("e_boss_warn"), SubResource("e_boss_slam"), SubResource("e_event_start"), SubResource("e_lightning"), SubResource("e_power_up"), SubResource("e_candle_out"), SubResource("e_drop_common"), SubResource("e_drop_uncommon"), SubResource("e_drop_rare"), SubResource("e_drop_super_rare"), SubResource("e_drop_legendary"), SubResource("e_drop_mythic"), SubResource("e_overtime_warn"), SubResource("e_overtime_start")])
+entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10"), SubResource("e11"), SubResource("e_boss_appear"), SubResource("e_boss_warn"), SubResource("e_boss_slam"), SubResource("e_event_start"), SubResource("e_lightning"), SubResource("e_power_up"), SubResource("e_candle_out"), SubResource("e_drop_common"), SubResource("e_drop_uncommon"), SubResource("e_drop_rare"), SubResource("e_drop_super_rare"), SubResource("e_drop_legendary"), SubResource("e_drop_mythic"), SubResource("e_overtime_warn"), SubResource("e_overtime_start"), SubResource("e_dash")])

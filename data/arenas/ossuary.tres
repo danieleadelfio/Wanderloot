@@ -25,6 +25,8 @@
 
 [ext_resource type="Resource" path="res://data/events/blood_pentagram.tres" id="pentagram"]
 
+[ext_resource type="Resource" path="res://data/events/shadow_step.tres" id="shadow"]
+
 [sub_resource type="Resource" id="ghoul"]
 script = ExtResource("2")
 scene = ExtResource("8")
@@ -59,7 +61,7 @@ extraction_data = ExtResource("7")
 enemies = Array[ExtResource("2")]([SubResource("ghoul"), SubResource("archer")])
 unlock_arena = &"crypt"
 unlock_extractions = 3
-events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram")])
+events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow")])
 event_times = PackedFloat32Array(30, 75)
 consumables = ExtResource("cons")
 item_drops = ExtResource("items")

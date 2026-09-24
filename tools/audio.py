@@ -215,3 +215,7 @@ d = 2.0
 gong = mix(np.sin(2 * np.pi * sweep(80, 55, d)) * env(int(SR * d), curve=1.3), 0.5 * np.sin(2 * np.pi * 131 * t(d)) * env(int(SR * d), curve=2.2), 0.35 * np.sin(2 * np.pi * 197 * t(d)) * env(int(SR * d), curve=3), 0.4 * lowpass(noise(d), 0.03) * env(int(SR * d), attack=0.05, curve=1.5))
 save("overtime_start", gong, 0.8)
 print("overtime sounds ok")
+# --- Passo d'ombra (M11.1): fruscio rapido dello scatto ---
+d = 0.2
+save("dash", mix(lowpass(noise(d), 0.5) * env(int(SR * d), attack=0.01, curve=2.5), 0.4 * triangle(sweep(500, 1400, d)) * env(int(SR * d), curve=3)), 0.45)
+print("dash sound ok")

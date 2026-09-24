@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://scripts/combat/frame_cycler.gd" id="s2"]
 
 [ext_resource type="Script" path="res://scripts/combat/shield_visual.gd" id="sv"]
+[ext_resource type="Script" path="res://scripts/combat/dash_ring.gd" id="dr"]
 [sub_resource type="Gradient" id="light_grad"]
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.4, 1, 1, 1, 0)
@@ -39,6 +40,7 @@ script = ExtResource("1")
 stats = ExtResource("2")
 
 [node name="Body" type="Sprite2D" parent="."]
+unique_name_in_owner = true
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("s1")
 offset = Vector2(0, -8)
@@ -50,6 +52,13 @@ frame_time = 0.4
 unique_name_in_owner = true
 visible = false
 script = ExtResource("sv")
+
+[node name="DashRing" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 5
+position = Vector2(26, -32)
+script = ExtResource("dr")
 
 [node name="Light" type="PointLight2D" parent="."]
 unique_name_in_owner = true

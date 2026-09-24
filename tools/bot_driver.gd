@@ -72,6 +72,12 @@ static func drive(a: Node) -> void:
 					best = dp
 					goal = pos.direction_to(pk.global_position) * 0.8
 	var move := (flee + center + goal).limit_length(1.0)
+	# Passo d'ombra (M11.1): scatta lontano dalla minaccia quando e' vicina (premi/rilascia per ripetere).
+	if p.get("dash_mode"):
+		if (nd < 70.0 or flee.length() > 2.0) and not Input.is_action_pressed("dash"):
+			Input.action_press("dash")
+		else:
+			Input.action_release("dash")
 	set_axis("move_left", "move_right", move.x)
 	set_axis("move_up", "move_down", move.y)
 	var aim := Vector2.ZERO

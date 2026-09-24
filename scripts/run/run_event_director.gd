@@ -1,7 +1,7 @@
 class_name RunEventDirector
 extends Node2D
 ## Fa partire gli eventi dell'arena ai tempi di ArenaData.event_times e ne applica le regole
-## (Tempesta di fulmini, Pentagramma di sangue). Comunica via segnali: la composition root (Arena)
+## (Tempesta di fulmini, Pentagramma di sangue, Passo d'ombra). Comunica via segnali: la composition root (Arena)
 ## mostra i testi, gestisce i mostri in piu' e da' le ricompense.
 
 signal event_started(event: RunEventData)
@@ -91,6 +91,8 @@ func _physics_process(delta: float) -> void:
 			_tick_storm(delta)
 		RunEventData.Kind.BLOOD_PENTAGRAM:
 			_tick_pentagram(delta)
+		RunEventData.Kind.SHADOW_STEP:
+			_tick_timed(delta)
 
 
 ## A caso tra gli eventi dell'arena, evitando di ripetere l'ultimo se ce n'e' piu' d'uno.
@@ -111,6 +113,8 @@ func _start(event: RunEventData) -> void:
 	else:
 		state.start(event.duration)
 		_strike_timer = 0.6
+		if event.kind == RunEventData.Kind.SHADOW_STEP:
+			player.start_dash_mode(event)
 	event_started.emit(event)
 
 
@@ -119,6 +123,13 @@ func _tick_storm(delta: float) -> void:
 	if _strike_timer <= 0.0:
 		_strike_timer = current.strike_interval
 		_spawn_strike()
+	event_progress.emit(state.remaining_ratio())
+	if state.tick(delta) == RunEventState.Status.COMPLETED:
+		_finish(true)
+
+
+## Passo d'ombra: dura `duration` secondi; come la Tempesta fallisce al primo colpo.
+func _tick_timed(delta: float) -> void:
 	event_progress.emit(state.remaining_ratio())
 	if state.tick(delta) == RunEventState.Status.COMPLETED:
 		_finish(true)
@@ -154,9 +165,9 @@ func _spawn_strike() -> void:
 			return
 
 
-## La Tempesta fallisce al primo colpo subito; il Pentagramma no (conta solo restare nel cerchio).
+## Tempesta e Passo d'ombra falliscono al primo colpo subito; il Pentagramma no (conta solo restare nel cerchio).
 func _on_player_damaged() -> void:
-	if current != null and current.kind == RunEventData.Kind.LIGHTNING_STORM and state.status == RunEventState.Status.RUNNING:
+	if current != null and current.kind != RunEventData.Kind.BLOOD_PENTAGRAM and state.status == RunEventState.Status.RUNNING:
 		state.fail()
 		_finish(false)
 
@@ -172,6 +183,8 @@ func _finish(success: bool) -> void:
 	for strike in _strikes:
 		strike.stop()
 	_pentagram.hide()
+	if event.kind == RunEventData.Kind.SHADOW_STEP:
+		player.stop_dash_mode()
 	if success:
 		event_completed.emit(event)
 	else:
