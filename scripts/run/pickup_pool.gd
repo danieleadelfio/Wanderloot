@@ -33,7 +33,7 @@ func spawn_exp(at: Vector2, amount: int) -> void:
 
 
 func spawn_material(at: Vector2, material: MaterialData, amount: int) -> void:
-	_spawn(at, Pickup.Kind.MATERIAL, amount, material, material.icon, 1.0)
+	_spawn(at, Pickup.Kind.MATERIAL, amount, material, material.icon, 0.375)
 
 
 func active_count() -> int:

@@ -44,41 +44,41 @@ extraction_data = ExtResource("14")
 
 [node name="Floor" type="Sprite2D" parent="."]
 texture_repeat = 2
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("17")
 region_enabled = true
-region_rect = Rect2(0, 0, 800, 500)
+region_rect = Rect2(0, 0, 3200, 2000)
 
 [node name="WallTiles" type="Node2D" parent="."]
 texture_repeat = 2
 
 [node name="Top" type="Sprite2D" parent="WallTiles"]
 position = Vector2(0, -484)
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("18")
 region_enabled = true
-region_rect = Rect2(0, 0, 800, 16)
+region_rect = Rect2(0, 0, 3200, 64)
 
 [node name="Bottom" type="Sprite2D" parent="WallTiles"]
 position = Vector2(0, 484)
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("18")
 region_enabled = true
-region_rect = Rect2(0, 0, 800, 16)
+region_rect = Rect2(0, 0, 3200, 64)
 
 [node name="Left" type="Sprite2D" parent="WallTiles"]
 position = Vector2(-784, 0)
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("18")
 region_enabled = true
-region_rect = Rect2(0, 0, 16, 500)
+region_rect = Rect2(0, 0, 64, 2000)
 
 [node name="Right" type="Sprite2D" parent="WallTiles"]
 position = Vector2(784, 0)
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("18")
 region_enabled = true
-region_rect = Rect2(0, 0, 16, 500)
+region_rect = Rect2(0, 0, 64, 2000)
 
 [node name="Walls" type="StaticBody2D" parent="."]
 

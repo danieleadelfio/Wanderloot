@@ -105,6 +105,84 @@ def build_characters():
     save("exp_gem", [exp_gem_svg()], 32)
 
 
+# --- Arena: pavimento a lastre (tile 384px = 192px di mondo) e muri (64px = 32px) -----------------
+def floor_svg():
+    parts = ['<rect width="384" height="384" fill="#2c2f46"/>']
+    for gy in range(3):
+        for gx in range(3):
+            v = RNG.randint(-3, 3)
+            x, y = gx * 128 + 3, gy * 128 + 3
+            parts.append('<rect x="%d" y="%d" width="122" height="122" rx="12" fill="rgb(%d,%d,%d)"/>' % (x, y, 56 + v, 60 + v, 82 + v))
+            parts.append('<rect x="%d" y="%d" width="122" height="6" rx="3" fill="#ffffff" opacity="0.05"/>' % (x, y + 4))
+            if RNG.random() < 0.2:
+                cx, cy = x + RNG.randint(20, 80), y + RNG.randint(20, 80)
+                parts.append('<path d="M%d %d l%d %d l%d %d" stroke="#34384f" stroke-width="3" fill="none" stroke-linecap="round"/>'
+                             % (cx, cy, RNG.randint(12, 26), RNG.randint(8, 18), RNG.randint(-14, 4), RNG.randint(10, 22)))
+    return svg("".join(parts), "", 384)
+
+
+def wall_svg():
+    parts = ['<rect width="64" height="64" fill="#1d2030"/>']
+    for row in range(2):
+        off = 0 if row == 0 else -16
+        for col in range(3):
+            parts.append('<rect x="%d" y="%d" width="28" height="28" rx="4" fill="#4a5270"/>' % (off + col * 32 + 2, row * 32 + 2))
+            parts.append('<rect x="%d" y="%d" width="28" height="7" rx="3" fill="#6b7690"/>' % (off + col * 32 + 2, row * 32 + 2))
+    return svg("".join(parts), "", 64)
+
+
+# --- Icone 64px (hub, inventario, oggetti a terra) --------------------------------------------------
+OUTLINE = 'stroke="#141a2c" stroke-width="3.5" stroke-linejoin="round"'
+
+
+def icon_gel():
+    defs = '<radialGradient id="g" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#c8ff8a"/><stop offset="0.5" stop-color="#38b764"/><stop offset="1" stop-color="#1d6e45"/></radialGradient>'
+    return svg('<path d="M32 6 C40 20 52 30 52 42 C52 54 43 60 32 60 C21 60 12 54 12 42 C12 30 24 20 32 6 Z" fill="url(#g)" %s/>'
+               '<ellipse cx="24" cy="38" rx="6" ry="9" fill="#fff" opacity="0.55" transform="rotate(20 24 38)"/>' % OUTLINE, defs, 64)
+
+
+def icon_core():
+    defs = ('<radialGradient id="g" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="#ffd1dc"/><stop offset="0.35" stop-color="#e8436a"/><stop offset="1" stop-color="#5d275d"/></radialGradient>'
+            '<radialGradient id="h"><stop offset="0" stop-color="#ff7aa0" stop-opacity="0.6"/><stop offset="1" stop-color="#ff7aa0" stop-opacity="0"/></radialGradient>')
+    return svg('<circle cx="32" cy="32" r="30" fill="url(#h)"/><circle cx="32" cy="33" r="20" fill="url(#g)" %s/>'
+               '<circle cx="25" cy="26" r="5" fill="#fff" opacity="0.7"/>' % OUTLINE, defs, 64)
+
+
+def icon_wand(gem, spark):
+    defs = '<radialGradient id="g" cx="0.35" cy="0.35" r="0.7"><stop offset="0" stop-color="#ffffff"/><stop offset="0.4" stop-color="%s"/><stop offset="1" stop-color="#1a1c2c"/></radialGradient>' % gem
+    sparks = "".join('<path d="M%d %d l3 -7 l3 7 l-3 7 Z" fill="#ffcd75"/>' % p for p in [(50, 30), (30, 10), (54, 6)]) if spark else ""
+    return svg('<line x1="10" y1="56" x2="42" y2="22" stroke="#141a2c" stroke-width="11" stroke-linecap="round"/>'
+               '<line x1="10" y1="56" x2="42" y2="22" stroke="#9a6035" stroke-width="5" stroke-linecap="round"/>'
+               '<circle cx="46" cy="18" r="10" fill="url(#g)" %s/>%s' % (OUTLINE, sparks), defs, 64)
+
+
+def icon_amulet():
+    defs = '<radialGradient id="g" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="#ffd1dc"/><stop offset="0.4" stop-color="#e8436a"/><stop offset="1" stop-color="#5d275d"/></radialGradient>'
+    return svg('<path d="M12 6 Q32 34 52 6" stroke="#141a2c" stroke-width="7" fill="none" stroke-linecap="round"/>'
+               '<path d="M12 6 Q32 34 52 6" stroke="#ffcd75" stroke-width="3" fill="none" stroke-linecap="round"/>'
+               '<circle cx="32" cy="42" r="15" fill="#ffcd75" %s/><circle cx="32" cy="42" r="9" fill="url(#g)"/>'
+               '<circle cx="29" cy="39" r="2.5" fill="#fff" opacity="0.8"/>' % OUTLINE, defs, 64)
+
+
+def icon_boots():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7ee08a"/><stop offset="1" stop-color="#1d6e45"/></linearGradient>'
+    return svg('<path d="M18 6 L36 6 L36 36 L54 42 Q58 44 56 52 L56 58 L12 58 L12 50 Q18 46 18 38 Z" fill="url(#g)" %s/>'
+               '<path d="M18 14 L36 14" stroke="#c8ff8a" stroke-width="3" opacity="0.7"/>'
+               '<rect x="12" y="54" width="44" height="5" rx="2" fill="#11402a"/>' % OUTLINE, defs, 64)
+
+
+def build_arena_and_icons():
+    save("floor", [floor_svg()], 384)
+    save("wall", [wall_svg()], 64)
+    save("icon_slime_gel", [icon_gel()], 64)
+    save("icon_slime_core", [icon_core()], 64)
+    save("icon_gel_wand", [icon_wand("#38b764", False)], 64)
+    save("icon_rapid_wand", [icon_wand("#73eff7", True)], 64)
+    save("icon_core_amulet", [icon_amulet()], 64)
+    save("icon_slime_boots", [icon_boots()], 64)
+
+
 if __name__ == "__main__":
     build_characters()
+    build_arena_and_icons()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))
