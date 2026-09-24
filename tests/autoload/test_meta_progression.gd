@@ -46,7 +46,7 @@ func test_craft_and_equip_are_saved_and_reloaded() -> void:
 	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(60 - 2 * recipe.cost_dictionary()[&"slime_gel"])
 	assert_int(reloaded.loadout.count_of(&"gel_wand")).is_equal(2)
 	assert_int(reloaded.loadout.equipped_in(EquipmentLoadout.EquipSlot.WEAPON).uid).is_equal(first.uid)
-	assert_int(reloaded.equipped_modifiers().size()).is_equal(recipe.result.modifiers.size())
+	assert_int(reloaded.equipped_modifiers().size()).is_equal(recipe.result.modifiers.size() + 1)
 
 
 func test_unequip_is_saved() -> void:

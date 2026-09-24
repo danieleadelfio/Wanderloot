@@ -95,6 +95,8 @@ func _ready() -> void:
 	_create_enemy_pools()
 	_wand.setup(_player, _projectile_pool, targetable_enemies)
 	_wand.changed.connect(_hud.set_abilities)
+	for ability in MetaProgression.equipped_abilities():
+		_wand.equip_bonus(ability)
 	_ability_choice.resolved.connect(_on_ability_resolved)
 	_events.bounds = extraction_spawn_rect
 	_events.setup(arena, _player)
@@ -193,7 +195,7 @@ func targetable_enemies() -> Array[Node2D]:
 
 ## Ricompensa degli eventi: il gioco si ferma e si sceglie un'abilita' tra quelle non ancora nella bacchetta.
 func offer_abilities(count: int = 3) -> void:
-	var options := ability_catalog.pick(count, _wand.slots.ids(), _rng)
+	var options := ability_catalog.pick(count, _wand.owned_ids(), _rng)
 	if options.is_empty() or RunManager.state != RunManager.State.RUNNING:
 		return
 	_choosing_ability = true
@@ -292,8 +294,9 @@ func _process(delta: float) -> void:
 			if _buffs[key] <= 0.0:
 				_buffs.erase(key)
 		_hud.set_buffs(_buffs)
-	for i in _wand.slots.abilities.size():
-		_hud.set_ability_progress(i, 1.0 if _player.has_shield() and _wand.slots.abilities[i].effect is ShieldEffect else _wand.progress_of(i))
+	var owned := _wand.all_abilities()
+	for i in owned.size():
+		_hud.set_ability_progress(i, 1.0 if _player.has_shield() and owned[i].effect is ShieldEffect else _wand.progress_of(i))
 	if not _extraction_timer.is_stopped():
 		_hud.set_extraction_countdown(_extraction_timer.time_left)
 

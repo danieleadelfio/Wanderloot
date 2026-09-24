@@ -31,6 +31,9 @@ var catalog: EquipmentCatalog = preload("res://data/equipment/equipment_catalog.
 var arena_catalog: ArenaCatalog = preload("res://data/arenas/arena_catalog.tres")
 ## Per ritrovare le abilita' degli oggetti Super rari e superiori.
 var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
+var rarity_table: RarityTable = preload("res://data/equipment/rarity_table.tres")
+var affix_table: AffixTable = preload("res://data/equipment/affix_table.tres")
+var _rng := RandomNumberGenerator.new()
 ## Estrazioni riuscite per id di arena.
 var extractions: Dictionary[StringName, int] = {}
 var selected_arena: StringName = &""
@@ -124,9 +127,9 @@ func craft(recipe: RecipeData) -> Crafting.Result:
 	return result
 
 
-## Crea l'istanza di un oggetto craftato (M11: Comune senza bonus; M11 #57 tira i bonus).
-func make_item(base: EquipmentData) -> ItemInstance:
-	return ItemInstance.new(base)
+## Crea l'istanza di un oggetto craftato: Comune con i bonus tirati.
+func make_item(base: EquipmentData, tier: int = 0) -> ItemInstance:
+	return ItemRoller.roll(base, tier, rarity_table, affix_table, ability_catalog, _rng)
 
 
 func equip(uid: int) -> void:

@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="RarityTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/rarity_table.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/rarity_tier.gd" id="2"]
+
+[sub_resource type="Resource" id="t0"]
+script = ExtResource("2")
+display_name = "RARITY_COMMON"
+color = Color(0.72, 0.72, 0.72, 1)
+affix_count = 1
+roll_min = 0.0
+roll_max = 0.35
+ability_count = 0
+drop_weight = 60.0
+salvage_multiplier = 1
+
+[sub_resource type="Resource" id="t1"]
+script = ExtResource("2")
+display_name = "RARITY_UNCOMMON"
+color = Color(0.36, 0.82, 0.42, 1)
+affix_count = 2
+roll_min = 0.2
+roll_max = 0.55
+ability_count = 0
+drop_weight = 25.0
+salvage_multiplier = 2
+
+[sub_resource type="Resource" id="t2"]
+script = ExtResource("2")
+display_name = "RARITY_RARE"
+color = Color(0.29, 0.56, 0.82, 1)
+affix_count = 3
+roll_min = 0.4
+roll_max = 0.75
+ability_count = 0
+drop_weight = 10.0
+salvage_multiplier = 3
+
+[sub_resource type="Resource" id="t3"]
+script = ExtResource("2")
+display_name = "RARITY_SUPER_RARE"
+color = Color(0.69, 0.36, 0.84, 1)
+affix_count = 3
+roll_min = 0.55
+roll_max = 0.9
+ability_count = 1
+drop_weight = 4.0
+salvage_multiplier = 5
+
+[sub_resource type="Resource" id="t4"]
+script = ExtResource("2")
+display_name = "RARITY_LEGENDARY"
+color = Color(0.94, 0.63, 0.19, 1)
+affix_count = 4
+roll_min = 0.75
+roll_max = 1.0
+ability_count = 1
+drop_weight = 1.0
+salvage_multiplier = 8
+
+[sub_resource type="Resource" id="t5"]
+script = ExtResource("2")
+display_name = "RARITY_MYTHIC"
+color = Color(0.91, 0.26, 0.23, 1)
+affix_count = 4
+roll_min = 0.9
+roll_max = 1.0
+ability_count = 1
+drop_weight = 0.0
+salvage_multiplier = 12
+
+[resource]
+script = ExtResource("1")
+tiers = Array[ExtResource("2")]([SubResource("t0"), SubResource("t1"), SubResource("t2"), SubResource("t3"), SubResource("t4"), SubResource("t5")])

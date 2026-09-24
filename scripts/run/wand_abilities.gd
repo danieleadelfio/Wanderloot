@@ -14,6 +14,8 @@ const STRIKE_POOL_SIZE := 8
 
 var player: Player
 var slots: AbilitySlots
+## Abilita' date dall'equipaggiamento (Super raro e superiori): sempre attive, fuori dai 3 slot.
+var bonus: Array[WandAbility] = []
 var _projectile_pool: ProjectilePool
 var _targets: Callable
 var _triggers: Array[AbilityTrigger] = []
@@ -59,14 +61,46 @@ func equip(ability: WandAbility, index: int = -1) -> bool:
 	_rebuild_triggers()
 	if ability.trigger == WandAbility.Trigger.PERMANENT and ability.effect:
 		ability.effect.activate(self)
-	player.weapon_data().projectile_tint = slots.tint()
-	changed.emit(slots.abilities)
+	_after_change()
 	return true
+
+
+## Abilita' dell'equipaggiamento, aggiunte a inizio run.
+func equip_bonus(ability: WandAbility) -> void:
+	if ability == null or all_abilities().has(ability):
+		return
+	bonus.append(ability)
+	_rebuild_triggers()
+	if ability.effect and (ability.trigger == WandAbility.Trigger.PERMANENT or ability.trigger == WandAbility.Trigger.COOLDOWN):
+		ability.effect.activate(self)
+	_after_change()
+
+
+## Slot della bacchetta + abilita' dell'equipaggiamento (per HUD, colore, scelta degli eventi).
+func all_abilities() -> Array[WandAbility]:
+	var result: Array[WandAbility] = []
+	result.append_array(slots.abilities)
+	result.append_array(bonus)
+	return result
+
+
+func owned_ids() -> Array[StringName]:
+	var result: Array[StringName] = []
+	for ability in all_abilities():
+		result.append(ability.id)
+	return result
+
+
+func _after_change() -> void:
+	var mixed := AbilitySlots.new(99)
+	mixed.abilities = all_abilities()
+	player.weapon_data().projectile_tint = mixed.tint()
+	changed.emit(all_abilities())
 
 
 func _rebuild_triggers() -> void:
 	_triggers.clear()
-	for ability in slots.abilities:
+	for ability in all_abilities():
 		_triggers.append(AbilityTrigger.new(ability))
 
 

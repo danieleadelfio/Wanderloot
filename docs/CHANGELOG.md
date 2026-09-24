@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Rarità e bonus casuali: 6 rarità (`rarity_table.tres`) con colore, numero e qualità dei bonus, abilità da Super raro; bonus tirati da `affix_table.tres`; il craft dà un Comune con bonus propri; nome e bordo colorati, tooltip con bonus e abilità; abilità degli oggetti sempre attive in run; test (#57).
 - 9 slot dell'equipaggiamento (Testa, Guanti, Armatura, Pantaloni, Stivali, 2 Anelli, Amuleto, Bacchetta) con manichino nell'inventario: clic su un oggetto per indossarlo, clic su uno slot per toglierlo; 5 nuovi oggetti base con ricette e icone vettoriali; test (#56).
 - Oggetti unici: ogni pezzo posseduto è un'istanza con oggetto base, rarità, bonus e abilità; il fabbro crafta anche duplicati; salvataggio v5 con conversione dei salvataggi precedenti in oggetti Comuni; test su istanze, loadout, crafting e migrazione (#55).
 - Guida al bilanciamento (`docs/GUIDA_CONTENUTI.md` §8): per ogni valore regolabile dall'Inspector il file, il campo, il valore attuale e l'effetto, con il metodo di verifica col bot (#54).

@@ -118,7 +118,7 @@ Ogni oggetto posseduto è un'**istanza** (`ItemInstance`): oggetto base (`Equipm
 
 Slot: **Testa, Guanti, Armatura, Pantaloni, Stivali, Anello (×2), Amuleto** e **Bacchetta** (l'arma, che porta anche gli slot delle abilità). Gli oggetti esistenti passano agli slot nuovi: bacchette → Bacchetta, Stivali viscosi → Stivali, Amuleto del nucleo → Amuleto. Nell'inventario dell'hub un **manichino** mostra gli slot con l'icona dell'oggetto indossato: **clic su un oggetto** del baule → va nel suo slot (sostituendo quello presente); **clic su uno slot occupato** → l'oggetto torna nel baule. I due anelli si riempiono in ordine (il secondo clic su un anello va nello slot libero, poi sostituisce il primo). Nuovi oggetti base: Cappuccio del viandante (Testa), Guanti del fabbro (Guanti), Corazza d'osso (Armatura), Brache di cuoio (Pantaloni), Anello di gelatina (Anello), ognuno con ricetta; gli Stivali viscosi passano allo slot Stivali. Il bordo degli slot e degli oggetti prende il colore della rarità (§6.2).
 
-### 6.2 Rarità (progetto M11)
+### 6.2 Rarità (M11, #57)
 
 | Rarità | Colore | Drop tra gli oggetti trovati | Contenuto |
 |---|---|---|---|
@@ -129,7 +129,7 @@ Slot: **Testa, Guanti, Armatura, Pantaloni, Stivali, Anello (×2), Amuleto** e *
 | Leggendario | arancio | 1% | 4 bonus alti + **1 modificatore forte casuale** |
 | Mitico | rosso | non si trova | 4 bonus massimi + **poteri fissi della ricetta** |
 
-Percentuali indicative, da bilanciare col bot. Ogni oggetto diventa un'**istanza unica** (id, oggetto base, rarità, bonus tirati) invece di un id di catalogo. I bonus sono tirati dentro intervalli che crescono con la rarità (`StatModifier` con minimo/massimo per rarità). I modificatori di Super raro e Leggendario vengono dalla lista delle abilità (§3.3, catalogo): lo stesso effetto (`AbilityEffect`) sempre attivo o potenziato, così i due sistemi non si duplicano.
+Le rarità sono in `data/equipment/rarity_table.tres` (colore, numero di bonus, qualità dei tiri `roll_min`–`roll_max`, abilità, peso di drop, moltiplicatore dello smontaggio); i bonus possibili in `data/equipment/affix_table.tres` (statistica, intervallo, tipi di oggetto ammessi, peso). Un oggetto non tira mai due volte la stessa statistica; le statistiche intere (danno, HP, proiettili, perforazione) si arrotondano. Il craft dal fabbro dà un Comune con 1 bonus tirato: due craft dello stesso oggetto sono diversi. L'abilità di Super raro e superiori è una delle abilità della bacchetta, **sempre attiva per tutta la run**, fuori dai 3 slot (e non viene più offerta dagli eventi). Il nome e il bordo degli oggetti hanno il colore della rarità; il tooltip mostra rarità, bonus e abilità. Percentuali indicative, da bilanciare col bot. Ogni oggetto diventa un'**istanza unica** (id, oggetto base, rarità, bonus tirati) invece di un id di catalogo. I bonus sono tirati dentro intervalli che crescono con la rarità (`StatModifier` con minimo/massimo per rarità). I modificatori di Super raro e Leggendario vengono dalla lista delle abilità (§3.3, catalogo): lo stesso effetto (`AbilityEffect`) sempre attivo o potenziato, così i due sistemi non si duplicano.
 
 ### 6.3 Drop in run e fusione (progetto M11)
 

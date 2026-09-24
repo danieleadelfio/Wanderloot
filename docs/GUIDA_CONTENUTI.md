@@ -385,6 +385,13 @@ Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s) ed `eve
 | Tempesta di fulmini | `data/events/lightning_storm.tres` | `duration`, `strike_interval`, `strike_telegraph`, `strike_radius`, `strike_damage`, `aimed_chance`, `reward_choices` | 10 s, 0,55 s, 0,8 s, 70 px, 1, 35%, 3 abilità |
 | Pentagramma di sangue | `data/events/blood_pentagram.tres` | `activation_timeout`, `duration`, `candle_count`, `circle_radius`, `monster_bonus`, `spawn_raged`, `bonus_bosses` | 20 s, 15 s, 15, 110 px, +30%, sì, +1 boss |
 
+### 8.7b Rarità e bonus dell'equipaggiamento
+
+| Cosa | File | Campi |
+|---|---|---|
+| Rarità | `data/equipment/rarity_table.tres` | per ogni rarità: `affix_count`, `roll_min`/`roll_max` (qualità 0–1 dei tiri), `ability_count`, `drop_weight` (tra gli oggetti trovati), `salvage_multiplier`, `color` |
+| Bonus possibili | `data/equipment/affix_table.tres` | `stat`, `min_value`/`max_value` (moltiplicatori es. 1,05–1,25), `is_multiplier`, `slots` (tipi di oggetto ammessi, vuoto = tutti), `weight` |
+
 ### 8.8 Loot, consumabili e abilità
 
 | Cosa | File | Campo | Attuale |
