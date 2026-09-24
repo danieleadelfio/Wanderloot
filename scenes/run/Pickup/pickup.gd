@@ -19,7 +19,6 @@ var pop_velocity: Vector2 = Vector2.ZERO
 
 func activate(at: Vector2, new_kind: Kind, new_amount: int, new_material: MaterialData, texture: Texture2D, texture_scale: float, pop: Vector2) -> void:
 	global_position = at
-	reset_physics_interpolation()
 	kind = new_kind
 	amount = new_amount
 	item_material = new_material
@@ -29,6 +28,7 @@ func activate(at: Vector2, new_kind: Kind, new_amount: int, new_material: Materi
 	_sprite.texture = texture
 	_sprite.scale = Vector2.ONE * texture_scale
 	visible = true
+	reset_physics_interpolation()
 
 
 func deactivate() -> void:

@@ -31,7 +31,6 @@ func _physics_process(delta: float) -> void:
 func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 	global_position = origin
 	rotation = direction.angle()
-	reset_physics_interpolation()
 	_velocity = direction * weapon.projectile_speed
 	_time_left = weapon.projectile_lifetime
 	_hitbox.damage = weapon.damage
@@ -43,6 +42,7 @@ func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 	_body.modulate = weapon.projectile_tint
 	_active = true
 	_set_enabled(true)
+	reset_physics_interpolation()
 
 
 func deactivate() -> void:

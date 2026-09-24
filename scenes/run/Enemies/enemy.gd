@@ -57,14 +57,15 @@ func _physics_process(delta: float) -> void:
 
 func activate(spawn_position: Vector2) -> void:
 	global_position = spawn_position
-	# Arriva dal pool: niente interpolazione dalla posizione precedente.
-	reset_physics_interpolation()
 	health.reset(data.max_hp)
 	_knockback.reset()
 	_freeze_left = 0.0
 	_reset_rage()
 	_attack_cooldown = data.attack_interval * randf_range(0.5, 1.0)
 	_set_enabled(true)
+	# Arriva dal pool: niente interpolazione dalla posizione precedente (dopo averlo reso visibile,
+	# altrimenti il reset viene ignorato e il nemico scivola per un attimo).
+	reset_physics_interpolation()
 
 
 func deactivate() -> void:

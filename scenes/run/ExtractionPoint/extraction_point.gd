@@ -46,10 +46,10 @@ func _draw() -> void:
 
 func activate(spawn_position: Vector2) -> void:
 	global_position = spawn_position
-	reset_physics_interpolation()
 	_progress = 0.0
 	_player_inside = false
 	_set_enabled(true)
+	reset_physics_interpolation()
 	progress_changed.emit(0.0)
 	queue_redraw()
 
