@@ -45,6 +45,7 @@ func _ready() -> void:
 	_blacksmith.salvage_requested.connect(_on_salvage_requested)
 	_loadout_panel.equip_requested.connect(MetaProgression.equip)
 	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
+	_loadout_panel.seen_requested.connect(MetaProgression.mark_seen)
 	_loadout_panel.equip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_arena_select.arena_selected.connect(_on_arena_selected)

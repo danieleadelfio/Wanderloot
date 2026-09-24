@@ -31,6 +31,22 @@ func test_category_groups_by_slot() -> void:
 	assert_int(result[0].rarity).is_equal(3)
 
 
+func test_filters_by_rarity_slot_and_new() -> void:
+	_items[1].is_new = true
+	_items[3].is_new = true
+	assert_int(StashSort.filtered(_items, "all").size()).is_equal(5)
+	assert_array(StashSort.filtered(_items, "new").map(func(i: ItemInstance) -> int: return i.uid)).is_equal([2, 4])
+	assert_int(StashSort.filtered(_items, "rarity:0").size()).is_equal(2)
+	assert_int(StashSort.filtered(_items, "slot:%d" % EquipmentData.Slot.RING).size()).is_equal(2)
+
+
+func test_new_flag_is_saved_and_cleared() -> void:
+	var item := ItemInstance.new(load("res://data/equipment/gel_ring.tres"), 1)
+	item.is_new = true
+	var copy := ItemInstance.from_dict(item.to_dict(), load("res://data/equipment/equipment_catalog.tres"), null)
+	assert_bool(copy.is_new).is_true()
+
+
 func test_arrival_keeps_uid_order() -> void:
 	var shuffled := _items.duplicate()
 	shuffled.reverse()

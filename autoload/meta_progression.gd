@@ -125,6 +125,7 @@ func deposit_run_items(items: Array[ItemInstance]) -> void:
 	if items.is_empty():
 		return
 	for item in items:
+		item.is_new = true
 		loadout.add(item)
 	_mark_changed()
 
@@ -133,7 +134,9 @@ func deposit_run_items(items: Array[ItemInstance]) -> void:
 func craft(recipe: RecipeData) -> Crafting.Result:
 	var result := Crafting.check(recipe, inventory)
 	if result == Crafting.Result.OK:
-		Crafting.craft(recipe, inventory, loadout, make_item)
+		var crafted := Crafting.craft(recipe, inventory, loadout, make_item)
+		if crafted:
+			crafted.is_new = true
 		_mark_changed()
 	return result
 
@@ -147,6 +150,7 @@ func make_item(base: EquipmentData, tier: int = 0) -> ItemInstance:
 func fuse(first_uid: int, second_uid: int) -> ItemInstance:
 	var fused := Forge.fuse(loadout.get_item(first_uid), loadout.get_item(second_uid), loadout, rarity_table, make_item)
 	if fused:
+		fused.is_new = true
 		_mark_changed()
 	return fused
 
@@ -165,8 +169,19 @@ func salvage(uid: int) -> bool:
 
 
 func equip(uid: int) -> void:
+	var item := loadout.get_item(uid)
+	if item:
+		item.is_new = false
 	if loadout.equip(uid):
 		_mark_changed()
+
+
+## Oggetto guardato (passaggio del mouse): perde la N. Da salvare, ma senza ridisegnare l'inventario.
+func mark_seen(uid: int) -> void:
+	var item := loadout.get_item(uid)
+	if item and item.is_new:
+		item.is_new = false
+		has_unsaved_changes = true
 
 
 func unequip(slot: int) -> void:

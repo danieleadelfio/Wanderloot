@@ -6,6 +6,8 @@ extends PanelContainer
 
 signal equip_requested(uid: int)
 signal unequip_requested(slot: int)
+## Oggetto nuovo guardato (perde la N).
+signal seen_requested(uid: int)
 
 const SLOT_SIZE := Vector2(60, 60)
 ## Posizione di ogni slot sul manichino (area 360x440).
@@ -19,6 +21,13 @@ const SLOT_POSITIONS: Dictionary[int, Vector2] = {
 	EquipmentLoadout.EquipSlot.RING_2: Vector2(272, 270),
 	EquipmentLoadout.EquipSlot.PANTS: Vector2(150, 262),
 	EquipmentLoadout.EquipSlot.BOOTS: Vector2(150, 372),
+}
+## Nome di ogni tipo di oggetto (filtro per categoria).
+const CATEGORY_NAMES: Dictionary[int, String] = {
+	EquipmentData.Slot.WEAPON: "SLOT_WEAPON", EquipmentData.Slot.ACCESSORY: "SLOT_ACCESSORY",
+	EquipmentData.Slot.HEAD: "SLOT_HEAD", EquipmentData.Slot.GLOVES: "SLOT_GLOVES",
+	EquipmentData.Slot.ARMOR: "SLOT_ARMOR", EquipmentData.Slot.PANTS: "SLOT_PANTS",
+	EquipmentData.Slot.BOOTS: "SLOT_BOOTS", EquipmentData.Slot.RING: "SLOT_RING",
 }
 const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.EquipSlot.WEAPON: "SLOT_WEAPON",
@@ -38,6 +47,9 @@ const SLOT_NAMES: Dictionary[int, String] = {
 
 ## Ordine del baule scelto: resta finche' il gioco e' aperto.
 static var sort_mode: StashSort.Mode = StashSort.Mode.ARRIVAL
+## Filtro del baule scelto (vedi StashSort.filtered).
+static var filter_key: String = "all"
+var _filter_keys: Array[String] = []
 
 var _loadout: EquipmentLoadout
 
@@ -48,6 +60,7 @@ var _loadout: EquipmentLoadout
 
 func _ready() -> void:
 	%Stash.visible = show_stash
+	_fill_filter()
 	var group := ButtonGroup.new()
 	for pair in [[%SortArrival, StashSort.Mode.ARRIVAL], [%SortRarity, StashSort.Mode.RARITY], [%SortCategory, StashSort.Mode.CATEGORY]]:
 		var button: Button = pair[0]
@@ -55,6 +68,29 @@ func _ready() -> void:
 		button.button_group = group
 		button.button_pressed = pair[1] == sort_mode
 		button.pressed.connect(_on_sort_pressed.bind(pair[1]))
+
+
+func _fill_filter() -> void:
+	var option: OptionButton = %Filter
+	option.clear()
+	_filter_keys.clear()
+	var entries: Array = [["all", tr("FILTER_ALL")], ["new", tr("FILTER_NEW")]]
+	for i in ItemText.RARITIES.tiers.size():
+		entries.append(["rarity:%d" % i, tr(ItemText.RARITIES.tier(i).display_name)])
+	for slot: int in EquipmentData.Slot.values():
+		entries.append(["slot:%d" % slot, tr(CATEGORY_NAMES[slot])])
+	for entry in entries:
+		option.add_item(entry[1])
+		_filter_keys.append(entry[0])
+	option.select(maxi(_filter_keys.find(filter_key), 0))
+	if not option.item_selected.is_connected(_on_filter_selected):
+		option.item_selected.connect(_on_filter_selected)
+
+
+func _on_filter_selected(index: int) -> void:
+	filter_key = _filter_keys[index]
+	if _loadout:
+		refresh(_loadout)
 
 
 func _on_sort_pressed(mode: StashSort.Mode) -> void:
@@ -81,7 +117,7 @@ func refresh(loadout: EquipmentLoadout) -> void:
 		_slots.add_child(button)
 	for child in _grid.get_children():
 		child.queue_free()
-	var stash := StashSort.sorted(loadout.stash_items(), sort_mode)
+	var stash := StashSort.sorted(StashSort.filtered(loadout.stash_items(), filter_key), sort_mode)
 	_empty_hint.visible = stash.is_empty()
 	for item in stash:
 		var tile := ItemTile.for_item(item)
@@ -91,6 +127,7 @@ func refresh(loadout: EquipmentLoadout) -> void:
 			if worn:
 				tile.compare.append(worn)
 		tile.pressed.connect(equip_requested.emit.bind(item.uid))
+		tile.seen.connect(seen_requested.emit)
 		_grid.add_child(tile)
 
 

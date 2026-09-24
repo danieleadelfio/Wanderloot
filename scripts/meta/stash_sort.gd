@@ -18,5 +18,18 @@ static func sorted(items: Array[ItemInstance], mode: Mode) -> Array[ItemInstance
 	return result
 
 
+## Filtro del baule: "all", "new", "rarity:<indice>", "slot:<EquipmentData.Slot>".
+static func filtered(items: Array[ItemInstance], key: String) -> Array[ItemInstance]:
+	if key == "new":
+		return items.filter(func(i: ItemInstance) -> bool: return i.is_new)
+	if key.begins_with("rarity:"):
+		var tier := int(key.trim_prefix("rarity:"))
+		return items.filter(func(i: ItemInstance) -> bool: return i.rarity == tier)
+	if key.begins_with("slot:"):
+		var slot := int(key.trim_prefix("slot:"))
+		return items.filter(func(i: ItemInstance) -> bool: return int(i.slot()) == slot)
+	return items.duplicate()
+
+
 static func _key(item: ItemInstance, head: Array) -> Array:
 	return head + [String(item.base.id), item.uid]

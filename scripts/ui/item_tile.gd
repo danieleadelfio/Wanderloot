@@ -3,6 +3,9 @@ extends Button
 ## Casella quadrata con icona (oggetto con bordo della rarita' o materiale con quantita') e tooltip.
 ## Usata dalla schermata del loot di fine run e dal baule (M11.3).
 
+## Oggetto nuovo guardato col mouse (perde la N).
+signal seen(uid: int)
+
 const SIZE: Vector2 = Vector2(64, 64)
 
 var item: ItemInstance
@@ -18,7 +21,31 @@ static func for_item(value: ItemInstance) -> ItemTile:
 	tile.icon = value.base.icon
 	tile.tooltip_text = ItemText.tooltip(value)
 	tile._style(ItemText.color(value))
+	if value.is_new:
+		tile._add_new_badge()
 	return tile
+
+
+## N gialla in alto a destra (oggetto nuovo); sparisce al primo passaggio del mouse.
+func _add_new_badge() -> void:
+	var badge := Label.new()
+	badge.name = "NewBadge"
+	badge.text = "N"
+	badge.add_theme_font_size_override("font_size", 16)
+	badge.add_theme_color_override("font_color", Color(1, 0.85, 0.15))
+	badge.add_theme_color_override("font_outline_color", Color.BLACK)
+	badge.add_theme_constant_override("outline_size", 5)
+	badge.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	badge.position += Vector2(-4, 0)
+	badge.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(badge)
+	mouse_entered.connect(_on_seen, CONNECT_ONE_SHOT)
+
+func _on_seen() -> void:
+	if has_node("NewBadge"):
+		get_node("NewBadge").queue_free()
+	seen.emit(item.uid)
 
 
 static func for_material(value: MaterialData, count: int) -> ItemTile:
