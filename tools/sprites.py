@@ -559,6 +559,26 @@ def build_boss():
     save("boss_shadow", [boss_shadow_svg()], 256)
 
 
+# --- Icone dell'hub (M9): inventario (sacca) e statistiche (pergamena) ------------------------------
+def icon_bag():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset="1" stop-color="#6a3f1f"/></linearGradient>'
+    return svg('<path d="M20 22 Q32 12 44 22" stroke="#3a2210" stroke-width="5" fill="none"/>'
+               '<path d="M12 28 Q12 22 20 22 L44 22 Q52 22 52 28 L54 50 Q54 58 46 58 L18 58 Q10 58 10 50 Z" fill="url(#g)" %s/>'
+               '<rect x="26" y="32" width="12" height="9" rx="2" fill="#ffcd75" stroke="#7a4d1c" stroke-width="2"/>' % OUTLINE, defs, 64)
+
+
+def icon_stats():
+    defs = '<linearGradient id="p" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8d9b0"/><stop offset="1" stop-color="#f6ecd0"/></linearGradient>'
+    return svg('<rect x="14" y="10" width="36" height="46" rx="4" fill="url(#p)" %s/>'
+               '<rect x="20" y="36" width="6" height="14" fill="#e8433a"/><rect x="29" y="28" width="6" height="22" fill="#38b764"/><rect x="38" y="20" width="6" height="30" fill="#4a8fd0"/>'
+               '<path d="M18 52 L46 52" stroke="#3a2e1a" stroke-width="2.5"/>' % OUTLINE, defs, 64)
+
+
+def build_hub_icons():
+    save("icon_bag", [icon_bag()], 64)
+    save("icon_stats", [icon_stats()], 64)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -567,4 +587,5 @@ if __name__ == "__main__":
     build_ossuary()
     build_hub()
     build_boss()
+    build_hub_icons()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

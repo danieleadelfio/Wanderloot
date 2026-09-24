@@ -77,6 +77,7 @@ func _ready() -> void:
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
 	_player.begin_run(MetaProgression.equipped_items())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
+	_hud.set_stats(_player.stats, _player.weapon_data())
 	_create_enemy_pools()
 	_pickup_pool.target = _player
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
@@ -277,6 +278,7 @@ func _present_level_up() -> void:
 
 func _on_upgrade_chosen(upgrade: UpgradeData) -> void:
 	_player.apply_upgrade(upgrade)
+	_hud.set_stats(_player.stats, _player.weapon_data())
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pending_level_ups -= 1
 	if _pending_level_ups > 0:

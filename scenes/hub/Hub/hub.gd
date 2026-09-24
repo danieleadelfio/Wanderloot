@@ -22,6 +22,10 @@ var _pause_open: bool = false
 @onready var _prompt: Label = %Prompt
 @onready var _dim: ColorRect = %Dim
 @onready var _pause_menu: PauseMenu = %PauseMenu
+@onready var _inventory_window: Control = %InventoryWindow
+@onready var _tabs: TabContainer = %Tabs
+@onready var _hub_stats_grid: GridContainer = %HubStatsGrid
+@onready var _player: Player = %Player
 
 
 func _ready() -> void:
@@ -43,6 +47,8 @@ func _ready() -> void:
 	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_arena_select.arena_selected.connect(_on_arena_selected)
 	_pause_menu.action_requested.connect(_on_pause_action)
+	%InventoryIcon.pressed.connect(_toggle_inventory.bind(0))
+	%StatsIcon.pressed.connect(_toggle_inventory.bind(1))
 	_pause_menu.set_hint("ESC per chiudere")
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
@@ -73,15 +79,23 @@ func _unhandled_input(event: InputEvent) -> void:
 			_set_pause_open(false)
 			get_viewport().set_input_as_handled()
 	elif _open_window:
-		if event.is_action_pressed("menu") or event.is_action_pressed("interact"):
+		if _open_window == _inventory_window and (event.is_action_pressed("inventory") or event.is_action_pressed("character")):
+			_toggle_inventory(0 if event.is_action_pressed("inventory") else 1)
+			get_viewport().set_input_as_handled()
+		elif event.is_action_pressed("menu") or event.is_action_pressed("interact"):
 			_close_window()
 			get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("menu"):
 		_set_pause_open(true)
 		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("inventory") or event.is_action_pressed("character"):
+		_toggle_inventory(0 if event.is_action_pressed("inventory") else 1)
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("interact"):
 		var spot := _nearest_spot()
 		if spot:
+			if spot.window == _inventory_window:
+				_tabs.current_tab = 0
 			_open(spot.window)
 			get_viewport().set_input_as_handled()
 
@@ -93,6 +107,23 @@ func _nearest_spot() -> Interactable:
 		points.append(spot.global_position)
 	var index := Interactable.nearest_index(points, %Player.global_position)
 	return in_range[index] if index >= 0 else null
+
+
+## Finestra Inventario (scheda 0) / Statistiche (scheda 1): I, C, icone in alto a destra, baule.
+## Stesso tasto sulla scheda aperta = chiude; tasto dell'altra scheda = cambia scheda.
+func _toggle_inventory(tab: int) -> void:
+	if _pause_open:
+		return
+	if _open_window == _inventory_window:
+		if _tabs.current_tab == tab:
+			_close_window()
+			return
+		_tabs.current_tab = tab
+		return
+	if _open_window:
+		_close_window()
+	_tabs.current_tab = tab
+	_open(_inventory_window)
 
 
 func _set_pause_open(open: bool) -> void:
@@ -138,6 +169,9 @@ func _refresh() -> void:
 	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names)
 	_loadout_panel.refresh(MetaProgression.loadout)
 	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id)
+	# Statistiche con l'equipaggiamento attuale: lo stesso calcolo di inizio run, sul player della piazza.
+	_player.begin_run(MetaProgression.equipped_items())
+	StatSheet.fill(_hub_stats_grid, StatSheet.rows(_player.stats, _player.weapon_data()), 18)
 	_ensure_focus.call_deferred()
 
 

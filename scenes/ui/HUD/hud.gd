@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var _extraction_label: Label = %ExtractionLabel
 @onready var _loot_label: Label = %LootLabel
 @onready var _boss_panel: Control = %BossPanel
+@onready var _stats_grid: GridContainer = %StatsGrid
 @onready var _boss_name: Label = %BossName
 @onready var _boss_bar: ProgressBar = %BossBar
 
@@ -41,6 +42,11 @@ func set_exp(current: int, required: int) -> void:
 
 func set_loot(total: int) -> void:
 	_loot_label.text = "Loot a rischio: %d" % total
+
+
+## Statistiche del personaggio sotto le barre (solo in run), aggiornate a ogni potenziamento.
+func set_stats(stats: PlayerStats, weapon: WeaponData) -> void:
+	StatSheet.fill(_stats_grid, StatSheet.rows(stats, weapon), 13)
 
 
 func show_boss(boss_name: String, current: int, maximum: int) -> void:

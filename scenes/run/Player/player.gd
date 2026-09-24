@@ -53,6 +53,11 @@ func _physics_process(delta: float) -> void:
 		_weapon.try_fire(aim)
 
 
+## Arma della run (copia con equip e potenziamenti applicati): letta per le statistiche a schermo.
+func weapon_data() -> WeaponData:
+	return _weapon.data
+
+
 func apply_upgrade(upgrade: UpgradeData) -> void:
 	StatApplier.apply(upgrade.stat, upgrade.amount, upgrade.is_multiplier, stats, _weapon.data)
 	match upgrade.stat:

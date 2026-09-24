@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Statistiche del personaggio nell'HUD della run (aggiornate a ogni potenziamento); nell'hub finestra Inventario con schede Inventario e Statistiche, aperta con I, C, icone cliccabili in alto a destra o dal baule: si equipaggia senza andare al baule; `StatSheet` testato (#42).
 - Salvando dalla piazza si salva anche la posizione del player: Carica e Continua lo rimettono nello stesso punto (salvataggio v4, compatibile con v3); test dedicati (#41).
 - Rifiniture dal playtest: ombra del Re Slime attaccata al corpo, nessun cerchio di preavviso sulla raffica a ventaglio (`BossAttack.show_windup`), freccia verso l'estrazione gialla (#40).
 - Boss Re Slime nella Cripta: compare 20s dopo l'apertura dell'estrazione; raffica a ventaglio, anelli, salto schiacciante con cerchio rosso di preavviso, spirale in fase 2; drop garantiti di gelatina e nuclei; grafica vettoriale e test sui dati (#39).

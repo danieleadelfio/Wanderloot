@@ -1,6 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/hub/Hub/hub.gd" id="hub"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_bag.png" id="icon_bag"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_stats.png" id="icon_stats"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu/PauseMenu.tscn" id="pause_menu"]
 [ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="m_core"]
@@ -481,8 +483,8 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("interactable")
-prompt = "E — Baule ed equipaggiamento"
-window = NodePath("../../UI/StashWindow")
+prompt = "E — Baule (inventario)"
+window = NodePath("../../UI/InventoryWindow")
 
 [node name="Shape" type="CollisionShape2D" parent="World/ChestSpot"]
 shape = SubResource("spot_small")
@@ -520,7 +522,7 @@ offset_bottom = 84.0
 theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.85)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-text = "WASD muoviti · E interagisci · ESC chiudi"
+text = "WASD muoviti · E interagisci · I inventario · C statistiche · ESC menu"
 
 [node name="Prompt" type="Label" parent="UI"]
 unique_name_in_owner = true
@@ -541,6 +543,38 @@ theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 
+[node name="MenuIcons" type="HBoxContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = 76.0
+grow_horizontal = 0
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="InventoryIcon" type="TextureButton" parent="UI/MenuIcons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+tooltip_text = "Inventario (I)"
+focus_mode = 0
+texture_normal = ExtResource("icon_bag")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="StatsIcon" type="TextureButton" parent="UI/MenuIcons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+tooltip_text = "Statistiche (C)"
+focus_mode = 0
+texture_normal = ExtResource("icon_stats")
+ignore_texture_size = true
+stretch_mode = 5
+
 [node name="Dim" type="ColorRect" parent="UI"]
 unique_name_in_owner = true
 layout_mode = 3
@@ -551,7 +585,8 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.55)
 
-[node name="StashWindow" type="CenterContainer" parent="UI"]
+[node name="InventoryWindow" type="CenterContainer" parent="UI"]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -559,50 +594,70 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="UI/StashWindow"]
+[node name="Panel" type="PanelContainer" parent="UI/InventoryWindow"]
 custom_minimum_size = Vector2(980, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("window_style")
 
-[node name="VBox" type="VBoxContainer" parent="UI/StashWindow/Panel"]
+[node name="VBox" type="VBoxContainer" parent="UI/InventoryWindow/Panel"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Panels" type="HBoxContainer" parent="UI/StashWindow/Panel/VBox"]
+[node name="Tabs" type="TabContainer" parent="UI/InventoryWindow/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Inventario" type="HBoxContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="StashPanel" type="PanelContainer" parent="UI/StashWindow/Panel/VBox/Panels"]
+[node name="StashPanel" type="PanelContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBox" type="VBoxContainer" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel"]
+[node name="VBox" type="VBoxContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel"]
 layout_mode = 2
 
-[node name="StashTitle" type="Label" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel/VBox"]
+[node name="StashTitle" type="Label" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Baule"
 
-[node name="StashLabel" type="Label" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel/VBox"]
+[node name="StashLabel" type="Label" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 1)
 text = "Baule vuoto: estrai loot da una run."
 
-[node name="StashList" type="VBoxContainer" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel/VBox"]
+[node name="StashList" type="VBoxContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LoadoutPanel" parent="UI/StashWindow/Panel/VBox/Panels" instance=ExtResource("loadout")]
+[node name="LoadoutPanel" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario" instance=ExtResource("loadout")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CloseHint" type="Label" parent="UI/StashWindow/Panel/VBox"]
+[node name="Statistiche" type="MarginContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 24
+
+[node name="HubStatsGrid" type="GridContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs/Statistiche"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 48
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="CloseHint" type="Label" parent="UI/InventoryWindow/Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
-text = "ESC o E per chiudere"
+text = "I inventario · C statistiche · ESC per chiudere"
 horizontal_alignment = 1
 
 [node name="BlacksmithWindow" type="CenterContainer" parent="UI"]
