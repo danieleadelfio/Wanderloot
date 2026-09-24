@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="Resource" path="res://data/weapons/necro_skull.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Anello di teschi"
+kind = 1
+weight = 1.2
+telegraph_time = 0.8
+recovery = 0.9
+teleport_after = true
+projectile_count = 12
+repeats = 3
+repeat_interval = 0.45
+ring_rotation_degrees = 15.0
+projectile = ExtResource("2")

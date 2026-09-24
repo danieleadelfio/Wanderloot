@@ -776,6 +776,48 @@ def build_crypt_slimes():
     save("toxic_aura", [toxic_aura_svg()], 128)
 
 
+# --- Boss dell'Ossario (M11.3) ---
+OL = "#16121c"
+
+
+def necromancer_svg(up=False):
+    dy = -8 if up else 0
+    defs = ('<linearGradient id="robe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a2a8a"/><stop offset="1" stop-color="#1e0b36"/></linearGradient>'
+            '<radialGradient id="orb" cx="0.4" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="0.4" stop-color="#e0aaff"/><stop offset="1" stop-color="#7b2cbf"/></radialGradient>'
+            '<radialGradient id="eye"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#d98cff"/><stop offset="1" stop-color="#7b2cbf" stop-opacity="0"/></radialGradient>')
+    O = 'stroke="%s" stroke-width="7" stroke-linejoin="round"' % OL
+    body = ('<ellipse cx="128" cy="240" rx="72" ry="12" fill="#000" opacity="0.35"/><g transform="translate(0 %d)">' % dy +
+            # bastone
+            '<rect x="186" y="60" width="11" height="180" rx="4" fill="#4a3a2a" %s/>' % O +
+            '<circle cx="191" cy="52" r="22" fill="url(#orb)" %s/>' % O +
+            # veste
+            '<path d="M58 238 L84 118 L172 118 L198 238 Q128 252 58 238 Z" fill="url(#robe)" %s/>' % O +
+            '<path d="M116 124 L128 236 L140 124 Z" fill="#12061f" opacity="0.6"/>'
+            '<path d="M80 150 Q128 170 176 150" stroke="#b36bff" stroke-width="4" fill="none" opacity="0.7"/>'
+            # cappuccio e teschio
+            '<path d="M70 132 C60 50 196 50 186 132 C182 160 74 160 70 132 Z" fill="url(#robe)" %s/>' % O +
+            '<path d="M96 104 C96 72 160 72 160 104 C160 130 146 140 128 140 C110 140 96 130 96 104 Z" fill="#e8e2d0" stroke="%s" stroke-width="5"/>' % OL +
+            '<circle cx="113" cy="106" r="11" fill="url(#eye)"/><circle cx="143" cy="106" r="11" fill="url(#eye)"/>'
+            '<circle cx="113" cy="106" r="4" fill="#fff"/><circle cx="143" cy="106" r="4" fill="#fff"/>'
+            '<path d="M116 128 L118 136 M128 128 L128 137 M140 128 L138 136" stroke="%s" stroke-width="3"/>' % OL +
+            # mano ossuta sul bastone
+            '<circle cx="190" cy="140" r="10" fill="#e8e2d0" stroke="%s" stroke-width="4"/>' % OL +
+            '</g>')
+    return svg(body, defs)
+
+def skull_svg():
+    defs = '<radialGradient id="g" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#b8a8d8"/></radialGradient>'
+    return svg('<circle cx="32" cy="32" r="30" fill="#9b4de0" opacity="0.35"/>'
+               '<path d="M14 30 C14 10 50 10 50 30 C50 42 44 48 32 48 C20 48 14 42 14 30 Z" fill="url(#g)" stroke="%s" stroke-width="4"/>'
+               '<circle cx="25" cy="30" r="6" fill="#4a1a7a"/><circle cx="39" cy="30" r="6" fill="#4a1a7a"/>'
+               '<path d="M26 42 L26 50 M32 42 L32 50 M38 42 L38 50" stroke="%s" stroke-width="3"/>' % (OL, OL), defs, 64)
+
+
+def build_necromancer():
+    save("necromancer", [necromancer_svg(), necromancer_svg(up=True)], 256)
+    save("necro_skull", [skull_svg()], 48)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -791,4 +833,5 @@ if __name__ == "__main__":
     build_equipment_slots()
     build_app_icon()
     build_crypt_slimes()
+    build_necromancer()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

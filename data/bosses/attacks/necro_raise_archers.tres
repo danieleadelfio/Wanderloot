@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SkeletonArcher/SkeletonArcher.tscn" id="3"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Richiamo degli arcieri"
+kind = 3
+weight = 0.8
+telegraph_time = 1.0
+recovery = 1.2
+teleport_after = true
+summon_count = 3
+summon_scene = ExtResource("3")

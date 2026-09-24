@@ -17,6 +17,8 @@
 
 [ext_resource type="Resource" path="res://data/events/lightning_storm.tres" id="storm"]
 
+[ext_resource type="PackedScene" path="res://scenes/run/Bosses/Necromancer/Necromancer.tscn" id="boss_Necromancer"]
+
 [ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
 
 [ext_resource type="Resource" path="res://data/run/overtime_default.tres" id="overtime"]
@@ -64,5 +66,6 @@ unlock_extractions = 3
 events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow")])
 event_times = PackedFloat32Array(30, 75)
 consumables = ExtResource("cons")
+boss_scenes = Array[PackedScene]([ExtResource("boss_Necromancer")])
 item_drops = ExtResource("items")
 overtime = ExtResource("overtime")
