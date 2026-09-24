@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MaterialData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/material_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_bone_shard.png" id="ic"]
+
+[resource]
+script = ExtResource("1")
+icon = ExtResource("ic")
+id = &"bone_shard"
+display_name = "Frammento d'osso"
+rarity = 0

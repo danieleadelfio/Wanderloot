@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/run/Enemies/enemy.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/skeleton_archer.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/combat/health.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/combat/hit_flash.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/combat/knockback.gd" id="k1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/skeleton.png" id="s1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/skeleton_rage.png" id="s3"]
+[ext_resource type="Script" path="res://scripts/combat/frame_cycler.gd" id="s2"]
+
+[sub_resource type="CircleShape2D" id="body_shape"]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id="box_shape"]
+radius = 17.0
+
+[node name="SkeletonArcher" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("1")
+data = ExtResource("2")
+
+[node name="Body" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("s1")
+offset = Vector2(0, -10)
+hframes = 2
+script = ExtResource("s2")
+frame_time = 0.35
+
+[node name="RageBody" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("s3")
+offset = Vector2(0, -10)
+hframes = 2
+script = ExtResource("s2")
+frame_time = 0.35
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("body_shape")
+
+[node name="Health" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3")
+
+[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+script = ExtResource("4")
+health = NodePath("../Health")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("box_shape")
+
+[node name="Hitbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 16
+collision_mask = 0
+monitoring = false
+script = ExtResource("5")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("box_shape")
+
+[node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("6")
+target = NodePath("..")
+
+[node name="Knockback" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("k1")
+decay = 8.0
+
+[connection signal="hurt" from="Hurtbox" to="HitFlash" method="flash"]

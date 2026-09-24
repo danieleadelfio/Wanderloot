@@ -10,6 +10,8 @@
 [ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="7"]
 [ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="8"]
 [ext_resource type="AudioStream" path="res://assets/audio/music_hub.wav" id="9"]
+[ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m1"]
+[ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m2"]
 
 [node name="Hub" type="Control"]
 layout_mode = 3
@@ -19,7 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
-materials = Array[Resource]([ExtResource("2"), ExtResource("3")])
+materials = Array[Resource]([ExtResource("2"), ExtResource("3"), ExtResource("m1"), ExtResource("m2")])
 
 [node name="Sfx" type="Node" parent="."]
 unique_name_in_owner = true

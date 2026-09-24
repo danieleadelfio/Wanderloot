@@ -141,4 +141,6 @@ save("music_arena", mix(music, drums), 0.6)
 d = 0.06; save("pickup_exp", triangle(sweep(1300, 2100, d)) * env(int(SR * d), curve=1.8), 0.35)
 chime = lambda n, dur: triangle(np.cumsum(np.full(int(SR * dur), note(n))) / SR) * env(int(SR * dur), curve=2.2)
 save("pickup_item", mix(chime(88, 0.16), np.pad(chime(95, 0.2), (int(SR * 0.06), 0))), 0.5)
+# --- nemici a distanza (M7): schiocco d'arco + sibilo ---
+d = 0.16; save("enemy_shoot", mix(triangle(sweep(620, 240, d)) * env(int(SR * d), curve=2.5), 0.35 * lowpass(noise(d), 0.3) * env(int(SR * d), curve=1.5)), 0.45)
 print("audio:", sorted(os.listdir(OUT)))

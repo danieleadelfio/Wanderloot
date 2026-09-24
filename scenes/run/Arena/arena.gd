@@ -21,6 +21,7 @@ var _exp_remainder: float = 0.0
 
 @onready var _player: Player = %Player
 @onready var _enemies: Node2D = %Enemies
+@onready var _enemy_projectile_pool: ProjectilePool = %EnemyProjectilePool
 @onready var _floor: Sprite2D = %Floor
 @onready var _wall_tiles: Node2D = %WallTiles
 @onready var _ambient: CanvasModulate = %Ambient
@@ -97,6 +98,8 @@ func _create_enemy_pools() -> void:
 		_enemies.add_child(pool)
 		pool.enemy_died.connect(_on_enemy_died)
 		pool.enemy_hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
+		pool.enemy_shot.connect(_enemy_projectile_pool.spawn)
+		pool.enemy_shot.connect(_sfx.play.bind(&"enemy_shoot").unbind(3))
 		_enemy_pools.append(pool)
 	_wave_spawner.wave_data = arena.wave_data
 	_wave_spawner.configure(arena.enemies, _enemy_pools)

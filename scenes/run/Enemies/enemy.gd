@@ -6,6 +6,8 @@ extends CharacterBody2D
 signal died(enemy: Enemy)
 signal hurt(enemy: Enemy)
 signal raged(enemy: Enemy)
+## Richiesta di tiro a distanza: la composition root la collega al pool dei proiettili nemici.
+signal shot_requested(origin: Vector2, direction: Vector2, weapon: WeaponData)
 
 @export var data: EnemyData
 
@@ -15,6 +17,7 @@ var is_raged: bool = false
 
 var _freeze_left: float = 0.0
 var _alive_time: float = 0.0
+var _attack_cooldown: float = 0.0
 var _rage_tween: Tween
 
 @onready var health: Health = %Health
@@ -46,7 +49,8 @@ func _physics_process(delta: float) -> void:
 	_knockback.step(delta)
 	var chase := Vector2.ZERO
 	if is_instance_valid(target):
-		chase = global_position.direction_to(target.global_position) * current_speed()
+		chase = _desired_direction(target.global_position - global_position) * current_speed()
+		_try_ranged_attack(delta, target.global_position - global_position)
 	velocity = chase + _knockback.velocity
 	move_and_slide()
 
@@ -57,6 +61,7 @@ func activate(spawn_position: Vector2) -> void:
 	_knockback.reset()
 	_freeze_left = 0.0
 	_reset_rage()
+	_attack_cooldown = data.attack_interval * randf_range(0.5, 1.0)
 	_set_enabled(true)
 
 
@@ -71,6 +76,22 @@ func _set_enabled(enabled: bool) -> void:
 	_hurtbox.set_deferred("monitoring", enabled)
 	_hitbox.set_deferred("monitorable", enabled)
 	_hitbox.active = enabled
+
+
+func _desired_direction(to_target: Vector2) -> Vector2:
+	if data.behavior == EnemyData.Behavior.KEEP_DISTANCE:
+		return EnemyMovement.keep_distance(to_target, data.preferred_distance)
+	return to_target.normalized()
+
+
+func _try_ranged_attack(delta: float, to_target: Vector2) -> void:
+	if data.ranged_weapon == null:
+		return
+	_attack_cooldown -= delta
+	if _attack_cooldown > 0.0 or to_target.length() > data.attack_range:
+		return
+	_attack_cooldown = data.attack_interval
+	shot_requested.emit(global_position, to_target.normalized(), data.ranged_weapon)
 
 
 func current_speed() -> float:

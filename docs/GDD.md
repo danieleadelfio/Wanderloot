@@ -57,6 +57,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - Player controllato con movimento in 8 direzioni (WASD/stick) + mira libera (mouse o stick destro) — twin-stick style.
 - Arma di partenza singola (es. "arco" o "baccheta magica base"), a distanza, con cooldown/fire-rate.
 - I proiettili sono sprite semplici (piccoli cerchi/frecce), riutilizzabili via object pooling per performance.
+- **Nemici dell'Ossario (M7, #34)**: **Ghoul** (2 HP, velocità 175, rage dopo 4s ×1,25 cioè circa la velocità del player, 1 exp): inseguitore veloce e fragile. **Scheletro arciere** (3 HP, velocità 95, 2 exp): mantiene ~280px dal player (`EnemyMovement.keep_distance`, gira attorno quando è alla distanza giusta) e tira un dardo viola (240px/s, schivabile) ogni 2,6s entro 420px (primo nemico a distanza: `EnemyProjectile` poolato sul layer `enemy_attack`, unshaded). Entrambi usano `enemy.gd` con comportamento e arma nei dati (`EnemyData`: gruppo Comportamento). Drop: **Frammento d'osso** (comune; ghoul 6%, arciere 10%) ed **Essenza d'ombra** (rara; 0,4% / 1,2%): percentuali basse perché nell'Ossario si uccide molto (~680 nemici per run col bot).
 - **Rage (M6, #29)**: un nemico vivo da più di `rage_after` secondi (slime: 5s) va in rage: velocità ×1,8 (era ×1,5, alzata dopo il primo playtest del proprietario), +1 danno da contatto, sprite che sfuma in 0,35s verso una variante rossa e arrabbiata. Si azzera quando il nemico torna nel pool. Valori in `EnemyData` (gruppo Rage). Con lo spawn ad almeno 300px e ~3s per raggiungere il player, quasi tutti i nemici che arrivano a contatto sono in rage: di fatto alza la pressione generale (voluto, vedi §10.3).
 - Nemici: pattern semplici (inseguimento diretto, mantenimento distanza + attacco ranged, pattern a pattuglia). Nessuna animazione complessa richiesta: 1-2 frame di movimento + 1 di attacco/morte sono sufficienti in stile pixel art.
 - Combat feel gestito via codice: knockback, hit-flash, hitstop leggero, i-frames sul player — nessun bisogno di asset aggiuntivi per "sentire" l'impatto.
@@ -183,6 +184,8 @@ res://
   data/audio/sound_bank.tres         # id suono -> stream + volume
   scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer, stat_applier, pickup_pool, pause_state, pause_controller
   scenes/run/Pickup/                 # oggetto a terra (gemma exp o materiale), poolable
+  scenes/run/Enemies/{Ghoul,SkeletonArcher}/ # nemici dell'Ossario (stesso enemy.gd, dati diversi)
+  scenes/run/Projectile/EnemyProjectile.tscn # dardo nemico (layer enemy_attack)
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
   data/arenas/                       # arena_catalog + un .tres per arena (crypt)

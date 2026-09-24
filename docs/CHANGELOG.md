@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Nemici macabri: Ghoul (veloce, fragile) e Scheletro arciere (mantiene la distanza e tira dardi, primo nemico a distanza con proiettili nemici poolati); comportamento e arma nei dati, nuovi materiali Frammento d'osso ed Essenza d'ombra, test dedicati (#34).
 - Arene guidate dai dati: `ArenaData` (aspetto, luci, musica, ondate, nemici con peso e tempo minimo, sblocco), `ArenaCatalog`, spawner multi-nemico, pannello Portale nell'hub, estrazioni per arena e arena scelta nel salvataggio v3 (#32).
 - Atmosfera cupa nella Cripta: ambiente scurito, luce portata dal player, torce tremolanti, vignettatura; proiettili, pickup e zona di estrazione restano luminosi (#31).
 - Bilanciamento dal playtest: rage più veloce (×1,8) e fase avanzata delle ondate dopo 60s (spawn 40% più rapido, +20 nemici vivi) (#30).

@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scenes/ui/RunInventory/run_inventory.gd" id="1"]
 [ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="2"]
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="3"]
+[ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m1"]
+[ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m2"]
 
 [sub_resource type="StyleBoxFlat" id="panel_bg"]
 bg_color = Color(0.1, 0.11, 0.17, 0.94)
@@ -15,7 +17,7 @@ content_margin_bottom = 24.0
 process_mode = 3
 layer = 14
 script = ExtResource("1")
-materials = Array[Resource]([ExtResource("2"), ExtResource("3")])
+materials = Array[Resource]([ExtResource("2"), ExtResource("3"), ExtResource("m1"), ExtResource("m2")])
 
 [node name="Panel" type="PanelContainer" parent="."]
 unique_name_in_owner = true

@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" path="res://assets/audio/ui_select.wav" id="a8"]
 [ext_resource type="AudioStream" path="res://assets/audio/pickup_exp.wav" id="a9"]
 [ext_resource type="AudioStream" path="res://assets/audio/pickup_item.wav" id="a10"]
+[ext_resource type="AudioStream" path="res://assets/audio/enemy_shoot.wav" id="a11"]
 
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("2")
@@ -91,6 +92,13 @@ stream = ExtResource("a10")
 volume_db = -3.0
 pitch_variance = 0.05
 
+[sub_resource type="Resource" id="e11"]
+script = ExtResource("2")
+id = &"enemy_shoot"
+stream = ExtResource("a11")
+volume_db = -8.0
+pitch_variance = 0.1
+
 [resource]
 script = ExtResource("1")
-entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10")])
+entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10"), SubResource("e11")])

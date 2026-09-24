@@ -14,6 +14,17 @@ extends Resource
 ## Freeze locale quando colpito (hitstop del solo nemico), in secondi.
 @export var hit_freeze: float = 0.05
 
+enum Behavior { CHASE, KEEP_DISTANCE }
+
+@export_group("Comportamento")
+@export var behavior: Behavior = Behavior.CHASE
+## Distanza mantenuta dal player con KEEP_DISTANCE (px).
+@export var preferred_distance: float = 280.0
+## Arma a distanza (null = solo contatto). Proiettili sul layer enemy_attack.
+@export var ranged_weapon: WeaponData
+@export var attack_interval: float = 1.8
+@export var attack_range: float = 460.0
+
 @export_group("Rage")
 ## Secondi in vita dopo i quali il nemico va in rage. 0 = mai.
 @export var rage_after: float = 5.0

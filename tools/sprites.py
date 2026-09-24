@@ -198,8 +198,98 @@ def build_props():
     save("torch", [torch_svg()], 64)
 
 
+# --- Nemici dell'Ossario (M7) ---------------------------------------------------------------------
+def ghoul_svg(up=False, rage=False):
+    skin = ("#c07a6a", "#8a3a33", "#4a1616") if rage else ("#9bb49a", "#5c7a62", "#2c3d33")
+    eye = "#ff3b2f" if rage else "#ffe066"
+    dy = -6 if up else 0
+    defs = ('<radialGradient id="s" cx="0.4" cy="0.3" r="0.8"><stop offset="0" stop-color="%s"/><stop offset="0.5" stop-color="%s"/><stop offset="1" stop-color="%s"/></radialGradient>'
+            '<radialGradient id="e"><stop offset="0" stop-color="#fff"/><stop offset="0.35" stop-color="%s"/><stop offset="1" stop-color="%s" stop-opacity="0"/></radialGradient>'
+            % (skin[0], skin[1], skin[2], eye, eye))
+    body = ('<ellipse cx="128" cy="238" rx="80" ry="12" fill="#000" opacity="0.35"/><g transform="translate(0 %d)">'
+            # braccia lunghe con artigli
+            '<path d="M76 150 Q40 180 44 222 M180 150 Q216 180 212 222" stroke="%s" stroke-width="20" fill="none" stroke-linecap="round"/>'
+            '<path d="M76 150 Q40 180 44 222 M180 150 Q216 180 212 222" stroke="url(#s)" stroke-width="12" fill="none" stroke-linecap="round"/>'
+            '<path d="M34 222 l4 16 M44 224 l2 18 M54 222 l-2 16 M202 222 l-4 16 M212 224 l-2 18 M222 222 l2 16" stroke="#e8e2d0" stroke-width="5" stroke-linecap="round"/>'
+            # corpo curvo con stracci
+            '<path d="M70 232 C66 170 90 136 128 136 C166 136 190 170 186 232 Q128 246 70 232 Z" fill="url(#s)" stroke="%s" stroke-width="7"/>'
+            '<path d="M78 200 L100 236 L112 204 L128 238 L142 204 L156 236 L178 200 Q128 222 78 200 Z" fill="#1c1a24" opacity="0.85"/>'
+            '<path d="M104 168 Q128 178 152 168 M108 184 Q128 192 148 184" stroke="%s" stroke-width="4" fill="none" opacity="0.6"/>'
+            # testa
+            '<ellipse cx="128" cy="112" rx="48" ry="44" fill="url(#s)" stroke="%s" stroke-width="7"/>'
+            '<circle cx="108" cy="106" r="22" fill="url(#e)"/><circle cx="148" cy="106" r="22" fill="url(#e)"/>'
+            '<ellipse cx="108" cy="106" rx="7" ry="9" fill="%s"/><ellipse cx="148" cy="106" rx="7" ry="9" fill="%s"/>'
+            '<path d="M104 132 L112 142 L120 132 L128 142 L136 132 L144 142 L152 132" stroke="#e8e2d0" stroke-width="4" fill="#1a0c10" stroke-linejoin="round"/>'
+            '</g>' % (dy, skin[2], skin[2], skin[2], skin[2], eye, eye))
+    return svg(body, defs)
+
+
+def skeleton_svg(up=False, rage=False):
+    bone = ("#f0c8b8", "#b0706a") if rage else ("#efe8d6", "#a89f88")
+    eye = "#ff3b2f" if rage else "#8fd3ff"
+    dy = -6 if up else 0
+    defs = ('<linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>'
+            '<radialGradient id="e"><stop offset="0" stop-color="#fff"/><stop offset="0.3" stop-color="%s"/><stop offset="1" stop-color="%s" stop-opacity="0"/></radialGradient>'
+            '<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2f4a"/><stop offset="1" stop-color="#15111e"/></linearGradient>'
+            % (bone[0], bone[1], eye, eye))
+    O = 'stroke="#141a2c" stroke-width="6"'
+    body = ('<ellipse cx="124" cy="238" rx="66" ry="12" fill="#000" opacity="0.35"/><g transform="translate(0 %d)">'
+            # mantello logoro
+            '<path d="M64 232 L84 128 L164 128 L184 232 L164 218 L150 236 L130 220 L112 236 L96 218 Z" fill="url(#h)" %s stroke-linejoin="round"/>'
+            # gabbia toracica
+            '<rect x="100" y="140" width="48" height="62" rx="16" fill="#0f0c16"/>'
+            '<path d="M124 142 L124 200 M104 152 Q124 162 144 152 M104 168 Q124 178 144 168 M106 184 Q124 192 142 184" stroke="url(#b)" stroke-width="6" fill="none" stroke-linecap="round"/>'
+            # arco e corda
+            '<path d="M204 84 Q246 158 204 232" stroke="#5a3218" stroke-width="10" fill="none" stroke-linecap="round"/>'
+            '<path d="M204 84 Q246 158 204 232" stroke="#9a6035" stroke-width="4" fill="none" stroke-linecap="round"/>'
+            '<line x1="204" y1="84" x2="204" y2="232" stroke="#d8d0c0" stroke-width="2"/>'
+            '<path d="M150 156 L204 158" stroke="url(#b)" stroke-width="7" stroke-linecap="round"/>'
+            # teschio con cappuccio
+            '<path d="M72 118 C68 44 180 44 176 118 Z" fill="url(#h)" %s/>'
+            '<path d="M92 108 C92 64 156 64 156 108 C156 124 146 134 138 136 L138 146 L110 146 L110 136 C102 134 92 124 92 108 Z" fill="url(#b)" %s/>'
+            '<ellipse cx="111" cy="104" rx="11" ry="12" fill="#0b0a10"/><ellipse cx="137" cy="104" rx="11" ry="12" fill="#0b0a10"/>'
+            '<circle cx="111" cy="105" r="9" fill="url(#e)"/><circle cx="137" cy="105" r="9" fill="url(#e)"/>'
+            '<path d="M121 118 L124 126 L127 118 Z" fill="#0b0a10"/>'
+            '<path d="M112 138 L112 146 M118 138 L118 146 M124 138 L124 146 M130 138 L130 146 M136 138 L136 146" stroke="#0b0a10" stroke-width="2"/>'
+            '</g>' % (dy, O, O, O))
+    return svg(body, defs)
+
+
+def enemy_bolt_svg():
+    defs = ('<radialGradient id="g"><stop offset="0" stop-color="#e0b0ff" stop-opacity="0.95"/><stop offset="1" stop-color="#6a2c8a" stop-opacity="0"/></radialGradient>'
+            '<linearGradient id="t" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a2c8a" stop-opacity="0"/><stop offset="1" stop-color="#c77dff" stop-opacity="0.85"/></linearGradient>')
+    return svg('<path d="M4 32 L42 24 L42 40 Z" fill="url(#t)"/><circle cx="44" cy="32" r="18" fill="url(#g)"/>'
+               '<path d="M34 32 L54 32 M50 27 L56 32 L50 37" stroke="#f4eeff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>', defs, 64)
+
+
+def icon_bone():
+    return svg('<g transform="rotate(-35 32 32)"><rect x="14" y="27" width="36" height="10" rx="4" fill="#efe8d6" %s/>'
+               '<circle cx="14" cy="26" r="7" fill="#efe8d6" %s/><circle cx="14" cy="38" r="7" fill="#efe8d6" %s/>'
+               '<circle cx="50" cy="26" r="7" fill="#efe8d6" %s/><circle cx="50" cy="38" r="7" fill="#efe8d6" %s/>'
+               '<rect x="12" y="28" width="40" height="8" fill="#efe8d6"/></g>' % ((OUTLINE,) * 5), "", 64)
+
+
+def icon_essence():
+    defs = ('<radialGradient id="g" cx="0.45" cy="0.4" r="0.7"><stop offset="0" stop-color="#f4eeff"/><stop offset="0.35" stop-color="#9d4edd"/><stop offset="1" stop-color="#240046"/></radialGradient>'
+            '<radialGradient id="h"><stop offset="0" stop-color="#c77dff" stop-opacity="0.7"/><stop offset="1" stop-color="#c77dff" stop-opacity="0"/></radialGradient>')
+    return svg('<circle cx="32" cy="32" r="30" fill="url(#h)"/>'
+               '<path d="M32 8 C44 22 50 30 48 42 C46 52 38 58 32 58 C26 58 18 52 16 42 C14 30 20 22 32 8 Z" fill="url(#g)" %s/>'
+               '<path d="M26 30 C24 38 28 46 34 48" stroke="#f4eeff" stroke-width="3" fill="none" opacity="0.7" stroke-linecap="round"/>' % OUTLINE, defs, 64)
+
+
+def build_ossuary_enemies():
+    save("ghoul", [ghoul_svg(), ghoul_svg(up=True)], 96)
+    save("ghoul_rage", [ghoul_svg(rage=True), ghoul_svg(up=True, rage=True)], 96)
+    save("skeleton", [skeleton_svg(), skeleton_svg(up=True)], 96)
+    save("skeleton_rage", [skeleton_svg(rage=True), skeleton_svg(up=True, rage=True)], 96)
+    save("enemy_bolt", [enemy_bolt_svg()], 32)
+    save("icon_bone_shard", [icon_bone()], 64)
+    save("icon_shadow_essence", [icon_essence()], 64)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
     build_props()
+    build_ossuary_enemies()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

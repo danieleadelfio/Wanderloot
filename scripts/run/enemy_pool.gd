@@ -4,6 +4,7 @@ extends Node2D
 
 signal enemy_died(enemy: Enemy)
 signal enemy_hurt(enemy: Enemy)
+signal enemy_shot(origin: Vector2, direction: Vector2, weapon: WeaponData)
 
 @export var enemy_scene: PackedScene
 @export var initial_size: int = 32
@@ -38,6 +39,7 @@ func _create() -> Enemy:
 	var enemy := enemy_scene.instantiate() as Enemy
 	enemy.died.connect(_on_enemy_died)
 	enemy.hurt.connect(enemy_hurt.emit)
+	enemy.shot_requested.connect(enemy_shot.emit)
 	add_child(enemy)
 	return enemy
 
