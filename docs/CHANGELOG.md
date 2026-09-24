@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Icona dell'eseguibile: portale viola in PNG, .ico e .icns, impostata come icona del progetto e icona nativa per l'export (#64).
 - Evento Passo d'ombra: 10 s senza sparo, lo sparo (o Spazio / tasto destro) diventa uno scatto invulnerabile; 6 cariche in un cerchio a spicchi accanto al player, una ogni 2 s; fallisce se colpiti, superato = scelta di un'abilità; azione `dash`, suono, bot, test (#63).
 - Overtime: 50 s dopo l'apertura dell'estrazione boss ogni 10 s, nemici nuovi in rage, velocità x2, vita +25%; ogni 50 s il livello sale e moltiplica i modificatori; avvisi a 30 e 10 s, annuncio e indicatore nell'HUD; `OvertimeData`/`OvertimeState`, test; bot `stay` (#62).
 - Oggetti a terra con alone pulsante del colore della rarità e suono di drop sempre più epico dal Comune al Mitico (`drop_sound`, `glow_scale` in `rarity_table.tres`) (#61).

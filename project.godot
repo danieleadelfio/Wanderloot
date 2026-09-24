@@ -13,7 +13,9 @@ config_version=5
 config/name="Wanderloot"
 run/main_scene="res://scenes/menu/MainMenu/MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/icon/icon.png"
+config/macos_native_icon="res://assets/icon/icon.icns"
+config/windows_native_icon="res://assets/icon/icon.ico"
 
 [autoload]
 

@@ -698,6 +698,45 @@ def build_equipment_slots():
     save_rect("mannequin", mannequin_svg(), 360, 440)
 
 
+
+# --- Icona dell'eseguibile (M11.2): portale viola su fondo scuro --------------------------------------
+def app_icon_svg():
+    cx, cy, ro, ri, base = 512, 470, 340, 232, 870
+    defs = ('<radialGradient id="bg" cx="0.5" cy="0.45" r="0.7"><stop offset="0" stop-color="#3b1a63"/><stop offset="1" stop-color="#0d0716"/></radialGradient>'
+            '<radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#c77dff" stop-opacity="0.75"/><stop offset="1" stop-color="#7b2cbf" stop-opacity="0"/></radialGradient>'
+            '<radialGradient id="p" cx="0.5" cy="0.55" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="0.22" stop-color="#ecc8ff"/><stop offset="0.6" stop-color="#8a3ad6"/><stop offset="1" stop-color="#2a0650"/></radialGradient>'
+            '<linearGradient id="s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f4a5c"/><stop offset="0.5" stop-color="#a39cb2"/><stop offset="1" stop-color="#433d50"/></linearGradient>'
+            '<clipPath id="open"><path d="M%d %d L%d %d A%d %d 0 0 1 %d %d L%d %d Z"/></clipPath>' % (cx - ri, base, cx - ri, cy, ri, ri, cx + ri, cy, cx + ri, base))
+    arms = "".join('<path d="M%d %d Q%.0f %.0f %.0f %.0f" stroke="#f6eaff" stroke-width="26" fill="none" opacity="0.6" stroke-linecap="round"/>'
+                   % (cx, 600, cx + 150 * math.cos(a), 600 + 150 * math.sin(a), cx + 280 * math.cos(a + 1.25), 600 + 280 * math.sin(a + 1.25)) for a in [i * math.tau / 5 for i in range(5)])
+    runes = "".join('<circle cx="%.0f" cy="%.0f" r="17" fill="#e0aaff"/>' % (cx + (ro + ri) / 2 * math.cos(a), cy - (ro + ri) / 2 * math.sin(a)) for a in [math.pi * (i + 0.5) / 7 for i in range(7)])
+    O = 'stroke="#140f1c" stroke-width="22" stroke-linejoin="round"'
+    arch = ('<path d="M%d %d L%d %d A%d %d 0 0 1 %d %d L%d %d L%d %d L%d %d A%d %d 0 0 0 %d %d L%d %d Z" fill="url(#s)" %s/>'
+            % (cx - ro, base, cx - ro, cy, ro, ro, cx + ro, cy, cx + ro, base, cx + ri, base, cx + ri, cy, ri, ri, cx - ri, cy, cx - ri, base, O))
+    body = ('<rect x="0" y="0" width="1024" height="1024" rx="220" fill="url(#bg)"/>'
+            '<circle cx="512" cy="560" r="470" fill="url(#glow)"/>'
+            '<ellipse cx="512" cy="905" rx="380" ry="44" fill="#000" opacity="0.45"/>'
+            '<g clip-path="url(#open)"><rect x="0" y="0" width="1024" height="1024" fill="url(#p)"/>%s<circle cx="512" cy="600" r="46" fill="#ffffff" opacity="0.9"/></g>'
+            '%s%s'
+            '<rect x="%d" y="850" width="210" height="52" rx="12" fill="#6e6878" %s/><rect x="%d" y="850" width="210" height="52" rx="12" fill="#6e6878" %s/>'
+            % (arms, arch, runes, cx - ro - 40, O, cx + ro - 170, O))
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs>%s</defs>%s</svg>' % (defs, body)
+
+
+def build_app_icon():
+    """assets/icon/: icon.png (1024, icona del progetto), icon.ico (Windows), icon.icns (macOS)."""
+    out = os.path.join(ROOT, "assets", "icon")
+    os.makedirs(out, exist_ok=True)
+    os.makedirs(ART, exist_ok=True)
+    text = app_icon_svg()
+    with open(os.path.join(ART, "app_icon.svg"), "w", newline="\n") as f:
+        f.write(text)
+    image = render(text, 1024, 1024)
+    image.save(os.path.join(out, "icon.png"))
+    image.save(os.path.join(out, "icon.ico"), sizes=[(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
+    image.save(os.path.join(out, "icon.icns"))
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -711,4 +750,5 @@ if __name__ == "__main__":
     build_cursors()
     build_consumables()
     build_equipment_slots()
+    build_app_icon()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))
