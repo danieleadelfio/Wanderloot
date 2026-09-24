@@ -113,6 +113,7 @@ func _ready() -> void:
 	_events.candle_out.connect(_sfx.play.bind(&"candle_out"))
 	_events.strike_landed.connect(_sfx.play.bind(&"lightning"))
 	_pickup_pool.target = _player
+	_enemy_projectile_pool.pull_target = _player
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pickup_pool.exp_collected.connect(_on_exp_collected)
 	_pickup_pool.material_collected.connect(_on_material_collected)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/void_orb.png" id="t"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Sfera del vuoto"
+damage = 1
+fire_rate = 1.0
+projectile_speed = 210.0
+projectile_lifetime = 3.2
+knockback = 160.0
+grow_after = 200.0
+grow_scale = 2.6
+grown_speed_multiplier = 0.3
+pull_radius = 180.0
+pull_strength = 130.0
+projectile_texture = ExtResource("t")
+projectile_scale = 0.35

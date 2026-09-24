@@ -23,6 +23,15 @@ extends Resource
 @export var poison_interval: float = 1.5
 @export var poison_damage: int = 1
 
+@export_group("Buco nero")
+## Dopo questi pixel il proiettile si ingrandisce, rallenta e attira il player (0 = mai; M11.3).
+@export var grow_after: float = 0.0
+@export var grow_scale: float = 2.5
+@export var grown_speed_multiplier: float = 0.35
+## Attrazione verso il proiettile cresciuto: raggio (px) e velocita' massima impressa al player (px/s).
+@export var pull_radius: float = 170.0
+@export var pull_strength: float = 120.0
+
 @export_group("Aspetto")
 ## Texture del proiettile; vuota = quella della scena del proiettile (M8, es. proiettili del boss).
 @export var projectile_texture: Texture2D

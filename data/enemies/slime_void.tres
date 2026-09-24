@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/drop_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="3"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="4"]
+[ext_resource type="Resource" path="res://data/weapons/void_orb.tres" id="w"]
+
+[sub_resource type="Resource" id="drop_gel"]
+script = ExtResource("2")
+material = ExtResource("3")
+chance = 0.25
+
+[sub_resource type="Resource" id="drop_core"]
+script = ExtResource("2")
+material = ExtResource("4")
+chance = 0.02
+
+[resource]
+script = ExtResource("1")
+display_name = "Slime del vuoto"
+max_hp = 6
+move_speed = 110.0
+exp_reward = 2
+rage_speed_multiplier = 1.8
+attack_interval = 3.2
+attack_range = 420.0
+ranged_weapon = ExtResource("w")
+drops = Array[ExtResource("2")]([SubResource("drop_gel"), SubResource("drop_core")])

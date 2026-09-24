@@ -24,6 +24,8 @@ var _dash_speed: float = 0.0
 var _dash_duration: float = 0.0
 var _dash_left: float = 0.0
 var _dash_direction: Vector2 = Vector2.ZERO
+## Attrazione esterna di questo tick (buco nero), sommata al movimento e poi azzerata.
+var _pull: Vector2 = Vector2.ZERO
 
 @onready var health: Health = %Health
 @onready var _hurtbox: Hurtbox = %Hurtbox
@@ -68,7 +70,8 @@ func _physics_process(delta: float) -> void:
 	if dash_mode:
 		_dash_step(delta, move_dir)
 		return
-	velocity = move_dir * stats.move_speed + _knockback.velocity
+	velocity = move_dir * stats.move_speed + _knockback.velocity + _pull
+	_pull = Vector2.ZERO
 	move_and_slide()
 	var aim := _get_aim_direction()
 	if weapon_enabled and aim != Vector2.ZERO:
@@ -141,6 +144,11 @@ func _end_dash() -> void:
 
 func _refresh_dash_ring() -> void:
 	_dash_ring.show_charges(dash_charges.charges, dash_charges.max_charges, dash_charges.partial())
+
+
+## Attrazione di un buco nero per questo tick (px/s), si somma tra piu' sorgenti.
+func add_pull(force: Vector2) -> void:
+	_pull += force
 
 
 ## Arma della run (copia con equip e potenziamenti applicati): letta per le statistiche a schermo.

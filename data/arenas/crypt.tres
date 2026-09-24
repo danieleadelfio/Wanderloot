@@ -8,6 +8,9 @@
 [ext_resource type="Resource" path="res://data/waves/wave_default.tres" id="6"]
 [ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/run/Enemies/EnemyBasic/EnemyBasic.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeToxic/SlimeToxic.tscn" id="st"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeVoid/SlimeVoid.tscn" id="sv"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeStone/SlimeStone.tscn" id="ss"]
 [ext_resource type="PackedScene" uid="uid://cmyk53big7wyo" path="res://scenes/run/Bosses/KingSlime/KingSlime.tscn" id="boss"]
 
 [ext_resource type="Resource" path="res://data/events/lightning_storm.tres" id="storm"]
@@ -26,6 +29,24 @@
 script = ExtResource("2")
 scene = ExtResource("8")
 
+[sub_resource type="Resource" id="toxic"]
+script = ExtResource("2")
+scene = ExtResource("st")
+weight = 0.18
+min_time = 30.0
+
+[sub_resource type="Resource" id="void"]
+script = ExtResource("2")
+scene = ExtResource("sv")
+weight = 0.15
+min_time = 45.0
+
+[sub_resource type="Resource" id="stone"]
+script = ExtResource("2")
+scene = ExtResource("ss")
+weight = 0.22
+min_time = 20.0
+
 [resource]
 script = ExtResource("1")
 id = &"crypt"
@@ -36,7 +57,7 @@ wall_texture = ExtResource("4")
 music = ExtResource("5")
 wave_data = ExtResource("6")
 extraction_data = ExtResource("7")
-enemies = Array[ExtResource("2")]([SubResource("slime")])
+enemies = Array[ExtResource("2")]([SubResource("slime"), SubResource("toxic"), SubResource("void"), SubResource("stone")])
 boss_scene = ExtResource("boss")
 events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow")])
 event_times = PackedFloat32Array(35, 80)

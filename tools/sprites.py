@@ -41,8 +41,16 @@ def svg(body, defs="", view=256):
 
 
 # --- Slime: frame 2 schiacciato (respiro) -------------------------------------------------------
-def slime_svg(squash=False, rage=False):
-    c = ("#ffc2b0", "#e8433a", "#7a1a1f", "#4a0d10") if rage else ("#c8ff8a", "#38b764", "#1d6e45", "#11402a")
+SLIME_PALETTES = {
+    "blue": ("#dff6ff", "#4fb4e8", "#1f5e8a", "#0f324d"),
+    "green": ("#c8ff8a", "#38b764", "#1d6e45", "#11402a"),
+    "violet": ("#f0d6ff", "#9b4de0", "#4c1f7a", "#2a0e45"),
+    "stone": ("#e6e6e8", "#8d8d94", "#4c4c55", "#26262c"),
+}
+
+
+def slime_svg(squash=False, rage=False, palette="blue"):
+    c = ("#ffc2b0", "#e8433a", "#7a1a1f", "#4a0d10") if rage else SLIME_PALETTES[palette]
     t = ' transform="translate(128 232) scale(1.07 0.92) translate(-128 -232)"' if squash else ""
     brows = ('<path d="M84 140 L118 152" stroke="%s" stroke-width="9" stroke-linecap="round"/>'
              '<path d="M172 140 L138 152" stroke="%s" stroke-width="9" stroke-linecap="round"/>' % (c[3], c[3])) if rage else ""
@@ -57,6 +65,8 @@ def slime_svg(squash=False, rage=False):
             '<circle cx="106" cy="162" r="4" fill="#fff"/><circle cx="158" cy="162" r="4" fill="#fff"/>'
             '<path d="M114 196 Q128 %d 142 196" stroke="%s" stroke-width="5" fill="none" stroke-linecap="round"/></g>'
             % (t, c[3], brows, c[3], c[3], mouth, c[3]))
+    if palette == "stone" and not rage:
+        body += ('<path d="M70 150 L96 132 L92 110 M170 120 L186 150 L176 180 M120 90 L132 110" stroke="%s" stroke-width="5" fill="none" stroke-linecap="round"/>' % c[3])
     return svg(body, defs)
 
 
@@ -737,6 +747,35 @@ def build_app_icon():
     image.save(os.path.join(out, "icon.icns"))
 
 
+
+# --- Slime colorati della Cripta (M11.3) ---------------------------------------------------------------
+def toxic_glob_svg():
+    defs = '<radialGradient id="g" cx="0.35" cy="0.35" r="0.7"><stop offset="0" stop-color="#f4ffd0"/><stop offset="0.45" stop-color="#9cf05a"/><stop offset="1" stop-color="#2e7a1c"/></radialGradient>'
+    return svg('<path d="M32 6 C44 22 54 32 54 42 C54 54 44 60 32 60 C20 60 10 54 10 42 C10 32 20 22 32 6 Z" fill="url(#g)" stroke="#16400c" stroke-width="4"/>'
+               '<ellipse cx="24" cy="38" rx="5" ry="8" fill="#fff" opacity="0.6"/>', defs, 64)
+
+
+def void_orb_svg():
+    defs = ('<radialGradient id="g" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#05000c"/><stop offset="0.55" stop-color="#2a0650"/>'
+            '<stop offset="0.8" stop-color="#9b4de0"/><stop offset="1" stop-color="#e0b0ff" stop-opacity="0.2"/></radialGradient>')
+    return svg('<circle cx="32" cy="32" r="28" fill="url(#g)"/><circle cx="32" cy="32" r="22" fill="none" stroke="#e0b0ff" stroke-width="2.5" stroke-dasharray="6 5" opacity="0.8"/>', defs, 64)
+
+
+def toxic_aura_svg():
+    defs = '<radialGradient id="g" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#9cf05a" stop-opacity="0.55"/><stop offset="0.6" stop-color="#4fbf2a" stop-opacity="0.25"/><stop offset="1" stop-color="#2e7a1c" stop-opacity="0"/></radialGradient>'
+    puffs = "".join('<circle cx="%d" cy="%d" r="%d" fill="url(#g)"/>' % (128 + 70 * math.cos(a), 128 + 60 * math.sin(a), 60) for a in [i * math.tau / 6 for i in range(6)])
+    return svg('<circle cx="128" cy="128" r="110" fill="url(#g)"/>' + puffs, defs, 256)
+
+
+def build_crypt_slimes():
+    save("slime", [slime_svg(), slime_svg(squash=True)], 88)
+    for name in ("green", "violet", "stone"):
+        save("slime_" + name, [slime_svg(palette=name), slime_svg(squash=True, palette=name)], 88)
+    save("toxic_glob", [toxic_glob_svg()], 48)
+    save("void_orb", [void_orb_svg()], 64)
+    save("toxic_aura", [toxic_aura_svg()], 128)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -751,4 +790,5 @@ if __name__ == "__main__":
     build_consumables()
     build_equipment_slots()
     build_app_icon()
+    build_crypt_slimes()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

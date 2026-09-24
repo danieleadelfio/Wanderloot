@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/drop_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="3"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="4"]
+
+[sub_resource type="Resource" id="drop_gel"]
+script = ExtResource("2")
+material = ExtResource("3")
+chance = 0.35
+
+[sub_resource type="Resource" id="drop_core"]
+script = ExtResource("2")
+material = ExtResource("4")
+chance = 0.03
+
+[resource]
+script = ExtResource("1")
+display_name = "Slime di pietra"
+max_hp = 12
+move_speed = 55.0
+exp_reward = 3
+knockback_resistance = 0.6
+rage_speed_multiplier = 1.8
+drops = Array[ExtResource("2")]([SubResource("drop_gel"), SubResource("drop_core")])

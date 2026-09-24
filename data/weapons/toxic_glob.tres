@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/toxic_glob.png" id="t"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Goccia tossica"
+damage = 1
+fire_rate = 1.0
+projectile_speed = 250.0
+projectile_lifetime = 1.8
+knockback = 120.0
+poison_duration = 4.5
+poison_interval = 1.5
+poison_damage = 1
+projectile_texture = ExtResource("t")
+projectile_scale = 0.4

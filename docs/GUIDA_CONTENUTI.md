@@ -346,6 +346,15 @@ File in `data/enemies/` (`enemy_basic` = Slime, `ghoul`, `skeleton_archer`).
 
 Regola: un nemico in rage non dovrebbe superare la velocità del player (`move_speed × rage_speed_multiplier` < 220), altrimenti non si può scappare.
 
+### 8.3b Slime della Cripta e proiettili speciali
+
+| Cosa | File | Campi |
+|---|---|---|
+| Slime tossico / del vuoto / di pietra | `data/enemies/slime_toxic.tres`, `slime_void.tres`, `slime_stone.tres` | `max_hp` (6 / 6 / 12), `move_speed` (110 / 110 / 55), `attack_interval`, `attack_range` |
+| Frequenza | `data/arenas/crypt.tres` → `enemies` | `weight` (celeste 1, tossico 0,18, vuoto 0,15, pietra 0,22), `min_time` (30 / 45 / 20 s) |
+| Veleno | `WeaponData` gruppo *Veleno* | `poison_duration`, `poison_interval`, `poison_damage` |
+| Buco nero | `WeaponData` gruppo *Buco nero* | `grow_after` (px), `grow_scale`, `grown_speed_multiplier`, `pull_radius`, `pull_strength` |
+
 ### 8.4 Ondate e numero di mostri
 
 File in `data/waves/` (`wave_default` = Cripta, `wave_ossuary`), assegnati in `ArenaData.wave_data`.

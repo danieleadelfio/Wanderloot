@@ -20,7 +20,12 @@ func spawn(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 			return
 		_free.append(_create())
 	var projectile: Projectile = _free.pop_back()
+	projectile.pull_target = pull_target
 	projectile.activate(origin, direction, weapon)
+
+
+## Bersaglio attirato dai proiettili a buco nero (il player, per il pool dei nemici).
+var pull_target: Node2D
 
 
 func free_count() -> int:
