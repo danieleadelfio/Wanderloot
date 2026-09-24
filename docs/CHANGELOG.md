@@ -81,6 +81,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Documento di design iniziale (`docs/GDD.md`): scope MVP, core loop hub/run/estrazione, doppia progressione, extraction shooter layer.
 - Setup repo git locale, changelog, best practice di sviluppo.
 
+### Fixed
+- Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
+
 ### Changed
 - Gioco rinominato **Wanderloot** (GDD, BEST_PRACTICES, `project.godot`). Repo GitHub collegato, task tracking su GitHub Issues attivo.
 - Knockback e hitstop spostati definitivamente a M4.

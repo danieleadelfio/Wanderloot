@@ -11,6 +11,7 @@ func refresh(catalog: ArenaCatalog, extractions: Dictionary, selected: StringNam
 	for child in _list.get_children():
 		_list.remove_child(child)
 		child.queue_free()
+	var chosen: Button = null
 	for arena in catalog.arenas:
 		var button := Button.new()
 		var unlocked := arena.is_unlocked(extractions)
@@ -18,6 +19,11 @@ func refresh(catalog: ArenaCatalog, extractions: Dictionary, selected: StringNam
 			button.text = "%s%s" % [tr(arena.display_name), tr("ARENA_SELECTED") if arena.id == selected else ""]
 			button.tooltip_text = tr(arena.description)
 			button.pressed.connect(arena_selected.emit.bind(arena.id))
+			# Scelta evidenziata come bottone premuto (M11.3, #67).
+			button.toggle_mode = true
+			button.button_pressed = arena.id == selected
+			if arena.id == selected:
+				chosen = button
 		else:
 			var required := catalog.find(arena.unlock_arena)
 			button.text = tr("ARENA_LOCKED") % [
@@ -27,3 +33,6 @@ func refresh(catalog: ArenaCatalog, extractions: Dictionary, selected: StringNam
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.custom_minimum_size.y = 36
 		_list.add_child(button)
+	# Il refresh ricrea i bottoni: il focus torna sull'arena scelta, non sulla prima della lista.
+	if chosen and is_visible_in_tree():
+		chosen.grab_focus.call_deferred()
