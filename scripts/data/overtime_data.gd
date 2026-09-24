@@ -1,3 +1,4 @@
+@tool
 class_name OvertimeData
 extends Resource
 ## Overtime (M11.1, #62): se si resta in arena dopo l'apertura dell'estrazione la run diventa
