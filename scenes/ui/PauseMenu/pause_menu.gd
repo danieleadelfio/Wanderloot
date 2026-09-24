@@ -18,6 +18,9 @@ var _menu_armed: bool = false
 @onready var _save_button: Button = %SaveButton
 @onready var _load_button: Button = %LoadButton
 @onready var _menu_button: Button = %MenuButton
+@onready var _options_button: Button = %OptionsButton
+@onready var _buttons: Control = %VBox
+@onready var _options_panel: OptionsPanel = %OptionsPanel
 @onready var _status_label: Label = %StatusLabel
 @onready var _hint: Label = %Hint
 
@@ -28,6 +31,8 @@ func _ready() -> void:
 	_save_button.pressed.connect(save_requested.emit)
 	_load_button.pressed.connect(load_requested.emit)
 	_menu_button.pressed.connect(_on_menu_pressed)
+	_options_button.pressed.connect(_show_options.bind(true))
+	_options_panel.back_requested.connect(_show_options.bind(false))
 
 
 func show_mode(mode: PauseState.Mode) -> void:
@@ -35,6 +40,8 @@ func show_mode(mode: PauseState.Mode) -> void:
 	_pause_label.visible = mode == PauseState.Mode.PAUSED
 	_status_label.text = ""
 	_menu_armed = false
+	_buttons.visible = true
+	_options_panel.visible = false
 	if _menu.visible:
 		_resume_button.grab_focus()
 
@@ -49,6 +56,16 @@ func show_status(text: String) -> void:
 
 
 ## Testo d'aiuto sotto i bottoni (nell'hub P non e' la pausa diretta).
+## Opzioni dentro il menu di pausa: volumi (e lingua); ESC o Indietro tornano ai bottoni.
+func _show_options(show_options: bool) -> void:
+	_buttons.visible = not show_options
+	_options_panel.visible = show_options
+	if show_options:
+		_options_panel.open()
+	elif _menu.visible:
+		_options_button.grab_focus()
+
+
 func set_hint(text: String) -> void:
 	_hint.text = text
 
