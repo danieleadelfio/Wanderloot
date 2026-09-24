@@ -37,10 +37,10 @@ func _ready() -> void:
 
 ## Prepara le stats della run: copie fresche dei .tres base + equipaggiamento permanente.
 ## Upgrade ed equip lavorano solo su queste copie, mai sui .tres condivisi.
-func begin_run(equipment: Array[EquipmentData]) -> void:
+func begin_run(equipment: Array[StatModifier]) -> void:
 	stats = _base_stats.duplicate()
 	_weapon.data = _base_weapon.duplicate()
-	StatApplier.apply_equipment(equipment, stats, _weapon.data)
+	StatApplier.apply_modifiers(equipment, stats, _weapon.data)
 	health.reset(stats.max_hp)
 	_knockback.reset()
 	set_shield(false)

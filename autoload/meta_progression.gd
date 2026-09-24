@@ -12,14 +12,16 @@ const SAVE_PATH: String = "user://save.cfg"
 const LEGACY_SAVE_PATH: String = "user://meta_progression.cfg"
 ## v1 (M2): solo materiali. v2 (M3): + equipaggiamento. v3 (M7): + estrazioni per arena e arena scelta.
 ## v4 (M9): + posizione del player nella piazza (solo se si e' salvato dall'hub).
+## v5 (M11): oggetti come istanze (sezione items, uid -> dizionario) e slot indossati per uid.
 ## Ogni versione carica le precedenti (sezioni mancanti = valori iniziali).
-const SAVE_VERSION: int = 4
+const SAVE_VERSION: int = 5
 const SECTION_META: String = "meta"
 const SECTION_MATERIALS: String = "materials"
 const SECTION_EQUIPMENT: String = "equipment"
 const SECTION_EQUIPPED: String = "equipped"
 const SECTION_EXTRACTIONS: String = "extractions"
 const SECTION_HUB: String = "hub"
+const SECTION_ITEMS: String = "items"
 
 var inventory: MetaInventory = MetaInventory.new()
 var loadout: EquipmentLoadout = EquipmentLoadout.new()
@@ -27,6 +29,8 @@ var loadout: EquipmentLoadout = EquipmentLoadout.new()
 var catalog: EquipmentCatalog = preload("res://data/equipment/equipment_catalog.tres")
 ## Arene disponibili. Sovrascrivibile nei test.
 var arena_catalog: ArenaCatalog = preload("res://data/arenas/arena_catalog.tres")
+## Per ritrovare le abilita' degli oggetti Super rari e superiori.
+var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
 ## Estrazioni riuscite per id di arena.
 var extractions: Dictionary[StringName, int] = {}
 var selected_arena: StringName = &""
@@ -113,30 +117,48 @@ func deposit_run_loot(loot: Dictionary[StringName, int]) -> void:
 
 ## Unico punto di crafting: regole in Crafting (logica pura), qui solo stato e notifica.
 func craft(recipe: RecipeData) -> Crafting.Result:
-	var result := Crafting.craft(recipe, inventory, loadout)
+	var result := Crafting.check(recipe, inventory)
 	if result == Crafting.Result.OK:
+		Crafting.craft(recipe, inventory, loadout, make_item)
 		_mark_changed()
 	return result
 
 
-func equip(item: EquipmentData) -> void:
-	if loadout.equip(item):
+## Crea l'istanza di un oggetto craftato (M11: Comune senza bonus; M11 #57 tira i bonus).
+func make_item(base: EquipmentData) -> ItemInstance:
+	return ItemInstance.new(base)
+
+
+func equip(uid: int) -> void:
+	if loadout.equip(uid):
 		_mark_changed()
 
 
-func unequip(slot: EquipmentData.Slot) -> void:
+func unequip(slot: int) -> void:
 	loadout.unequip(slot)
 	_mark_changed()
 
 
-## Pezzi equipaggiati, risolti dal catalogo: e' cio' che la run applica alle stats iniziali.
-func equipped_items() -> Array[EquipmentData]:
-	var items: Array[EquipmentData] = []
-	for id in loadout.equipped_ids().values():
-		var item := catalog.find(id)
-		if item != null:
-			items.append(item)
-	return items
+## Istanze indossate (per l'inventario di run e le statistiche).
+func equipped_items() -> Array[ItemInstance]:
+	return loadout.equipped_items()
+
+
+## Modificatori di tutto l'equipaggiamento indossato: e' cio' che la run applica alle stats iniziali.
+func equipped_modifiers() -> Array[StatModifier]:
+	var result: Array[StatModifier] = []
+	for item in loadout.equipped_items():
+		result.append_array(item.modifiers())
+	return result
+
+
+## Abilita' date dagli oggetti indossati (Super raro e superiori): attive per tutta la run.
+func equipped_abilities() -> Array[WandAbility]:
+	var result: Array[WandAbility] = []
+	for item in loadout.equipped_items():
+		if item.ability and not result.has(item.ability):
+			result.append(item.ability)
+	return result
 
 
 func register_extraction(arena_id: StringName) -> void:
@@ -168,10 +190,11 @@ func save_to_disk() -> Error:
 	var amounts := inventory.to_dictionary()
 	for id in amounts:
 		config.set_value(SECTION_MATERIALS, String(id), amounts[id])
-	config.set_value(SECTION_EQUIPMENT, "owned", PackedStringArray(loadout.owned_ids()))
-	var equipped := loadout.equipped_ids()
+	for item in loadout.all_items():
+		config.set_value(SECTION_ITEMS, str(item.uid), item.to_dict())
+	var equipped := loadout.equipped_slots()
 	for slot in equipped:
-		config.set_value(SECTION_EQUIPPED, _slot_key(slot), String(equipped[slot]))
+		config.set_value(SECTION_EQUIPPED, EquipmentLoadout.slot_key(slot), equipped[slot])
 	for arena_id in extractions:
 		config.set_value(SECTION_EXTRACTIONS, String(arena_id), extractions[arena_id])
 	config.set_value(SECTION_META, "selected_arena", String(selected_arena))
@@ -212,19 +235,33 @@ func load_from_disk() -> Error:
 
 
 func _load_loadout(config: ConfigFile) -> void:
+	var version := int(config.get_value(SECTION_META, "version", 1))
+	if version >= 5:
+		if config.has_section(SECTION_ITEMS):
+			for key in config.get_section_keys(SECTION_ITEMS):
+				var item := ItemInstance.from_dict(config.get_value(SECTION_ITEMS, key, {}), catalog, ability_catalog)
+				if item:
+					item.uid = int(key)
+					loadout.add(item)
+		if config.has_section(SECTION_EQUIPPED):
+			for key in config.get_section_keys(SECTION_EQUIPPED):
+				var slot := EquipmentLoadout.EquipSlot.keys().find(key.to_upper())
+				var item := loadout.get_item(int(config.get_value(SECTION_EQUIPPED, key, 0)))
+				if slot >= 0 and item and EquipmentLoadout.slots_for(item.slot()).has(slot):
+					loadout.equip(item.uid)
+		return
+	# v2-v4: pezzi posseduti per id -> un'istanza Comune ciascuno, equipaggiati come prima.
+	var migrated: Dictionary[StringName, int] = {}
 	for id in PackedStringArray(config.get_value(SECTION_EQUIPMENT, "owned", PackedStringArray())):
-		if catalog.find(StringName(id)) != null:
-			loadout.add_owned(StringName(id))
-	for slot: int in EquipmentData.Slot.values():
-		var item := catalog.find(StringName(config.get_value(SECTION_EQUIPPED, _slot_key(slot), "")))
-		if item != null and item.slot == slot:
-			loadout.equip(item)
+		var base := catalog.find(StringName(id))
+		if base != null and not migrated.has(base.id):
+			migrated[base.id] = loadout.add(ItemInstance.new(base)).uid
+	for key in ["weapon", "accessory"]:
+		var equipped_id := StringName(config.get_value(SECTION_EQUIPPED, key, ""))
+		if migrated.has(equipped_id):
+			loadout.equip(migrated[equipped_id])
 
 
 func _mark_changed() -> void:
 	has_unsaved_changes = true
 	changed.emit()
-
-
-func _slot_key(slot: int) -> String:
-	return String(EquipmentData.Slot.find_key(slot)).to_lower()

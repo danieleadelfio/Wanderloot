@@ -222,7 +222,7 @@ Va aperta una issue dedicata, perché serve codice. Percorso previsto, coerente 
 
 1. Icona `icon_<id>` a 64 px in `sprites.py`.
 2. `data/equipment/<id>.tres` (`EquipmentData`): `id` (nel salvataggio), nome, descrizione, `slot` (`WEAPON` o `ACCESSORY`), `icon`, `modifiers` (lista di `StatModifier`: `stat`, `amount`, `is_multiplier`).
-3. Aggiungilo a `data/equipment/equipment_catalog.tres`: gli id che non sono nel catalogo vengono scartati al caricamento del salvataggio.
+3. Aggiungilo a `data/equipment/equipment_catalog.tres`: gli oggetti posseduti il cui oggetto base non è nel catalogo vengono scartati al caricamento del salvataggio. Da M11 ogni oggetto posseduto è un'istanza con rarità e bonus propri (GDD §6.0).
 
 ### 4.2 Ricetta del fabbro
 

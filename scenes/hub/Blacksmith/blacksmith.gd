@@ -13,9 +13,12 @@ func refresh(inventory: MetaInventory, loadout: EquipmentLoadout, material_names
 	for child in _recipe_list.get_children():
 		child.queue_free()
 	for recipe in recipe_book.recipes:
-		var state := Crafting.check(recipe, inventory, loadout)
+		var state := Crafting.check(recipe, inventory)
 		var button := Button.new()
-		var detail := tr("BLACKSMITH_OWNED") if state == Crafting.Result.ALREADY_OWNED else _cost_text(recipe, material_names)
+		var detail := _cost_text(recipe, material_names)
+		var owned := loadout.count_of(recipe.result.id)
+		if owned > 0:
+			detail += "  ·  " + tr("BLACKSMITH_OWNED_COUNT") % owned
 		button.text = "%s  —  %s" % [tr(recipe.result.display_name), detail]
 		button.tooltip_text = tr(recipe.result.description)
 		button.icon = recipe.result.icon

@@ -32,11 +32,11 @@ func test_equipment_applies_to_copies_and_leaves_base_resources_untouched() -> v
 	var base_damage := base_weapon.damage
 	var stats: PlayerStats = base_stats.duplicate()
 	var weapon: WeaponData = base_weapon.duplicate()
-	var items: Array[EquipmentData] = [
-		load("res://data/equipment/gel_wand.tres"), load("res://data/equipment/core_amulet.tres")
-	]
+	var modifiers: Array[StatModifier] = []
+	for path in ["res://data/equipment/gel_wand.tres", "res://data/equipment/core_amulet.tres"]:
+		modifiers.append_array(ItemInstance.new(load(path)).modifiers())
 
-	StatApplier.apply_equipment(items, stats, weapon)
+	StatApplier.apply_modifiers(modifiers, stats, weapon)
 
 	assert_int(weapon.damage).is_equal(base_damage + 1)
 	assert_int(stats.max_hp).is_equal(base_hp + 2)

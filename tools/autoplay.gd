@@ -49,9 +49,8 @@ func _physics_process(_d: float) -> bool:
 		var m = root.get_node("MetaProgression")
 		m.save_path = "user://bot.cfg"
 		for id in equip:
-			m.loadout.add_owned(id)
-			m.loadout.equip(m.catalog.find(id))
-		a.get_node("%Player").begin_run(m.equipped_items())
+			m.loadout.equip(m.loadout.add(ItemInstance.new(m.catalog.find(id))).uid)
+		a.get_node("%Player").begin_run(m.equipped_modifiers())
 		a.get_node("%Player").health.damaged.connect(func(n): damage_taken += n)
 		root.get_node("RunManager").run_ended.connect(_on_end, CONNECT_ONE_SHOT)
 		var ev = a.get_node("%EventDirector")

@@ -180,7 +180,7 @@ func _refresh() -> void:
 	_loadout_panel.refresh(MetaProgression.loadout)
 	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id)
 	# Statistiche con l'equipaggiamento attuale: lo stesso calcolo di inizio run, sul player della piazza.
-	_player.begin_run(MetaProgression.equipped_items())
+	_player.begin_run(MetaProgression.equipped_modifiers())
 	StatSheet.fill(_hub_stats_grid, StatSheet.rows(_player.stats, _player.weapon_data()), 18)
 	_ensure_focus.call_deferred()
 

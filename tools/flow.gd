@@ -50,10 +50,10 @@ func _physics_process(_d: float) -> bool:
 				buttons[0].pressed.emit(); step = 3; t = 0
 		3:
 			if t > 3:
-				say("craft -> baule=%s posseduti=%s" % [m.inventory.to_dictionary(), m.loadout.owned_ids()])
-				for b in s.get_node("%LoadoutPanel").get_node("%SlotList").get_children():
-					if b is Button: b.pressed.emit(); break
-				say("equip -> %s" % [m.equipped_items().map(func(i): return i.id)])
+				say("craft -> baule=%s posseduti=%s" % [m.inventory.to_dictionary(), m.loadout.all_items().map(func(i): return i.base.id)])
+				var stash = m.loadout.stash_items()
+				if not stash.is_empty(): m.equip(stash[0].uid)
+				say("equip -> %s" % [m.equipped_items().map(func(i): return i.base.id)])
 				stash_before = m.inventory.to_dictionary()
 				s.get_node("%StartButton").pressed.emit(); step = 4; t = 0
 		5:
@@ -65,7 +65,7 @@ func _physics_process(_d: float) -> bool:
 				say("dopo morte baule invariato=%s (%s)" % [ok, m.inventory.to_dictionary()])
 				var fresh = preload("res://autoload/meta_progression.gd").new()
 				fresh.save_path = "user://flow.cfg"; fresh.load_from_disk()
-				say("ricarica da disco: baule=%s equip=%s" % [fresh.inventory.to_dictionary(), fresh.equipped_items().map(func(i): return i.id)])
+				say("ricarica da disco: baule=%s equip=%s" % [fresh.inventory.to_dictionary(), fresh.equipped_items().map(func(i): return i.base.id)])
 				fresh.free()
 				say("time_scale=%s paused=%s" % [Engine.time_scale, paused])
 				s.get_node("%PauseMenu").get_node("%MenuButton").pressed.emit(); step = 6; t = 0

@@ -40,10 +40,10 @@ static func apply(stat: UpgradeData.Stat, amount: float, is_multiplier: bool, st
 			weapon.pierce = maxi(roundi(_modify(weapon.pierce, amount, is_multiplier)), 0)
 
 
-static func apply_equipment(items: Array[EquipmentData], stats: PlayerStats, weapon: WeaponData) -> void:
-	for item in items:
-		for modifier in item.modifiers:
-			apply(modifier.stat, modifier.amount, modifier.is_multiplier, stats, weapon)
+## Modificatori dell'equipaggiamento indossato (oggetto base + bonus tirati), applicati a inizio run.
+static func apply_modifiers(modifiers: Array[StatModifier], stats: PlayerStats, weapon: WeaponData) -> void:
+	for modifier in modifiers:
+		apply(modifier.stat, modifier.amount, modifier.is_multiplier, stats, weapon)
 
 
 static func _modify(value: float, amount: float, is_multiplier: bool) -> float:

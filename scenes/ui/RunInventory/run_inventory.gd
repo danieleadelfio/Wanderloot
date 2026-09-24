@@ -4,8 +4,8 @@ extends CanvasLayer
 ## Occupa la meta' destra dello schermo; la pausa la gestisce la composition root.
 
 const SLOT_NAMES: Dictionary[int, String] = {
-	EquipmentData.Slot.WEAPON: "SLOT_WEAPON",
-	EquipmentData.Slot.ACCESSORY: "SLOT_ACCESSORY",
+	EquipmentLoadout.EquipSlot.WEAPON: "SLOT_WEAPON",
+	EquipmentLoadout.EquipSlot.AMULET: "SLOT_ACCESSORY",
 }
 const ICON_SIZE: Vector2 = Vector2(32, 32)
 const LOOT_COLOR: Color = Color(1, 0.8, 0.35)
@@ -27,16 +27,13 @@ func close() -> void:
 	_panel.hide()
 
 
-func present(equipped: Array[EquipmentData], loot: Dictionary[StringName, int]) -> void:
+func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int]) -> void:
 	_clear(_equip_list)
 	_clear(_loot_list)
-	for slot: int in EquipmentData.Slot.values():
-		var item: EquipmentData = null
-		for candidate in equipped:
-			if candidate.slot == slot:
-				item = candidate
-		var text := "%s: %s" % [tr(SLOT_NAMES[slot]), ("%s  (%s)" % [tr(item.display_name), tr(item.description)]) if item else tr("SLOT_NONE")]
-		_equip_list.add_child(_row(item.icon if item else null, text, Color.WHITE))
+	for slot: int in EquipmentLoadout.EquipSlot.values():
+		var item := loadout.equipped_in(slot)
+		var text := "%s: %s" % [tr(SLOT_NAMES[slot]), ("%s  (%s)" % [tr(item.base.display_name), tr(item.base.description)]) if item else tr("SLOT_NONE")]
+		_equip_list.add_child(_row(item.base.icon if item else null, text, Color.WHITE))
 	var total := 0
 	for id in loot:
 		var material := _material(id)

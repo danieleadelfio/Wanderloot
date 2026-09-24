@@ -1,41 +1,58 @@
 extends GdUnitTestSuite
-
-var _loadout: EquipmentLoadout
-
-
-func before_test() -> void:
-	_loadout = EquipmentLoadout.new()
+## Loadout a istanze (M11): piu' copie dello stesso oggetto, equip per slot, rimozione.
 
 
-func test_cannot_equip_what_is_not_owned() -> void:
-	assert_bool(_loadout.equip(_item(&"wand", EquipmentData.Slot.WEAPON))).is_false()
-	assert_str(String(_loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_empty()
+func _base(id: StringName, slot: EquipmentData.Slot) -> EquipmentData:
+	var data := EquipmentData.new()
+	data.id = id
+	data.slot = slot
+	return data
 
 
-func test_equip_replaces_same_slot_only() -> void:
-	for id in [&"wand_a", &"wand_b", &"ring"]:
-		_loadout.add_owned(id)
-	_loadout.equip(_item(&"wand_a", EquipmentData.Slot.WEAPON))
-	_loadout.equip(_item(&"ring", EquipmentData.Slot.ACCESSORY))
-	_loadout.equip(_item(&"wand_b", EquipmentData.Slot.WEAPON))
-
-	assert_str(String(_loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_equal("wand_b")
-	assert_str(String(_loadout.equipped_id(EquipmentData.Slot.ACCESSORY))).is_equal("ring")
-	assert_bool(_loadout.is_equipped(&"wand_a")).is_false()
+func test_add_assigns_unique_uids_and_allows_duplicates() -> void:
+	var loadout := EquipmentLoadout.new()
+	var wand := _base(&"wand", EquipmentData.Slot.WEAPON)
+	var a := loadout.add(ItemInstance.new(wand))
+	var b := loadout.add(ItemInstance.new(wand))
+	assert_int(a.uid).is_not_equal(b.uid)
+	assert_int(loadout.count_of(&"wand")).is_equal(2)
 
 
-func test_unequip_and_owned_are_unique() -> void:
-	_loadout.add_owned(&"ring")
-	_loadout.add_owned(&"ring")
-	_loadout.equip(_item(&"ring", EquipmentData.Slot.ACCESSORY))
-	_loadout.unequip(EquipmentData.Slot.ACCESSORY)
+func test_equip_replaces_in_same_slot_and_unequip_returns_to_stash() -> void:
+	var loadout := EquipmentLoadout.new()
+	var a := loadout.add(ItemInstance.new(_base(&"wand_a", EquipmentData.Slot.WEAPON)))
+	var b := loadout.add(ItemInstance.new(_base(&"wand_b", EquipmentData.Slot.WEAPON)))
+	assert_bool(loadout.equip(a.uid)).is_true()
+	assert_bool(loadout.equip(b.uid)).is_true()
+	assert_object(loadout.equipped_in(EquipmentLoadout.EquipSlot.WEAPON)).is_same(b)
+	assert_bool(loadout.is_equipped(a.uid)).is_false()
+	loadout.unequip(EquipmentLoadout.EquipSlot.WEAPON)
+	assert_int(loadout.stash_items().size()).is_equal(2)
 
-	assert_array(_loadout.owned_ids()).has_size(1)
-	assert_bool(_loadout.is_equipped(&"ring")).is_false()
+
+func test_unknown_uid_and_remove() -> void:
+	var loadout := EquipmentLoadout.new()
+	assert_bool(loadout.equip(99)).is_false()
+	var a := loadout.add(ItemInstance.new(_base(&"amulet", EquipmentData.Slot.ACCESSORY)))
+	loadout.equip(a.uid)
+	loadout.remove(a.uid)
+	assert_array(loadout.equipped_items()).is_empty()
+	assert_array(loadout.all_items()).is_empty()
 
 
-func _item(id: StringName, slot: EquipmentData.Slot) -> EquipmentData:
-	var item := EquipmentData.new()
-	item.id = id
-	item.slot = slot
-	return item
+func test_instance_dict_roundtrip() -> void:
+	var catalog: EquipmentCatalog = load("res://data/equipment/equipment_catalog.tres")
+	var item := ItemInstance.new(catalog.find(&"gel_wand"), 2)
+	var affix := StatModifier.new()
+	affix.stat = UpgradeData.Stat.FIRE_RATE
+	affix.amount = 1.15
+	affix.is_multiplier = true
+	item.affixes.append(affix)
+	item.ability = load("res://data/abilities/arcane_ring.tres")
+	var back := ItemInstance.from_dict(item.to_dict(), catalog, load("res://data/abilities/ability_catalog.tres"))
+	assert_str(String(back.base.id)).is_equal("gel_wand")
+	assert_int(back.rarity).is_equal(2)
+	assert_float(back.affixes[0].amount).is_equal_approx(1.15, 0.0001)
+	assert_str(String(back.ability.id)).is_equal("arcane_ring")
+	assert_int(back.modifiers().size()).is_equal(item.base.modifiers.size() + 1)
+	assert_object(ItemInstance.from_dict({"base": "removed"}, catalog, null)).is_null()

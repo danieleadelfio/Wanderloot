@@ -158,3 +158,4 @@ EVENT_PENTAGRAM_SUBTITLE,Entra nel cerchio di candele,Step into the circle of ca
 EVENT_PENTAGRAM_HOLD,Resta nel cerchio finché le candele si spengono,Stay in the circle until the candles go out,Restez dans le cercle jusqu'à ce que les bougies s'éteignent,Quédate en el círculo hasta que se apaguen las velas
 EVENT_PENTAGRAM_REWARD,Un boss in più ti aspetta,One more boss awaits you,Un boss de plus vous attend,Te espera un jefe más
 EVENT_PENTAGRAM_FAILED_HINT,Il pentagramma si è dissolto,The pentagram has faded,Le pentagramme s'est dissipé,El pentagrama se ha desvanecido
+BLACKSMITH_OWNED_COUNT,posseduti: %d,owned: %d,possédés : %d,en posesión: %d

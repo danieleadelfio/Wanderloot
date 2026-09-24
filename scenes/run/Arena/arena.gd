@@ -89,7 +89,7 @@ func _ready() -> void:
 	_player.health.damaged.connect(_sfx.play.bind(&"player_hurt").unbind(1))
 	_player.shot_requested.connect(_sfx.play.bind(&"shoot").unbind(3))
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
-	_player.begin_run(MetaProgression.equipped_items())
+	_player.begin_run(MetaProgression.equipped_modifiers())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player.stats, _player.weapon_data())
 	_create_enemy_pools()
@@ -465,7 +465,7 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_pause_menu.show_mode(mode)
 	if mode == PauseState.Mode.INVENTORY:
-		_run_inventory.present(MetaProgression.equipped_items(), RunManager.loot.to_dictionary())
+		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary())
 	else:
 		_run_inventory.close()
 	_refresh_pause()

@@ -6,7 +6,6 @@
 [node name="LoadoutPanel" type="PanelContainer"]
 size_flags_horizontal = 3
 script = ExtResource("1")
-catalog = ExtResource("2")
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 2

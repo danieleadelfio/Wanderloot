@@ -33,24 +33,26 @@ func test_deposit_is_saved_and_reloaded() -> void:
 
 
 func test_craft_and_equip_are_saved_and_reloaded() -> void:
-	_meta.deposit_run_loot({&"slime_gel": 30} as Dictionary[StringName, int])
+	_meta.deposit_run_loot({&"slime_gel": 60} as Dictionary[StringName, int])
 	var recipe: RecipeData = load("res://data/recipes/gel_wand.tres")
 	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
-	_meta.equip(recipe.result)
+	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
+	var first: ItemInstance = _meta.loadout.all_items()[0]
+	_meta.equip(first.uid)
 	_meta.save_game()
 
 	var reloaded := _reload()
 
-	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(30 - recipe.cost_dictionary()[&"slime_gel"])
-	assert_bool(reloaded.loadout.owns(&"gel_wand")).is_true()
-	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_equal("gel_wand")
-	assert_array(reloaded.equipped_items()).contains([recipe.result])
+	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(60 - 2 * recipe.cost_dictionary()[&"slime_gel"])
+	assert_int(reloaded.loadout.count_of(&"gel_wand")).is_equal(2)
+	assert_int(reloaded.loadout.equipped_in(EquipmentLoadout.EquipSlot.WEAPON).uid).is_equal(first.uid)
+	assert_int(reloaded.equipped_modifiers().size()).is_equal(recipe.result.modifiers.size())
 
 
 func test_unequip_is_saved() -> void:
-	_meta.loadout.add_owned(&"core_amulet")
-	_meta.equip(load("res://data/equipment/core_amulet.tres"))
-	_meta.unequip(EquipmentData.Slot.ACCESSORY)
+	var item: ItemInstance = _meta.loadout.add(ItemInstance.new(load("res://data/equipment/core_amulet.tres")))
+	_meta.equip(item.uid)
+	_meta.unequip(EquipmentLoadout.EquipSlot.AMULET)
 	_meta.save_game()
 
 	assert_array(_reload().equipped_items()).is_empty()
@@ -65,22 +67,23 @@ func test_v1_save_loads_materials_with_empty_loadout() -> void:
 	var reloaded := _reload()
 
 	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(7)
-	assert_array(reloaded.loadout.owned_ids()).is_empty()
+	assert_array(reloaded.loadout.all_items()).is_empty()
 
 
-func test_unknown_or_not_owned_equipment_is_discarded_on_load() -> void:
+func test_v2_equipment_migrates_to_common_instances() -> void:
 	var config := ConfigFile.new()
 	config.set_value("meta", "version", 2)
-	config.set_value("equipment", "owned", PackedStringArray(["gel_wand", "removed_item"]))
+	config.set_value("equipment", "owned", PackedStringArray(["gel_wand", "removed_item", "slime_boots"]))
 	config.set_value("equipped", "weapon", "gel_wand")
 	config.set_value("equipped", "accessory", "core_amulet")
 	config.save(TEST_PATH)
 
 	var reloaded := _reload()
 
-	assert_array(reloaded.loadout.owned_ids()).contains_exactly([&"gel_wand"])
-	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.ACCESSORY))).is_empty()
-	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_equal("gel_wand")
+	assert_int(reloaded.loadout.all_items().size()).is_equal(2)
+	assert_int(reloaded.loadout.all_items()[0].rarity).is_equal(0)
+	assert_str(String(reloaded.loadout.equipped_in(EquipmentLoadout.EquipSlot.WEAPON).base.id)).is_equal("gel_wand")
+	assert_int(reloaded.loadout.equipped_items().size()).is_equal(1)
 
 
 func test_extractions_and_selected_arena_are_saved() -> void:
@@ -154,7 +157,7 @@ func test_new_game_resets_memory_but_keeps_file() -> void:
 	_meta.save_game()
 	_meta.new_game()
 	assert_int(_meta.inventory.total()).is_equal(0)
-	assert_array(_meta.loadout.owned_ids()).is_empty()
+	assert_array(_meta.loadout.all_items()).is_empty()
 	assert_bool(_meta.extractions.is_empty()).is_true()
 	assert_bool(_meta.has_save()).is_true()
 
