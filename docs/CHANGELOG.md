@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Cursore del mouse sempre visibile: freccia chiara con contorno scuro nei menu e nell'hub, mirino in run, freccia nei menu della run (#49).
 - Tremolio del personaggio in movimento risolto: interpolazione della fisica attiva, camera sui tick di fisica, reset dell'interpolazione negli spostamenti istantanei, nebbia e vortice mossi sui tick di fisica (#48).
 - Catalogo di Wanderloot (`docs/catalog/catalog.json` → `Wanderloot_Catalogo.pdf` con `tools/catalog_pdf.py`): abilità con provenienza Magicraft o originale, eventi, equipaggiamento, rarità, achievement. GDD: progetto di slot con manichino, 6 rarità, drop fino a Leggendario, fusione di oggetti identici, mitici da ricette dei boss, enciclopedia in gioco; roadmap M8–M12 (#47).
 - Eventi della run: `RunEventData` e tempi in `ArenaData`, titolo e sottotitolo a schermo con barra del tempo, Tempesta di fulmini (10 s, cerchi azzurri di preavviso) che se superata senza colpi fa scegliere un'abilità; due eventi per run in Cripta e Ossario, suoni dedicati, bot che schiva i fulmini; test (#46).

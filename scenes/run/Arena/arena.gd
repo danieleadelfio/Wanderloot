@@ -60,6 +60,7 @@ var _boss_timer := Timer.new()
 
 func _ready() -> void:
 	get_tree().paused = false
+	CursorStyle.use_crosshair()
 	_rng.randomize()
 	arena = arena_override if arena_override != null else MetaProgression.current_arena()
 	extraction_data = arena.extraction_data
@@ -398,6 +399,11 @@ func _on_save_requested() -> void:
 ## Due fonti di pausa: lo stato della run (level-up, fine run) e le pause del giocatore (ESC, P).
 func _refresh_pause() -> void:
 	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused() or _choosing_ability
+	# Mirino mentre si gioca, freccia nei menu (pausa, level-up, scelte, fine run).
+	if get_tree().paused:
+		CursorStyle.use_arrow()
+	else:
+		CursorStyle.use_crosshair()
 
 
 func _on_run_ended(result: RunManager.Result) -> void:
@@ -419,3 +425,7 @@ func _on_restart_requested() -> void:
 	# Si torna all'hub; la prossima run ricrea la scena Arena da zero (RunManager riparte da start_run()).
 	get_tree().paused = false
 	get_tree().change_scene_to_file.call_deferred(SceneRoutes.HUB)
+
+
+func _exit_tree() -> void:
+	CursorStyle.use_arrow()

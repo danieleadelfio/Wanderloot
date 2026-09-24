@@ -605,6 +605,25 @@ def build_ability_icons():
     save("icon_arcane_barrier", [icon_arcane_barrier()], 64)
 
 
+# --- Cursori (M10.1): freccia chiara con contorno scuro, mirino. PNG a dimensione reale (48 px) -------
+def cursor_arrow_svg():
+    return svg('<path d="M6 4 L6 38 L15 30 L21 44 L28 41 L22 27 L34 27 Z" fill="#fff4d6" stroke="#141a2c" stroke-width="3.5" stroke-linejoin="round"/>'
+               '<path d="M9 10 L9 30 L15 25" fill="none" stroke="#ffcd75" stroke-width="2" stroke-linecap="round"/>', "", 48)
+
+
+def cursor_crosshair_svg():
+    ring = '<circle cx="24" cy="24" r="12" fill="none" stroke="%s" stroke-width="%s"/>'
+    ticks = "".join('<path d="%s" stroke="%s" stroke-width="%s" stroke-linecap="round"/>' % (d, "%s", "%s") for d in ("M24 3 L24 13", "M24 35 L24 45", "M3 24 L13 24", "M35 24 L45 24"))
+    dark = ring % ("#141a2c", 6) + ticks % (("#141a2c", 6) * 4)
+    light = ring % ("#fff4d6", 2.5) + ticks % (("#ffcd75", 2.5) * 4)
+    return svg(dark + light + '<circle cx="24" cy="24" r="2.5" fill="#ffcd75" stroke="#141a2c" stroke-width="1.5"/>', "", 48)
+
+
+def build_cursors():
+    save("cursor_arrow", [cursor_arrow_svg()], 48)
+    save("cursor_crosshair", [cursor_crosshair_svg()], 48)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -615,4 +634,5 @@ if __name__ == "__main__":
     build_boss()
     build_hub_icons()
     build_ability_icons()
+    build_cursors()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))
