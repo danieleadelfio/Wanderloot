@@ -54,6 +54,8 @@ extends Resource
 @export var events: Array[RunEventData] = []
 ## Secondi di run in cui parte un evento.
 @export var event_times: PackedFloat32Array = []
+## Evento in piu' questi secondi dopo aver sconfitto tutti i boss (una volta per run, M11.2). Negativo = nessuno.
+@export var boss_event_delay: float = 10.0
 
 @export_group("Sblocco")
 ## Arena in cui servono estrazioni riuscite per sbloccare questa (vuoto = sempre disponibile).

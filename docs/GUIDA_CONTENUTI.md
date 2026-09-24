@@ -382,7 +382,7 @@ File in `data/run/` (`extraction_default` = Cripta, `extraction_ossuary`): `appe
 
 ### 8.7 Eventi
 
-Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s) ed `events` (quali eventi possono uscire).
+Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s), `events` (quali eventi possono uscire) e `boss_event_delay` (evento in più 10 s dopo aver sconfitto tutti i boss; negativo = nessuno).
 
 | Evento | File | Campi principali | Attuale |
 |---|---|---|---|

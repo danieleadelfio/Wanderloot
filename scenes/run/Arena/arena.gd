@@ -35,6 +35,8 @@ var _choosing_ability: bool = false
 ## Effetti a tempo dei consumabili attivi: chiave di traduzione -> secondi rimasti (solo per l'HUD).
 var _buffs: Dictionary = {}
 var boss_defeated: bool = false
+## Evento dopo il boss gia' accodato (una volta per run, M11.2).
+var _boss_event_queued: bool = false
 var _boss_timer := Timer.new()
 ## Overtime (M11.1): parte all'apertura dell'estrazione.
 var overtime := OvertimeState.new()
@@ -457,6 +459,9 @@ func _on_boss_attack_started(attack: BossAttack) -> void:
 func _on_boss_died(dead: Boss) -> void:
 	bosses.erase(dead)
 	boss_defeated = bosses.is_empty()
+	if boss_defeated and not _boss_event_queued and arena.boss_event_delay >= 0.0:
+		_boss_event_queued = true
+		_events.queue_event(arena.boss_event_delay)
 	_refresh_boss_bar()
 	_sfx.play(&"enemy_die")
 	RunManager.register_kill(0)

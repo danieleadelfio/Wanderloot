@@ -27,6 +27,8 @@ var state := RunEventState.new()
 var pentagram_state := PentagramState.new()
 var _elapsed: float = 0.0
 var _fired: int = 0
+## Evento accodato (dopo il boss): secondi rimasti, -1 = nessuno. Non consuma i tempi fissi.
+var _queued_left: float = -1.0
 var _last: RunEventData
 var _strike_timer: float = 0.0
 var _strikes: Array[Telegraph] = []
@@ -82,6 +84,12 @@ func _physics_process(delta: float) -> void:
 		return
 	_elapsed += delta
 	if current == null:
+		if _queued_left >= 0.0:
+			_queued_left -= delta
+			if _queued_left <= 0.0:
+				_queued_left = -1.0
+				_start(_pick_event(), false)
+				return
 		var next := RunEventState.next_time(times, _fired)
 		if next >= 0.0 and _elapsed >= next:
 			_start(_pick_event())
@@ -101,8 +109,19 @@ func _pick_event() -> RunEventData:
 	return pool[_rng.randi_range(0, pool.size() - 1)]
 
 
-func _start(event: RunEventData) -> void:
-	_fired += 1
+## Evento in piu' tra `delay` secondi (se in quel momento ne e' in corso un altro, parte appena finisce).
+func queue_event(delay: float) -> void:
+	_queued_left = maxf(delay, 0.001)
+
+
+func has_queued_event() -> bool:
+	return _queued_left >= 0.0
+
+
+## timed = uno dei tempi fissi di event_times (li conta); falso per gli eventi accodati.
+func _start(event: RunEventData, timed: bool = true) -> void:
+	if timed:
+		_fired += 1
 	current = event
 	_last = event
 	if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM:
