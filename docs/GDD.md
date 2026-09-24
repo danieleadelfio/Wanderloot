@@ -2,9 +2,9 @@
 
 Nome del gioco: **Wanderloot** ("wanderlust" + "loot"). Nome di lavoro precedente: FirstAiGame.
 
-Ultimo aggiornamento: 2026-09-23
+Ultimo aggiornamento: 2026-09-24
 Engine: Godot 4.6
-Stato: MVP completato (M0–M4) — prossimo: playtest umano e roadmap v2
+Stato: MVP completato (M0–M4), post-MVP M5–M7 completati (due arene, nemici a distanza, hub esplorabile) — prossimo: playtest umano, zoom della camera, roadmap v2
 
 ## 1. Pitch
 
@@ -103,100 +103,46 @@ Fuori scope MVP ma parte della visione a lungo termine (da aggiungere per fasi s
 - **Stato M4 (#19, audio)**: SFX chiptune sintetizzati da `tools/audio.py` (numpy): sparo, colpo e morte nemico, danno e morte player, level-up, apertura estrazione, estrazione riuscita, craft, selezione. Due musiche in loop (hub 90 BPM calma, arena 140 BPM incalzante). Bus `Music` (−8 dB) e `SFX` (−3 dB) in `default_bus_layout.tres`. Suoni per id in `data/audio/sound_bank.tres`; `SfxPlayer` (pool di 12 voci, min 30ms tra ripetizioni dello stesso suono, pitch variato sui suoni frequenti) ignora id/stream mancanti senza errori. Stessa nota della grafica: suoni programmatici sostituibili file per file.
 - **Stato M5 (#26, HUD e schermo)**: barra HP rossa, barra EXP blu. Scalatura della finestra `canvas_items` con risoluzione base 1280x720 e aspect `expand`: a schermo intero gioco e HUD si ingrandiscono in proporzione invece di mostrare più arena a pixel minuscoli. Zoom della camera (`Arena/Player/Camera2D`): 1.0 per ora, **valore definitivo da scegliere con il playtest del proprietario** e da riportare qui.
 - **Stato M7 (#31, atmosfera)**: tono più cupo con le luci 2D di Godot. L'arena attuale è la **Cripta** (arena iniziale): ambiente scurito da `CanvasModulate` (0.40, 0.38, 0.50), il player porta una luce calda (`Player/%Light`, raggio ~450px), 5 torce tremolanti per muro lungo (`Torch.tscn`, `LightFlicker`), vignettatura ai bordi. Proiettili, gemme, oggetti a terra e zona di estrazione sono *unshaded*: restano luminosi e leggibili al buio. HUD e menu sono su CanvasLayer propri e non vengono scuriti.
+- **Stato M7 (#35, piazza)**: props vettoriali dell'hub generati da `build_hub()` (ciottoli, fontana, forgia e magazzino, incudine, baule, portale ad arco con vortice, lampione, due alberi). Lampioni e arco con materiale normale, illuminati dalle luci della piazza; il vortice del portale è unshaded.
 
 ## 9. Struttura tecnica (Godot 4.6)
 
-Struttura scene target (indicativa; lo stato reale è in §9.1):
-
-```
-res://
-  scenes/
-    hub/
-      Hub.tscn
-      NpcBlacksmith.tscn
-    run/
-      Arena.tscn
-      Player.tscn
-      Enemies/
-        EnemyBasic.tscn
-        EnemyRanged.tscn
-      Projectile.tscn
-      ExtractionPoint.tscn
-    ui/
-      LevelUpChoice.tscn
-      HubMenu.tscn
-      HUD.tscn
-  scripts/
-    player/
-      player_controller.gd
-      player_stats.gd
-    combat/
-      projectile_pool.gd
-      hitbox.gd
-      hurtbox.gd
-    run/
-      run_manager.gd        # stato della run corrente, exp, level, timer estrazione
-      loot_run_inventory.gd # inventario "a rischio" della run
-    meta/
-      meta_progression.gd   # inventario permanente, materiali, equip
-      crafting_system.gd
-    enemies/
-      enemy_ai_base.gd
-  data/
-    weapons.tres / .json
-    enemies.tres / .json
-    upgrades.tres / .json
-    recipes.tres / .json
-  assets/
-    sprites/
-    tiles/
-    audio/
-```
+La struttura target iniziale (M0) è superata dallo stato reale in §9.1. Per aggiungere contenuti (nemici, arene, personaggi, equipaggiamento, suoni) seguire `docs/GUIDA_CONTENUTI.md`.
 
 ### 9.1 Struttura attuale
 
 ```
 res://
   autoload/run_manager.gd            # RunManager: stato, exp, livello, tempo, uccisioni, loot di run
-  autoload/meta_progression.gd       # MetaProgression: inventario permanente + salvataggio su disco
-  scripts/meta/                      # meta_inventory, equipment_loadout, crafting (logica pura dello stato permanente)
+  autoload/meta_progression.gd       # MetaProgression: inventario, equip, estrazioni per arena, arena scelta, salvataggio v3
   scripts/core/scene_routes.gd       # percorsi delle scene principali (Hub, Arena)
-  scenes/hub/Hub/                    # Hub.tscn + hub.gd (scena principale, composition root dell'hub)
-  scenes/hub/Blacksmith/             # pannello fabbro (ricette, richiesta craft via segnale)
-  scenes/hub/LoadoutPanel/           # pannello equipaggiamento (equip/unequip via segnale)
-  scenes/run/Arena/                  # Arena.tscn + arena.gd (composition root: collega i segnali)
-  scenes/run/Player/                 # Player.tscn + player.gd
-  scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
-  scenes/run/Enemies/EnemyBasic/     # EnemyBasic.tscn (inseguimento diretto)
-  scenes/run/Projectile/             # Projectile.tscn + projectile.gd (poolable)
-  scenes/run/ExtractionPoint/        # zona di estrazione (Area2D + _draw del progresso)
-  scenes/ui/HUD/                     # HUD.tscn + hud.gd (HP, livello, barra EXP)
-  scenes/ui/LevelUpChoice/           # overlay scelta upgrade (funziona in pausa)
-  scenes/ui/RunEndScreen/            # schermata di fine run (morte/estrazione) + riavvio
-  scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool, knockback, hit_stop, blink, frame_cycler
-  assets/art/                        # sorgenti SVG della grafica (da M6)
-  assets/sprites/                    # PNG esportati a 2x (player, slime, proiettile, gemma, tile, icone)
-  tools/sprites.py                   # generatore della grafica vettoriale (Python + cairosvg): SVG → PNG 2x
-  tools/autoplay.gd                  # bot di playtest per il bilanciamento (metriche su N run)
-  tools/flow.gd                      # playtest end-to-end automatico hub→run→hub
-  scenes/ui/ExtractionIndicator/     # freccia a bordo schermo verso la zona di estrazione
-  tools/bot_driver.gd                # guida del bot (kiting, mira, estrazione), condivisa dagli strumenti
-  assets/audio/                      # WAV di SFX e musiche (generati da tools/audio.py)
+  scripts/data/                      # classi Resource: arena_data, arena_catalog, enemy_spawn, enemy_data, weapon_data, player_stats, wave_data, extraction_data, level_curve, upgrade_data, upgrade_table, material_data, drop_entry, equipment_data, equipment_catalog, stat_modifier, recipe_data, material_cost, recipe_book
+  scripts/meta/                      # meta_inventory, equipment_loadout, crafting (logica pura dello stato permanente)
+  scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool, knockback, hit_stop, blink, frame_cycler, light_flicker
+  scripts/run/                       # enemy_pool, wave_spawner, enemy_movement, spawn_utils, loot_run_inventory, loot_transfer, stat_applier, pickup_pool, pause_state, pause_controller, fog_drift
+  scripts/hub/                       # interactable (punto di interazione, nearest_index testato), spinner (vortice del portale)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
-  data/audio/sound_bank.tres         # id suono -> stream + volume
-  scripts/run/                       # enemy_pool, wave_spawner, spawn_utils, loot_run_inventory, loot_transfer, stat_applier, pickup_pool, pause_state, pause_controller
-  scenes/run/Pickup/                 # oggetto a terra (gemma exp o materiale), poolable
-  scenes/run/Enemies/{Ghoul,SkeletonArcher}/ # nemici dell'Ossario (stesso enemy.gd, dati diversi)
-  scenes/run/Projectile/EnemyProjectile.tscn # dardo nemico (layer enemy_attack)
+  scenes/hub/Hub/                    # Hub.tscn + hub.gd: piazza esplorabile, scena principale, composition root dell'hub
+  scenes/hub/{Blacksmith,LoadoutPanel,ArenaSelect}/ # finestre dell'hub: fabbro, equipaggiamento, portale (segnali verso l'hub)
+  scenes/hub/Lamp/                   # lampione con luce calda
+  scenes/run/Arena/                  # Arena.tscn + arena.gd: unica scena di arena, configurata da ArenaData (composition root della run)
+  scenes/run/Player/                 # Player.tscn + player.gd (usato in Arena e Hub)
+  scenes/run/Enemies/enemy.gd        # script nemico condiviso, guidato da EnemyData
+  scenes/run/Enemies/{EnemyBasic,Ghoul,SkeletonArcher}/ # scene dei nemici (stesso script, dati e grafica diversi)
+  scenes/run/Projectile/             # Projectile.tscn (player) ed EnemyProjectile.tscn (layer enemy_attack), poolable
+  scenes/run/{Pickup,ExtractionPoint,Torch,Candle}/ # oggetto a terra, zona di estrazione, torcia, candela
+  scenes/ui/                         # HUD, LevelUpChoice, RunEndScreen, PauseMenu, RunInventory, ExtractionIndicator
+  data/arenas/                       # arena_catalog + un .tres per arena (crypt, ossuary)
+  data/{weapons,enemies,player,waves,run,upgrades,materials,equipment,recipes,audio}/ # istanze .tres di tutti i contenuti
+  assets/art/                        # sorgenti SVG (generati da tools/sprites.py)
+  assets/sprites/                    # PNG a 2x (personaggi, nemici, tile, decorazioni, props dell'hub, icone)
+  assets/audio/                      # WAV di SFX e musiche (generati da tools/audio.py)
+  tools/sprites.py, tools/audio.py   # generatori di grafica vettoriale e audio (Python)
+  tools/autoplay.gd, tools/bot_driver.gd # bot di playtest per il bilanciamento (metriche su N run, anche per arena)
+  tools/flow.gd                      # playtest end-to-end automatico hub→run→hub
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
-  data/arenas/                       # arena_catalog + un .tres per arena (crypt, ossuary)
-  scenes/run/Candle/                 # candela con luce tremolante (decorazioni)
-  scenes/hub/ArenaSelect/            # scelta dell'arena (portale)
-  scenes/hub/Lamp/                   # lampione con luce calda (piazza dell'hub)
-  scripts/hub/                       # interactable (punto di interazione, nearest_index testato), spinner (vortice del portale)
-  scripts/data/                      # classi Resource: arena_data, arena_catalog, enemy_spawn, weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry, stat_modifier, equipment_data, equipment_catalog, material_cost, recipe_data, recipe_book
-  data/{weapons,enemies,player,waves,run,upgrades,materials,equipment,recipes}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core, equipment_catalog + pezzi, recipe_book + ricette
+docs/                                # GDD, CHANGELOG, BEST_PRACTICES, GUIDA_CONTENUTI (procedure operative per i contenuti)
 ```
 
 - Grafica (M6): sprite vettoriali in `assets/sprites/` (player e slime a 2 frame via `FrameCycler`, proiettile, pavimento e muri a tile ripetute, icone 16x16 di materiali ed equipaggiamento usate nell'hub). Arena 1600x1000: muri visibili larghi 32px sul bordo, area giocabile ±768x±468, camera sul player con limiti arena.
@@ -221,6 +167,9 @@ Note tecniche:
 **M2 — Loot ed extraction** ✅ (2026-09-23): inventario di run separato da quello permanente, drop di materiali, trasferimento del loot solo su estrazione riuscita.
 **M3 — Hub minimo** ✅ (2026-09-23): scena hub, 1 NPC fabbro, crafting con ricette fisse, equipaggiamento persistente selezionabile prima della run.
 **M4 — Rifinitura MVP** ✅ (2026-09-23): combat feel (knockback, hitstop), bilanciamento (curve exp/danno/drop rate), asset pixel art definitivi, audio minimo, primo playtest completo hub→run→estrazione/morte→hub.
+**M5 — Post-MVP: controlli e UI** ✅ (2026-09-23): cadenza senza tetto, raccolta a magnete, pausa (ESC/P), inventario di run (I), 8 nuovi potenziamenti, barre HUD e scalatura della finestra.
+**M6 — Grafica vettoriale e rage** ✅ (2026-09-23): addio pixel art, arena e icone vettoriali, rage dei nemici, fase avanzata delle ondate dopo 60s.
+**M7 — Atmosfera, arene, hub esplorabile** ✅ (2026-09-24): luci 2D e Cripta cupa, arene guidate dai dati con scelta dal portale, Ossario con Ghoul e Scheletro arciere, hub come piazza all'aperto.
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.
 
@@ -282,10 +231,13 @@ Correzioni fatte durante la verifica: prima versione impossibile (0% anche con e
 - ~~Dimensione sprite definitiva~~ → in M6 si passa alla grafica vettoriale (vedi §8): la domanda non si pone più. Storico: in M4 era stato deciso **16x16**, disegnati a scala 2 (32px a schermo), filtro nearest. Arena 1600x1000 con UI reale: a 32x32 i personaggi sarebbero stati troppo grandi rispetto al campo visivo e alla densità di nemici.
 - ~~Persistenza meta-progressione~~ → decisa in M2: `ConfigFile` in `user://` (leggibile, versionato; niente `.tres` caricati da `user://`, che possono eseguire script). Cloud save fuori scope.
 - ~~Durata target di una run~~ → M4: **~2–2,5 minuti** fino alla prima estrazione possibile (zona a 120s + 6s di canale); chi resta oltre rischia di più (tetto nemici crescente). Da confermare con playtest umano.
+- **Zoom della camera in arena**: in attesa del valore scelto dal playtest del proprietario (oggi zoom 1). Nell'hub è 0,85.
+- **Difficoltà per giocatori esperti**: il bot estrae nel 90% delle run nella Cripta; da verificare con giocatori umani se serve una curva più dura o se basta l'Ossario come sfida.
+- **Scelta del personaggio**: non prevista finora; percorso tecnico descritto in `docs/GUIDA_CONTENUTI.md` §3.3, da pianificare con una issue.
 
 ## 12. Processo e versionamento
 
 - Repo GitHub: `danieleadelfio/Wanderloot` (remote `origin`, branch `main`).
 - Task tracking: GitHub Issues + Projects, attivo. Una milestone per ogni M del §10; nessun sistema di task parallelo.
-- Vedi `docs/BEST_PRACTICES.md` per convenzioni di codice, architettura e testing (GdUnit4). Vedi `docs/CHANGELOG.md` per lo storico modifiche.
+- Vedi `docs/BEST_PRACTICES.md` per convenzioni di codice, architettura e testing (GdUnit4). Vedi `docs/CHANGELOG.md` per lo storico modifiche. Vedi `docs/GUIDA_CONTENUTI.md` per le procedure operative (nuovi nemici, arene, personaggi, equipaggiamento, suoni).
 - **Regola fissa**: ogni modifica a feature/grafica/scope/genere/gameplay loop va riportata in questo documento (sezione pertinente) e come voce in `docs/CHANGELOG.md`, nello stesso commit della modifica.

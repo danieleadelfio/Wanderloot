@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Guida operativa `docs/GUIDA_CONTENUTI.md`: come creare nemici, arene, personaggi, materiali, equipaggiamento, ricette, potenziamenti, suoni e punti di interazione sfruttando dati, generatori, bot e test esistenti; GDD aggiornato (roadmap M5–M7, struttura attuale riordinata, open questions su zoom, difficoltà e scelta del personaggio), BEST_PRACTICES con la regola "dati prima del codice".
 - Hub come piazza all'aperto esplorabile: fontana, forgia, magazzino, alberi, lampioni e portale in stile vettoriale, atmosfera serale; il player cammina e con E apre le finestre di fabbro, baule/equipaggiamento e portale (mondo in pausa, ESC o E chiude); `Interactable` e azione `interact`, test dedicati (#35).
 - Arena Ossario: buio quasi totale, candele rosse, nebbia, decorazioni macabre, musica cupa, ondate più dure, sblocco dopo 3 estrazioni nella Cripta; nuova ricetta Bacchetta d'ossa con i materiali dell'Ossario (#33).
 - Nemici macabri: Ghoul (veloce, fragile) e Scheletro arciere (mantiene la distanza e tira dardi, primo nemico a distanza con proiettili nemici poolati); comportamento e arma nei dati, nuovi materiali Frammento d'osso ed Essenza d'ombra, test dedicati (#34).

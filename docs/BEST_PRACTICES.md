@@ -10,13 +10,15 @@ res://
   scripts/<dominio>/              # script condivisi/non legati a una scena singola
   scripts/data/                   # classi Resource (class_name WeaponData, EnemyData, ...)
   data/                            # istanze Resource (.tres) per armi, nemici, upgrade, ricette — mai hardcoded in script
-  assets/{sprites,tiles,audio}/
+  assets/{art,sprites,audio}/     # SVG sorgenti, PNG a 2x, WAV
+  tools/                          # generatori di asset (Python) e bot di playtest (GDScript)
   autoload/                       # singleton globali (vedi §3)
   tests/                          # test GdUnit4, rispecchia la struttura di scripts/
 docs/
   GDD.md
   CHANGELOG.md
   BEST_PRACTICES.md
+  GUIDA_CONTENUTI.md             # procedure operative: nuovi nemici, arene, personaggi, equip, suoni
 ```
 
 Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa cartella della scena. Se sono condivisi da più scene, vanno in `scripts/`/`assets/` generici.
@@ -51,6 +53,9 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - **Punti di scrittura di `MetaProgression`**: `deposit_run_loot` (solo dopo un'estrazione), `craft`, `equip`/`unequip`, `register_extraction` (solo dopo un'estrazione), `select_arena`. Nessun altro sistema scrive lo stato permanente.
 - **Persistenza**: solo `MetaProgression` legge/scrive su disco, in `user://` con `ConfigFile` e chiave `version` per future migrazioni. Ogni cambio di formato alza `SAVE_VERSION`, resta compatibile con le versioni precedenti (sezioni mancanti = default) e ha un test che carica un file della versione vecchia. Sul disco si salvano id, mai Resource: al caricamento si risolvono via catalogo (`EquipmentCatalog`) e gli id sconosciuti si scartano. Mai caricare `.tres`/`.res` da `user://` (possono contenere script eseguibili). Logica di inventario in classi pure (`MetaInventory`) separate dall'I/O, così si testano senza file.
 
+- Interazioni nel mondo (hub, M7): un `Interactable` (Area2D) sa solo se il player è nel raggio e quale finestra apre (export `window`); l'apertura, la pausa e il focus li gestisce la composition root. Le finestre restano scene UI riusabili (`Blacksmith`, `LoadoutPanel`, `ArenaSelect`) con unique name, così `tools/flow.gd` le pilota senza passare dal mondo.
+- **Contenuti nuovi = dati prima del codice**: nemici, arene, equipaggiamento, ricette, upgrade e suoni si aggiungono con `.tres` e scene seguendo `docs/GUIDA_CONTENUTI.md`. Gli `id` (materiali, equip, arene) finiscono nel salvataggio: una volta pubblicati non si rinominano. Se una procedura della guida cambia, la guida si aggiorna nello stesso commit.
+
 ## 3.1 Componenti di combattimento
 
 - `Health` (HP + segnali `changed`/`damaged`/`died`, nessuna logica di morte), `Hitbox` (infligge danno), `Hurtbox` (riceve danno, inoltra a `Health`, i-frames opzionali), `HitFlash`, `Weapon` (cooldown + segnale `fired`, non istanzia proiettili).
@@ -73,7 +78,6 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 
 - Suoni sempre per id tramite `SfxPlayer.play(&"id")` e `SoundBank` (`.tres`): mai `AudioStreamPlayer` sparsi con stream hardcoded. Un id nuovo va aggiunto al banco e alla lista del test `tests/audio/test_sound_bank.gd`.
 - Collegamento via segnali nella composition root (`Arena`, `Hub`), mai chiamate audio dalle entità.
-- Interazioni nel mondo (hub, M7): un `Interactable` (Area2D) sa solo se il player è nel raggio e quale finestra apre (export `window`); l'apertura, la pausa e il focus li gestisce la composition root. Le finestre restano scene UI riusabili (`Blacksmith`, `LoadoutPanel`, `ArenaSelect`) con unique name, così `tools/flow.gd` le pilota senza passare dal mondo.
 - Bus: `Music`, `SFX` (Master sopra). Asset sorgente riproducibili: `tools/audio.py`.
 
 ## 3.2 Collision layers (vincolanti)
