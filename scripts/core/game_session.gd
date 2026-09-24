@@ -1,6 +1,6 @@
 class_name GameSession
 extends RefCounted
-## Azioni di sessione del menu di pausa, condivise da Arena e Hub: salva, carica.
+## Azioni di sessione del menu di pausa, condivise da Arena e Hub: salva, carica, torna al menu.
 ## Salvataggi solo manuali (M8): lo stato permanente si scrive su disco solo da qui.
 
 
@@ -18,3 +18,10 @@ static func load_saved(tree: SceneTree) -> bool:
 	tree.paused = false
 	tree.change_scene_to_file.call_deferred(SceneRoutes.HUB)
 	return true
+
+
+## Torna al menu iniziale senza salvare; una run in corso viene abbandonata.
+static func quit_to_menu(tree: SceneTree) -> void:
+	RunManager.abort_run()
+	tree.paused = false
+	tree.change_scene_to_file.call_deferred(SceneRoutes.MAIN_MENU)

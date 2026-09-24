@@ -1,0 +1,229 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/menu/MainMenu/main_menu.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/audio/sfx_player.gd" id="sfx"]
+[ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="bank"]
+[ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="music"]
+[ext_resource type="AudioStream" path="res://assets/audio/music_hub.wav" id="music_hub"]
+[ext_resource type="Texture2D" path="res://assets/sprites/portal_swirl.png" id="swirl"]
+
+[sub_resource type="Gradient" id="bg_grad"]
+colors = PackedColorArray(0.16, 0.12, 0.24, 1, 0.04, 0.03, 0.07, 1)
+
+[sub_resource type="GradientTexture2D" id="bg_tex"]
+gradient = SubResource("bg_grad")
+fill = 1
+fill_from = Vector2(0.5, 0.45)
+fill_to = Vector2(1.1, 1.1)
+
+[sub_resource type="StyleBoxFlat" id="panel_style"]
+content_margin_left = 24.0
+content_margin_top = 20.0
+content_margin_right = 24.0
+content_margin_bottom = 20.0
+bg_color = Color(0.1, 0.09, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.62, 0.36, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("script")
+
+[node name="Sfx" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("sfx")
+bank = ExtResource("bank")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("music_hub")
+script = ExtResource("music")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("bg_tex")
+
+[node name="Swirl" type="TextureRect" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.35)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+pivot_offset = Vector2(300, 300)
+mouse_filter = 2
+texture = ExtResource("swirl")
+expand_mode = 1
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Title" type="Label" parent="Center/Panel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.05, 0.15, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 72
+text = "Wanderloot"
+horizontal_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MainPanel" type="VBoxContainer" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 12
+
+[node name="ContinueButton" type="Button" parent="Center/Panel/VBox/MainPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Continua"
+
+[node name="NewGameButton" type="Button" parent="Center/Panel/VBox/MainPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Nuova partita"
+
+[node name="NewGameHint" type="Label" parent="Center/Panel/VBox/MainPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.7)
+theme_override_font_sizes/font_size = 13
+text = "Nuova partita: il salvataggio attuale resta finché non salvi."
+horizontal_alignment = 1
+
+[node name="OptionsButton" type="Button" parent="Center/Panel/VBox/MainPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Opzioni"
+
+[node name="QuitButton" type="Button" parent="Center/Panel/VBox/MainPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Esci"
+
+[node name="OptionsPanel" type="PanelContainer" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("panel_style")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel/VBox/OptionsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="OptionsTitle" type="Label" parent="Center/Panel/VBox/OptionsPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Opzioni · Audio"
+
+[node name="MusicRow" type="HBoxContainer" parent="Center/Panel/VBox/OptionsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Center/Panel/VBox/OptionsPanel/VBox/MusicRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Musica"
+
+[node name="MusicSlider" type="HSlider" parent="Center/Panel/VBox/OptionsPanel/VBox/MusicRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 32)
+layout_mode = 2
+size_flags_vertical = 4
+step = 1.0
+value = 100.0
+
+[node name="MusicValue" type="Label" parent="Center/Panel/VBox/OptionsPanel/VBox/MusicRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="SfxRow" type="HBoxContainer" parent="Center/Panel/VBox/OptionsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Center/Panel/VBox/OptionsPanel/VBox/SfxRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Effetti"
+
+[node name="SfxSlider" type="HSlider" parent="Center/Panel/VBox/OptionsPanel/VBox/SfxRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 32)
+layout_mode = 2
+size_flags_vertical = 4
+step = 1.0
+value = 100.0
+
+[node name="SfxValue" type="Label" parent="Center/Panel/VBox/OptionsPanel/VBox/SfxRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Sep" type="HSeparator" parent="Center/Panel/VBox/OptionsPanel/VBox"]
+layout_mode = 2
+
+[node name="DeleteButton" type="Button" parent="Center/Panel/VBox/OptionsPanel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Cancella dati salvati"
+
+[node name="OptionsStatus" type="Label" parent="Center/Panel/VBox/OptionsPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.7, 0.5, 1)
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="Center/Panel/VBox/OptionsPanel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Indietro"

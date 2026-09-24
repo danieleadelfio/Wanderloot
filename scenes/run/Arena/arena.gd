@@ -62,6 +62,7 @@ func _ready() -> void:
 	_pause_menu.action_requested.connect(_pause.request)
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
+	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
@@ -247,6 +248,7 @@ func _on_run_state_changed(state: RunManager.State) -> void:
 
 func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_pause_menu.set_can_load(MetaProgression.has_save())
+	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_pause_menu.show_mode(mode)
 	if mode == PauseState.Mode.INVENTORY:
 		_run_inventory.present(MetaProgression.equipped_items(), RunManager.loot.to_dictionary())
@@ -259,6 +261,7 @@ func _on_save_requested() -> void:
 	var ok := GameSession.save()
 	_pause_menu.show_status("Partita salvata (il loot della run resta a rischio)" if ok else "Salvataggio non riuscito")
 	_pause_menu.set_can_load(MetaProgression.has_save())
+	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_sfx.play(&"ui_select")
 
 

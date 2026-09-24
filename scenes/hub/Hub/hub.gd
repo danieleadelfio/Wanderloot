@@ -1,7 +1,7 @@
 extends Node2D
 ## Hub fuori dalla run (GDD §7): piazza esplorabile con fabbro, baule e portale. Composition root dell'hub.
 ## Il player cammina nella piazza; con E su un punto di interazione si apre la sua finestra (gioco in pausa), ESC o E la chiude.
-## ESC senza finestre aperte apre il menu di pausa (Riprendi, Salva, Carica).
+## ESC senza finestre aperte apre il menu di pausa (Riprendi, Salva, Carica, Torna al menu).
 
 ## Solo per mostrare i nomi nel baule; id sconosciuti vengono mostrati grezzi.
 @export var materials: Array[MaterialData] = []
@@ -43,8 +43,10 @@ func _ready() -> void:
 	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_arena_select.arena_selected.connect(_on_arena_selected)
 	_pause_menu.action_requested.connect(_on_pause_action)
+	_pause_menu.set_hint("ESC per chiudere")
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
+	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
 	_refresh()
 
 
@@ -86,6 +88,7 @@ func _nearest_spot() -> Interactable:
 func _set_pause_open(open: bool) -> void:
 	_pause_open = open
 	_pause_menu.set_can_load(MetaProgression.has_save())
+	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_pause_menu.show_mode(PauseState.Mode.MENU if open else PauseState.Mode.NONE)
 	get_tree().paused = open
 
@@ -99,6 +102,7 @@ func _on_save_requested() -> void:
 	var ok := GameSession.save()
 	_pause_menu.show_status("Partita salvata" if ok else "Salvataggio non riuscito")
 	_pause_menu.set_can_load(MetaProgression.has_save())
+	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_sfx.play(&"ui_select")
 
 

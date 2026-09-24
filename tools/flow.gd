@@ -68,6 +68,15 @@ func _physics_process(_d: float) -> bool:
 				say("ricarica da disco: baule=%s equip=%s" % [fresh.inventory.to_dictionary(), fresh.equipped_items().map(func(i): return i.id)])
 				fresh.free()
 				say("time_scale=%s paused=%s" % [Engine.time_scale, paused])
+				s.get_node("%PauseMenu").get_node("%MenuButton").pressed.emit(); step = 6; t = 0
+		6:
+			if s.name == "MainMenu" and t > 3:
+				var cont = s.get_node("%ContinueButton")
+				say("menu iniziale: Continua visibile=%s" % cont.visible)
+				cont.pressed.emit(); step = 7; t = 0
+		7:
+			if s.name == "Hub" and t > 3:
+				say("Continua -> hub, baule=%s" % m.inventory.to_dictionary())
 				return true
 	return false
 
