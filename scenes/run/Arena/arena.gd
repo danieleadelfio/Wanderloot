@@ -306,6 +306,8 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 
 
 func _on_save_requested() -> void:
+	# In run si salvano solo i progressi permanenti: al caricamento si riparte dall'ingresso della piazza.
+	MetaProgression.clear_hub_position()
 	var ok := GameSession.save()
 	_pause_menu.show_status("Partita salvata (il loot della run resta a rischio)" if ok else "Salvataggio non riuscito")
 	_pause_menu.set_can_load(MetaProgression.has_save())

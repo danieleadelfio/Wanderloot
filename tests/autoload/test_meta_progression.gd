@@ -164,3 +164,29 @@ func test_delete_save_removes_file() -> void:
 	_meta.save_game()
 	assert_int(_meta.delete_save()).is_equal(OK)
 	assert_bool(_meta.has_save()).is_false()
+
+
+func test_hub_position_is_saved_and_restored_once() -> void:
+	_meta.set_hub_position(Vector2(120, -80))
+	_meta.save_game()
+	var reloaded := _reload()
+	assert_bool(reloaded.has_pending_hub_position()).is_true()
+	assert_vector(reloaded.take_pending_hub_position()).is_equal(Vector2(120, -80))
+	assert_bool(reloaded.has_pending_hub_position()).is_false()
+
+
+func test_save_from_run_has_no_hub_position() -> void:
+	_meta.set_hub_position(Vector2(10, 10))
+	_meta.clear_hub_position()
+	_meta.save_game()
+	assert_bool(_reload().has_pending_hub_position()).is_false()
+
+
+func test_v3_save_has_no_hub_position() -> void:
+	var config := ConfigFile.new()
+	config.set_value("meta", "version", 3)
+	config.set_value("materials", "slime_gel", 2)
+	config.save(TEST_PATH)
+	var reloaded := _reload()
+	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(2)
+	assert_bool(reloaded.has_pending_hub_position()).is_false()

@@ -48,6 +48,16 @@ func _ready() -> void:
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
 	_refresh()
+	_restore_saved_position()
+
+
+## Dopo Carica/Continua il player riappare dove aveva salvato nella piazza.
+func _restore_saved_position() -> void:
+	if not MetaProgression.has_pending_hub_position():
+		return
+	var player: Node2D = %Player
+	player.global_position = MetaProgression.take_pending_hub_position()
+	(player.get_node("Camera2D") as Camera2D).reset_smoothing()
 
 
 func _process(_delta: float) -> void:
@@ -99,6 +109,7 @@ func _on_pause_action(action: PauseState.Action) -> void:
 
 
 func _on_save_requested() -> void:
+	MetaProgression.set_hub_position(%Player.global_position)
 	var ok := GameSession.save()
 	_pause_menu.show_status("Partita salvata" if ok else "Salvataggio non riuscito")
 	_pause_menu.set_can_load(MetaProgression.has_save())

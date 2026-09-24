@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Salvando dalla piazza si salva anche la posizione del player: Carica e Continua lo rimettono nello stesso punto (salvataggio v4, compatibile con v3); test dedicati (#41).
 - Rifiniture dal playtest: ombra del Re Slime attaccata al corpo, nessun cerchio di preavviso sulla raffica a ventaglio (`BossAttack.show_windup`), freccia verso l'estrazione gialla (#40).
 - Boss Re Slime nella Cripta: compare 20s dopo l'apertura dell'estrazione; raffica a ventaglio, anelli, salto schiacciante con cerchio rosso di preavviso, spirale in fase 2; drop garantiti di gelatina e nuclei; grafica vettoriale e test sui dati (#39).
 - Sistema boss riutilizzabile: `BossData` e `BossAttack` (.tres) con raffica a ventaglio, anello e salto schiacciante, preavviso con cerchio rosso a terra (`Telegraph`), fase 2 sotto soglia di HP, comparsa configurabile in `ArenaData`, barra HP del boss nell'HUD, texture opzionale dei proiettili in `WeaponData`, suoni dedicati, bot che schiva i cerchi; test sulla logica pura (#38).

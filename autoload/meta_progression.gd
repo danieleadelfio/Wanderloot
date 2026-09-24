@@ -11,13 +11,15 @@ const SAVE_PATH: String = "user://save.cfg"
 ## File dei salvataggi automatici fino a M7: rimosso all'avvio (M8, si riparte da zero).
 const LEGACY_SAVE_PATH: String = "user://meta_progression.cfg"
 ## v1 (M2): solo materiali. v2 (M3): + equipaggiamento. v3 (M7): + estrazioni per arena e arena scelta.
+## v4 (M9): + posizione del player nella piazza (solo se si e' salvato dall'hub).
 ## Ogni versione carica le precedenti (sezioni mancanti = valori iniziali).
-const SAVE_VERSION: int = 3
+const SAVE_VERSION: int = 4
 const SECTION_META: String = "meta"
 const SECTION_MATERIALS: String = "materials"
 const SECTION_EQUIPMENT: String = "equipment"
 const SECTION_EQUIPPED: String = "equipped"
 const SECTION_EXTRACTIONS: String = "extractions"
+const SECTION_HUB: String = "hub"
 
 var inventory: MetaInventory = MetaInventory.new()
 var loadout: EquipmentLoadout = EquipmentLoadout.new()
@@ -32,6 +34,12 @@ var selected_arena: StringName = &""
 var save_path: String = SAVE_PATH
 ## Vero se lo stato in memoria differisce dall'ultimo salvataggio/caricamento.
 var has_unsaved_changes: bool = false
+## Posizione nella piazza da scrivere col prossimo salvataggio (impostata dall'hub prima di salvare).
+var _hub_position: Vector2 = Vector2.ZERO
+var _has_hub_position: bool = false
+## Posizione letta dall'ultimo caricamento, consumata dall'hub alla sua apertura.
+var _pending_hub_position: Vector2 = Vector2.ZERO
+var _has_pending_hub_position: bool = false
 
 
 func _ready() -> void:
@@ -50,7 +58,29 @@ func new_game() -> void:
 	extractions.clear()
 	selected_arena = &""
 	has_unsaved_changes = false
+	_has_hub_position = false
+	_has_pending_hub_position = false
 	changed.emit()
+
+
+## Salvando dalla piazza si memorizza la posizione del player; salvando in run no (la run non si riprende).
+func set_hub_position(position: Vector2) -> void:
+	_hub_position = position
+	_has_hub_position = true
+
+
+func clear_hub_position() -> void:
+	_has_hub_position = false
+
+
+func has_pending_hub_position() -> bool:
+	return _has_pending_hub_position
+
+
+## Posizione da ripristinare nella piazza dopo un caricamento; la consuma (vale una volta sola).
+func take_pending_hub_position() -> Vector2:
+	_has_pending_hub_position = false
+	return _pending_hub_position
 
 
 ## Unico punto di scrittura su disco richiesto dal giocatore (Salva nel menu di pausa).
@@ -145,6 +175,8 @@ func save_to_disk() -> Error:
 	for arena_id in extractions:
 		config.set_value(SECTION_EXTRACTIONS, String(arena_id), extractions[arena_id])
 	config.set_value(SECTION_META, "selected_arena", String(selected_arena))
+	if _has_hub_position:
+		config.set_value(SECTION_HUB, "player_position", _hub_position)
 	var error := config.save(save_path)
 	if error != OK:
 		push_error("MetaProgression: salvataggio fallito (%s): %s" % [save_path, error_string(error)])
@@ -165,6 +197,11 @@ func load_from_disk() -> Error:
 			for key in config.get_section_keys(SECTION_EXTRACTIONS):
 				extractions[StringName(key)] = int(config.get_value(SECTION_EXTRACTIONS, key, 0))
 		selected_arena = StringName(config.get_value(SECTION_META, "selected_arena", ""))
+		_has_pending_hub_position = config.has_section_key(SECTION_HUB, "player_position")
+		if _has_pending_hub_position:
+			_pending_hub_position = config.get_value(SECTION_HUB, "player_position", Vector2.ZERO)
+			_hub_position = _pending_hub_position
+		_has_hub_position = _has_pending_hub_position
 		if config.has_section(SECTION_MATERIALS):
 			for key in config.get_section_keys(SECTION_MATERIALS):
 				amounts[StringName(key)] = int(config.get_value(SECTION_MATERIALS, key, 0))
