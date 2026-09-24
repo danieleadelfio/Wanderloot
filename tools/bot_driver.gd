@@ -88,7 +88,7 @@ static func set_axis(neg: String, pos_a: String, v: float) -> void:
 ## come farebbe un giocatore; con 13 potenziamenti la scelta casuale lo rendeva artificialmente debole.
 const PRIORITY: Array[int] = [
 	UpgradeData.Stat.DAMAGE, UpgradeData.Stat.FIRE_RATE, UpgradeData.Stat.PROJECTILE_COUNT,
-	UpgradeData.Stat.PIERCE, UpgradeData.Stat.MAX_HP, UpgradeData.Stat.MOVE_SPEED,
+	UpgradeData.Stat.COUNT_BONUS, UpgradeData.Stat.PIERCE, UpgradeData.Stat.MAX_HP, UpgradeData.Stat.MOVE_SPEED,
 	UpgradeData.Stat.PICKUP_RADIUS, UpgradeData.Stat.PROJECTILE_SPEED,
 ]
 

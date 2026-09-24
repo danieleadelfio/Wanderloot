@@ -29,7 +29,13 @@ static func apply(stat: UpgradeData.Stat, amount: float, is_multiplier: bool, st
 		UpgradeData.Stat.KNOCKBACK:
 			weapon.knockback = _modify(weapon.knockback, amount, is_multiplier)
 		UpgradeData.Stat.PROJECTILE_COUNT:
-			weapon.projectile_count = maxi(roundi(_modify(weapon.projectile_count, amount, is_multiplier)), 1)
+			# Il Contatore potenzia i Ventagli presi dopo: +1 diventa +(1 + Contatore).
+			var scaled := amount * (1 + stats.count_bonus) if not is_multiplier and amount > 0.0 else amount
+			weapon.projectile_count = maxi(roundi(_modify(weapon.projectile_count, scaled, is_multiplier)), 1)
+		UpgradeData.Stat.COUNT_BONUS:
+			var added := roundi(amount)
+			stats.count_bonus += added
+			weapon.projectile_count = maxi(weapon.projectile_count + added, 1)
 		UpgradeData.Stat.PIERCE:
 			weapon.pierce = maxi(roundi(_modify(weapon.pierce, amount, is_multiplier)), 0)
 

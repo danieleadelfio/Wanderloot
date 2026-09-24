@@ -7,6 +7,9 @@ extends Resource
 @export var invulnerability_time: float = 0.8
 ## Raggio (px) entro cui exp e materiali a terra vengono attratti verso il player.
 @export var pickup_radius: float = 90.0
+## Contatore (M10.1): +1 a ogni conteggio di proiettili (sparo, Anello arcano, Fulmine errante)
+## e ogni Ventaglio preso dopo aggiunge 1 + Contatore proiettili.
+@export var count_bonus: int = 0
 ## Moltiplicatore dell'exp raccolta (upgrade "Saggezza").
 @export var exp_multiplier: float = 1.0
 ## Moltiplicatore della probabilità di drop dei materiali (upgrade "Fortuna").

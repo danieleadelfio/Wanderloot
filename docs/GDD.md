@@ -42,6 +42,8 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
   - **Stato M3 (#14)**: pannello "Equipaggiamento" nell'hub (un pezzo per slot, click per equipaggiare/togliere). A inizio run `Arena` passa `MetaProgression.equipped_items()` a `Player.begin_run()`, che riparte da copie fresche di `PlayerStats`/`WeaponData` e applica i modificatori (`StatApplier`, stessa logica degli upgrade di run, che si sommano sopra). L'equip è letto una sola volta: cambiarlo vale dalla run successiva.
 - Sblocco progressivo di strutture/NPC nell'hub in base a milestone (es. numero di estrazioni riuscite, materiali totali raccolti, boss sconfitti).
 
+- **Stato M10.1 (#51, Contatore)**: nuovo potenziamento (14 totali). **+1 a ogni conteggio di proiettili**: sparo (1 → 2), Anello arcano (10 → 11), Fulmine errante (1 → 2 fulmini su nemici diversi); nessun effetto sulla Barriera arcana. In combo con **Ventaglio**: ogni Ventaglio preso *dopo* aggiunge 1 + Contatori presi (1 → Ventaglio 2 → Contatore 3 → Ventaglio 5 → Contatore 6 → Ventaglio 9). Riga Contatore nelle statistiche.
+
 ### 3.2b Consumabili (M10.1, #50)
 
 I nemici possono lasciare **consumabili** (1,2% per uccisione, moltiplicato dal bonus drop; il boss ne lascia 2): oggetti a terra con effetto alla raccolta, attratti dal magnete come exp e materiali, che **non sono loot** (non vanno nel baule). **Magnete**: per 4 s attira tutto ciò che è a terra in tutta l'arena. **Cuore**: cura 2 HP. **Furia**: cadenza +50% per 6 s. Gli effetti a tempo compaiono nell'HUD con i secondi rimasti. Dati in `data/consumables/` (`ConsumableData`, `ConsumableTable` assegnata da `ArenaData.consumables`).

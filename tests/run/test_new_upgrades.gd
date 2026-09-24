@@ -69,4 +69,4 @@ func test_luck_multiplier_raises_drop_chance() -> void:
 
 func test_all_upgrades_in_table() -> void:
 	var table: UpgradeTable = load("res://data/upgrades/upgrade_table.tres")
-	assert_int(table.upgrades.size()).is_equal(13)
+	assert_int(table.upgrades.size()).is_equal(14)

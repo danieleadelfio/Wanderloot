@@ -12,6 +12,7 @@ static func rows(stats: PlayerStats, weapon: WeaponData) -> Array[PackedStringAr
 	result.append(PackedStringArray(["STAT_FIRE_RATE", "%.1f/s" % weapon.fire_rate]))
 	result.append(PackedStringArray(["STAT_PROJECTILES", str(weapon.projectile_count)]))
 	result.append(PackedStringArray(["STAT_PIERCE", str(weapon.pierce)]))
+	result.append(PackedStringArray(["STAT_COUNT_BONUS", "+%d" % stats.count_bonus]))
 	result.append(PackedStringArray(["STAT_PROJECTILE_SPEED", str(roundi(weapon.projectile_speed))]))
 	result.append(PackedStringArray(["STAT_PROJECTILE_LIFETIME", "%.2fs" % weapon.projectile_lifetime]))
 	result.append(PackedStringArray(["STAT_KNOCKBACK", str(roundi(weapon.knockback))]))

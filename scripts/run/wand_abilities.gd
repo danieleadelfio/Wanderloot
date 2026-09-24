@@ -8,7 +8,7 @@ signal activated(ability: WandAbility)
 
 const TELEGRAPH := preload("res://scenes/run/Telegraph/Telegraph.tscn")
 const STRIKE_COLOR := Color(0.55, 0.85, 1.0)
-const STRIKE_POOL_SIZE := 4
+const STRIKE_POOL_SIZE := 8
 
 @export var slot_count: int = 3
 
@@ -99,17 +99,16 @@ func spawn_ring(count: int, damage_multiplier: float) -> void:
 		_projectile_pool.spawn(player.global_position, direction, weapon)
 
 
-func strike_nearest(max_range: float, radius: float, damage_bonus: int) -> void:
-	var best: Node2D = null
-	var best_distance := max_range
+func strike_nearest(max_range: float, radius: float, damage_bonus: int, count: int = 1) -> void:
+	var in_range: Array[Node2D] = []
 	for target: Node2D in _targets.call():
-		var distance := player.global_position.distance_to(target.global_position)
-		if distance < best_distance:
-			best_distance = distance
-			best = target
-	if best == null:
-		return
+		if player.global_position.distance_to(target.global_position) <= max_range:
+			in_range.append(target)
+	in_range.sort_custom(func(a: Node2D, b: Node2D) -> bool: return player.global_position.distance_squared_to(a.global_position) < player.global_position.distance_squared_to(b.global_position))
+	var fired := 0
 	for strike in _strikes:
-		if not strike.is_running():
-			strike.start(best.global_position, radius, 0.06, player.weapon_data().damage + damage_bonus, 180.0)
+		if fired >= mini(count, in_range.size()):
 			return
+		if not strike.is_running():
+			strike.start(in_range[fired].global_position, radius, 0.06, player.weapon_data().damage + damage_bonus, 180.0)
+			fired += 1

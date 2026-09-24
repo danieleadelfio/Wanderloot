@@ -7,4 +7,4 @@ extends AbilityEffect
 
 
 func activate(host: WandAbilities) -> void:
-	host.spawn_ring(count, damage_multiplier)
+	host.spawn_ring(count + host.player.stats.count_bonus, damage_multiplier)
