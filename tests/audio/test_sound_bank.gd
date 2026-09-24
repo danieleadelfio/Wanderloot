@@ -4,7 +4,7 @@ extends GdUnitTestSuite
 const USED_IDS: Array[StringName] = [
 	&"shoot", &"enemy_hit", &"enemy_die", &"player_hurt", &"level_up",
 	&"extract", &"player_death", &"craft", &"ui_select", &"pickup_exp", &"pickup_item",
-	&"enemy_shoot", &"boss_appear", &"boss_warn", &"boss_slam",
+	&"enemy_shoot", &"boss_appear", &"boss_warn", &"boss_slam", &"event_start", &"lightning",
 ]
 
 

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Eventi della run: `RunEventData` e tempi in `ArenaData`, titolo e sottotitolo a schermo con barra del tempo, Tempesta di fulmini (10 s, cerchi azzurri di preavviso) che se superata senza colpi fa scegliere un'abilità; due eventi per run in Cripta e Ossario, suoni dedicati, bot che schiva i fulmini; test (#46).
 - Abilità della bacchetta: 3 slot senza ordine, attivazione a ricarica, ogni N colpi, ogni N metri o sempre attiva, effetti come Resource riusabili, colore dei proiettili per la run; Anello arcano, Fulmine errante, Barriera arcana; scelta con sostituzione a slot pieni, icone con avanzamento nell'HUD; test (#45).
 - Lingue italiano, inglese, francese e spagnolo: testi di scene, dati e codice come chiavi in `data/i18n/strings.csv`, selettore nelle Opzioni; a partita avviata il cambio lingua salva e torna al menu iniziale; lingua salvata nel file impostazioni e riapplicata all'avvio; `LocaleSettings` e test sulle traduzioni (#44).
 - Opzioni anche dal menu di pausa (run e hub): pannello Opzioni unico riusato dal menu iniziale, Cancella dati solo nel menu iniziale (#43).

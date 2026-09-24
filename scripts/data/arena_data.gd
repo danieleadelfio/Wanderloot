@@ -38,6 +38,12 @@ extends Resource
 @export var boss_delay: float = 20.0
 @export var boss_spawn_min_distance: float = 380.0
 
+@export_group("Eventi")
+## Eventi possibili (uno a caso a ogni tempo di event_times).
+@export var events: Array[RunEventData] = []
+## Secondi di run in cui parte un evento.
+@export var event_times: PackedFloat32Array = []
+
 @export_group("Sblocco")
 ## Arena in cui servono estrazioni riuscite per sbloccare questa (vuoto = sempre disponibile).
 @export var unlock_arena: StringName = &""

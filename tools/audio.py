@@ -171,4 +171,11 @@ save("boss_warn", mix(square(sweep(300, 900, d), 0.25) * env(int(SR * d), attack
 d = 0.45
 thud = np.sin(2 * np.pi * sweep(90, 30, d)) * env(int(SR * d), curve=2.5)
 save("boss_slam", mix(thud, 0.7 * lowpass(noise(d), 0.12) * env(int(SR * d), curve=3)), 0.8)
+# --- Eventi (M10): inizio evento (tuono lontano), fulmine (schiocco) ---
+d = 1.4
+rumble = lowpass(noise(d), 0.04) * env(int(SR * d), attack=0.25, curve=1.2)
+save("event_start", mix(rumble, 0.4 * triangle(sweep(90, 60, d)) * env(int(SR * d), attack=0.2, curve=1.5)), 0.8)
+d = 0.35
+crack = lowpass(noise(d), 0.6) * env(int(SR * d), curve=5)
+save("lightning", mix(crack, 0.5 * lowpass(noise(d), 0.08) * env(int(SR * d), curve=2)), 0.6)
 print("audio:", sorted(os.listdir(OUT)))

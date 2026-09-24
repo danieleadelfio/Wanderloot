@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RunEventData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/run_event_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"lightning_storm"
+title = "EVENT_LIGHTNING_TITLE"
+subtitle = "EVENT_LIGHTNING_SUBTITLE"
+kind = 0
+duration = 10.0
+reward_choices = 3
+strike_interval = 0.55
+strike_radius = 70.0
+strike_telegraph = 0.8
+strike_damage = 1
+strike_spread = 260.0
+aimed_chance = 0.35

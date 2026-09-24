@@ -54,6 +54,12 @@ La bacchetta ha **3 slot** di abilità per la run; l'ordine non conta e le abili
 
 Il catalogo completo (abilità di Magicraft riadattate e originali) è in `docs/catalog/` (§13).
 
+### 3.4 Eventi della run (M10, #46)
+
+A tempi fissi della run (`ArenaData.event_times`) parte un evento scelto tra quelli dell'arena (`RunEventData`, `data/events/`). Al centro in alto compaiono un **titolo grande** e un **sottotitolo di poche parole** con l'obiettivo, e una barra del tempo rimasto. Superato l'evento il gioco si ferma e si sceglie un'abilità della bacchetta tra 3 (§3.3); fallito, compare "Evento fallito" e si continua senza premio.
+
+**Tempesta di fulmini** (primo evento): 10 s; un fulmine ogni 0,55 s, annunciato da un cerchio azzurro di 70 px che si riempie in 0,8 s (35% sulla posizione del player, gli altri entro 260 px). Basta un colpo subito, da qualsiasi fonte, per fallire. Cripta: eventi a 35 s e 80 s; Ossario: 30 s e 75 s (massimo 2 abilità per run prima dell'estrazione). Il catalogo degli eventi pianificati è in `docs/catalog/`.
+
 ## 4. Extraction shooter layer — regole di rischio
 
 - Il loot grezzo vive in un "inventario di run" separato da quello permanente.
@@ -153,6 +159,8 @@ res://
   data/abilities/                    # abilità della bacchetta + ability_catalog
   scripts/run/abilities/             # effetti delle abilità (AbilityEffect e sottoclassi)
   scenes/ui/AbilityChoice/           # scelta dell'abilità (pausa), sostituzione con slot pieni
+  data/events/                       # eventi della run (RunEventData)
+  scripts/run/run_event_director.gd  # fa partire gli eventi e ne applica le regole (fulmini con Telegraph)
   scripts/hub/                       # interactable (punto di interazione, nearest_index testato), spinner (vortice del portale)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
   scenes/hub/Hub/                    # Hub.tscn + hub.gd: piazza esplorabile, scena principale, composition root dell'hub
@@ -269,6 +277,17 @@ Bot con opzione `boss` (resta nell'arena finché il boss comparso è vivo, poi v
 | Combatte il boss, Bacchetta di gelatina + Amuleto | 6/8 | 50% | 183 s | 118 / 10,8 |
 
 Lettura: chi estrae subito non è toccato dal boss; chi resta rischia molto di più ma raccoglie circa il triplo (soprattutto per le uccisioni in più, fase avanzata delle ondate inclusa). Le morti arrivano quasi tutte dopo i 170 s, quando boss e ondate fitte si sommano. Da rivedere col playtest umano: il bot schiva i cerchi in modo quasi perfetto ma subisce i proiettili.
+
+### 10.7 Verifica M10 (#45/#46, abilità ed eventi)
+
+Bot aggiornato: schiva i cerchi dei fulmini come quelli del boss e prende la prima abilità proposta.
+
+| Configurazione | Eventi superati | Estrazioni | Confronto |
+|---|---|---|---|
+| Cripta, senza equip (8 run) | 13/16 (81%) | 100% | prima delle abilità 75–90% |
+| Ossario, gelatina + amuleto (5 run) | 8/10 (80%) | 100% | prima delle abilità 60% |
+
+Lettura: le abilità alzano molto la potenza della run (Anello arcano e Fulmine errante raddoppiano di fatto il danno ad area). Il bot schiva quasi perfettamente, un giocatore umano fallirà più eventi. Da rivedere col playtest; il bilanciamento della difficoltà è previsto insieme alle rarità (M11), quando cresce anche la potenza dell'equipaggiamento.
 
 ## 11. Open questions
 

@@ -55,6 +55,7 @@ var _boss_timer := Timer.new()
 @onready var _run_inventory: RunInventory = %RunInventory
 @onready var _wand: WandAbilities = %WandAbilities
 @onready var _ability_choice: AbilityChoice = %AbilityChoice
+@onready var _events: RunEventDirector = %EventDirector
 
 
 func _ready() -> void:
@@ -88,6 +89,13 @@ func _ready() -> void:
 	_wand.setup(_player, _projectile_pool, targetable_enemies)
 	_wand.changed.connect(_hud.set_abilities)
 	_ability_choice.resolved.connect(_on_ability_resolved)
+	_events.bounds = extraction_spawn_rect
+	_events.setup(arena, _player)
+	_events.event_started.connect(_on_event_started)
+	_events.event_progress.connect(_hud.set_event_progress)
+	_events.event_completed.connect(_on_event_completed)
+	_events.event_failed.connect(_on_event_failed)
+	_events.strike_landed.connect(_sfx.play.bind(&"lightning"))
 	_pickup_pool.target = _player
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pickup_pool.exp_collected.connect(_on_exp_collected)
@@ -113,6 +121,28 @@ func active_enemies() -> Array[Enemy]:
 			if enemy is Enemy and enemy.visible:
 				result.append(enemy)
 	return result
+
+
+## Zone di pericolo attive (boss + fulmini degli eventi) per il bot di playtest: centro x,y e raggio z.
+func danger_zones() -> Array[Vector3]:
+	var zones := _events.danger_zones()
+	if is_instance_valid(boss) and boss.danger_zone().z > 0.0:
+		zones.append(boss.danger_zone())
+	return zones
+
+
+func _on_event_started(event: RunEventData) -> void:
+	_hud.show_event(event.title, event.subtitle)
+	_sfx.play(&"event_start")
+
+
+func _on_event_completed(event: RunEventData) -> void:
+	_hud.end_event(true)
+	offer_abilities(event.reward_choices)
+
+
+func _on_event_failed(_event: RunEventData) -> void:
+	_hud.end_event(false)
 
 
 ## Nemici e boss colpibili dalle abilita' della bacchetta.

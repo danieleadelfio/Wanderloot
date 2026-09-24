@@ -12,6 +12,11 @@ extends CanvasLayer
 @onready var _boss_panel: Control = %BossPanel
 @onready var _stats_grid: GridContainer = %StatsGrid
 @onready var _ability_bar: HBoxContainer = %AbilityBar
+@onready var _event_banner: Control = %EventBanner
+@onready var _event_title: Label = %EventTitle
+@onready var _event_subtitle: Label = %EventSubtitle
+@onready var _event_bar: ProgressBar = %EventBar
+var _banner_tween: Tween
 @onready var _boss_name: Label = %BossName
 @onready var _boss_bar: ProgressBar = %BossBar
 
@@ -71,6 +76,35 @@ func set_abilities(abilities: Array[WandAbility]) -> void:
 func set_ability_progress(index: int, ratio: float) -> void:
 	if index < _ability_bar.get_child_count():
 		(_ability_bar.get_child(index) as TextureProgressBar).value = ratio
+
+
+## Evento in corso (M10): titolo grande, obiettivo in poche parole, barra del tempo rimasto.
+func show_event(title: String, subtitle: String) -> void:
+	if _banner_tween:
+		_banner_tween.kill()
+	_event_title.text = tr(title)
+	_event_subtitle.text = tr(subtitle)
+	_event_bar.visible = true
+	_event_bar.value = 1.0
+	_event_banner.modulate.a = 1.0
+	_event_banner.visible = true
+
+
+func set_event_progress(ratio: float) -> void:
+	_event_bar.value = ratio
+
+
+## Esito: il banner mostra il risultato e sparisce dopo poco (subito se si apre la scelta dell'abilita').
+func end_event(success: bool) -> void:
+	_event_title.text = tr("EVENT_COMPLETED") if success else tr("EVENT_FAILED")
+	_event_subtitle.text = "" if success else tr("EVENT_FAILED_HINT")
+	_event_bar.visible = false
+	if _banner_tween:
+		_banner_tween.kill()
+	_banner_tween = create_tween()
+	_banner_tween.tween_interval(1.6)
+	_banner_tween.tween_property(_event_banner, "modulate:a", 0.0, 0.4)
+	_banner_tween.tween_callback(_event_banner.hide)
 
 
 func show_boss(boss_name: String, current: int, maximum: int) -> void:

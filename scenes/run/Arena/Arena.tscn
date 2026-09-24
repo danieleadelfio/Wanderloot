@@ -32,6 +32,8 @@
 [ext_resource type="Script" path="res://scripts/run/wand_abilities.gd" id="wand"]
 [ext_resource type="PackedScene" path="res://scenes/ui/AbilityChoice/AbilityChoice.tscn" id="ability_choice"]
 
+[ext_resource type="Script" path="res://scripts/run/run_event_director.gd" id="events"]
+
 [sub_resource type="Gradient" id="vignette_grad"]
 offsets = PackedFloat32Array(0.45, 1)
 colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.75)
@@ -240,3 +242,7 @@ script = ExtResource("wand")
 
 [node name="AbilityChoice" parent="." instance=ExtResource("ability_choice")]
 unique_name_in_owner = true
+
+[node name="EventDirector" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("events")

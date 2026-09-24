@@ -138,3 +138,8 @@ ABILITY_TRIGGER_PERMANENT,Sempre attiva,Always active,Toujours active,Siempre ac
 ABILITY_CHOICE_TITLE,Scegli un'abilità per la bacchetta,Choose an ability for your wand,Choisissez une capacité pour la baguette,Elige una habilidad para la varita
 ABILITY_REPLACE_TITLE,Slot pieni: cosa sostituisci con %s?,Slots full: what do you replace with %s?,Emplacements pleins : que remplacer par %s ?,Huecos llenos: ¿qué sustituyes por %s?
 ABILITY_KEEP,Tieni la bacchetta com'è,Keep your wand as it is,Garder la baguette telle quelle,Deja la varita como está
+EVENT_LIGHTNING_TITLE,TEMPESTA DI FULMINI,LIGHTNING STORM,TEMPÊTE DE FOUDRE,TORMENTA DE RAYOS
+EVENT_LIGHTNING_SUBTITLE,Evita i fulmini,Dodge the lightning,Évitez la foudre,Esquiva los rayos
+EVENT_COMPLETED,EVENTO SUPERATO,EVENT CLEARED,ÉVÉNEMENT RÉUSSI,EVENTO SUPERADO
+EVENT_FAILED,EVENTO FALLITO,EVENT FAILED,ÉVÉNEMENT ÉCHOUÉ,EVENTO FALLIDO
+EVENT_FAILED_HINT,Sei stato colpito: nessuna abilità,You were hit: no ability,Vous avez été touché : aucune capacité,Te han golpeado: sin habilidad

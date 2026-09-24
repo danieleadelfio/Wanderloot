@@ -26,8 +26,9 @@ static func drive(a: Node) -> void:
 		if db < nd: nd = db; nearest = boss
 		if db < 300.0:
 			flee += (pos - boss.global_position).normalized() * pow(1.0 - db / 300.0, 2) * 4.0
-		var zone: Vector3 = boss.danger_zone()
-		if zone.z > 0.0:
+	# Cerchi di preavviso (salto del boss, fulmini degli eventi): esce dal cerchio.
+	if a.has_method("danger_zones"):
+		for zone: Vector3 in a.danger_zones():
 			var c := Vector2(zone.x, zone.y)
 			if pos.distance_to(c) < zone.z + 50.0:
 				flee += (pos - c).normalized() * 5.0 if pos.distance_to(c) > 1.0 else Vector2.RIGHT * 5.0
