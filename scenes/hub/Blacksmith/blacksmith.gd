@@ -11,6 +11,9 @@ signal salvage_requested(uid: int)
 const RARITIES: RarityTable = ItemText.RARITIES
 
 @export var recipe_book: RecipeBook
+## Smontaggio in lavorazione (#60): la resa futura sono materiali ottenibili solo smontando, ancora da definire.
+## Da falso l'elenco resta visibile ma non si puo' smontare.
+@export var salvage_enabled: bool = false
 
 ## Smontaggio irreversibile: il primo clic chiede conferma, il secondo smonta.
 var _pending_salvage: int = 0
@@ -68,10 +71,12 @@ func _refresh_salvage(loadout: EquipmentLoadout, material_names: Dictionary[Stri
 	_pending_salvage = 0
 	var items := loadout.stash_items()
 	for item: ItemInstance in items:
-		var amounts := Forge.salvage_yield(item, recipe_book, RARITIES)
-		var text := "%s  —  %s" % [ItemText.title(item), _amounts_text(amounts, material_names)]
+		var text := ItemText.title(item)
+		if salvage_enabled:
+			text += "  —  " + _amounts_text(Forge.salvage_yield(item, recipe_book, RARITIES), material_names)
 		var button := _button(item.base.icon, text, ItemText.tooltip(item))
 		button.add_theme_color_override("font_color", ItemText.color(item))
+		button.disabled = not salvage_enabled
 		button.pressed.connect(_on_salvage_pressed.bind(item.uid, button))
 		_salvage_list.add_child(button)
 	if items.is_empty():
