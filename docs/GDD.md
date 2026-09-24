@@ -131,13 +131,14 @@ Slot: **Testa, Guanti, Armatura, Pantaloni, Stivali, Anello (×2), Amuleto** e *
 
 Le rarità sono in `data/equipment/rarity_table.tres` (colore, numero di bonus, qualità dei tiri `roll_min`–`roll_max`, abilità, peso di drop, moltiplicatore dello smontaggio); i bonus possibili in `data/equipment/affix_table.tres` (statistica, intervallo, tipi di oggetto ammessi, peso). Un oggetto non tira mai due volte la stessa statistica; le statistiche intere (danno, HP, proiettili, perforazione) si arrotondano. Il craft dal fabbro dà un Comune con 1 bonus tirato: due craft dello stesso oggetto sono diversi. L'abilità di Super raro e superiori è una delle abilità della bacchetta, **sempre attiva per tutta la run**, fuori dai 3 slot (e non viene più offerta dagli eventi). Il nome e il bordo degli oggetti hanno il colore della rarità; il tooltip mostra rarità, bonus e abilità. Percentuali indicative, da bilanciare col bot. Ogni oggetto diventa un'**istanza unica** (id, oggetto base, rarità, bonus tirati) invece di un id di catalogo. I bonus sono tirati dentro intervalli che crescono con la rarità (`StatModifier` con minimo/massimo per rarità). I modificatori di Super raro e Leggendario vengono dalla lista delle abilità (§3.3, catalogo): lo stesso effetto (`AbilityEffect`) sempre attivo o potenziato, così i due sistemi non si duplicano.
 
-### 6.3 Drop in run (M11, #58) e fusione
+### 6.3 Drop in run (M11, #58), fusione e smontaggio (M11, #59)
 
 - In run i nemici possono lasciare oggetti da Comune a **Leggendario** (probabilità bassa per uccisione, più alta per il boss). Sono **loot a rischio** come i materiali: si tengono solo estraendo.
 - Tabella per arena in `ArenaData.item_drops` (`data/equipment/drops_<arena>.tres`, `ItemDropTable`): oggetti possibili, `drop_chance` per uccisione (Cripta 0,4 %, Ossario 0,6 %, × bonus drop), `max_tier` (4 = Leggendario), `boss_drops` (1 per boss) con `boss_min_tier` (2 = Raro). La rarità si tira coi pesi `drop_weight` di `rarity_table.tres`; bonus e abilità si tirano quando l'oggetto cade.
 - A terra l'oggetto ha la sua icona tinta col colore della rarità e si raccoglie col magnete; nell'inventario di run (I) compare tra il loot a rischio con tooltip; a fine run la schermata elenca gli oggetti portati in salvo o persi. Estraendo entrano nel baule dell'hub come istanze nuove.
 - **Fusione dal fabbro**: due oggetti **identici** (stesso oggetto base) della **stessa rarità** → uno della rarità successiva, con bonus e modificatore ritirati. Si sale fino a Leggendario; il Mitico non si ottiene per fusione.
 - **Smontaggio** di un oggetto in materiali (quantità crescente con la rarità), per gestire il baule.
+- Il fabbro ha tre schede: **Crafting**, **Fusione**, **Smontaggio**. Fusione e smontaggio valgono solo per oggetti nel baule (non equipaggiati). La fusione elenca le coppie disponibili (stesso oggetto, stessa rarità, sotto Leggendario) e fonde le prime due; il risultato è un oggetto nuovo tirato alla rarità successiva. Lo smontaggio rende `max(1, floor(costo ricetta × 25 % × salvage_multiplier))` per ogni materiale della ricetta (Comune ×1, Non comune ×2, Raro ×3, Super raro ×5, Leggendario ×8, Mitico ×12); es. Bacchetta di gelatina (25 Gelatina): Comune 6, Leggendario 50. Lo smontaggio chiede conferma (secondo clic). Logica in `scripts/meta/forge.gd`.
 
 ### 6.4 Mitici (progetto M12)
 
@@ -263,7 +264,7 @@ Note tecniche:
 **M8 — Salvataggi, menu, boss** ✅ (2026-09-24): salvataggi manuali, menu iniziale con opzioni audio, sistema boss riutilizzabile, Re Slime.
 **M9 — Rifiniture dal playtest** ✅ (2026-09-24): statistiche, inventario nell'hub con I/C, opzioni in pausa, posizione salvata nella piazza, 4 lingue.
 **M10 — Abilità ed eventi** ✅ (2026-09-24): abilità della bacchetta (3 slot), eventi della run (Tempesta di fulmini), catalogo PDF, progetto di rarità/slot/mitici/enciclopedia (§6.1–6.4).
-**M11 — Rarità ed equipaggiamento** (pianificata): istanze uniche con rarità e bonus casuali, 9 slot con manichino, drop in run fino a Leggendario, fusione di due oggetti identici, modificatori da Super raro (§6.1–6.3).
+**M11 — Rarità ed equipaggiamento** (completata): istanze uniche con rarità e bonus casuali, 9 slot con manichino, drop in run fino a Leggendario, fusione di due oggetti identici, modificatori da Super raro (§6.1–6.3).
 **M12 — Mitici, enciclopedia, achievement** (pianificata): ricette mitiche dai boss, materiali composti, enciclopedia in gioco, achievement (§6.4, §13).
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.

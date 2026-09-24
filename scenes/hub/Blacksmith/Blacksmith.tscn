@@ -16,6 +16,69 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "BLACKSMITH_TITLE"
 
-[node name="RecipeList" type="VBoxContainer" parent="VBox"]
+[node name="Tabs" type="TabContainer" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
+current_tab = 0
+
+[node name="Craft" type="ScrollContainer" parent="VBox/Tabs"]
+metadata/_tab_index = 0
+custom_minimum_size = Vector2(0, 430)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="VBox/Tabs/Craft"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="RecipeList" type="VBoxContainer" parent="VBox/Tabs/Craft/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Fusion" type="ScrollContainer" parent="VBox/Tabs"]
+visible = false
+metadata/_tab_index = 1
+custom_minimum_size = Vector2(0, 430)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="VBox/Tabs/Fusion"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Hint" type="Label" parent="VBox/Tabs/Fusion/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.75)
+text = "BLACKSMITH_FUSION_HINT"
+autowrap_mode = 3
+
+[node name="FusionList" type="VBoxContainer" parent="VBox/Tabs/Fusion/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Salvage" type="ScrollContainer" parent="VBox/Tabs"]
+visible = false
+metadata/_tab_index = 2
+custom_minimum_size = Vector2(0, 430)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="VBox/Tabs/Salvage"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Hint" type="Label" parent="VBox/Tabs/Salvage/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.75)
+text = "BLACKSMITH_SALVAGE_HINT"
+autowrap_mode = 3
+
+[node name="SalvageList" type="VBoxContainer" parent="VBox/Tabs/Salvage/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3

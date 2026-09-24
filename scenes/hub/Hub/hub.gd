@@ -41,6 +41,8 @@ func _ready() -> void:
 	MetaProgression.changed.connect(_refresh)
 	_start_button.pressed.connect(_on_start_pressed)
 	_blacksmith.craft_requested.connect(_on_craft_requested)
+	_blacksmith.fuse_requested.connect(_on_fuse_requested)
+	_blacksmith.salvage_requested.connect(_on_salvage_requested)
 	_loadout_panel.equip_requested.connect(MetaProgression.equip)
 	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
 	_loadout_panel.equip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
@@ -222,6 +224,16 @@ func _refresh_stash(amounts: Dictionary[StringName, int]) -> void:
 func _on_craft_requested(recipe: RecipeData) -> void:
 	if MetaProgression.craft(recipe) == Crafting.Result.OK:
 		_sfx.play(&"craft")
+
+
+func _on_fuse_requested(first_uid: int, second_uid: int) -> void:
+	if MetaProgression.fuse(first_uid, second_uid):
+		_sfx.play(&"craft")
+
+
+func _on_salvage_requested(uid: int) -> void:
+	if MetaProgression.salvage(uid):
+		_sfx.play(&"pickup_item")
 
 
 func _on_arena_selected(id: StringName) -> void:

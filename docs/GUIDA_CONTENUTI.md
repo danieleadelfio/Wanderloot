@@ -396,6 +396,10 @@ Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s) ed `eve
 
 Ogni arena ha `item_drops` (`data/equipment/drops_<arena>.tres`, script `ItemDropTable`): `items` (oggetti base possibili, anche senza ricetta), `drop_chance`, `max_tier`, `boss_drops`, `boss_min_tier`. Per un oggetto nuovo trovabile in run basta aggiungerlo alla lista `items` della tabella dell'arena; la rarità segue i `drop_weight` di `rarity_table.tres`.
 
+### 8.7d Fusione e smontaggio
+
+Resa dello smontaggio: `salvage_multiplier` in `rarity_table.tres` e `SALVAGE_SHARE` in `scripts/meta/forge.gd` (25 % del costo della ricetta). Rarità massima per fusione: la penultima della tabella (`Forge.max_fusion_tier`). Un oggetto senza ricetta rende `FALLBACK_SALVAGE` × moltiplicatore.
+
 ### 8.8 Loot, consumabili e abilità
 
 | Cosa | File | Campo | Attuale |

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Fabbro a schede Crafting/Fusione/Smontaggio: due oggetti identici della stessa rarità → rarità successiva con bonus ritirati (fino a Leggendario); smontaggio in materiali secondo la rarità; logica in `Forge`; test (#59).
 - Oggetti trovati in run: `ItemDropTable` per arena (drop per uccisione, boss con almeno un Raro), rarità fino a Leggendario, icona tinta a terra, loot a rischio nell'inventario di run e nel riepilogo, nel baule solo estraendo; test (#58).
 - Rarità e bonus casuali: 6 rarità (`rarity_table.tres`) con colore, numero e qualità dei bonus, abilità da Super raro; bonus tirati da `affix_table.tres`; il craft dà un Comune con bonus propri; nome e bordo colorati, tooltip con bonus e abilità; abilità degli oggetti sempre attive in run; test (#57).
 - 9 slot dell'equipaggiamento (Testa, Guanti, Armatura, Pantaloni, Stivali, 2 Anelli, Amuleto, Bacchetta) con manichino nell'inventario: clic su un oggetto per indossarlo, clic su uno slot per toglierlo; 5 nuovi oggetti base con ricette e icone vettoriali; test (#56).

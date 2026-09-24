@@ -33,6 +33,7 @@ var arena_catalog: ArenaCatalog = preload("res://data/arenas/arena_catalog.tres"
 var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
 var rarity_table: RarityTable = preload("res://data/equipment/rarity_table.tres")
 var affix_table: AffixTable = preload("res://data/equipment/affix_table.tres")
+var recipe_book: RecipeBook = preload("res://data/recipes/recipe_book.tres")
 var _rng := RandomNumberGenerator.new()
 ## Estrazioni riuscite per id di arena.
 var extractions: Dictionary[StringName, int] = {}
@@ -140,6 +141,27 @@ func craft(recipe: RecipeData) -> Crafting.Result:
 ## Crea l'istanza di un oggetto craftato: Comune con i bonus tirati.
 func make_item(base: EquipmentData, tier: int = 0) -> ItemInstance:
 	return ItemRoller.roll(base, tier, rarity_table, affix_table, ability_catalog, _rng)
+
+
+## Fusione dal fabbro (regole in Forge): ritorna il nuovo oggetto o null.
+func fuse(first_uid: int, second_uid: int) -> ItemInstance:
+	var fused := Forge.fuse(loadout.get_item(first_uid), loadout.get_item(second_uid), loadout, rarity_table, make_item)
+	if fused:
+		_mark_changed()
+	return fused
+
+
+func salvage_yield(item: ItemInstance) -> Dictionary[StringName, int]:
+	return Forge.salvage_yield(item, recipe_book, rarity_table)
+
+
+## Smontaggio di un oggetto del baule in materiali.
+func salvage(uid: int) -> bool:
+	var item := loadout.get_item(uid)
+	if item == null or not Forge.salvage(item, loadout, inventory, salvage_yield(item)):
+		return false
+	_mark_changed()
+	return true
 
 
 func equip(uid: int) -> void:
