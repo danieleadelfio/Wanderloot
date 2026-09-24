@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="Resource" path="res://data/weapons/bone_spike.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Pestone"
+kind = 6
+weight = 1.1
+telegraph_time = 1.0
+recovery = 1.2
+radius = 150.0
+damage = 2
+knockback = 700.0
+projectile_count = 14
+projectile = ExtResource("2")

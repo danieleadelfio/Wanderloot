@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Doppia carica"
+kind = 5
+weight = 1.0
+min_phase = 2
+telegraph_time = 0.9
+recovery = 0.4
+charge_speed = 820.0
+charge_distance = 520.0
+charge_lane_radius = 46.0

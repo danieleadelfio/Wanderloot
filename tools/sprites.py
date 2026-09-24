@@ -818,6 +818,41 @@ def build_necromancer():
     save("necro_skull", [skull_svg()], 48)
 
 
+# --- Boss dell'Ossario (M11.3) ---
+def colossus_svg(squash=False):
+    t = ' transform="translate(128 236) scale(1.05 0.95) translate(-128 -236)"' if squash else ""
+    bone = "#e6dcc2"
+    defs = ('<linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3ecd8"/><stop offset="1" stop-color="#a89878"/></linearGradient>'
+            '<radialGradient id="eye"><stop offset="0" stop-color="#fff6c0"/><stop offset="0.5" stop-color="#ff9a3c"/><stop offset="1" stop-color="#ff5a1c" stop-opacity="0"/></radialGradient>')
+    O = 'stroke="%s" stroke-width="7" stroke-linejoin="round"' % OL
+    ribs = "".join('<path d="M%d %d Q128 %d %d %d" stroke="%s" stroke-width="7" fill="none"/>' % (84, y, y + 16, 172, y, OL) for y in (132, 152, 172))
+    body = ('<ellipse cx="128" cy="244" rx="104" ry="12" fill="#000" opacity="0.4"/><g%s>' % t +
+            # gambe
+            '<rect x="82" y="196" width="30" height="46" rx="8" fill="url(#b)" %s/><rect x="144" y="196" width="30" height="46" rx="8" fill="url(#b)" %s/>' % (O, O) +
+            # braccia enormi
+            '<path d="M58 118 L24 196 L50 214 L84 140 Z" fill="url(#b)" %s/><path d="M198 118 L232 196 L206 214 L172 140 Z" fill="url(#b)" %s/>' % (O, O) +
+            '<circle cx="36" cy="208" r="20" fill="url(#b)" %s/><circle cx="220" cy="208" r="20" fill="url(#b)" %s/>' % (O, O) +
+            # torso a gabbia
+            '<path d="M64 112 L192 112 L178 206 L78 206 Z" fill="#3a3040" %s/>' % O + ribs +
+            '<rect x="122" y="112" width="12" height="94" fill="%s" stroke="%s" stroke-width="4"/>' % (bone, OL) +
+            '<path d="M64 112 Q128 90 192 112" stroke="%s" stroke-width="10" fill="none"/>' % bone +
+            # teschio
+            '<path d="M86 70 C86 24 170 24 170 70 C170 96 154 110 128 110 C102 110 86 96 86 70 Z" fill="url(#b)" %s/>' % O +
+            '<circle cx="110" cy="70" r="13" fill="url(#eye)"/><circle cx="146" cy="70" r="13" fill="url(#eye)"/>'
+            '<path d="M104 98 L152 98" stroke="%s" stroke-width="5"/><path d="M114 92 L114 104 M128 92 L128 104 M142 92 L142 104" stroke="%s" stroke-width="3"/>' % (OL, OL) +
+            '</g>')
+    return svg(body, defs)
+
+def bone_spike_svg():
+    return svg('<path d="M4 32 L20 22 L60 30 L60 34 L20 42 Z" fill="#efe6cf" stroke="%s" stroke-width="4" stroke-linejoin="round"/>'
+               '<circle cx="12" cy="26" r="7" fill="#efe6cf" stroke="%s" stroke-width="3"/><circle cx="12" cy="38" r="7" fill="#efe6cf" stroke="%s" stroke-width="3"/>' % (OL, OL, OL), "", 64)
+
+
+def build_colossus():
+    save("bone_colossus", [colossus_svg(), colossus_svg(squash=True)], 256)
+    save("bone_spike", [bone_spike_svg()], 48)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()

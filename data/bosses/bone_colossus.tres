@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="BossData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/drop_entry.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="3"]
+[ext_resource type="Resource" path="res://data/bosses/attacks/colossus_charge.tres" id="a0"]
+[ext_resource type="Resource" path="res://data/bosses/attacks/colossus_stomp.tres" id="a1"]
+[ext_resource type="Resource" path="res://data/bosses/attacks/colossus_spikes.tres" id="a2"]
+[ext_resource type="Resource" path="res://data/bosses/attacks/colossus_double_charge.tres" id="a3"]
+[ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m0"]
+[ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m1"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SkeletonArcher/SkeletonArcher.tscn" id="ps"]
+
+[sub_resource type="Resource" id="d0"]
+script = ExtResource("2")
+material = ExtResource("m0")
+chance = 1.0
+min_amount = 25
+max_amount = 35
+
+[sub_resource type="Resource" id="d1"]
+script = ExtResource("2")
+material = ExtResource("m1")
+chance = 1.0
+min_amount = 2
+max_amount = 4
+
+[resource]
+script = ExtResource("1")
+id = &"bone_colossus"
+display_name = "BOSS_BONE_COLOSSUS"
+max_hp = 600
+move_speed = 55.0
+contact_damage = 3
+contact_knockback = 700.0
+exp_reward = 70
+first_attack_delay = 2.2
+chase_time = 1.5
+phase_two_speed_multiplier = 1.3
+phase_two_tempo_multiplier = 0.7
+phase_two_tint = Color(1, 0.75, 0.6, 1)
+drops = Array[ExtResource("2")]([SubResource("d0"), SubResource("d1")])
+attacks = Array[ExtResource("3")]([ExtResource("a0"), ExtResource("a1"), ExtResource("a2"), ExtResource("a3")])
+phase_two_summon_scene = ExtResource("ps")
+phase_two_summon_count = 4

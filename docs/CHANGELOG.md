@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Boss Colosso d'ossa nell'Ossario: carica in linea con corsia di preavviso, pestone con spuntoni a raggiera, in fase 2 evoca scheletri; sprite, dati (#77).
 - Boss Negromante nell'Ossario: teletrasporto dopo l'attacco, anelli di teschi, evoca arcieri e ghoul, pioggia d'ossa in fase 2; sprite, dati, test sul roster dei boss (#76).
 - Sistema boss esteso: evocazione, pioggia di cerchi, carica in linea, pestone, urlo, balzi a catena, teletrasporto, evocazione in fase 2; più boss possibili per arena; vita di tutti i boss x2; test (#75).
 - Cripta: slime celesti di base, più rari lo Slime tossico (spara gocce avvelenate, alone di nube), lo Slime del vuoto (sfera che diventa un buco nero e attira) e lo Slime di pietra (vita x4, velocità /2); sprite, test (#74).

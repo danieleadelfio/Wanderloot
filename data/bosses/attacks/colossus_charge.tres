@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Carica del colosso"
+kind = 5
+weight = 1.2
+telegraph_time = 1.1
+recovery = 1.4
+charge_speed = 760.0
+charge_distance = 600.0
+charge_lane_radius = 46.0
