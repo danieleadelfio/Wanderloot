@@ -60,6 +60,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 ## 3.1 Componenti di combattimento
 
 - `Health` (HP + segnali `changed`/`damaged`/`died`, nessuna logica di morte), `Hitbox` (infligge danno), `Hurtbox` (riceve danno, inoltra a `Health`, i-frames opzionali), `HitFlash`, `Weapon` (cooldown + segnale `fired`, non istanzia proiettili).
+- Attacchi ad area (M8): sempre preceduti da un `Telegraph` visibile (tempo minimo per uscire dal cerchio a velocità base del player); il danno è un impulso della sua `Hitbox`, non un controllo di distanza nel codice.
 - Enum salvati nei `.tres` (es. `UpgradeData.Stat`): nuove voci solo in coda, mai riordinare o inserire in mezzo.
 - Cadenze e timer che possono scendere sotto un tick di fisica: accumulatore (il timer va sotto zero e si spendono più eventi nello stesso tick), mai un solo evento per tick.
 - `Knockback` (spinta, il corpo chiama `step()` e somma `velocity`), `HitStop` (unico punto che tocca `Engine.time_scale`, ripristino garantito in `_exit_tree`), `Blink` (i-frames visibili). Segnali `Hurtbox.knocked(impulse)` e `invulnerable_changed(active)`.

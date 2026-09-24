@@ -9,6 +9,9 @@ extends CanvasLayer
 @onready var _exp_bar: ProgressBar = %ExpBar
 @onready var _extraction_label: Label = %ExtractionLabel
 @onready var _loot_label: Label = %LootLabel
+@onready var _boss_panel: Control = %BossPanel
+@onready var _boss_name: Label = %BossName
+@onready var _boss_bar: ProgressBar = %BossBar
 
 
 func _ready() -> void:
@@ -38,6 +41,21 @@ func set_exp(current: int, required: int) -> void:
 
 func set_loot(total: int) -> void:
 	_loot_label.text = "Loot a rischio: %d" % total
+
+
+func show_boss(boss_name: String, current: int, maximum: int) -> void:
+	_boss_name.text = boss_name
+	_boss_panel.visible = true
+	set_boss_hp(current, maximum)
+
+
+func set_boss_hp(current: int, maximum: int) -> void:
+	_boss_bar.max_value = maxi(maximum, 1)
+	_boss_bar.value = current
+
+
+func hide_boss() -> void:
+	_boss_panel.visible = false
 
 
 func set_extraction_countdown(seconds: float) -> void:

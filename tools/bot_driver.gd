@@ -5,6 +5,10 @@ extends RefCounted
 ## tools/autoplay.gd (bilanciamento) e tools/flow.gd (playtest end-to-end). Agisce solo via Input actions.
 
 
+## Se vero il bot ignora l'estrazione finche' il boss (comparso) e' vivo: serve a misurare il boss.
+static var fight_boss: bool = false
+
+
 static func drive(a: Node) -> void:
 	var p = a.get_node("%Player")
 	var pos: Vector2 = p.global_position
@@ -16,6 +20,17 @@ static func drive(a: Node) -> void:
 		if d < nd: nd = d; nearest = e
 		if d < 240.0:
 			flee += (pos - e.global_position).normalized() * pow(1.0 - d / 240.0, 2) * 3.0
+	var boss = a.get("boss")
+	if boss != null and is_instance_valid(boss):
+		var db: float = pos.distance_to(boss.global_position)
+		if db < nd: nd = db; nearest = boss
+		if db < 300.0:
+			flee += (pos - boss.global_position).normalized() * pow(1.0 - db / 300.0, 2) * 4.0
+		var zone: Vector3 = boss.danger_zone()
+		if zone.z > 0.0:
+			var c := Vector2(zone.x, zone.y)
+			if pos.distance_to(c) < zone.z + 50.0:
+				flee += (pos - c).normalized() * 5.0 if pos.distance_to(c) > 1.0 else Vector2.RIGHT * 5.0
 	if a.has_node("%EnemyProjectilePool"):
 		for b in a.get_node("%EnemyProjectilePool").get_children():
 			if b.visible and pos.distance_to(b.global_position) < 140.0:
@@ -27,7 +42,8 @@ static func drive(a: Node) -> void:
 	if absf(pos.y) > 330: center.y = -signf(pos.y) * (absf(pos.y) - 330) / 80.0
 	var goal := Vector2.ZERO
 	var ep = a.get_node("%ExtractionPoint")
-	if ep.visible:
+	var hold: bool = fight_boss and not a.get("boss_defeated") and (boss != null or a.get("_boss_timer").time_left > 0.0)
+	if ep.visible and not hold:
 		var to: Vector2 = ep.global_position - pos
 		# Con zona aperta l'estrazione ha la priorita': fuga limitata (serve nelle arene affollate).
 		goal = to.normalized() * (2.2 if to.length() > 30 else 0.0)

@@ -31,6 +31,13 @@ extends Resource
 @export var extraction_data: ExtractionData
 @export var enemies: Array[EnemySpawn] = []
 
+@export_group("Boss")
+## Scena del boss (script Boss); vuota = nessun boss in questa arena.
+@export var boss_scene: PackedScene
+## Secondi dopo l'apertura della zona di estrazione in cui compare il boss.
+@export var boss_delay: float = 20.0
+@export var boss_spawn_min_distance: float = 380.0
+
 @export_group("Sblocco")
 ## Arena in cui servono estrazioni riuscite per sbloccare questa (vuoto = sempre disponibile).
 @export var unlock_arena: StringName = &""

@@ -23,6 +23,13 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
+[sub_resource type="StyleBoxFlat" id="boss_fill"]
+bg_color = Color(0.62, 0.2, 0.85, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
 
@@ -82,3 +89,33 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 1)
 text = "Loot a rischio: 0"
+
+[node name="BossPanel" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = 18.0
+offset_right = 260.0
+offset_bottom = 70.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="BossName" type="Label" parent="BossPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="BossBar" type="ProgressBar" parent="BossPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 16)
+layout_mode = 2
+theme_override_styles/background = SubResource("bar_bg")
+theme_override_styles/fill = SubResource("boss_fill")
+show_percentage = false

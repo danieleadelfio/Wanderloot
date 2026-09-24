@@ -16,3 +16,9 @@ extends Resource
 @export var spread_degrees: float = 10.0
 ## Nemici attraversati prima di sparire (upgrade "Perforazione").
 @export var pierce: int = 0
+
+@export_group("Aspetto")
+## Texture del proiettile; vuota = quella della scena del proiettile (M8, es. proiettili del boss).
+@export var projectile_texture: Texture2D
+## Scala dello sprite del proiettile; 0 = quella della scena.
+@export var projectile_scale: float = 0.0

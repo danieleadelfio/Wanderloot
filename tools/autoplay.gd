@@ -19,7 +19,9 @@ func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 0: runs = int(args[0])
 	for i in range(1, args.size()):
-		if args[i].begins_with("arena="):
+		if args[i] == "boss":
+			BotDriver.fight_boss = true
+		elif args[i].begins_with("arena="):
 			var m = root.get_node("MetaProgression")
 			m.save_path = "user://bot.cfg"
 			for arena in m.arena_catalog.arenas: m.extractions[arena.unlock_arena] = 99
@@ -66,7 +68,7 @@ func _on_end(result) -> void:
 	var rm = root.get_node("RunManager")
 	var gel = last_gel
 	var core = last_core
-	results.append({"r": "EXT" if result == 1 else "DIE", "t": rm.elapsed, "lv": rm.level, "k": rm.kills, "gel": gel, "core": core, "dmg": damage_taken, "loot": last_loot})
+	results.append({"r": "EXT" if result == 1 else "DIE", "t": rm.elapsed, "lv": rm.level, "k": rm.kills, "gel": gel, "core": core, "dmg": damage_taken, "loot": last_loot, "boss": arena.boss_defeated if is_instance_valid(arena) else false})
 	done += 1
 	if done >= runs:
 		_report()
@@ -86,5 +88,6 @@ func _report() -> void:
 	for r in results:
 		for id in r.loot: per_material[id] = per_material.get(id, 0) + r.loot[id]
 	for id in per_material: per_material[id] = snappedf(per_material[id] / float(results.size()), 0.1)
+	print("boss sconfitti: %d/%d" % [results.filter(func(r): return r.boss).size(), results.size()])
 	print("loot medio per run (raccolto, anche se poi perso): ", per_material)
 	print("RUNS=%d extract=%d%% avg_t=%.0fs avg_lv=%.1f avg_kills=%.0f gel/run=%.1f core/run=%.2f death_times=%s" % [n, ext * 100 / n, t / n, lv / n, k / n, gel / n, core / n, tdie])

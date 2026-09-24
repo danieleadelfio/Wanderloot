@@ -14,6 +14,9 @@
 [ext_resource type="AudioStream" path="res://assets/audio/pickup_exp.wav" id="a9"]
 [ext_resource type="AudioStream" path="res://assets/audio/pickup_item.wav" id="a10"]
 [ext_resource type="AudioStream" path="res://assets/audio/enemy_shoot.wav" id="a11"]
+[ext_resource type="AudioStream" path="res://assets/audio/boss_appear.wav" id="b0"]
+[ext_resource type="AudioStream" path="res://assets/audio/boss_warn.wav" id="b1"]
+[ext_resource type="AudioStream" path="res://assets/audio/boss_slam.wav" id="b2"]
 
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("2")
@@ -99,6 +102,27 @@ stream = ExtResource("a11")
 volume_db = -8.0
 pitch_variance = 0.1
 
+[sub_resource type="Resource" id="e_boss_appear"]
+script = ExtResource("2")
+id = &"boss_appear"
+stream = ExtResource("b0")
+volume_db = -2.0
+pitch_variance = 0.0
+
+[sub_resource type="Resource" id="e_boss_warn"]
+script = ExtResource("2")
+id = &"boss_warn"
+stream = ExtResource("b1")
+volume_db = -6.0
+pitch_variance = 0.0
+
+[sub_resource type="Resource" id="e_boss_slam"]
+script = ExtResource("2")
+id = &"boss_slam"
+stream = ExtResource("b2")
+volume_db = -3.0
+pitch_variance = 0.05
+
 [resource]
 script = ExtResource("1")
-entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10"), SubResource("e11")])
+entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10"), SubResource("e11"), SubResource("e_boss_appear"), SubResource("e_boss_warn"), SubResource("e_boss_slam")])

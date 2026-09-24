@@ -65,6 +65,10 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - **Stato M5 (#21)**: nessun tetto alla cadenza di fuoco. Prima l'arma sparava al massimo 1 colpo per tick di fisica (60/s) e l'arrotondamento del cooldown faceva perdere cadenza già da ~30 colpi/s; ora il cooldown è ad accumulatore e nello stesso tick partono tutti i colpi maturati, sfalsati lungo la traiettoria. Scelta di design: gli upgrade possono "rompere" il gioco, è parte del divertimento.
 - **Stato M0**: movimento 8 direzioni (WASD/frecce/stick sinistro), mira col mouse tenendo premuto il tasto sinistro oppure stick destro con auto-fire, fire-rate da `WeaponData`. Implementati hit-flash (nemici e player) e i-frames del player (0.8s, danno da contatto ripetuto finché si resta a contatto). Knockback e hitstop rinviati a M4 (rifinitura).
 
+### 5.1 Boss (M8, #38)
+
+Sistema riutilizzabile: un boss è una scena con lo script condiviso `Boss` + un `BossData` (HP, velocità, contatto, exp, drop, attacchi, fase 2) + una lista di `BossAttack` (.tres). Tipi di attacco: **raffica a ventaglio** mirata al player, **anello** di proiettili (con rotazione tra le ripetizioni), **salto schiacciante** sulla posizione del player. Ogni attacco ha un **preavviso**: carica sul posto (cerchio attorno al boss) per le raffiche, **cerchio rosso a terra** che si riempie per il salto (`Telegraph`): il bersaglio è fissato all'inizio del preavviso, il player ha `telegraph_time + leap_time` per uscirne; a fine riempimento l'area colpisce per un istante. Dopo ogni attacco il boss recupera (si muove piano: finestra per colpirlo). Sotto `phase_two_threshold` HP entra in fase 2: più veloce, attacchi più ravvicinati, sblocca gli attacchi con `min_phase = 2`, colore alterato. Scelta per peso tra gli attacchi della fase. `ArenaData` (gruppo Boss): scena del boss, secondi di ritardo dall'apertura dell'estrazione (default 20), distanza minima di comparsa. Barra HP del boss in alto al centro. I proiettili del boss usano il pool dei proiettili nemici; `WeaponData` ha texture e scala opzionali del proiettile. Alla morte: exp in 6 gemme e drop come i nemici. Il boss non è poolato (uno per run).
+
 ## 6. Loot e crafting (scope MVP)
 
 - I nemici droppano: exp (sempre) + eventualmente 1 tipo di materiale comune.
@@ -124,6 +128,8 @@ res://
   scripts/meta/                      # meta_inventory, equipment_loadout, crafting (logica pura dello stato permanente)
   scripts/combat/                    # health, hitbox, hurtbox, hit_flash, weapon, projectile_pool, knockback, hit_stop, blink, frame_cycler, light_flicker
   scripts/run/                       # enemy_pool, wave_spawner, enemy_movement, spawn_utils, loot_run_inventory, loot_transfer, stat_applier, pickup_pool, pause_state, pause_controller, fog_drift
+  scenes/run/Bosses/boss.gd          # script boss condiviso (macchina a stati guidata da BossData)
+  scenes/run/Telegraph/              # cerchio di preavviso con Hitbox a impulso (attacchi ad area)
   scripts/hub/                       # interactable (punto di interazione, nearest_index testato), spinner (vortice del portale)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
   scenes/hub/Hub/                    # Hub.tscn + hub.gd: piazza esplorabile, scena principale, composition root dell'hub

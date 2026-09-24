@@ -23,6 +23,10 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _exp_remainder: float = 0.0
 
 @onready var _player: Player = %Player
+## Boss della run (null finche' non compare o se l'arena non ne ha). Letto anche dal bot di playtest.
+var boss: Boss = null
+var boss_defeated: bool = false
+var _boss_timer := Timer.new()
 @onready var _enemies: Node2D = %Enemies
 @onready var _enemy_projectile_pool: ProjectilePool = %EnemyProjectilePool
 @onready var _floor: Sprite2D = %Floor
@@ -85,6 +89,9 @@ func _ready() -> void:
 	_extraction_point.extracted.connect(_on_extracted)
 	_extraction_timer.timeout.connect(_open_extraction)
 	_extraction_timer.start(extraction_data.appear_after)
+	_boss_timer.one_shot = true
+	add_child(_boss_timer)
+	_boss_timer.timeout.connect(_spawn_boss)
 	RunManager.start_run(level_curve)
 
 
@@ -209,6 +216,47 @@ func _open_extraction() -> void:
 	)
 	_extraction_point.activate(spawn_position)
 	_sfx.play(&"ui_select")
+	if arena.boss_scene != null:
+		_boss_timer.start(arena.boss_delay)
+
+
+## Il boss compare arena.boss_delay secondi dopo l'apertura dell'estrazione, lontano dal player.
+func _spawn_boss() -> void:
+	if RunManager.state == RunManager.State.ENDED:
+		return
+	boss = arena.boss_scene.instantiate()
+	boss.target = _player
+	boss.position = SpawnUtils.random_point_away(extraction_spawn_rect, _player.global_position, arena.boss_spawn_min_distance)
+	_enemies.add_child(boss)
+	boss.shot_requested.connect(_enemy_projectile_pool.spawn)
+	boss.shot_requested.connect(_sfx.play.bind(&"enemy_shoot").unbind(3))
+	boss.hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
+	boss.attack_started.connect(_on_boss_attack_started)
+	boss.slammed.connect(_sfx.play.bind(&"boss_slam").unbind(2))
+	boss.health.changed.connect(_hud.set_boss_hp)
+	boss.died.connect(_on_boss_died)
+	_hud.show_boss(boss.data.display_name, boss.health.current, boss.health.max_hp)
+	_sfx.play(&"boss_appear")
+
+
+func _on_boss_attack_started(attack: BossAttack) -> void:
+	if attack.kind == BossAttack.Kind.LEAP_SLAM:
+		_sfx.play(&"boss_warn")
+
+
+func _on_boss_died(dead: Boss) -> void:
+	boss_defeated = true
+	_hud.hide_boss()
+	_sfx.play(&"enemy_die")
+	RunManager.register_kill(0)
+	# Exp in piu' gemme e drop garantiti: si raccolgono come quelli dei nemici (magnete).
+	for i in 6:
+		_pickup_pool.spawn_exp(dead.global_position, ceili(dead.data.exp_reward / 6.0))
+	for entry in dead.data.drops:
+		for i in entry.roll(_rng, _player.stats.drop_chance_multiplier):
+			_pickup_pool.spawn_material(dead.global_position, entry.material, 1)
+	dead.queue_free()
+	boss = null
 
 
 func _on_extracted() -> void:

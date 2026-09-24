@@ -161,4 +161,14 @@ for i in range(int(D / 1.2)):
         thump = np.sin(2 * np.pi * sweep(70, 38, 0.16)) * env(n, curve=3) * vol * 0.55
         beat[a:a + n] += thump[:max(0, len(beat) - a)]
 save("music_ossuary", mix(drone, bells, beat), 0.6)
+# --- Boss (M8): comparsa (ruggito gorgogliante), preavviso del salto, impatto ---
+d = 1.1
+roar = square(sweep(70, 45, d), 0.4) * env(int(SR * d), attack=0.08, curve=1.2) * 0.6
+roar = roar + 0.5 * lowpass(noise(d), 0.08) * env(int(SR * d), attack=0.05, curve=1.5)
+save("boss_appear", mix(roar, triangle(sweep(140, 60, d)) * env(int(SR * d), curve=2) * 0.4), 0.7)
+d = 0.5
+save("boss_warn", mix(square(sweep(300, 900, d), 0.25) * env(int(SR * d), attack=0.02, curve=0.8) * 0.35), 0.5)
+d = 0.45
+thud = np.sin(2 * np.pi * sweep(90, 30, d)) * env(int(SR * d), curve=2.5)
+save("boss_slam", mix(thud, 0.7 * lowpass(noise(d), 0.12) * env(int(SR * d), curve=3)), 0.8)
 print("audio:", sorted(os.listdir(OUT)))
