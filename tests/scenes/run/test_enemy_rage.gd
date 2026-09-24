@@ -17,6 +17,17 @@ func _live(enemy: Enemy, seconds: float) -> void:
 		enemy._physics_process(TICK)
 
 
+func test_overtime_boost_resets_from_pool() -> void:
+	var enemy := _enemy()
+	var base_speed := enemy.current_speed()
+	enemy.boost(2.0, 1.25)
+	assert_float(enemy.current_speed()).is_equal_approx(base_speed * 2.0, 0.01)
+	assert_int(enemy.health.max_hp).is_equal(ceili(enemy.data.max_hp * 1.25))
+	enemy.deactivate()
+	enemy.activate(Vector2.ZERO)
+	assert_float(enemy.current_speed()).is_equal_approx(base_speed, 0.01)
+
+
 func test_rage_starts_after_threshold() -> void:
 	var enemy := _enemy()
 	_live(enemy, enemy.data.rage_after - 0.2)

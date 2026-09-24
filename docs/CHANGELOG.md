@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Overtime: 50 s dopo l'apertura dell'estrazione boss ogni 10 s, nemici nuovi in rage, velocità x2, vita +25%; ogni 50 s il livello sale e moltiplica i modificatori; avvisi a 30 e 10 s, annuncio e indicatore nell'HUD; `OvertimeData`/`OvertimeState`, test; bot `stay` (#62).
 - Oggetti a terra con alone pulsante del colore della rarità e suono di drop sempre più epico dal Comune al Mitico (`drop_sound`, `glow_scale` in `rarity_table.tres`) (#61).
 - Smontaggio del fabbro in lavorazione: la scheda mostra Work in progress e non smonta; la resa sarà in materiali ottenibili solo smontando (#60).
 - Fabbro a schede Crafting/Fusione/Smontaggio: due oggetti identici della stessa rarità → rarità successiva con bonus ritirati (fino a Leggendario); smontaggio in materiali secondo la rarità; logica in `Forge`; test (#59).

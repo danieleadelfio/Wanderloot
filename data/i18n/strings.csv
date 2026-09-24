@@ -193,3 +193,7 @@ BLACKSMITH_FUSION_EMPTY,Nessuna coppia da fondere.,No pairs to fuse.,Aucune pair
 BLACKSMITH_SALVAGE_HINT,"Work in progress: lo smontaggio darà materiali che si ottengono solo così, da usare in nuove ricette. Per ora non è disponibile.","Work in progress: salvaging will give materials you can only get this way, used in new recipes. Not available yet.","Work in progress : le démontage donnera des matériaux obtenus uniquement ainsi, pour de nouvelles recettes. Pas encore disponible.","Work in progress: el desguace dará materiales que solo se obtienen así, para nuevas recetas. Aún no disponible."
 BLACKSMITH_SALVAGE_EMPTY,Nessun oggetto nel baule.,No items in the stash.,Aucun objet dans le coffre.,No hay objetos en el cofre.
 BLACKSMITH_SALVAGE_CONFIRM,Clic di nuovo per smontare: %s,Click again to salvage: %s,Cliquez à nouveau pour démonter : %s,Pulsa otra vez para desguazar: %s
+OVERTIME_TITLE,OVERTIME x%d,OVERTIME x%d,PROLONGATION x%d,PRÓRROGA x%d
+OVERTIME_WARNING,Overtime x%d tra %d s,Overtime x%d in %d s,Prolongation x%d dans %d s,Prórroga x%d en %d s
+OVERTIME_WARNING_SUB,Estrai prima che l'arena diventi impossibile,Extract before the arena becomes impossible,Extrayez-vous avant que l'arène devienne impossible,Extrae antes de que la arena sea imposible
+OVERTIME_SUB,Un boss ogni %s s · nemici in rage · velocità x%s · vita +%d%%,A boss every %s s · raged enemies · speed x%s · health +%d%%,Un boss toutes les %s s · ennemis enragés · vitesse x%s · vie +%d %%,Un jefe cada %s s · enemigos furiosos · velocidad x%s · vida +%d%%

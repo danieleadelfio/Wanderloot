@@ -36,6 +36,8 @@ var _choosing_ability: bool = false
 var _buffs: Dictionary = {}
 var boss_defeated: bool = false
 var _boss_timer := Timer.new()
+## Overtime (M11.1): parte all'apertura dell'estrazione.
+var overtime := OvertimeState.new()
 @onready var _enemies: Node2D = %Enemies
 @onready var _enemy_projectile_pool: ProjectilePool = %EnemyProjectilePool
 @onready var _floor: Sprite2D = %Floor
@@ -123,6 +125,9 @@ func _ready() -> void:
 	_boss_timer.one_shot = true
 	add_child(_boss_timer)
 	_boss_timer.timeout.connect(_spawn_boss)
+	overtime.warned.connect(_on_overtime_warned)
+	overtime.level_changed.connect(_on_overtime_level)
+	overtime.boss_due.connect(_spawn_bosses.bind(1))
 	RunManager.start_run(level_curve)
 
 
@@ -374,6 +379,28 @@ func _open_extraction() -> void:
 	_sfx.play(&"ui_select")
 	if arena.boss_scene != null:
 		_boss_timer.start(arena.boss_delay)
+	overtime.start(arena.overtime)
+
+
+func _physics_process(delta: float) -> void:
+	if RunManager.state == RunManager.State.RUNNING and not get_tree().paused:
+		overtime.tick(delta)
+
+
+func _on_overtime_warned(seconds: int, next_level: int) -> void:
+	_hud.announce(tr("OVERTIME_WARNING") % [next_level, seconds], tr("OVERTIME_WARNING_SUB"))
+	_sfx.play(&"overtime_warn")
+
+
+## Nuovo livello: nemici nuovi in rage, piu' veloci e resistenti; i boss arrivano da overtime.boss_due.
+func _on_overtime_level(level: int) -> void:
+	_wave_spawner.overtime_raged = arena.overtime.spawn_raged
+	_wave_spawner.overtime_speed = overtime.speed_multiplier()
+	_wave_spawner.overtime_hp = overtime.hp_multiplier()
+	_hud.set_overtime(level)
+	var subtitle := tr("OVERTIME_SUB") % [snappedf(overtime.boss_interval(), 0.1), snappedf(overtime.speed_multiplier(), 0.1), roundi((overtime.hp_multiplier() - 1.0) * 100.0)]
+	_hud.announce(tr("OVERTIME_TITLE") % level, subtitle, 3.5)
+	_sfx.play(&"overtime_start")
 
 
 ## I boss compaiono arena.boss_delay secondi dopo l'apertura dell'estrazione, lontano dal player
@@ -384,7 +411,7 @@ func _spawn_boss() -> void:
 
 
 func _spawn_bosses(count: int) -> void:
-	if RunManager.state == RunManager.State.ENDED or count <= 0:
+	if RunManager.state == RunManager.State.ENDED or count <= 0 or arena.boss_scene == null:
 		return
 	var taken: Array[Vector2] = []
 	for alive in bosses:

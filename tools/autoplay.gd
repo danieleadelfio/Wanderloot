@@ -26,6 +26,8 @@ func _initialize() -> void:
 	for i in range(1, args.size()):
 		if args[i] == "boss":
 			BotDriver.fight_boss = true
+		elif args[i] == "stay":
+			BotDriver.stay = true
 		elif args[i].begins_with("arena="):
 			var m = root.get_node("MetaProgression")
 			m.save_path = "user://bot.cfg"

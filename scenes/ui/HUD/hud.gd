@@ -18,6 +18,11 @@ extends CanvasLayer
 @onready var _event_subtitle: Label = %EventSubtitle
 @onready var _event_bar: ProgressBar = %EventBar
 var _banner_tween: Tween
+@onready var _overtime_label: Label = %OvertimeLabel
+@onready var _announce: Control = %Announce
+@onready var _announce_title: Label = %AnnounceTitle
+@onready var _announce_subtitle: Label = %AnnounceSubtitle
+var _announce_tween: Tween
 @onready var _boss_name: Label = %BossName
 @onready var _boss_bar: ProgressBar = %BossBar
 
@@ -133,6 +138,26 @@ func set_boss_hp(current: int, maximum: int) -> void:
 
 func hide_boss() -> void:
 	_boss_panel.visible = false
+
+
+## Annuncio breve (overtime): sotto il banner degli eventi, sparisce da solo dopo `hold` secondi.
+func announce(title: String, subtitle: String, hold: float = 2.5) -> void:
+	_announce_title.text = title
+	_announce_subtitle.text = subtitle
+	_announce.modulate.a = 1.0
+	_announce.show()
+	if _announce_tween:
+		_announce_tween.kill()
+	_announce_tween = create_tween()
+	_announce_tween.tween_interval(hold)
+	_announce_tween.tween_property(_announce, "modulate:a", 0.0, 0.5)
+	_announce_tween.tween_callback(_announce.hide)
+
+
+## Livello di overtime sempre visibile sotto l'estrazione (0 = nascosto).
+func set_overtime(level: int) -> void:
+	_overtime_label.visible = level > 0
+	_overtime_label.text = tr("OVERTIME_TITLE") % level
 
 
 func set_extraction_countdown(seconds: float) -> void:

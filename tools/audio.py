@@ -207,3 +207,11 @@ save("drop_legendary", mix(boom(0.8) * 0.8, brass(55, 1.2), brass(62, 1.2), bras
 pad = lambda n, d: lowpass(sum(square(np.cumsum(np.full(int(SR * d), note(n) * (1 + dt))) / SR, 0.5) for dt in (-0.006, 0.0, 0.006)), 0.08) * env(int(SR * d), attack=0.25, curve=1.0)
 save("drop_mythic", mix(boom(1.2, 90, 30), np.pad(boom(0.9, 70, 30) * 0.6, (int(SR * 0.45), 0)), pad(50, 2.2) * 0.5, pad(57, 2.2) * 0.4, pad(62, 2.2) * 0.4, brass(62, 1.6), brass(69, 1.6), np.pad(arp((74, 78, 81, 86, 90, 93, 98), 0.08, 0.4), (int(SR * 0.2), 0)), np.pad(shimmer(1.8, 100), (int(SR * 0.6), 0))), 0.8)
 print("drop sounds ok")
+# --- Overtime (M11.1): allarme a due toni, gong grave all'ingresso ---
+d = 0.9
+alarm = mix(*[np.pad(square(np.cumsum(np.full(int(SR * 0.14), note(n))) / SR, 0.4) * env(int(SR * 0.14), curve=0.8) * 0.5, (int(SR * 0.16 * i), 0)) for i, n in enumerate((81, 76, 81, 76))])
+save("overtime_warn", alarm, 0.5)
+d = 2.0
+gong = mix(np.sin(2 * np.pi * sweep(80, 55, d)) * env(int(SR * d), curve=1.3), 0.5 * np.sin(2 * np.pi * 131 * t(d)) * env(int(SR * d), curve=2.2), 0.35 * np.sin(2 * np.pi * 197 * t(d)) * env(int(SR * d), curve=3), 0.4 * lowpass(noise(d), 0.03) * env(int(SR * d), attack=0.05, curve=1.5))
+save("overtime_start", gong, 0.8)
+print("overtime sounds ok")

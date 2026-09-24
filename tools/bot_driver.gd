@@ -7,6 +7,8 @@ extends RefCounted
 
 ## Se vero il bot ignora l'estrazione finche' il boss (comparso) e' vivo: serve a misurare il boss.
 static var fight_boss: bool = false
+## Se vero il bot non va mai all'estrazione: serve a misurare l'overtime (M11.1).
+static var stay: bool = false
 
 
 static func drive(a: Node) -> void:
@@ -51,6 +53,8 @@ static func drive(a: Node) -> void:
 		var d_in: float = pos.distance_to(pc)
 		goal = pos.direction_to(pc) * (2.5 if d_in > penta.z * 0.5 else 1.2 * d_in / penta.z)
 		flee = flee.limit_length(0.5 if d_in < penta.z * 0.7 else 0.1)
+		hold = true
+	if stay:
 		hold = true
 	if ep.visible and not hold:
 		var to: Vector2 = ep.global_position - pos

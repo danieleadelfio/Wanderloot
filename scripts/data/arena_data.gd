@@ -35,6 +35,8 @@ extends Resource
 @export var consumables: ConsumableTable
 ## Oggetti di equipaggiamento trovabili in run (M11, #58).
 @export var item_drops: ItemDropTable
+## Overtime dopo l'apertura dell'estrazione (M11.1, #62). null = nessun overtime.
+@export var overtime: OvertimeData
 
 @export_group("Boss")
 ## Scena del boss (script Boss); vuota = nessun boss in questa arena.

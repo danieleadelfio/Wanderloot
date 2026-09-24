@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="OvertimeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/overtime_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+start_after = 50.0
+level_every = 50.0
+warnings = PackedFloat32Array(30, 10)
+boss_interval = 10.0
+min_boss_interval = 2.0
+speed_multiplier = 2.0
+hp_bonus = 0.25
+spawn_raged = true

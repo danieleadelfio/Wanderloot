@@ -376,6 +376,10 @@ File in `data/run/` (`extraction_default` = Cripta, `extraction_ossuary`): `appe
 | Attacchi | `data/bosses/attacks/king_slime_*.tres` | `weight`, `telegraph_time`, `recovery`, `projectile_count`, `repeats`, `radius`, `damage` | vedi GDD §5.1 |
 | Proiettili del boss | `data/weapons/king_slime_goo.tres` | `damage`, `projectile_speed`, `projectile_lifetime` | 1, 220, 3 s |
 
+### 8.5b Overtime
+
+`data/run/overtime_default.tres` (assegnato in `ArenaData.overtime`, vuoto = niente overtime): `start_after` (50 s dall'apertura dell'estrazione), `level_every` (50 s), `warnings` (30, 10), `boss_interval` (10 s, diviso per il livello), `min_boss_interval` (2 s), `speed_multiplier` (x2, per livello), `hp_bonus` (+25%, per livello), `spawn_raged`. Per misurarlo: `tools/autoplay.gd -- N stay` (il bot non estrae mai) e guardare `death_times`.
+
 ### 8.7 Eventi
 
 Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s) ed `events` (quali eventi possono uscire).

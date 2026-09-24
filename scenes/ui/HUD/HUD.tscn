@@ -84,6 +84,15 @@ unique_name_in_owner = true
 layout_mode = 2
 text = ""
 
+[node name="OvertimeLabel" type="Label" parent="Margin/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.25, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = ""
+
 [node name="LootLabel" type="Label" parent="Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -141,6 +150,39 @@ layout_mode = 2
 theme_override_styles/background = SubResource("bar_bg")
 theme_override_styles/fill = SubResource("boss_fill")
 show_percentage = false
+
+[node name="Announce" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -360.0
+offset_top = 215.0
+offset_right = 360.0
+offset_bottom = 300.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="AnnounceTitle" type="Label" parent="Announce"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.35, 0.28, 1)
+theme_override_colors/font_outline_color = Color(0.15, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 38
+horizontal_alignment = 1
+
+[node name="AnnounceSubtitle" type="Label" parent="Announce"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="EventBanner" type="VBoxContainer" parent="."]
 unique_name_in_owner = true

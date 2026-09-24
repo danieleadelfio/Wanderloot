@@ -14,6 +14,8 @@ signal shot_requested(origin: Vector2, direction: Vector2, weapon: WeaponData)
 var target: Node2D
 
 var is_raged: bool = false
+## Overtime: velocita' dei nemici nuovi moltiplicata (1 = normale).
+var speed_multiplier: float = 1.0
 
 var _freeze_left: float = 0.0
 var _alive_time: float = 0.0
@@ -58,6 +60,7 @@ func _physics_process(delta: float) -> void:
 func activate(spawn_position: Vector2) -> void:
 	global_position = spawn_position
 	health.reset(data.max_hp)
+	speed_multiplier = 1.0
 	_knockback.reset()
 	_freeze_left = 0.0
 	_reset_rage()
@@ -103,8 +106,14 @@ func force_rage() -> void:
 		_enter_rage()
 
 
+## Overtime (M11.1): nemico appena comparso piu' veloce e con piu' vita.
+func boost(speed: float, hp: float) -> void:
+	speed_multiplier = speed
+	health.reset(ceili(data.max_hp * hp))
+
+
 func current_speed() -> float:
-	return data.move_speed * (data.rage_speed_multiplier if is_raged else 1.0)
+	return data.move_speed * (data.rage_speed_multiplier if is_raged else 1.0) * speed_multiplier
 
 
 func _enter_rage() -> void:

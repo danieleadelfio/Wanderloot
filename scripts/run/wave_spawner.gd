@@ -16,6 +16,10 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Ondata (Pentagramma di sangue): tetto dei vivi moltiplicato e nuovi mostri gia' in rage.
 var surge_multiplier: float = 1.0
 var spawn_raged: bool = false
+## Overtime (M11.1): nuovi mostri in rage, piu' veloci e con piu' vita. Indipendente dal Pentagramma.
+var overtime_raged: bool = false
+var overtime_speed: float = 1.0
+var overtime_hp: float = 1.0
 
 
 func _ready() -> void:
@@ -58,8 +62,12 @@ func _spawn_batch(count: int) -> void:
 			return
 		var spawn_position := SpawnUtils.random_point_away(spawn_rect, _target.global_position, spawn_min_distance)
 		var enemy := _pools[index].spawn(spawn_position, _target)
-		if enemy and spawn_raged:
+		if enemy == null:
+			continue
+		if spawn_raged or overtime_raged:
 			enemy.force_rage()
+		if overtime_speed != 1.0 or overtime_hp != 1.0:
+			enemy.boost(overtime_speed, overtime_hp)
 
 
 func start(target: Node2D) -> void:
