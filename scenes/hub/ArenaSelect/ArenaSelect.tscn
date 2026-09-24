@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/ArenaSelect/arena_select.gd" id="1"]
+
+[node name="ArenaSelect" type="PanelContainer"]
+size_flags_horizontal = 3
+script = ExtResource("1")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Portale"
+
+[node name="ArenaList" type="VBoxContainer" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2

@@ -11,6 +11,7 @@ var _material_icons: Dictionary[StringName, Texture2D] = {}
 @onready var _stash_list: VBoxContainer = %StashList
 @onready var _blacksmith: Blacksmith = %Blacksmith
 @onready var _loadout_panel: LoadoutPanel = %LoadoutPanel
+@onready var _arena_select: ArenaSelect = %ArenaSelect
 @onready var _sfx: SfxPlayer = %Sfx
 @onready var _start_button: Button = %StartButton
 
@@ -27,6 +28,7 @@ func _ready() -> void:
 	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
 	_loadout_panel.equip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
+	_arena_select.arena_selected.connect(_on_arena_selected)
 	_refresh()
 	_start_button.grab_focus()
 
@@ -35,6 +37,7 @@ func _refresh() -> void:
 	_refresh_stash(MetaProgression.inventory.to_dictionary())
 	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names)
 	_loadout_panel.refresh(MetaProgression.loadout)
+	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id)
 	_ensure_focus.call_deferred()
 
 
@@ -69,6 +72,11 @@ func _refresh_stash(amounts: Dictionary[StringName, int]) -> void:
 func _on_craft_requested(recipe: RecipeData) -> void:
 	if MetaProgression.craft(recipe) == Crafting.Result.OK:
 		_sfx.play(&"craft")
+
+
+func _on_arena_selected(id: StringName) -> void:
+	if MetaProgression.select_arena(id):
+		_sfx.play(&"ui_select")
 
 
 func _on_start_pressed() -> void:

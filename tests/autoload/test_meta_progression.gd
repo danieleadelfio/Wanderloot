@@ -79,6 +79,42 @@ func test_unknown_or_not_owned_equipment_is_discarded_on_load() -> void:
 	assert_str(String(reloaded.loadout.equipped_id(EquipmentData.Slot.WEAPON))).is_equal("gel_wand")
 
 
+func test_extractions_and_selected_arena_are_saved() -> void:
+	_meta.register_extraction(&"crypt")
+	_meta.register_extraction(&"crypt")
+	assert_bool(_meta.select_arena(&"crypt")).is_true()
+	var reloaded := _reload()
+	assert_int(reloaded.extractions.get(&"crypt", 0)).is_equal(2)
+	assert_str(String(reloaded.current_arena().id)).is_equal("crypt")
+
+
+func test_locked_or_unknown_arena_cannot_be_selected() -> void:
+	var locked := ArenaData.new()
+	locked.id = &"deep"
+	locked.unlock_arena = &"crypt"
+	locked.unlock_extractions = 2
+	var catalog := ArenaCatalog.new()
+	catalog.arenas = [load("res://data/arenas/crypt.tres"), locked] as Array[ArenaData]
+	_meta.arena_catalog = catalog
+	assert_bool(_meta.select_arena(&"deep")).is_false()
+	assert_bool(_meta.select_arena(&"nowhere")).is_false()
+	_meta.register_extraction(&"crypt")
+	_meta.register_extraction(&"crypt")
+	assert_bool(_meta.select_arena(&"deep")).is_true()
+	assert_str(String(_meta.current_arena().id)).is_equal("deep")
+
+
+func test_v2_save_loads_with_no_extractions_and_first_arena() -> void:
+	var config := ConfigFile.new()
+	config.set_value("meta", "version", 2)
+	config.set_value("materials", "slime_gel", 3)
+	config.save(TEST_PATH)
+	var reloaded := _reload()
+	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(3)
+	assert_bool(reloaded.extractions.is_empty()).is_true()
+	assert_str(String(reloaded.current_arena().id)).is_equal("crypt")
+
+
 func _reload() -> Node:
 	var reloaded: Node = auto_free(preload("res://autoload/meta_progression.gd").new())
 	reloaded.save_path = TEST_PATH

@@ -48,6 +48,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - **Chiamate differite (`call_deferred`) e `await`**: al rientro il nodo può essere uscito dall'albero (cambio scena). Controllare `is_inside_tree()` prima di usare viewport/tree.
 - **Pausa**: si usa `get_tree().paused`; la UI che deve funzionare in pausa ha `process_mode = ALWAYS`. La pausa segue lo stato della run: `RunManager` cambia solo stato (nessun accesso alla scena, così resta testabile come logica pura) e la composition root applica `paused` reagendo a `state_changed`.
 
+- **Punti di scrittura di `MetaProgression`**: `deposit_run_loot` (solo dopo un'estrazione), `craft`, `equip`/`unequip`, `register_extraction` (solo dopo un'estrazione), `select_arena`. Nessun altro sistema scrive lo stato permanente.
 - **Persistenza**: solo `MetaProgression` legge/scrive su disco, in `user://` con `ConfigFile` e chiave `version` per future migrazioni. Ogni cambio di formato alza `SAVE_VERSION`, resta compatibile con le versioni precedenti (sezioni mancanti = default) e ha un test che carica un file della versione vecchia. Sul disco si salvano id, mai Resource: al caricamento si risolvono via catalogo (`EquipmentCatalog`) e gli id sconosciuti si scartano. Mai caricare `.tres`/`.res` da `user://` (possono contenere script eseguibili). Logica di inventario in classi pure (`MetaInventory`) separate dall'I/O, così si testano senza file.
 
 ## 3.1 Componenti di combattimento

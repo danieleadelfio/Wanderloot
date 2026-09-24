@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="ArenaData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/arena_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/enemy_spawn.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/wall.png" id="4"]
+[ext_resource type="AudioStream" path="res://assets/audio/music_arena.wav" id="5"]
+[ext_resource type="Resource" path="res://data/waves/wave_default.tres" id="6"]
+[ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/EnemyBasic/EnemyBasic.tscn" id="8"]
+
+[sub_resource type="Resource" id="slime"]
+script = ExtResource("2")
+scene = ExtResource("8")
+weight = 1.0
+min_time = 0.0
+
+[resource]
+script = ExtResource("1")
+id = &"crypt"
+display_name = "Cripta"
+description = "Sotterranei umidi infestati dagli slime. L'arena iniziale."
+floor_texture = ExtResource("3")
+wall_texture = ExtResource("4")
+ambient_color = Color(0.4, 0.38, 0.5, 1)
+player_light_color = Color(1, 0.86, 0.66, 1)
+player_light_energy = 1.05
+player_light_scale = 3.6
+torches_per_wall = 5
+torch_color = Color(1, 0.62, 0.32, 1)
+music = ExtResource("5")
+wave_data = ExtResource("6")
+extraction_data = ExtResource("7")
+enemies = Array[ExtResource("2")]([SubResource("slime")])
+unlock_arena = &""
+unlock_extractions = 0

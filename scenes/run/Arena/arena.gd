@@ -1,22 +1,30 @@
 extends Node2D
 ## Composition root della run: collega i segnali tra player, nemici, pool, HUD e RunManager.
+## L'arena si configura da ArenaData (M7): aspetto, luci, musica, ondate, nemici.
 
 @export var level_curve: LevelCurve
 @export var upgrade_table: UpgradeTable
 @export var choices_per_level: int = 3
-@export var extraction_data: ExtractionData
+## Se vuoto si usa l'arena scelta in MetaProgression (portale).
+@export var arena_override: ArenaData
 @export var extraction_spawn_rect: Rect2 = Rect2(-700.0, -400.0, 1400.0, 800.0)
 @export var torch_scene: PackedScene = preload("res://scenes/run/Torch/Torch.tscn")
 ## Torce per lato lungo (muro alto e basso), distribuite in modo uniforme.
-@export var torches_per_wall: int = 5
 
+var arena: ArenaData
+var extraction_data: ExtractionData
+var _enemy_pools: Array[EnemyPool] = []
 var _pending_level_ups: int = 0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Exp frazionaria dovuta al moltiplicatore "Saggezza", accumulata fino all'unità successiva.
 var _exp_remainder: float = 0.0
 
 @onready var _player: Player = %Player
-@onready var _enemy_pool: EnemyPool = %EnemyPool
+@onready var _enemies: Node2D = %Enemies
+@onready var _floor: Sprite2D = %Floor
+@onready var _wall_tiles: Node2D = %WallTiles
+@onready var _ambient: CanvasModulate = %Ambient
+@onready var _music: AudioStreamPlayer = %Music
 @onready var _wave_spawner: WaveSpawner = %WaveSpawner
 @onready var _projectile_pool: ProjectilePool = %ProjectilePool
 @onready var _pickup_pool: PickupPool = %PickupPool
@@ -37,7 +45,9 @@ var _exp_remainder: float = 0.0
 func _ready() -> void:
 	get_tree().paused = false
 	_rng.randomize()
-	_place_torches(torches_per_wall)
+	arena = arena_override if arena_override != null else MetaProgression.current_arena()
+	extraction_data = arena.extraction_data
+	_apply_arena_look()
 	RunManager.state_changed.connect(_on_run_state_changed)
 	RunManager.run_ended.connect(_on_run_ended)
 	RunManager.leveled_up.connect(_on_leveled_up)
@@ -54,12 +64,11 @@ func _ready() -> void:
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
 	_player.begin_run(MetaProgression.equipped_items())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
-	_enemy_pool.enemy_died.connect(_on_enemy_died)
+	_create_enemy_pools()
 	_pickup_pool.target = _player
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pickup_pool.exp_collected.connect(_on_exp_collected)
 	_pickup_pool.material_collected.connect(_on_material_collected)
-	_enemy_pool.enemy_hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
 	_wave_spawner.start(_player)
 	_extraction_point.data = extraction_data
 	_extraction_indicator.target = _extraction_point
@@ -70,14 +79,54 @@ func _ready() -> void:
 	RunManager.start_run(level_curve)
 
 
+## Nemici vivi in tutti i pool (usato anche dagli strumenti di playtest).
+func active_enemies() -> Array[Enemy]:
+	var result: Array[Enemy] = []
+	for pool in _enemy_pools:
+		for enemy in pool.get_children():
+			if enemy is Enemy and enemy.visible:
+				result.append(enemy)
+	return result
+
+
+func _create_enemy_pools() -> void:
+	for spawn in arena.enemies:
+		var pool := EnemyPool.new()
+		pool.enemy_scene = spawn.scene
+		pool.initial_size = 24
+		_enemies.add_child(pool)
+		pool.enemy_died.connect(_on_enemy_died)
+		pool.enemy_hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
+		_enemy_pools.append(pool)
+	_wave_spawner.wave_data = arena.wave_data
+	_wave_spawner.configure(arena.enemies, _enemy_pools)
+
+
+func _apply_arena_look() -> void:
+	if arena.floor_texture:
+		_floor.texture = arena.floor_texture
+	if arena.wall_texture:
+		for wall in _wall_tiles.get_children():
+			(wall as Sprite2D).texture = arena.wall_texture
+	_ambient.color = arena.ambient_color
+	_player.light.color = arena.player_light_color
+	_player.light.energy = arena.player_light_energy
+	_player.light.texture_scale = arena.player_light_scale
+	_place_torches(arena.torches_per_wall, arena.torch_color)
+	if arena.music:
+		_music.stream = arena.music
+		_music.play()
+
+
 ## Torce sui muri alto e basso (i muri visibili sono a y = ±484).
-func _place_torches(per_wall: int) -> void:
+func _place_torches(per_wall: int, color: Color) -> void:
 	for i in per_wall:
 		var x := lerpf(-640.0, 640.0, (i + 0.5) / per_wall)
 		for y in [-462.0, 462.0]:
 			var torch := torch_scene.instantiate() as Node2D
 			torch.position = Vector2(x, y)
 			_torches.add_child(torch)
+			(torch.get_node("Light") as PointLight2D).color = color
 
 
 func _process(_delta: float) -> void:
@@ -175,6 +224,8 @@ func _on_run_ended(result: RunManager.Result) -> void:
 	_level_up_choice.hide()
 	var extracted := result == RunManager.Result.EXTRACTED
 	_sfx.play(&"extract" if extracted else &"player_death")
+	if extracted:
+		MetaProgression.register_extraction(arena.id)
 	# Unico punto in cui il loot di run raggiunge MetaProgression (GDD §4).
 	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot)
 	_run_end_screen.present(

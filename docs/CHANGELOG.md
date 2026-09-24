@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Arene guidate dai dati: `ArenaData` (aspetto, luci, musica, ondate, nemici con peso e tempo minimo, sblocco), `ArenaCatalog`, spawner multi-nemico, pannello Portale nell'hub, estrazioni per arena e arena scelta nel salvataggio v3 (#32).
 - Atmosfera cupa nella Cripta: ambiente scurito, luce portata dal player, torce tremolanti, vignettatura; proiettili, pickup e zona di estrazione restano luminosi (#31).
 - Bilanciamento dal playtest: rage più veloce (×1,8) e fase avanzata delle ondate dopo 60s (spawn 40% più rapido, +20 nemici vivi) (#30).
 - Rage dei nemici: dopo 5s in vita lo slime diventa rosso, più veloce (×1,5) e più dannoso (+1); valori in `EnemyData`, test dedicati (#29).

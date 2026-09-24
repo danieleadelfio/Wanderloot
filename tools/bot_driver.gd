@@ -11,8 +11,7 @@ static func drive(a: Node) -> void:
 	var nearest = null
 	var nd := INF
 	var flee := Vector2.ZERO
-	for e in a.get_node("%EnemyPool").get_children():
-		if not e.visible: continue
+	for e in a.active_enemies():
 		var d: float = pos.distance_to(e.global_position)
 		if d < nd: nd = d; nearest = e
 		if d < 240.0:
