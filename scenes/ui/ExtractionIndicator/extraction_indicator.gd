@@ -4,7 +4,7 @@ extends Control
 ## Trovato nel playtest M4: con la zona a 120s in un'arena piu' grande dello schermo, senza
 ## indicatore il giocatore non sa dove andare.
 
-const COLOR: Color = Color(0.3, 1.0, 0.55)
+const COLOR: Color = Color(1.0, 0.85, 0.2)
 @export var margin: float = 28.0
 @export var size_px: float = 22.0
 

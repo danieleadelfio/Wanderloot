@@ -45,7 +45,7 @@ color = Color(1, 0.6, 0.2, 1)
 [node name="Shadow" type="Sprite2D" parent="." unique_id=1563215614]
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("9")
-offset = Vector2(0, 104)
+offset = Vector2(0, 96)
 
 [node name="Body" type="Node2D" parent="." unique_id=1330869856]
 unique_name_in_owner = true

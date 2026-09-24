@@ -111,7 +111,7 @@ func _begin_attack() -> void:
 		# Il bersaglio e' fissato ora: il player ha telegraph_time + leap_time per uscire dal cerchio.
 		_leap_to = target.global_position
 		_impact.start(_leap_to, _attack.radius, _attack.telegraph_time + _attack.leap_time, _attack.damage, _attack.knockback)
-	else:
+	elif _attack.show_windup:
 		_windup.start(global_position, windup_radius, _attack.telegraph_time)
 	attack_started.emit(_attack)
 

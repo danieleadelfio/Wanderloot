@@ -13,6 +13,9 @@ enum Kind { AIMED_FAN, RING, LEAP_SLAM }
 @export_range(1, 2) var min_phase: int = 1
 ## Secondi di preavviso prima del colpo (cerchio o carica attorno al boss): il tempo per scappare.
 @export var telegraph_time: float = 0.8
+## Mostra la carica sul posto (cerchio attorno al boss) durante il preavviso delle raffiche.
+## Il cerchio del salto si vede sempre.
+@export var show_windup: bool = true
 ## Pausa dopo l'attacco, in cui il boss si muove lentamente (finestra per colpirlo).
 @export var recovery: float = 1.0
 
