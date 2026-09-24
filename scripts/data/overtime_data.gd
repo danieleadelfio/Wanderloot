@@ -18,3 +18,6 @@ extends Resource
 @export var hp_bonus: float = 0.25
 ## I nemici nuovi compaiono gia' in rage.
 @export var spawn_raged: bool = true
+## Tetto dei nemici vivi (livello N: x max_alive_multiplier * N) e frequenza delle ondate (x spawn_rate_multiplier * N).
+@export var max_alive_multiplier: float = 1.5
+@export var spawn_rate_multiplier: float = 1.5

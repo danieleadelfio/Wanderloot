@@ -406,6 +406,8 @@ func _on_overtime_level(level: int) -> void:
 	_wave_spawner.overtime_raged = arena.overtime.spawn_raged
 	_wave_spawner.overtime_speed = overtime.speed_multiplier()
 	_wave_spawner.overtime_hp = overtime.hp_multiplier()
+	_wave_spawner.overtime_alive = overtime.max_alive_multiplier()
+	_wave_spawner.overtime_rate = overtime.spawn_rate_multiplier()
 	_hud.set_overtime(level)
 	var subtitle := tr("OVERTIME_SUB") % [overtime.bosses_per_wave, snappedf(overtime.boss_interval(), 0.1), snappedf(overtime.speed_multiplier(), 0.1), roundi((overtime.hp_multiplier() - 1.0) * 100.0)]
 	_hud.announce(tr("OVERTIME_TITLE") % level, subtitle, 3.5)

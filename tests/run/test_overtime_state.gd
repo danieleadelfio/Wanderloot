@@ -55,6 +55,8 @@ func test_each_level_multiplies_the_modifiers() -> void:
 	assert_float(_state.speed_multiplier()).is_equal_approx(6.0, 0.001)
 	assert_float(_state.hp_multiplier()).is_equal_approx(1.75, 0.001)
 	assert_float(_state.boss_interval()).is_equal_approx(10.0 / 3.0, 0.001)
+	assert_float(_state.max_alive_multiplier()).is_equal_approx(4.5, 0.001)
+	assert_float(_state.spawn_rate_multiplier()).is_equal_approx(4.5, 0.001)
 	# Avvisi anche prima di ogni livello successivo.
 	assert_bool(_warnings.has([10, 3])).is_true()
 

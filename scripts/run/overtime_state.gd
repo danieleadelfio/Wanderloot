@@ -63,6 +63,14 @@ func speed_multiplier() -> float:
 	return data.speed_multiplier * level if level > 0 else 1.0
 
 
+func max_alive_multiplier() -> float:
+	return data.max_alive_multiplier * level if level > 0 else 1.0
+
+
+func spawn_rate_multiplier() -> float:
+	return data.spawn_rate_multiplier * level if level > 0 else 1.0
+
+
 func hp_multiplier() -> float:
 	return 1.0 + data.hp_bonus * level
 

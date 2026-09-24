@@ -3,6 +3,9 @@ extends Node
 ## Spawna nemici secondo WaveData scegliendo il tipo tra gli EnemySpawn dell'arena (un EnemyPool per tipo).
 ## Avviato e configurato dalla composition root.
 
+## Tetto assoluto dei nemici vivi (prestazioni), anche in overtime.
+const MAX_ALIVE: int = 320
+
 @export var wave_data: WaveData
 @export var spawn_rect: Rect2 = Rect2(-740.0, -440.0, 1480.0, 880.0)
 @export var spawn_min_distance: float = 300.0
@@ -20,6 +23,9 @@ var spawn_raged: bool = false
 var overtime_raged: bool = false
 var overtime_speed: float = 1.0
 var overtime_hp: float = 1.0
+## Overtime (M11.4): tetto dei vivi e frequenza delle ondate moltiplicati; mai oltre MAX_ALIVE.
+var overtime_alive: float = 1.0
+var overtime_rate: float = 1.0
 
 
 func _ready() -> void:
@@ -45,8 +51,9 @@ func _physics_process(delta: float) -> void:
 	_cooldown -= delta
 	if _cooldown > 0.0 or _pools.is_empty():
 		return
-	_cooldown = wave_data.interval_at(_elapsed)
-	var free_slots := roundi(wave_data.max_alive_at(_elapsed) * surge_multiplier) - active_count()
+	_cooldown = wave_data.interval_at(_elapsed) / maxf(overtime_rate, 0.01)
+	var cap := mini(roundi(wave_data.max_alive_at(_elapsed) * surge_multiplier * overtime_alive), MAX_ALIVE)
+	var free_slots := cap - active_count()
 	_spawn_batch(mini(wave_data.batch_at(_elapsed), free_slots))
 
 

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Overtime: a ogni livello anche il tetto dei nemici vivi e la frequenza delle ondate crescono (x1,5 per livello), tetto assoluto 320; test (#84).
 - Sfera dello Slime del vuoto grande il doppio e con raggio di attrazione doppio (360 px) (#83).
 - Baule: N gialla sugli oggetti nuovi (estratti, craftati, fusi) fino al passaggio del mouse o all'equipaggiamento, salvata; filtro Mostra per nuovi, rarità o categoria; test (#81).
 - Inventario di run: manichino dell'hub in sola lettura con tooltip, raccolto in una griglia scorrevole con statistiche e confronto (#80).

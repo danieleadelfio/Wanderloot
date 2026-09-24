@@ -12,3 +12,5 @@ min_boss_interval = 2.0
 speed_multiplier = 2.0
 hp_bonus = 0.25
 spawn_raged = true
+max_alive_multiplier = 1.5
+spawn_rate_multiplier = 1.5

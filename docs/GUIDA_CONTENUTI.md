@@ -387,7 +387,7 @@ File in `data/run/` (`extraction_default` = Cripta, `extraction_ossuary`): `appe
 
 ### 8.5b Overtime
 
-`data/run/overtime_default.tres` (assegnato in `ArenaData.overtime`, vuoto = niente overtime): `start_after` (50 s dall'apertura dell'estrazione), `level_every` (50 s), `warnings` (30, 10), `boss_interval` (10 s, diviso per il livello), `min_boss_interval` (2 s), `speed_multiplier` (x2, per livello), `hp_bonus` (+25%, per livello), `spawn_raged`. Per misurarlo: `tools/autoplay.gd -- N stay` (il bot non estrae mai) e guardare `death_times`.
+`data/run/overtime_default.tres` (assegnato in `ArenaData.overtime`, vuoto = niente overtime): `start_after` (50 s dall'apertura dell'estrazione), `level_every` (50 s), `warnings` (30, 10), `boss_interval` (10 s, diviso per il livello), `min_boss_interval` (2 s), `speed_multiplier` (x2, per livello), `hp_bonus` (+25%, per livello), `spawn_raged`, `max_alive_multiplier` (x1,5 per livello), `spawn_rate_multiplier` (x1,5 per livello; tetto assoluto `WaveSpawner.MAX_ALIVE` = 320). Per misurarlo: `tools/autoplay.gd -- N stay` (il bot non estrae mai) e guardare `death_times`.
 
 ### 8.6b Attacchi dei boss (M11.3)
 
