@@ -1,10 +1,10 @@
 class_name ShieldEffect
 extends AbilityEffect
-## Barriera che annulla il prossimo colpo; la ricarica riparte solo quando si rompe (Barriera arcana).
+## Barriera che annulla i prossimi colpi (uno per livello); la ricarica riparte solo quando si rompe (Barriera arcana).
 
 
-func activate(host: WandAbilities) -> void:
-	host.player.set_shield(true)
+func activate(host: WandAbilities, level: int = 1) -> void:
+	host.player.set_shield(true, level)
 
 
 func deactivate(host: WandAbilities) -> void:

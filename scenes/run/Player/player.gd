@@ -145,8 +145,8 @@ func weapon_data() -> WeaponData:
 
 
 ## Barriera (abilita' Barriera arcana): annulla il prossimo colpo.
-func set_shield(active: bool) -> void:
-	_hurtbox.shield_charges = 1 if active else 0
+func set_shield(active: bool, charges: int = 1) -> void:
+	_hurtbox.shield_charges = maxi(charges, 1) if active else 0
 	_shield.visible = active
 
 

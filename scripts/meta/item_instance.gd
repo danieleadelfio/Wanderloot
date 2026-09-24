@@ -19,6 +19,11 @@ func _init(from_base: EquipmentData = null, tier: int = 0) -> void:
 	rarity = tier
 
 
+## Livello dell'abilita' incorporata secondo la rarita' (0 senza abilita').
+func ability_level(rarities: RarityTable) -> int:
+	return rarities.tier(rarity).ability_level if ability else 0
+
+
 func slot() -> EquipmentData.Slot:
 	return base.slot
 

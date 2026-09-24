@@ -10,6 +10,7 @@ const BUTTON_SIZE: Vector2 = Vector2(250.0, 150.0)
 var _chosen: WandAbility
 var _current: Array[WandAbility] = []
 var _full: bool = false
+var _levels: Dictionary = {}
 
 @onready var _title: Label = %Title
 @onready var _choices: HBoxContainer = %Choices
@@ -21,9 +22,10 @@ func _ready() -> void:
 	_keep_button.pressed.connect(_finish.bind(null, -1))
 
 
-func present(options: Array[WandAbility], current: Array[WandAbility], full: bool) -> void:
+func present(options: Array[WandAbility], current: Array[WandAbility], full: bool, levels: Dictionary = {}) -> void:
 	_current = current
 	_full = full
+	_levels = levels
 	_title.text = tr("ABILITY_CHOICE_TITLE")
 	_keep_button.visible = false
 	_fill(options, _on_option_pressed)
@@ -31,7 +33,7 @@ func present(options: Array[WandAbility], current: Array[WandAbility], full: boo
 
 
 func _on_option_pressed(ability: WandAbility) -> void:
-	if not _full:
+	if not _full or _levels.has(ability.id):
 		_finish(ability, -1)
 		return
 	_chosen = ability
@@ -55,7 +57,10 @@ func _fill(abilities: Array[WandAbility], on_pressed: Callable) -> void:
 		child.queue_free()
 	for ability in abilities:
 		var button := Button.new()
-		button.text = "%s\n%s\n%s" % [tr(ability.display_name), ability.trigger_text(), tr(ability.description)]
+		var name := tr(ability.display_name)
+		if _levels.has(ability.id):
+			name += "  " + tr("ABILITY_LEVEL_UP") % [_levels[ability.id], _levels[ability.id] + 1]
+		button.text = "%s\n%s\n%s" % [name, ability.trigger_text(), tr(ability.description)]
 		button.icon = ability.icon
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP

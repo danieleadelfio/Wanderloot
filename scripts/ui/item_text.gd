@@ -63,7 +63,7 @@ static func tooltip(item: ItemInstance) -> String:
 	for affix in item.affixes:
 		lines.append("• %s  %s" % [modifier_text(affix), range_text(affix, item.rarity)])
 	if item.ability:
-		lines.append(TranslationServer.translate("ITEM_ABILITY") % TranslationServer.translate(item.ability.display_name))
+		lines.append(TranslationServer.translate("ITEM_ABILITY") % _ability_name(item))
 	return "\n".join(lines)
 
 
@@ -83,7 +83,7 @@ static func tooltip_panel(item: ItemInstance, header: String = "") -> Control:
 		row.add_child(_line(range_text(affix, item.rarity), Color(1, 1, 1, 0.5), 12))
 		box.add_child(row)
 	if item.ability:
-		box.add_child(_line(TranslationServer.translate("ITEM_ABILITY") % TranslationServer.translate(item.ability.display_name), Color(1, 0.85, 0.4), 14))
+		box.add_child(_line(TranslationServer.translate("ITEM_ABILITY") % _ability_name(item), Color(1, 0.85, 0.4), 14))
 	return box
 
 
@@ -96,6 +96,10 @@ static func compare_panel(item: ItemInstance, equipped: Array[ItemInstance]) -> 
 		row.add_child(VSeparator.new())
 		row.add_child(tooltip_panel(other, TranslationServer.translate("TOOLTIP_EQUIPPED")))
 	return row
+
+
+static func _ability_name(item: ItemInstance) -> String:
+	return "%s Lv%d" % [TranslationServer.translate(item.ability.display_name), item.ability_level(RARITIES)]
 
 
 static func _line(text: String, font_color: Color, size: int) -> Label:

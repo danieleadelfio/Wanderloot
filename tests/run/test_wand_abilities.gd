@@ -62,6 +62,35 @@ func test_catalog_pick_excludes_owned() -> void:
 		assert_str(String(ability.id)).is_not_equal("b")
 
 
+func test_same_ability_levels_up_instead_of_duplicating() -> void:
+	var player: Player = auto_free(load("res://scenes/run/Player/Player.tscn").instantiate())
+	add_child(player)
+	var wand: WandAbilities = auto_free(WandAbilities.new())
+	add_child(wand)
+	wand.player = player
+	var lightning: WandAbility = load("res://data/abilities/wandering_lightning.tres")
+	var ring: WandAbility = load("res://data/abilities/arcane_ring.tres")
+	wand.equip_bonus(lightning, 2)
+	wand.equip_bonus(lightning, 1)
+	assert_int(wand.level_of(lightning)).is_equal(3)
+	assert_bool(wand.equip(lightning)).is_true()
+	assert_int(wand.level_of(lightning)).is_equal(4)
+	assert_int(wand.slots.abilities.size()).is_equal(0)
+	assert_int(wand.all_abilities().size()).is_equal(1)
+	assert_bool(wand.equip(ring)).is_true()
+	assert_int(wand.level_of(ring)).is_equal(1)
+	assert_int(wand.slots.abilities.size()).is_equal(1)
+
+
+func test_legendary_items_carry_level_two() -> void:
+	var rarities: RarityTable = load("res://data/equipment/rarity_table.tres")
+	var item := ItemInstance.new(load("res://data/equipment/gel_ring.tres"), 4)
+	item.ability = load("res://data/abilities/wandering_lightning.tres")
+	assert_int(item.ability_level(rarities)).is_equal(2)
+	item.rarity = 3
+	assert_int(item.ability_level(rarities)).is_equal(1)
+
+
 func test_real_catalog_has_three_abilities_with_translated_texts() -> void:
 	var catalog: AbilityCatalog = load("res://data/abilities/ability_catalog.tres")
 	assert_int(catalog.abilities.size()).is_equal(3)

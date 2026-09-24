@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Abilità a livelli: gli oggetti le portano a Lv1/Lv2/Lv3 (Super raro/Leggendario/Mitico); la stessa abilità da equip ed eventi si somma di livello; gli eventi propongono anche le abilità possedute (Lv+1, senza slot); livello nell'HUD e nel tooltip; test (#72).
 - Tooltip degli oggetti: confronto con il pezzo equipaggiato nello stesso slot e intervallo possibile di ogni bonus per la rarità (#70).
 - Baule: ordinamento per arrivo, rarità o categoria (slot) nell'inventario dell'hub; `StashSort`, test (#69).
 - Fine run: bottone Guarda il loot con griglia di icone e tooltip di oggetti e materiali, estratti o persi; Torna all'hub sempre disponibile (#68).

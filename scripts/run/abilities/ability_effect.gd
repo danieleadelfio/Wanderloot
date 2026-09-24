@@ -4,7 +4,8 @@ extends Resource
 ## host e' il nodo WandAbilities della run, che espone player, proiettili e colpi ad area.
 
 
-func activate(_host: WandAbilities) -> void:
+## level: livello dell'abilita' (1 = base; equip e scelte uguali lo alzano).
+func activate(_host: WandAbilities, _level: int = 1) -> void:
 	pass
 
 

@@ -128,6 +128,8 @@ Il baule degli oggetti si ordina con tre bottoni sopra la griglia: **Arrivo** (d
 
 **Tooltip (M11.3, #70)**: passando su un oggetto del baule compare accanto il pezzo equipaggiato nello stesso slot (per gli anelli entrambi), per il confronto. Ogni bonus tirato mostra l'**intervallo possibile per la sua rarità**, es. *+13% Vel. proiettile (+10% – +20%)*: si vede subito se il tiro è vicino al minimo o al massimo. L'intervallo è quello del bonus in `affix_table.tres` letto tra `roll_min` e `roll_max` della rarità.
 
+**Livelli delle abilità (M11.3, #72)**: ogni abilità della bacchetta ha un livello. Gli oggetti la portano a **Lv1 (Super raro), Lv2 (Leggendario), Lv3 (Mitico)** (`ability_level` in `rarity_table.tres`). La stessa abilità da più pezzi o da un evento **si somma**: non si duplica e non sparisce dalle scelte; gli eventi propongono tutte le abilità, e per quelle già possedute la scelta mostra *Lv2 → Lv3* e non occupa uno slot. Effetto del livello: Fulmine errante = un fulmine per livello; Anello arcano = +5 proiettili per livello; Barriera arcana = un colpo assorbito per livello. Nell'HUD il numero del livello compare sull'icona (da Lv2). **Futuro (M12)**: Leggendari e Mitici avranno anche abilità **uniche**, che non si trovano in run.
+
 ### 6.2 Rarità (M11, #57)
 
 | Rarità | Colore | Drop tra gli oggetti trovati | Contenuto |
@@ -278,7 +280,7 @@ Note tecniche:
 **M10 — Abilità ed eventi** ✅ (2026-09-24): abilità della bacchetta (3 slot), eventi della run (Tempesta di fulmini), catalogo PDF, progetto di rarità/slot/mitici/enciclopedia (§6.1–6.4).
 **M11 — Rarità ed equipaggiamento** ✅ (2026-09-24): istanze uniche con rarità e bonus casuali, 9 slot con manichino, drop in run fino a Leggendario, fusione di due oggetti identici, modificatori da Super raro (§6.1–6.3).
 **M11.1 — Overtime e Passo d'ombra** ✅ (2026-09-24): smontaggio in lavorazione, alone e suono dei drop per rarità, overtime dopo l'apertura dell'estrazione, evento Passo d'ombra (§4, §3, §6.3).
-**M12 — Mitici, enciclopedia, achievement** (pianificata): ricette mitiche dai boss, materiali composti, enciclopedia in gioco, achievement (§6.4, §13).
+**M12 — Mitici, enciclopedia, achievement** (pianificata): abilità **uniche** di Leggendari e Mitici che non si trovano in run, ricette mitiche dai boss, materiali composti, enciclopedia in gioco, achievement (§6.4, §13).
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.
 

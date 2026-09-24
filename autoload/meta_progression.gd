@@ -196,6 +196,18 @@ func equipped_abilities() -> Array[WandAbility]:
 	return result
 
 
+
+## Livelli delle abilita' degli oggetti indossati, sommati per abilita' (id -> [abilita', livello]).
+func equipped_ability_levels() -> Dictionary:
+	var result := {}
+	for item in loadout.equipped_items():
+		if item.ability:
+			var entry: Array = result.get(item.ability.id, [item.ability, 0])
+			entry[1] += item.ability_level(rarity_table)
+			result[item.ability.id] = entry
+	return result
+
+
 func register_extraction(arena_id: StringName) -> void:
 	extractions[arena_id] = extractions.get(arena_id, 0) + 1
 	_mark_changed()

@@ -98,9 +98,9 @@ func _ready() -> void:
 	_hud.set_stats(_player.stats, _player.weapon_data())
 	_create_enemy_pools()
 	_wand.setup(_player, _projectile_pool, targetable_enemies)
-	_wand.changed.connect(_hud.set_abilities)
-	for ability in MetaProgression.equipped_abilities():
-		_wand.equip_bonus(ability)
+	_wand.changed.connect(func(abilities: Array[WandAbility]) -> void: _hud.set_abilities(abilities, _wand.levels))
+	for entry: Array in MetaProgression.equipped_ability_levels().values():
+		_wand.equip_bonus(entry[0], entry[1])
 	_ability_choice.resolved.connect(_on_ability_resolved)
 	_events.bounds = extraction_spawn_rect
 	_events.setup(arena, _player)
@@ -203,15 +203,15 @@ func targetable_enemies() -> Array[Node2D]:
 	return result
 
 
-## Ricompensa degli eventi: il gioco si ferma e si sceglie un'abilita' tra quelle non ancora nella bacchetta.
+## Ricompensa degli eventi: il gioco si ferma e si sceglie un'abilita'; quelle gia' possedute salgono di livello.
 func offer_abilities(count: int = 3) -> void:
-	var options := ability_catalog.pick(count, _wand.owned_ids(), _rng)
+	var options := ability_catalog.pick(count, [] as Array[StringName], _rng)
 	if options.is_empty() or RunManager.state != RunManager.State.RUNNING:
 		return
 	_choosing_ability = true
 	_pause.enabled = false
 	_refresh_pause()
-	_ability_choice.present(options, _wand.slots.abilities, _wand.slots.is_full())
+	_ability_choice.present(options, _wand.slots.abilities, _wand.slots.is_full(), _wand.levels)
 
 
 func _on_ability_resolved(ability: WandAbility, replace_index: int) -> void:
@@ -220,7 +220,7 @@ func _on_ability_resolved(ability: WandAbility, replace_index: int) -> void:
 	if ability != null and _wand.equip(ability, replace_index):
 		# Le abilita' a ricarica partono cariche (es. Barriera arcana attiva subito).
 		if ability.trigger == WandAbility.Trigger.COOLDOWN and ability.effect:
-			ability.effect.activate(_wand)
+			ability.effect.activate(_wand, _wand.level_of(ability))
 		_sfx.play(&"level_up")
 	_refresh_pause()
 

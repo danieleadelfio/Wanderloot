@@ -62,7 +62,7 @@ func set_stats(stats: PlayerStats, weapon: WeaponData) -> void:
 
 
 ## Icone delle abilita' della bacchetta (M10); il riempimento mostra l'avanzamento verso l'attivazione.
-func set_abilities(abilities: Array[WandAbility]) -> void:
+func set_abilities(abilities: Array[WandAbility], levels: Dictionary = {}) -> void:
 	for child in _ability_bar.get_children():
 		child.queue_free()
 	for ability in abilities:
@@ -76,6 +76,17 @@ func set_abilities(abilities: Array[WandAbility]) -> void:
 		icon.max_value = 1.0
 		icon.step = 0.01
 		icon.tooltip_text = tr(ability.display_name)
+		var level: int = levels.get(ability.id, 1)
+		if level > 1:
+			var label := Label.new()
+			label.text = "%d" % level
+			label.add_theme_font_size_override("font_size", 13)
+			label.add_theme_color_override("font_outline_color", Color.BLACK)
+			label.add_theme_constant_override("outline_size", 4)
+			label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+			label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+			label.grow_vertical = Control.GROW_DIRECTION_BEGIN
+			icon.add_child(label)
 		_ability_bar.add_child(icon)
 
 

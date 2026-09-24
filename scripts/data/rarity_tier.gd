@@ -12,6 +12,8 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var roll_max: float = 0.35
 ## Modificatori di gameplay (abilita' della bacchetta sempre attive in run).
 @export var ability_count: int = 0
+## Livello dell'abilita' dell'oggetto (Super raro 1, Leggendario 2, Mitico 3): si somma con la stessa abilita' in run.
+@export var ability_level: int = 1
 ## Peso tra gli oggetti trovati in run (0 = non si trova, es. Mitico).
 @export var drop_weight: float = 1.0
 ## Moltiplicatore dei materiali restituiti dallo smontaggio.

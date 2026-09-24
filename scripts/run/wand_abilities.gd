@@ -16,6 +16,8 @@ var player: Player
 var slots: AbilitySlots
 ## Abilita' date dall'equipaggiamento (Super raro e superiori): sempre attive, fuori dai 3 slot.
 var bonus: Array[WandAbility] = []
+## Livello di ogni abilita' posseduta (id -> livello): la stessa abilita' da equip o eventi si somma (M11.3, #72).
+var levels: Dictionary[StringName, int] = {}
 var _projectile_pool: ProjectilePool
 var _targets: Callable
 var _triggers: Array[AbilityTrigger] = []
@@ -50,29 +52,52 @@ func progress_of(index: int) -> float:
 
 ## Aggiunge o, con index >= 0, sostituisce lo slot index. False se non e' cambiato nulla.
 func equip(ability: WandAbility, index: int = -1) -> bool:
+	# Gia' posseduta (slot o equip): sale di livello, nessuno slot occupato.
+	if levels.has(ability.id):
+		level_up(ability.id)
+		return true
 	if index >= 0:
 		var removed := slots.replace(index, ability)
 		if removed == null:
 			return false
 		if removed.effect:
 			removed.effect.deactivate(self)
+		levels.erase(removed.id)
 	elif not slots.add(ability):
 		return false
+	levels[ability.id] = 1
 	_rebuild_triggers()
 	if ability.trigger == WandAbility.Trigger.PERMANENT and ability.effect:
-		ability.effect.activate(self)
+		ability.effect.activate(self, level_of(ability))
 	_after_change()
 	return true
 
 
-## Abilita' dell'equipaggiamento, aggiunte a inizio run.
-func equip_bonus(ability: WandAbility) -> void:
-	if ability == null or all_abilities().has(ability):
+func level_of(ability: WandAbility) -> int:
+	return levels.get(ability.id, 1)
+
+
+## +amount livelli a un'abilita' gia' posseduta.
+func level_up(id: StringName, amount: int = 1) -> void:
+	levels[id] = levels.get(id, 0) + amount
+	for ability in all_abilities():
+		if ability.id == id and ability.effect and ability.trigger == WandAbility.Trigger.PERMANENT:
+			ability.effect.activate(self, levels[id])
+	_after_change()
+
+
+## Abilita' dell'equipaggiamento, aggiunte a inizio run al livello del pezzo; se gia' presente si somma.
+func equip_bonus(ability: WandAbility, level: int = 1) -> void:
+	if ability == null:
+		return
+	if levels.has(ability.id):
+		level_up(ability.id, level)
 		return
 	bonus.append(ability)
+	levels[ability.id] = level
 	_rebuild_triggers()
 	if ability.effect and (ability.trigger == WandAbility.Trigger.PERMANENT or ability.trigger == WandAbility.Trigger.COOLDOWN):
-		ability.effect.activate(self)
+		ability.effect.activate(self, level)
 	_after_change()
 
 
@@ -122,7 +147,7 @@ func _on_player_shot() -> void:
 func _fire(trigger: AbilityTrigger, times: int) -> void:
 	for i in times:
 		if trigger.ability.effect:
-			trigger.ability.effect.activate(self)
+			trigger.ability.effect.activate(self, level_of(trigger.ability))
 		activated.emit(trigger.ability)
 
 
