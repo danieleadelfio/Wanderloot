@@ -59,6 +59,9 @@ func _physics_process(_d: float) -> bool:
 		5:
 			if s.name == "Hub" and t > 3:
 				var ok: bool = m.inventory.to_dictionary() == stash_before
+				# M8: salvataggi manuali, si salva dal menu di pausa dell'hub prima di ricaricare
+				s.get_node("%PauseMenu").get_node("%SaveButton").pressed.emit()
+				say("salva dal menu di pausa -> file=%s" % m.has_save())
 				say("dopo morte baule invariato=%s (%s)" % [ok, m.inventory.to_dictionary()])
 				var fresh = preload("res://autoload/meta_progression.gd").new()
 				fresh.save_path = "user://flow.cfg"; fresh.load_from_disk()

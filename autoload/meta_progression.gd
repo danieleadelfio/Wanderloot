@@ -1,11 +1,15 @@
 extends Node
 ## Progressione permanente (meta): materiali ed equipaggiamento, persistiti in user:// (ConfigFile).
+## Da M8 i salvataggi sono solo manuali: le modifiche restano in memoria finche' non si chiama save_game().
 ## Il loot entra solo da deposit_run_loot(), chiamato solo dopo un'estrazione riuscita.
 ## Da M7 tiene anche le estrazioni riuscite per arena (sblocchi) e l'arena scelta al portale.
 
 signal changed
+signal saved
 
-const SAVE_PATH: String = "user://meta_progression.cfg"
+const SAVE_PATH: String = "user://save.cfg"
+## File dei salvataggi automatici fino a M7: rimosso all'avvio (M8, si riparte da zero).
+const LEGACY_SAVE_PATH: String = "user://meta_progression.cfg"
 ## v1 (M2): solo materiali. v2 (M3): + equipaggiamento. v3 (M7): + estrazioni per arena e arena scelta.
 ## Ogni versione carica le precedenti (sezioni mancanti = valori iniziali).
 const SAVE_VERSION: int = 3
@@ -26,39 +30,73 @@ var extractions: Dictionary[StringName, int] = {}
 var selected_arena: StringName = &""
 ## Sovrascrivibile nei test per non toccare il salvataggio reale.
 var save_path: String = SAVE_PATH
+## Vero se lo stato in memoria differisce dall'ultimo salvataggio/caricamento.
+var has_unsaved_changes: bool = false
 
 
 func _ready() -> void:
-	load_from_disk()
+	if FileAccess.file_exists(LEGACY_SAVE_PATH):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(LEGACY_SAVE_PATH))
+
+
+func has_save() -> bool:
+	return FileAccess.file_exists(save_path)
+
+
+## Nuova partita: stato vuoto in memoria. Il file su disco resta finche' non si salva o si cancella.
+func new_game() -> void:
+	inventory.load_dictionary({} as Dictionary[StringName, int])
+	loadout.clear()
+	extractions.clear()
+	selected_arena = &""
+	has_unsaved_changes = false
+	changed.emit()
+
+
+## Unico punto di scrittura su disco richiesto dal giocatore (Salva nel menu di pausa).
+func save_game() -> Error:
+	var error := save_to_disk()
+	if error == OK:
+		has_unsaved_changes = false
+		saved.emit()
+	return error
+
+
+func load_game() -> Error:
+	var error := load_from_disk()
+	has_unsaved_changes = false
+	return error
+
+
+func delete_save() -> Error:
+	if not has_save():
+		return ERR_FILE_NOT_FOUND
+	return DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))
 
 
 func deposit_run_loot(loot: Dictionary[StringName, int]) -> void:
 	if loot.is_empty():
 		return
 	inventory.deposit(loot)
-	save_to_disk()
-	changed.emit()
+	_mark_changed()
 
 
-## Unico punto di crafting: regole in Crafting (logica pura), qui solo salvataggio e notifica.
+## Unico punto di crafting: regole in Crafting (logica pura), qui solo stato e notifica.
 func craft(recipe: RecipeData) -> Crafting.Result:
 	var result := Crafting.craft(recipe, inventory, loadout)
 	if result == Crafting.Result.OK:
-		save_to_disk()
-		changed.emit()
+		_mark_changed()
 	return result
 
 
 func equip(item: EquipmentData) -> void:
 	if loadout.equip(item):
-		save_to_disk()
-		changed.emit()
+		_mark_changed()
 
 
 func unequip(slot: EquipmentData.Slot) -> void:
 	loadout.unequip(slot)
-	save_to_disk()
-	changed.emit()
+	_mark_changed()
 
 
 ## Pezzi equipaggiati, risolti dal catalogo: e' cio' che la run applica alle stats iniziali.
@@ -73,8 +111,7 @@ func equipped_items() -> Array[EquipmentData]:
 
 func register_extraction(arena_id: StringName) -> void:
 	extractions[arena_id] = extractions.get(arena_id, 0) + 1
-	save_to_disk()
-	changed.emit()
+	_mark_changed()
 
 
 ## Seleziona l'arena per la prossima run; false se sconosciuta o bloccata.
@@ -83,8 +120,7 @@ func select_arena(arena_id: StringName) -> bool:
 	if arena == null or not arena.is_unlocked(extractions):
 		return false
 	selected_arena = arena_id
-	save_to_disk()
-	changed.emit()
+	_mark_changed()
 	return true
 
 
@@ -146,6 +182,11 @@ func _load_loadout(config: ConfigFile) -> void:
 		var item := catalog.find(StringName(config.get_value(SECTION_EQUIPPED, _slot_key(slot), "")))
 		if item != null and item.slot == slot:
 			loadout.equip(item)
+
+
+func _mark_changed() -> void:
+	has_unsaved_changes = true
+	changed.emit()
 
 
 func _slot_key(slot: int) -> String:

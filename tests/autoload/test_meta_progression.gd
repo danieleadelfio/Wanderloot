@@ -1,5 +1,6 @@
 extends GdUnitTestSuite
 ## Persistenza su file di test dedicato: il salvataggio reale in user:// non viene mai toccato.
+## Da M8 si scrive su disco solo con save_game() (salvataggi manuali).
 
 const TEST_PATH: String = "user://test_meta_progression.cfg"
 
@@ -23,6 +24,7 @@ func test_first_load_without_file_gives_empty_inventory() -> void:
 
 func test_deposit_is_saved_and_reloaded() -> void:
 	_meta.deposit_run_loot({&"gel": 4, &"core": 1} as Dictionary[StringName, int])
+	_meta.save_game()
 	var reloaded: Node = auto_free(preload("res://autoload/meta_progression.gd").new())
 	reloaded.save_path = TEST_PATH
 	assert_int(reloaded.load_from_disk()).is_equal(OK)
@@ -35,6 +37,7 @@ func test_craft_and_equip_are_saved_and_reloaded() -> void:
 	var recipe: RecipeData = load("res://data/recipes/gel_wand.tres")
 	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
 	_meta.equip(recipe.result)
+	_meta.save_game()
 
 	var reloaded := _reload()
 
@@ -48,6 +51,7 @@ func test_unequip_is_saved() -> void:
 	_meta.loadout.add_owned(&"core_amulet")
 	_meta.equip(load("res://data/equipment/core_amulet.tres"))
 	_meta.unequip(EquipmentData.Slot.ACCESSORY)
+	_meta.save_game()
 
 	assert_array(_reload().equipped_items()).is_empty()
 
@@ -83,6 +87,7 @@ func test_extractions_and_selected_arena_are_saved() -> void:
 	_meta.register_extraction(&"crypt")
 	_meta.register_extraction(&"crypt")
 	assert_bool(_meta.select_arena(&"crypt")).is_true()
+	_meta.save_game()
 	var reloaded := _reload()
 	assert_int(reloaded.extractions.get(&"crypt", 0)).is_equal(2)
 	assert_str(String(reloaded.current_arena().id)).is_equal("crypt")
@@ -120,3 +125,42 @@ func _reload() -> Node:
 	reloaded.save_path = TEST_PATH
 	reloaded.load_from_disk()
 	return reloaded
+
+
+func test_changes_are_not_written_until_save() -> void:
+	_meta.deposit_run_loot({&"slime_gel": 5} as Dictionary[StringName, int])
+	assert_bool(_meta.has_save()).is_false()
+	assert_bool(_meta.has_unsaved_changes).is_true()
+	assert_int(_meta.save_game()).is_equal(OK)
+	assert_bool(_meta.has_save()).is_true()
+	assert_bool(_meta.has_unsaved_changes).is_false()
+
+
+func test_load_game_discards_unsaved_changes() -> void:
+	_meta.deposit_run_loot({&"slime_gel": 5} as Dictionary[StringName, int])
+	_meta.save_game()
+	_meta.deposit_run_loot({&"slime_gel": 7} as Dictionary[StringName, int])
+	_meta.register_extraction(&"crypt")
+	assert_int(_meta.load_game()).is_equal(OK)
+	assert_int(_meta.inventory.amount_of(&"slime_gel")).is_equal(5)
+	assert_bool(_meta.extractions.is_empty()).is_true()
+	assert_bool(_meta.has_unsaved_changes).is_false()
+
+
+func test_new_game_resets_memory_but_keeps_file() -> void:
+	_meta.deposit_run_loot({&"slime_gel": 30} as Dictionary[StringName, int])
+	_meta.craft(load("res://data/recipes/gel_wand.tres"))
+	_meta.register_extraction(&"crypt")
+	_meta.save_game()
+	_meta.new_game()
+	assert_int(_meta.inventory.total()).is_equal(0)
+	assert_array(_meta.loadout.owned_ids()).is_empty()
+	assert_bool(_meta.extractions.is_empty()).is_true()
+	assert_bool(_meta.has_save()).is_true()
+
+
+func test_delete_save_removes_file() -> void:
+	assert_int(_meta.delete_save()).is_equal(ERR_FILE_NOT_FOUND)
+	_meta.save_game()
+	assert_int(_meta.delete_save()).is_equal(OK)
+	assert_bool(_meta.has_save()).is_false()

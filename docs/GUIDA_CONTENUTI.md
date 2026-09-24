@@ -226,6 +226,8 @@ Le stat disponibili sono quelle dell'enum `UpgradeData.Stat` (danno, cadenza, ve
 
 ## 5. Cose da non fare
 
+- **Non chiamare `MetaProgression.save_to_disk()` dal gameplay**: i salvataggi sono solo manuali (Salva nel menu di pausa → `GameSession.save()`). Per provare contenuti nuovi parti da **Nuova partita** o da un salvataggio di prova.
+
 - **Non cambiare un `id`** di materiale, equipaggiamento o arena già usato: i salvataggi dei giocatori lo referenziano.
 - **Non riordinare gli enum** salvati nei `.tres` (`UpgradeData.Stat`, `EnemyData.Behavior`, `EquipmentData.Slot`): voci nuove solo in coda, perché nei `.tres` sono salvati come numeri.
 - **Non modificare un `.tres` condiviso a runtime** (es. `stats.max_hp += 1` sul file caricato): lavora su `duplicate()`, come fa `Player.begin_run()`.

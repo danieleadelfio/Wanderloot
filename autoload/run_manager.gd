@@ -91,6 +91,12 @@ func end_run(result: Result) -> void:
 	run_ended.emit(result)
 
 
+## Run abbandonata (Carica, Torna al menu): nessun esito, il loot di run si perde.
+func abort_run() -> void:
+	loot.clear()
+	_set_state(State.IDLE)
+
+
 func _set_state(new_state: State) -> void:
 	if state == new_state:
 		return

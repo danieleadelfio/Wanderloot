@@ -1,6 +1,7 @@
 extends Node2D
 ## Hub fuori dalla run (GDD §7): piazza esplorabile con fabbro, baule e portale. Composition root dell'hub.
 ## Il player cammina nella piazza; con E su un punto di interazione si apre la sua finestra (gioco in pausa), ESC o E la chiude.
+## ESC senza finestre aperte apre il menu di pausa (Riprendi, Salva, Carica).
 
 ## Solo per mostrare i nomi nel baule; id sconosciuti vengono mostrati grezzi.
 @export var materials: Array[MaterialData] = []
@@ -9,6 +10,7 @@ var _material_names: Dictionary[StringName, String] = {}
 var _material_icons: Dictionary[StringName, Texture2D] = {}
 var _interactables: Array[Interactable] = []
 var _open_window: Control = null
+var _pause_open: bool = false
 
 @onready var _stash_label: Label = %StashLabel
 @onready var _stash_list: VBoxContainer = %StashList
@@ -19,6 +21,7 @@ var _open_window: Control = null
 @onready var _start_button: Button = %StartButton
 @onready var _prompt: Label = %Prompt
 @onready var _dim: ColorRect = %Dim
+@onready var _pause_menu: PauseMenu = %PauseMenu
 
 
 func _ready() -> void:
@@ -39,21 +42,31 @@ func _ready() -> void:
 	_loadout_panel.equip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_arena_select.arena_selected.connect(_on_arena_selected)
+	_pause_menu.action_requested.connect(_on_pause_action)
+	_pause_menu.save_requested.connect(_on_save_requested)
+	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_refresh()
 
 
 func _process(_delta: float) -> void:
 	var spot := _nearest_spot()
-	_prompt.visible = spot != null and _open_window == null
+	_prompt.visible = spot != null and _open_window == null and not _pause_open
 	if spot:
 		_prompt.text = spot.prompt
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _open_window:
+	if _pause_open:
+		if event.is_action_pressed("menu"):
+			_set_pause_open(false)
+			get_viewport().set_input_as_handled()
+	elif _open_window:
 		if event.is_action_pressed("menu") or event.is_action_pressed("interact"):
 			_close_window()
 			get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("menu"):
+		_set_pause_open(true)
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("interact"):
 		var spot := _nearest_spot()
 		if spot:
@@ -68,6 +81,25 @@ func _nearest_spot() -> Interactable:
 		points.append(spot.global_position)
 	var index := Interactable.nearest_index(points, %Player.global_position)
 	return in_range[index] if index >= 0 else null
+
+
+func _set_pause_open(open: bool) -> void:
+	_pause_open = open
+	_pause_menu.set_can_load(MetaProgression.has_save())
+	_pause_menu.show_mode(PauseState.Mode.MENU if open else PauseState.Mode.NONE)
+	get_tree().paused = open
+
+
+func _on_pause_action(action: PauseState.Action) -> void:
+	if action == PauseState.Action.RESUME:
+		_set_pause_open(false)
+
+
+func _on_save_requested() -> void:
+	var ok := GameSession.save()
+	_pause_menu.show_status("Partita salvata" if ok else "Salvataggio non riuscito")
+	_pause_menu.set_can_load(MetaProgression.has_save())
+	_sfx.play(&"ui_select")
 
 
 func _open(window: Control) -> void:
