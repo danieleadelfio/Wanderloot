@@ -1,4 +1,19 @@
 extends GdUnitTestSuite
+
+
+func test_no_item_repeats_a_stat() -> void:
+	var catalog: EquipmentCatalog = load("res://data/equipment/equipment_catalog.tres")
+	var rarities: RarityTable = load("res://data/equipment/rarity_table.tres")
+	var affixes: AffixTable = load("res://data/equipment/affix_table.tres")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	for base in catalog.items:
+		for i in 40:
+			var item := ItemRoller.roll(base, rarities.highest(), rarities, affixes, null, rng)
+			var seen: Array[int] = []
+			for modifier in item.modifiers():
+				assert_bool(seen.has(int(modifier.stat))).override_failure_message("%s ripete %d" % [base.id, modifier.stat]).is_false()
+				seen.append(int(modifier.stat))
 ## Rarita' e bonus (M11): numero di bonus per rarita', valori negli intervalli, abilita' da Super raro.
 
 var _rarities: RarityTable = load("res://data/equipment/rarity_table.tres")

@@ -13,7 +13,11 @@ const INTEGER_STATS: Array[int] = [
 static func roll(base: EquipmentData, tier_index: int, rarities: RarityTable, affixes: AffixTable, abilities: AbilityCatalog, rng: RandomNumberGenerator) -> ItemInstance:
 	var tier := rarities.tier(tier_index)
 	var item := ItemInstance.new(base, clampi(tier_index, 0, rarities.highest()))
-	var pool: Array[AffixRoll] = affixes.rolls.filter(func(r: AffixRoll) -> bool: return r.allows(base.slot))
+	# Nessuna statistica ripetuta: esclusi i bonus che l'oggetto base ha gia' (M11.3, #71).
+	var fixed: Array[int] = []
+	for modifier in base.modifiers:
+		fixed.append(int(modifier.stat))
+	var pool: Array[AffixRoll] = affixes.rolls.filter(func(r: AffixRoll) -> bool: return r.allows(base.slot) and not fixed.has(int(r.stat)))
 	for i in mini(tier.affix_count, pool.size()):
 		var chosen := _pick(pool, rng)
 		pool.erase(chosen)

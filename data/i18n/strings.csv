@@ -70,7 +70,7 @@ HUD_EXTRACTION_READY,Estrazione disponibile: raggiungi la zona verde,Extraction 
 STAT_MAX_HP,Vita max,Max health,Vie max,Vida máx.
 STAT_MOVE_SPEED,Velocità,Speed,Vitesse,Velocidad
 STAT_DAMAGE,Danno,Damage,Dégâts,Daño
-STAT_FIRE_RATE,Cadenza,Fire rate,Cadence,Cadencia
+STAT_FIRE_RATE,Cadenza di fuoco,Fire rate,Cadence de tir,Cadencia de disparo
 STAT_PROJECTILES,Proiettili,Projectiles,Projectiles,Proyectiles
 STAT_PIERCE,Perforazione,Pierce,Perforation,Perforación
 STAT_PROJECTILE_SPEED,Vel. proiettile,Projectile speed,Vit. des projectiles,Vel. de proyectil
@@ -148,7 +148,7 @@ CONS_MAGNET_DESC,Per 4 s attira tutto ciò che è a terra nell'arena.,For 4 s pu
 CONS_HEART,Cuore,Heart,Cœur,Corazón
 CONS_HEART_DESC,Cura 2 HP.,Heals 2 HP.,Soigne 2 PV.,Cura 2 PV.
 CONS_FRENZY,Furia,Frenzy,Frénésie,Frenesí
-CONS_FRENZY_DESC,Cadenza +50% per 6 s.,Fire rate +50% for 6 s.,Cadence +50 % pendant 6 s.,Cadencia +50% durante 6 s.
+CONS_FRENZY_DESC,Cadenza di fuoco +50% per 6 s.,Fire rate +50% for 6 s.,Cadence de tir +50 % pendant 6 s.,Cadencia de disparo +50% durante 6 s.
 HUD_BUFF,%s %ds,%s %ds,%s %d s,%s %d s
 UPG_COUNTER_UP,Contatore,Counter,Compteur,Contador
 UPG_COUNTER_UP_DESC,+1 proiettile allo sparo e alle abilità (non alla barriera); ogni Ventaglio preso dopo vale 1 in più,+1 projectile to your shots and abilities (not the barrier); every Spread taken later gives 1 more,+1 projectile aux tirs et aux capacités (pas à la barrière) ; chaque Éventail pris ensuite en donne 1 de plus,+1 proyectil a los disparos y habilidades (no a la barrera); cada Abanico posterior da 1 más
@@ -169,7 +169,7 @@ LOADOUT_CLICK_HINT,"Clic su un oggetto per indossarlo, clic su uno slot per togl
 EQ_WANDERER_HOOD,Cappuccio del viandante,Wanderer's hood,Capuche du vagabond,Capucha del errante
 EQ_WANDERER_HOOD_DESC,"+20% raggio di raccolta, +10% exp","+20% pickup radius, +10% exp","+20 % de rayon de ramassage, +10 % d'exp","+20% de radio de recogida, +10% de exp"
 EQ_SMITH_GLOVES,Guanti del fabbro,Smith's gloves,Gants du forgeron,Guantes del herrero
-EQ_SMITH_GLOVES_DESC,"+10% cadenza, +20% spinta","+10% fire rate, +20% knockback","+10 % de cadence, +20 % de recul","+10% de cadencia, +20% de empuje"
+EQ_SMITH_GLOVES_DESC,"+10% cadenza di fuoco, +20% spinta","+10% fire rate, +20% knockback","+10 % de cadence de tir, +20 % de recul","+10% de cadencia de disparo, +20% de empuje"
 EQ_BONE_ARMOR,Corazza d'osso,Bone armor,Armure d'os,Coraza de hueso
 EQ_BONE_ARMOR_DESC,"+1 HP massimi, +0,1 s di invulnerabilità","+1 max HP, +0.1s invulnerability","+1 PV max, +0,1 s d'invulnérabilité","+1 PV máx., +0,1 s de invulnerabilidad"
 EQ_LEATHER_PANTS,Brache di cuoio,Leather breeches,Braies de cuir,Calzas de cuero
