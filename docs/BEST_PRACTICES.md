@@ -44,6 +44,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
   - API standard di un oggetto poolable: `activate(...)` / `deactivate()`, mai `queue_free()`. Il ritorno al pool avviene via segnale (`expired(obj)`), non con riferimento diretto al pool.
   - In activate/deactivate: `visible`, `set_physics_process` e toggle di `monitoring`/`monitorable`/`disabled` sempre con `set_deferred` (si è spesso dentro un callback fisico).
 
+- **Classi Resource con array tipizzati o Packed*Array esportati: `@tool`** (#85). Senza, all'export l'editor le converte da un'istanza segnaposto e quei valori possono sparire solo nella build. Prima di un rilascio, dopo aver cambiato una classe dati, cancellare `.godot/exported/` (la cache di conversione non si invalida quando cambia lo script).
 - **Resource condivise sono read-only a runtime.** Un `.tres` caricato è la stessa istanza per tutti: per stato che cambia durante la run (stats potenziate dagli upgrade) lavorare su una copia fatta con `duplicate()` a inizio run.
   - Il proprietario tiene il riferimento al `.tres` base e ricrea le copie a ogni inizio run (`Player.begin_run()`); tutti i modificatori (equip, upgrade) passano da un'unica funzione pura (`StatApplier`), mai `match` sulle stat duplicati in più punti.
 - **Più fonti di pausa**: `get_tree().paused` lo scrive solo la composition root, combinando le fonti (stato della run, pause del giocatore) in un unico `_refresh_pause()`. Nessun altro nodo lo imposta direttamente.

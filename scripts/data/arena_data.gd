@@ -1,6 +1,9 @@
+@tool
 class_name ArenaData
 extends Resource
 ## Un'arena giocabile: aspetto, atmosfera, ondate, nemici e condizione di sblocco (M7).
+## @tool (#85): senza, all'export l'editor converte il .tres in binario da un'istanza segnaposto
+## che perde `event_times` (PackedFloat32Array) e nella build gli eventi non partono mai.
 ## Aggiungere un'arena = un nuovo .tres in data/arenas/ + i suoi asset, senza codice nuovo.
 
 @export var id: StringName = &""
