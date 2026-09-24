@@ -132,8 +132,8 @@ locale/translations=PackedStringArray("res://data/i18n/strings.it.translation", 
 
 [physics]
 
-common/physics_interpolation=true
 3d/physics_engine="Jolt Physics"
+common/physics_interpolation=true
 
 [rendering]
 
