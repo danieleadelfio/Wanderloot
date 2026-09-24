@@ -31,6 +31,7 @@ offset_bottom = 440.0
 mouse_filter = 2
 
 [node name="Stash" type="VBoxContainer" parent="HBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 

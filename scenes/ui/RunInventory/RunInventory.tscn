@@ -5,13 +5,16 @@
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="3"]
 [ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m1"]
 [ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m2"]
+[ext_resource type="PackedScene" path="res://scenes/hub/LoadoutPanel/LoadoutPanel.tscn" id="lp"]
 
 [sub_resource type="StyleBoxFlat" id="panel_bg"]
-bg_color = Color(0.1, 0.11, 0.17, 0.94)
+bg_color = Color(0.1, 0.11, 0.17, 0.96)
 content_margin_left = 28.0
-content_margin_top = 24.0
+content_margin_top = 20.0
 content_margin_right = 28.0
-content_margin_bottom = 24.0
+content_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxEmpty" id="empty"]
 
 [node name="RunInventory" type="CanvasLayer"]
 process_mode = 3
@@ -31,7 +34,7 @@ theme_override_styles/panel = SubResource("panel_bg")
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="Panel/VBox"]
 layout_mode = 2
@@ -44,26 +47,52 @@ theme_override_colors/font_color = Color(1, 1, 1, 0.5)
 theme_override_font_sizes/font_size = 13
 text = "RUNINV_HINT"
 
-[node name="EquipTitle" type="Label" parent="Panel/VBox"]
+[node name="Body" type="HBoxContainer" parent="Panel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "RUNINV_EQUIPPED"
+size_flags_vertical = 3
+theme_override_constants/separation = 20
 
-[node name="EquipList" type="VBoxContainer" parent="Panel/VBox"]
+[node name="Mannequin" parent="Panel/VBox/Body" instance=ExtResource("lp")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("empty")
+show_stash = false
+read_only = true
 
-[node name="LootTitle" type="Label" parent="Panel/VBox"]
+[node name="Loot" type="VBoxContainer" parent="Panel/VBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="LootTitle" type="Label" parent="Panel/VBox/Body/Loot"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "RUNINV_TITLE"
 
-[node name="LootList" type="VBoxContainer" parent="Panel/VBox"]
+[node name="Scroll" type="ScrollContainer" parent="Panel/VBox/Body/Loot"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="LootGrid" type="GridContainer" parent="Panel/VBox/Body/Loot/Scroll"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 6
 
-[node name="LootTotal" type="Label" parent="Panel/VBox"]
+[node name="LootEmpty" type="Label" parent="Panel/VBox/Body/Loot"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+text = "RUNINV_NOTHING"
+
+[node name="LootTotal" type="Label" parent="Panel/VBox/Body/Loot"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 0.8)
 theme_override_font_sizes/font_size = 13
+autowrap_mode = 3

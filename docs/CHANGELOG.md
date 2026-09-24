@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Inventario di run: manichino dell'hub in sola lettura con tooltip, raccolto in una griglia scorrevole con statistiche e confronto (#80).
 - Tooltip: intervalli dei bonus in bianco e sfondo quasi opaco (tema del progetto `data/ui/wanderloot_theme.tres`) (#79).
 - Boss Regina dei Ghoul nell'Ossario: balzi a catena, graffio ravvicinato, urlo che manda in rage, branchi di ghoul in fase 2; l'Ossario sceglie a caso tra i suoi 3 boss (#78).
 - Boss Colosso d'ossa nell'Ossario: carica in linea con corsia di preavviso, pestone con spuntoni a raggiera, in fase 2 evoca scheletri; sprite, dati (#77).

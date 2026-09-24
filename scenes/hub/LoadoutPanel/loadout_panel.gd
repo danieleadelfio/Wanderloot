@@ -32,6 +32,10 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.EquipSlot.RING_2: "SLOT_RING",
 }
 
+## Falso nell'inventario di run: solo il manichino (niente baule), in sola lettura (M11.4, #80).
+@export var show_stash: bool = true
+@export var read_only: bool = false
+
 ## Ordine del baule scelto: resta finche' il gioco e' aperto.
 static var sort_mode: StashSort.Mode = StashSort.Mode.ARRIVAL
 
@@ -43,6 +47,7 @@ var _loadout: EquipmentLoadout
 
 
 func _ready() -> void:
+	%Stash.visible = show_stash
 	var group := ButtonGroup.new()
 	for pair in [[%SortArrival, StashSort.Mode.ARRIVAL], [%SortRarity, StashSort.Mode.RARITY], [%SortCategory, StashSort.Mode.CATEGORY]]:
 		var button: Button = pair[0]
@@ -67,8 +72,10 @@ func refresh(loadout: EquipmentLoadout) -> void:
 		var button: Button = ItemTile.for_item(item) if item else _item_button(null, tr(SLOT_NAMES[slot]))
 		button.size = button.custom_minimum_size
 		button.position = SLOT_POSITIONS[slot]
-		if item:
+		if item and not read_only:
 			button.pressed.connect(unequip_requested.emit.bind(slot))
+		elif item:
+			button.focus_mode = Control.FOCUS_NONE
 		else:
 			button.disabled = true
 		_slots.add_child(button)

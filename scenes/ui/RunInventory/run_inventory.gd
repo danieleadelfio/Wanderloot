@@ -1,18 +1,18 @@
 class_name RunInventory
 extends CanvasLayer
-## Inventario di run (tasto I): equipaggiamento indossato e loot raccolto nella run (a rischio).
+## Inventario di run (tasto I): manichino con l'equipaggiamento indossato (tooltip con statistiche) e,
+## accanto, il loot raccolto nella run (a rischio) in una griglia scorrevole con tooltip e confronto.
 ## Occupa la meta' destra dello schermo; la pausa la gestisce la composition root.
 
-const SLOT_NAMES := LoadoutPanel.SLOT_NAMES
-const ICON_SIZE: Vector2 = Vector2(32, 32)
 const LOOT_COLOR: Color = Color(1, 0.8, 0.35)
 
-## Per nomi e icone del loot; id sconosciuti mostrati grezzi.
+## Per nomi e icone del loot; id sconosciuti non mostrati.
 @export var materials: Array[MaterialData] = []
 
 @onready var _panel: Control = %Panel
-@onready var _equip_list: VBoxContainer = %EquipList
-@onready var _loot_list: VBoxContainer = %LootList
+@onready var _mannequin: LoadoutPanel = %Mannequin
+@onready var _loot_grid: GridContainer = %LootGrid
+@onready var _empty: Label = %LootEmpty
 @onready var _loot_total: Label = %LootTotal
 
 
@@ -25,58 +25,26 @@ func close() -> void:
 
 
 func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items: Array[ItemInstance] = []) -> void:
-	_clear(_equip_list)
-	_clear(_loot_list)
-	for slot: int in EquipmentLoadout.EquipSlot.values():
-		var item := loadout.equipped_in(slot)
-		if item == null:
-			continue
-		var text := "%s: %s  (%s)" % [tr(SLOT_NAMES[slot]), ItemText.title(item), tr(item.base.description)]
-		_equip_list.add_child(_row(item.base.icon, text, ItemText.color(item)))
+	_mannequin.refresh(loadout)
+	for child in _loot_grid.get_children():
+		_loot_grid.remove_child(child)
+		child.queue_free()
 	var total := 0
-	for id in loot:
-		var material := _material(id)
-		var name := tr(material.display_name) if material else String(id)
-		_loot_list.add_child(_row(material.icon if material else null, "%s × %d" % [name, loot[id]], LOOT_COLOR))
-		total += loot[id]
-	# Oggetti trovati in run: a rischio come i materiali, col colore della rarita'.
-	for item in items:
-		var row := _row(item.base.icon, ItemText.title(item), ItemText.color(item))
-		row.tooltip_text = ItemText.tooltip(item)
-		row.mouse_filter = Control.MOUSE_FILTER_PASS
-		_loot_list.add_child(row)
+	var sorted := items.duplicate()
+	sorted.sort_custom(func(a: ItemInstance, b: ItemInstance) -> bool: return a.rarity > b.rarity)
+	for item: ItemInstance in sorted:
+		var tile := ItemTile.for_item(item)
+		for slot in EquipmentLoadout.slots_for(item.slot()):
+			var worn := loadout.equipped_in(slot)
+			if worn:
+				tile.compare.append(worn)
+		_loot_grid.add_child(tile)
 		total += 1
-	if loot.is_empty() and items.is_empty():
-		_loot_list.add_child(_row(null, tr("RUNINV_NOTHING"), Color(1, 1, 1, 0.5)))
+	for material in materials:
+		var amount: int = loot.get(material.id, 0)
+		if amount > 0:
+			_loot_grid.add_child(ItemTile.for_material(material, amount))
+			total += amount
+	_empty.visible = _loot_grid.get_child_count() == 0
 	_loot_total.text = tr("RUNINV_TOTAL") % total
 	_panel.show()
-
-
-func _material(id: StringName) -> MaterialData:
-	for material in materials:
-		if material.id == id:
-			return material
-	return null
-
-
-func _row(icon: Texture2D, text: String, color: Color) -> HBoxContainer:
-	var row := HBoxContainer.new()
-	var picture := TextureRect.new()
-	picture.texture = icon
-	picture.custom_minimum_size = ICON_SIZE
-	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	var label := Label.new()
-	label.text = text
-	label.add_theme_color_override("font_color", color)
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(picture)
-	row.add_child(label)
-	return row
-
-
-func _clear(container: Container) -> void:
-	for child in container.get_children():
-		container.remove_child(child)
-		child.queue_free()
