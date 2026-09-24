@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Fortuna"
-description = "+15% probabilità di drop"
+display_name = "UPG_LUCK_UP"
+description = "UPG_LUCK_UP_DESC"
 stat = 8
 amount = 0.15
 is_multiplier = false

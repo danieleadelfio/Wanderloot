@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Persistenza"
-description = "+25% durata dei proiettili"
+display_name = "UPG_LIFETIME_UP"
+description = "UPG_LIFETIME_UP_DESC"
 stat = 5
 amount = 1.25
 is_multiplier = true

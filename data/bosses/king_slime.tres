@@ -27,7 +27,7 @@ max_amount = 5
 [resource]
 script = ExtResource("1")
 id = &"king_slime"
-display_name = "Re Slime"
+display_name = "BOSS_KING_SLIME"
 max_hp = 400
 move_speed = 80.0
 exp_reward = 40

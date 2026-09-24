@@ -17,8 +17,8 @@ scene = ExtResource("8")
 [resource]
 script = ExtResource("1")
 id = &"crypt"
-display_name = "Cripta"
-description = "Sotterranei umidi infestati dagli slime. L'arena iniziale."
+display_name = "ARENA_CRYPT"
+description = "ARENA_CRYPT_DESC"
 floor_texture = ExtResource("3")
 wall_texture = ExtResource("4")
 music = ExtResource("5")

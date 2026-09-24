@@ -7,5 +7,5 @@
 script = ExtResource("1")
 icon = ExtResource("ic")
 id = &"shadow_essence"
-display_name = "Essenza d'ombra"
+display_name = "MAT_SHADOW_ESSENCE"
 rarity = 1

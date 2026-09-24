@@ -54,8 +54,10 @@ func load_file() -> Error:
 	return error
 
 
+## Conserva le altre sezioni del file impostazioni (es. lingua).
 func save_file() -> Error:
 	var config := ConfigFile.new()
+	config.load(path)
 	for bus in BUSES:
 		config.set_value(SECTION, String(bus), volume(bus))
 	return config.save(path)

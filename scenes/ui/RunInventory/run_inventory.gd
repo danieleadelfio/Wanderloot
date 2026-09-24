@@ -4,8 +4,8 @@ extends CanvasLayer
 ## Occupa la meta' destra dello schermo; la pausa la gestisce la composition root.
 
 const SLOT_NAMES: Dictionary[int, String] = {
-	EquipmentData.Slot.WEAPON: "Arma",
-	EquipmentData.Slot.ACCESSORY: "Accessorio",
+	EquipmentData.Slot.WEAPON: "SLOT_WEAPON",
+	EquipmentData.Slot.ACCESSORY: "SLOT_ACCESSORY",
 }
 const ICON_SIZE: Vector2 = Vector2(32, 32)
 const LOOT_COLOR: Color = Color(1, 0.8, 0.35)
@@ -35,17 +35,17 @@ func present(equipped: Array[EquipmentData], loot: Dictionary[StringName, int]) 
 		for candidate in equipped:
 			if candidate.slot == slot:
 				item = candidate
-		var text := "%s: %s" % [SLOT_NAMES[slot], ("%s  (%s)" % [item.display_name, item.description]) if item else "nessuno"]
+		var text := "%s: %s" % [tr(SLOT_NAMES[slot]), ("%s  (%s)" % [tr(item.display_name), tr(item.description)]) if item else tr("SLOT_NONE")]
 		_equip_list.add_child(_row(item.icon if item else null, text, Color.WHITE))
 	var total := 0
 	for id in loot:
 		var material := _material(id)
-		var name := material.display_name if material else String(id)
+		var name := tr(material.display_name) if material else String(id)
 		_loot_list.add_child(_row(material.icon if material else null, "%s × %d" % [name, loot[id]], LOOT_COLOR))
 		total += loot[id]
 	if loot.is_empty():
-		_loot_list.add_child(_row(null, "Niente, per ora.", Color(1, 1, 1, 0.5)))
-	_loot_total.text = "Totale a rischio: %d  ·  si perde tutto se muori" % total
+		_loot_list.add_child(_row(null, tr("RUNINV_NOTHING"), Color(1, 1, 1, 0.5)))
+	_loot_total.text = tr("RUNINV_TOTAL") % total
 	_panel.show()
 
 

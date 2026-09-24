@@ -16,13 +16,13 @@ func _ready() -> void:
 
 
 func present(extracted: bool, level: int, elapsed: float, kills: int, loot_amount: int, stash_total: int) -> void:
-	_title_label.text = "Estrazione riuscita!" if extracted else "Sei morto"
+	_title_label.text = tr("RUNEND_EXTRACTED") if extracted else tr("RUNEND_DEAD")
 	var seconds := int(elapsed)
-	_summary_label.text = "Livello %d  ·  Tempo %d:%02d  ·  Uccisioni %d" % [level, seconds / 60, seconds % 60, kills]
+	_summary_label.text = tr("RUNEND_SUMMARY") % [level, seconds / 60, seconds % 60, kills]
 	if extracted:
-		_loot_label.text = "Loot estratto: %d  ·  Totale nel baule: %d" % [loot_amount, stash_total]
+		_loot_label.text = tr("RUNEND_LOOT_EXTRACTED") % [loot_amount, stash_total]
 	else:
-		_loot_label.text = "Loot perso: %d" % loot_amount
+		_loot_label.text = tr("RUNEND_LOOT_LOST") % loot_amount
 	show()
 	_restart_button.grab_focus()
 

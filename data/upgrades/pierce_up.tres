@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Perforazione"
-description = "I proiettili attraversano +1 nemico"
+display_name = "UPG_PIERCE_UP"
+description = "UPG_PIERCE_UP_DESC"
 stat = 12
 amount = 1.0
 is_multiplier = false

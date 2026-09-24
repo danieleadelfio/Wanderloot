@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Impatto"
-description = "+30% spinta dei colpi"
+display_name = "UPG_IMPACT_UP"
+description = "UPG_IMPACT_UP_DESC"
 stat = 10
 amount = 1.3
 is_multiplier = true

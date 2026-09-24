@@ -113,21 +113,21 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Continua"
+text = "MENU_CONTINUE"
 
 [node name="NewGameButton" type="Button" parent="Center/Panel/VBox/MainPanel"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Nuova partita"
+text = "MENU_NEW_GAME"
 
 [node name="NewGameHint" type="Label" parent="Center/Panel/VBox/MainPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.7)
 theme_override_font_sizes/font_size = 13
-text = "Nuova partita: il salvataggio attuale resta finché non salvi."
+text = "MENU_NEW_GAME_HINT"
 horizontal_alignment = 1
 
 [node name="OptionsButton" type="Button" parent="Center/Panel/VBox/MainPanel"]
@@ -135,14 +135,14 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Opzioni"
+text = "UI_OPTIONS"
 
 [node name="QuitButton" type="Button" parent="Center/Panel/VBox/MainPanel"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Esci"
+text = "MENU_QUIT"
 
 [node name="OptionsPanel" parent="Center/Panel/VBox" instance=ExtResource("options")]
 unique_name_in_owner = true

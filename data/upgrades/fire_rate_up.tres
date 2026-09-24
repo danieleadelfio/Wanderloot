@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Raffica"
-description = "+20% cadenza di fuoco"
+display_name = "UPG_FIRE_RATE_UP"
+description = "UPG_FIRE_RATE_UP_DESC"
 stat = 1
 amount = 1.2
 is_multiplier = true

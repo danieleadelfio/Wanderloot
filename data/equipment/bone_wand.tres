@@ -16,7 +16,7 @@ amount = 1.0
 [resource]
 script = ExtResource("1")
 id = &"bone_wand"
-display_name = "Bacchetta d'ossa"
-description = "+1 danno e i proiettili attraversano +1 nemico"
+display_name = "EQ_BONE_WAND"
+description = "EQ_BONE_WAND_DESC"
 icon = ExtResource("ic")
 modifiers = Array[ExtResource("2")]([SubResource("mod_1"), SubResource("mod_2")])

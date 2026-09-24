@@ -13,8 +13,8 @@ is_multiplier = true
 [resource]
 script = ExtResource("1")
 id = &"slime_boots"
-display_name = "Stivali viscosi"
-description = "+10% velocità di movimento"
+display_name = "EQ_SLIME_BOOTS"
+description = "EQ_SLIME_BOOTS_DESC"
 slot = 1
 icon = ExtResource("ic")
 modifiers = Array[ExtResource("2")]([SubResource("mod_1")])

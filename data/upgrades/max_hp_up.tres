@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Vigore"
-description = "+1 HP massimi (e cura 1)"
+display_name = "UPG_MAX_HP_UP"
+description = "UPG_MAX_HP_UP_DESC"
 stat = 4
 amount = 1.0
 is_multiplier = false

@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Guardia"
-description = "+0.2s di invulnerabilità dopo un colpo"
+display_name = "UPG_GUARD_UP"
+description = "UPG_GUARD_UP_DESC"
 stat = 9
 amount = 0.2
 is_multiplier = false

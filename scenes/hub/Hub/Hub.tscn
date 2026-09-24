@@ -471,7 +471,7 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("interactable")
-prompt = "E — Fabbro (crafting)"
+prompt = "PROMPT_FORGE"
 window = NodePath("../../UI/BlacksmithWindow")
 
 [node name="Shape" type="CollisionShape2D" parent="World/ForgeSpot"]
@@ -483,7 +483,7 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("interactable")
-prompt = "E — Baule (inventario)"
+prompt = "PROMPT_CHEST"
 window = NodePath("../../UI/InventoryWindow")
 
 [node name="Shape" type="CollisionShape2D" parent="World/ChestSpot"]
@@ -495,7 +495,7 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("interactable")
-prompt = "E — Portale (scegli l'arena e parti)"
+prompt = "PROMPT_PORTAL"
 window = NodePath("../../UI/PortalWindow")
 
 [node name="Shape" type="CollisionShape2D" parent="World/PortalSpot"]
@@ -512,7 +512,7 @@ theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 28
-text = "Piazza di Wanderloot"
+text = "HUB_TITLE"
 
 [node name="Hint" type="Label" parent="UI"]
 offset_left = 24.0
@@ -522,7 +522,7 @@ offset_bottom = 84.0
 theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.85)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-text = "WASD muoviti · E interagisci · I inventario · C statistiche · ESC menu"
+text = "HUB_HINT"
 
 [node name="Prompt" type="Label" parent="UI"]
 unique_name_in_owner = true
@@ -559,7 +559,7 @@ alignment = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
-tooltip_text = "Inventario (I)"
+tooltip_text = "UI_TOOLTIP_INVENTORY"
 focus_mode = 0
 texture_normal = ExtResource("icon_bag")
 ignore_texture_size = true
@@ -569,7 +569,7 @@ stretch_mode = 5
 unique_name_in_owner = true
 custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
-tooltip_text = "Statistiche (C)"
+tooltip_text = "UI_TOOLTIP_STATS"
 focus_mode = 0
 texture_normal = ExtResource("icon_stats")
 ignore_texture_size = true
@@ -624,13 +624,13 @@ layout_mode = 2
 [node name="StashTitle" type="Label" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Baule"
+text = "STASH_TITLE"
 
 [node name="StashLabel" type="Label" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 1)
-text = "Baule vuoto: estrai loot da una run."
+text = "STASH_EMPTY"
 
 [node name="StashList" type="VBoxContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel/VBox"]
 unique_name_in_owner = true
@@ -657,7 +657,7 @@ columns = 2
 [node name="CloseHint" type="Label" parent="UI/InventoryWindow/Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
-text = "I inventario · C statistiche · ESC per chiudere"
+text = "INV_CLOSE_HINT"
 horizontal_alignment = 1
 
 [node name="BlacksmithWindow" type="CenterContainer" parent="UI"]
@@ -685,7 +685,7 @@ size_flags_vertical = 3
 [node name="CloseHint" type="Label" parent="UI/BlacksmithWindow/Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
-text = "ESC o E per chiudere"
+text = "UI_CLOSE_HINT"
 horizontal_alignment = 1
 
 [node name="PortalWindow" type="CenterContainer" parent="UI"]
@@ -715,12 +715,12 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(240, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Attraversa il portale"
+text = "PORTAL_START"
 
 [node name="CloseHint" type="Label" parent="UI/PortalWindow/Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
-text = "ESC o E per chiudere"
+text = "UI_CLOSE_HINT"
 horizontal_alignment = 1
 
 [node name="PauseMenu" parent="." instance=ExtResource("pause_menu")]

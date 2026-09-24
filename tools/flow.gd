@@ -38,7 +38,7 @@ func _physics_process(_d: float) -> bool:
 						end.get_node("%RestartButton").pressed.emit(); t = 0
 						# step 1: si ripete finche' un'estrazione non riesce (max 6 tentativi)
 						attempts += 1
-						if step == 4 or title.begins_with("Estrazione") or attempts >= 6: step += 1
+						if step == 4 or title == TranslationServer.translate("RUNEND_EXTRACTED") or attempts >= 6: step += 1
 						else: step = 0
 				else:
 					_drive(s, step == 1)

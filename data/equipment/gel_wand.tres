@@ -11,7 +11,7 @@ amount = 1.0
 [resource]
 script = ExtResource("1")
 id = &"gel_wand"
-display_name = "Bacchetta di gelatina"
-description = "+1 danno per proiettile"
+display_name = "EQ_GEL_WAND"
+description = "EQ_GEL_WAND_DESC"
 icon = ExtResource("ic")
 modifiers = Array[ExtResource("2")]([SubResource("mod_1")])

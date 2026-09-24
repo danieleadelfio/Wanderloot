@@ -29,7 +29,7 @@ theme_override_constants/separation = 14
 [node name="OptionsTitle" type="Label" parent="VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Opzioni"
+text = "UI_OPTIONS"
 
 [node name="MusicRow" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
@@ -38,7 +38,7 @@ theme_override_constants/separation = 12
 [node name="Label" type="Label" parent="VBox/MusicRow"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-text = "Musica"
+text = "OPT_MUSIC"
 
 [node name="MusicSlider" type="HSlider" parent="VBox/MusicRow"]
 unique_name_in_owner = true
@@ -62,7 +62,7 @@ theme_override_constants/separation = 12
 [node name="Label" type="Label" parent="VBox/SfxRow"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-text = "Effetti"
+text = "OPT_SFX"
 
 [node name="SfxSlider" type="HSlider" parent="VBox/SfxRow"]
 unique_name_in_owner = true
@@ -79,6 +79,30 @@ layout_mode = 2
 text = "100%"
 horizontal_alignment = 2
 
+[node name="LanguageRow" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="VBox/LanguageRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "OPT_LANGUAGE"
+
+[node name="LanguageOption" type="OptionButton" parent="VBox/LanguageRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 36)
+layout_mode = 2
+
+[node name="LanguageHint" type="Label" parent="VBox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.75)
+theme_override_font_sizes/font_size = 13
+text = "OPT_LANGUAGE_HINT"
+autowrap_mode = 3
+
 [node name="DeleteSeparator" type="HSeparator" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -88,7 +112,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Cancella dati salvati"
+text = "OPT_DELETE"
 
 [node name="OptionsStatus" type="Label" parent="VBox"]
 unique_name_in_owner = true
@@ -101,4 +125,4 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Indietro"
+text = "UI_BACK"

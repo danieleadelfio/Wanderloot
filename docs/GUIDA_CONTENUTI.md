@@ -249,6 +249,10 @@ Le stat disponibili sono quelle dell'enum `UpgradeData.Stat` (danno, cadenza, ve
 
 ---
 
+## 4.6 Testi e traduzioni
+
+Ogni testo visibile è una chiave: nel `.tres` o nella scena scrivi la chiave (es. `display_name = "MAT_BONE_SHARD"`), poi aggiungi una riga a `data/i18n/strings.csv` con `keys,it,en,fr,es` (virgolette se il testo contiene virgole). Godot reimporta il CSV da solo. Convenzione dei prefissi: `MAT_` materiali, `EQ_` equipaggiamento (`_DESC` per la descrizione), `UPG_` potenziamenti, `ARENA_` arene, `BOSS_` boss, `STAT_` statistiche, `UI_`/`MENU_`/`PAUSE_`/`OPT_`/`HUD_` interfaccia. I test controllano che ogni chiave usata esista e abbia le 4 lingue.
+
 ## 5. Cose da non fare
 
 - **Non chiamare `MetaProgression.save_to_disk()` dal gameplay**: i salvataggi sono solo manuali (Salva nel menu di pausa → `GameSession.save()`). Per provare contenuti nuovi parti da **Nuova partita** o da un salvataggio di prova.

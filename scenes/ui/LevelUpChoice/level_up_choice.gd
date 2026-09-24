@@ -19,7 +19,7 @@ func present(options: Array[UpgradeData]) -> void:
 		child.queue_free()
 	for upgrade in options:
 		var button := Button.new()
-		button.text = "%s\n%s" % [upgrade.display_name, upgrade.description]
+		button.text = "%s\n%s" % [tr(upgrade.display_name), tr(upgrade.description)]
 		button.custom_minimum_size = BUTTON_SIZE
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		button.pressed.connect(_on_choice_pressed.bind(upgrade))

@@ -31,7 +31,7 @@ var _pause_open: bool = false
 func _ready() -> void:
 	get_tree().paused = false
 	for material in materials:
-		_material_names[material.id] = material.display_name
+		_material_names[material.id] = tr(material.display_name)
 		_material_icons[material.id] = material.icon
 	for node in find_children("*", "Interactable", true, false):
 		var spot := node as Interactable
@@ -49,7 +49,10 @@ func _ready() -> void:
 	_pause_menu.action_requested.connect(_on_pause_action)
 	%InventoryIcon.pressed.connect(_toggle_inventory.bind(0))
 	%StatsIcon.pressed.connect(_toggle_inventory.bind(1))
-	_pause_menu.set_hint("ESC per chiudere")
+	_tabs.set_tab_title(0, tr("TAB_INVENTORY"))
+	_tabs.set_tab_title(1, tr("TAB_STATS"))
+	_pause_menu.language_requested.connect(_on_language_requested)
+	_pause_menu.set_hint(tr("PAUSE_HINT_HUB"))
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
@@ -142,10 +145,16 @@ func _on_pause_action(action: PauseState.Action) -> void:
 func _on_save_requested() -> void:
 	MetaProgression.set_hub_position(%Player.global_position)
 	var ok := GameSession.save()
-	_pause_menu.show_status("Partita salvata" if ok else "Salvataggio non riuscito")
+	_pause_menu.show_status(tr("SAVE_OK") if ok else tr("SAVE_FAIL"))
 	_pause_menu.set_can_load(MetaProgression.has_save())
 	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_sfx.play(&"ui_select")
+
+
+## Cambio lingua dal menu di pausa: salva (con la posizione nella piazza) e torna al menu iniziale.
+func _on_language_requested(locale: String) -> void:
+	MetaProgression.set_hub_position(%Player.global_position)
+	GameSession.change_language(get_tree(), locale)
 
 
 func _open(window: Control) -> void:

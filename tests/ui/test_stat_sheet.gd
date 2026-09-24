@@ -13,11 +13,11 @@ func test_rows_reflect_stats_and_weapon() -> void:
 	var by_label := {}
 	for row in rows:
 		by_label[row[0]] = row[1]
-	assert_str(by_label["Vita max"]).is_equal("7")
-	assert_str(by_label["Danno"]).is_equal("3")
-	assert_str(by_label["Cadenza"]).is_equal("5.5/s")
-	assert_str(by_label["Bonus exp"]).is_equal("+25%")
-	assert_str(by_label["Bonus drop"]).is_equal("+0%")
+	assert_str(by_label["STAT_MAX_HP"]).is_equal("7")
+	assert_str(by_label["STAT_DAMAGE"]).is_equal("3")
+	assert_str(by_label["STAT_FIRE_RATE"]).is_equal("5.5/s")
+	assert_str(by_label["STAT_EXP_BONUS"]).is_equal("+25%")
+	assert_str(by_label["STAT_DROP_BONUS"]).is_equal("+0%")
 
 
 func test_upgrade_changes_rows() -> void:

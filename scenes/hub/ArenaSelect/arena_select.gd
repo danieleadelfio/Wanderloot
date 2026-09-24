@@ -15,14 +15,14 @@ func refresh(catalog: ArenaCatalog, extractions: Dictionary, selected: StringNam
 		var button := Button.new()
 		var unlocked := arena.is_unlocked(extractions)
 		if unlocked:
-			button.text = "%s%s" % [arena.display_name, "  —  scelta" if arena.id == selected else ""]
-			button.tooltip_text = arena.description
+			button.text = "%s%s" % [tr(arena.display_name), tr("ARENA_SELECTED") if arena.id == selected else ""]
+			button.tooltip_text = tr(arena.description)
 			button.pressed.connect(arena_selected.emit.bind(arena.id))
 		else:
 			var required := catalog.find(arena.unlock_arena)
-			button.text = "%s  —  bloccata: %d/%d estrazioni in %s" % [
-				arena.display_name, int(extractions.get(arena.unlock_arena, 0)), arena.unlock_extractions,
-				required.display_name if required else String(arena.unlock_arena)]
+			button.text = tr("ARENA_LOCKED") % [
+				tr(arena.display_name), int(extractions.get(arena.unlock_arena, 0)), arena.unlock_extractions,
+				tr(required.display_name) if required else String(arena.unlock_arena)]
 			button.disabled = true
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.custom_minimum_size.y = 36

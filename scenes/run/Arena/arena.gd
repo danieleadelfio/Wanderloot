@@ -67,6 +67,7 @@ func _ready() -> void:
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
+	_pause_menu.language_requested.connect(_on_language_requested)
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
@@ -307,11 +308,17 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_refresh_pause()
 
 
+## Cambio lingua in run: salva i progressi permanenti (la run si perde) e torna al menu iniziale.
+func _on_language_requested(locale: String) -> void:
+	MetaProgression.clear_hub_position()
+	GameSession.change_language(get_tree(), locale)
+
+
 func _on_save_requested() -> void:
 	# In run si salvano solo i progressi permanenti: al caricamento si riparte dall'ingresso della piazza.
 	MetaProgression.clear_hub_position()
 	var ok := GameSession.save()
-	_pause_menu.show_status("Partita salvata (il loot della run resta a rischio)" if ok else "Salvataggio non riuscito")
+	_pause_menu.show_status(tr("SAVE_OK_RUN") if ok else tr("SAVE_FAIL"))
 	_pause_menu.set_can_load(MetaProgression.has_save())
 	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_sfx.play(&"ui_select")

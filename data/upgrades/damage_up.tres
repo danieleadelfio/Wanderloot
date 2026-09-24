@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Potenza"
-description = "+1 danno per proiettile"
+display_name = "UPG_DAMAGE_UP"
+description = "UPG_DAMAGE_UP_DESC"
 stat = 0
 amount = 1.0
 is_multiplier = false

@@ -7,6 +7,6 @@
 script = ExtResource("1")
 icon = ExtResource("ic")
 id = &"slime_core"
-display_name = "Nucleo di slime"
+display_name = "MAT_SLIME_CORE"
 rarity = 1
 color = Color(0.3, 0.85, 1, 1)

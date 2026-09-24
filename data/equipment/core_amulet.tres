@@ -12,8 +12,8 @@ amount = 2.0
 [resource]
 script = ExtResource("1")
 id = &"core_amulet"
-display_name = "Amuleto del nucleo"
-description = "+2 HP massimi"
+display_name = "EQ_CORE_AMULET"
+description = "EQ_CORE_AMULET_DESC"
 slot = 1
 icon = ExtResource("ic")
 modifiers = Array[ExtResource("2")]([SubResource("mod_1")])

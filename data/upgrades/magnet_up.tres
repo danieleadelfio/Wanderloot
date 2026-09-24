@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Magnete"
-description = "+30% raggio di raccolta"
+display_name = "UPG_MAGNET_UP"
+description = "UPG_MAGNET_UP_DESC"
 stat = 6
 amount = 1.3
 is_multiplier = true

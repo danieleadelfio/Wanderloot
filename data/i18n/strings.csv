@@ -1,0 +1,127 @@
+keys,it,en,fr,es
+UI_OPTIONS,Opzioni,Options,Options,Opciones
+UI_CLOSE_HINT,ESC o E per chiudere,ESC or E to close,Échap ou E pour fermer,ESC o E para cerrar
+UI_TOOLTIP_STATS,Statistiche (C),Stats (C),Statistiques (C),Estadísticas (C)
+UI_TOOLTIP_INVENTORY,Inventario (I),Inventory (I),Inventaire (I),Inventario (I)
+UI_BACK,Indietro,Back,Retour,Atrás
+HUB_HINT,WASD muoviti · E interagisci · I inventario · C statistiche · ESC menu,WASD move · E interact · I inventory · C stats · ESC menu,WASD se déplacer · E interagir · I inventaire · C statistiques · Échap menu,WASD moverse · E interactuar · I inventario · C estadísticas · ESC menú
+HUB_TITLE,Piazza di Wanderloot,Wanderloot Square,Place de Wanderloot,Plaza de Wanderloot
+RUN_BACK_TO_HUB,Torna all'hub,Back to the hub,Retour au hub,Volver al hub
+PAUSE_BACK_TO_MENU,Torna al menu,Back to menu,Retour au menu,Volver al menú
+PAUSE_SAVE,Salva,Save,Sauvegarder,Guardar
+PAUSE_RESUME,Riprendi,Resume,Reprendre,Reanudar
+PAUSE_LOAD,Carica,Load,Charger,Cargar
+PAUSE_TITLE,Menu,Menu,Menu,Menú
+PAUSE_LABEL,PAUSA,PAUSED,PAUSE,PAUSA
+PAUSE_HINT,ESC per chiudere · P pausa diretta,ESC to close · P quick pause,Échap pour fermer · P pause directe,ESC para cerrar · P pausa directa
+PAUSE_HINT_HUB,ESC per chiudere,ESC to close,Échap pour fermer,ESC para cerrar
+PAUSE_UNSAVED,Modifiche non salvate: premi di nuovo per uscire,Unsaved changes: press again to leave,Modifications non sauvegardées : appuyez à nouveau pour quitter,Cambios sin guardar: pulsa de nuevo para salir
+SAVE_OK,Partita salvata,Game saved,Partie sauvegardée,Partida guardada
+SAVE_OK_RUN,Partita salvata (il loot della run resta a rischio),Game saved (run loot is still at risk),Partie sauvegardée (le butin de l'expédition reste en jeu),Partida guardada (el botín de la expedición sigue en riesgo)
+SAVE_FAIL,Salvataggio non riuscito,Save failed,Échec de la sauvegarde,Error al guardar
+RUNINV_TITLE,Raccolto in questa run,Collected this run,Récolté pendant l'expédition,Recogido en esta expedición
+RUNINV_HINT,Gioco in pausa · I o ESC per chiudere,Game paused · I or ESC to close,Jeu en pause · I ou Échap pour fermer,Juego en pausa · I o ESC para cerrar
+RUNINV_EQUIPPED,Equipaggiato,Equipped,Équipé,Equipado
+RUNINV_NOTHING,"Niente, per ora.",Nothing yet.,Rien pour l'instant.,Nada por ahora.
+RUNINV_TOTAL,Totale a rischio: %d  ·  si perde tutto se muori,Total at risk: %d  ·  you lose it all if you die,Total en jeu : %d  ·  tout est perdu si vous mourez,Total en riesgo: %d  ·  lo pierdes todo si mueres
+PORTAL_TITLE,Portale,Portal,Portail,Portal
+PORTAL_START,Attraversa il portale,Enter the portal,Traverser le portail,Cruzar el portal
+ARENA_SELECTED,  —  scelta,  —  selected,  —  choisie,  —  elegida
+ARENA_LOCKED,%s  —  bloccata: %d/%d estrazioni in %s,%s  —  locked: %d/%d extractions in %s,%s  —  verrouillée : %d/%d extractions dans %s,%s  —  bloqueada: %d/%d extracciones en %s
+MENU_CONTINUE,Continua,Continue,Continuer,Continuar
+MENU_NEW_GAME,Nuova partita,New game,Nouvelle partie,Nueva partida
+MENU_NEW_GAME_HINT,Nuova partita: il salvataggio attuale resta finché non salvi.,New game: your current save stays until you save again.,Nouvelle partie : la sauvegarde actuelle reste jusqu'à ce que vous sauvegardiez.,Nueva partida: la partida guardada se mantiene hasta que vuelvas a guardar.
+MENU_QUIT,Esci,Quit,Quitter,Salir
+OPT_MUSIC,Musica,Music,Musique,Música
+OPT_SFX,Effetti,Effects,Effets,Efectos
+OPT_LANGUAGE,Lingua,Language,Langue,Idioma
+OPT_LANGUAGE_HINT,Cambiando lingua la partita viene salvata e si torna al menu principale.,Changing language saves the game and returns to the main menu.,Changer de langue sauvegarde la partie et revient au menu principal.,Cambiar el idioma guarda la partida y vuelve al menú principal.
+OPT_DELETE,Cancella dati salvati,Delete saved data,Supprimer les données,Borrar datos guardados
+OPT_DELETE_CONFIRM,Conferma: cancella tutto,Confirm: delete everything,Confirmer : tout supprimer,Confirmar: borrar todo
+OPT_DELETE_WARNING,Il salvataggio verrà eliminato definitivamente.,The save will be permanently deleted.,La sauvegarde sera définitivement supprimée.,La partida guardada se eliminará definitivamente.
+DATA_DELETED,Dati cancellati.,Data deleted.,Données supprimées.,Datos borrados.
+DATA_DELETE_FAIL,Cancellazione non riuscita.,Deletion failed.,Échec de la suppression.,Error al borrar.
+LEVELUP_TITLE,Level up! Scegli un potenziamento,Level up! Choose an upgrade,Niveau supérieur ! Choisissez une amélioration,¡Subes de nivel! Elige una mejora
+TAB_INVENTORY,Inventario,Inventory,Inventaire,Inventario
+TAB_STATS,Statistiche,Stats,Statistiques,Estadísticas
+INV_CLOSE_HINT,I inventario · C statistiche · ESC per chiudere,I inventory · C stats · ESC to close,I inventaire · C statistiques · Échap pour fermer,I inventario · C estadísticas · ESC para cerrar
+BLACKSMITH_TITLE,Fabbro,Blacksmith,Forgeron,Herrero
+BLACKSMITH_OWNED,posseduto,owned,possédé,en posesión
+LOADOUT_TITLE,Equipaggiamento,Equipment,Équipement,Equipo
+LOADOUT_NO_ITEM,  nessun pezzo: craftalo dal fabbro,  no item: craft it at the blacksmith,  aucun objet : fabriquez-le chez le forgeron,  ningún objeto: fabrícalo en el herrero
+LOADOUT_EQUIPPED,equipaggiato,equipped,équipé,equipado
+SLOT_WEAPON,Arma,Weapon,Arme,Arma
+SLOT_ACCESSORY,Accessorio,Accessory,Accessoire,Accesorio
+SLOT_NONE,nessuno,none,aucun,ninguno
+STASH_TITLE,Baule,Chest,Coffre,Cofre
+STASH_EMPTY,Baule vuoto: estrai loot da una run.,Chest empty: extract loot from a run.,Coffre vide : extrayez du butin d'une expédition.,Cofre vacío: extrae botín de una expedición.
+PROMPT_PORTAL,E — Portale (scegli l'arena e parti),E — Portal (choose the arena and go),E — Portail (choisir l'arène et partir),E — Portal (elige la arena y parte)
+PROMPT_FORGE,E — Fabbro (crafting),E — Blacksmith (crafting),E — Forgeron (artisanat),E — Herrero (fabricación)
+PROMPT_CHEST,E — Baule (inventario),E — Chest (inventory),E — Coffre (inventaire),E — Cofre (inventario)
+RUNEND_EXTRACTED,Estrazione riuscita!,Extraction successful!,Extraction réussie !,¡Extracción completada!
+RUNEND_DEAD,Sei morto,You died,Vous êtes mort,Has muerto
+RUNEND_SUMMARY,Livello %d  ·  Tempo %d:%02d  ·  Uccisioni %d,Level %d  ·  Time %d:%02d  ·  Kills %d,Niveau %d  ·  Temps %d:%02d  ·  Éliminations %d,Nivel %d  ·  Tiempo %d:%02d  ·  Bajas %d
+RUNEND_LOOT_EXTRACTED,Loot estratto: %d  ·  Totale nel baule: %d,Loot extracted: %d  ·  Chest total: %d,Butin extrait : %d  ·  Total dans le coffre : %d,Botín extraído: %d  ·  Total en el cofre: %d
+RUNEND_LOOT_LOST,Loot perso: %d,Loot lost: %d,Butin perdu : %d,Botín perdido: %d
+HUD_LOOT,Loot a rischio: %d,Loot at risk: %d,Butin en jeu : %d,Botín en riesgo: %d
+HUD_EXTRACTION_IN,Estrazione tra %ds,Extraction in %ds,Extraction dans %d s,Extracción en %d s
+HUD_EXTRACTION_PROGRESS,Estrazione %d%%,Extraction %d%%,Extraction %d%%,Extracción %d%%
+HUD_EXTRACTION_READY,Estrazione disponibile: raggiungi la zona verde,Extraction available: reach the green zone,Extraction disponible : rejoignez la zone verte,Extracción disponible: llega a la zona verde
+STAT_MAX_HP,Vita max,Max health,Vie max,Vida máx.
+STAT_MOVE_SPEED,Velocità,Speed,Vitesse,Velocidad
+STAT_DAMAGE,Danno,Damage,Dégâts,Daño
+STAT_FIRE_RATE,Cadenza,Fire rate,Cadence,Cadencia
+STAT_PROJECTILES,Proiettili,Projectiles,Projectiles,Proyectiles
+STAT_PIERCE,Perforazione,Pierce,Perforation,Perforación
+STAT_PROJECTILE_SPEED,Vel. proiettile,Projectile speed,Vit. des projectiles,Vel. de proyectil
+STAT_PROJECTILE_LIFETIME,Durata proiettile,Projectile duration,Durée des projectiles,Duración de proyectil
+STAT_KNOCKBACK,Spinta,Knockback,Recul,Empuje
+STAT_PICKUP_RADIUS,Raggio magnete,Magnet radius,Rayon d'aimant,Radio de imán
+STAT_INVULNERABILITY,Invulnerabilità,Invulnerability,Invulnérabilité,Invulnerabilidad
+STAT_EXP_BONUS,Bonus exp,Exp bonus,Bonus d'exp,Bonus de exp
+STAT_DROP_BONUS,Bonus drop,Drop bonus,Bonus de butin,Bonus de botín
+UPG_DAMAGE_UP,Potenza,Power,Puissance,Potencia
+UPG_DAMAGE_UP_DESC,+1 danno per proiettile,+1 damage per projectile,+1 dégât par projectile,+1 de daño por proyectil
+UPG_EXP_UP,Saggezza,Wisdom,Sagesse,Sabiduría
+UPG_EXP_UP_DESC,+15% exp raccolta,+15% exp collected,+15 % d'exp récoltée,+15% de exp recogida
+UPG_FIRE_RATE_UP,Raffica,Barrage,Rafale,Ráfaga
+UPG_FIRE_RATE_UP_DESC,+20% cadenza di fuoco,+20% fire rate,+20 % de cadence de tir,+20% de cadencia de disparo
+UPG_GUARD_UP,Guardia,Guard,Garde,Guardia
+UPG_GUARD_UP_DESC,"+0,2 s di invulnerabilità dopo un colpo",+0.2s invulnerability after a hit,"+0,2 s d'invulnérabilité après un coup","+0,2 s de invulnerabilidad tras un golpe"
+UPG_IMPACT_UP,Impatto,Impact,Impact,Impacto
+UPG_IMPACT_UP_DESC,+30% spinta dei colpi,+30% hit knockback,+30 % de recul des coups,+30% de empuje de los golpes
+UPG_LIFETIME_UP,Persistenza,Persistence,Persistance,Persistencia
+UPG_LIFETIME_UP_DESC,+25% durata dei proiettili,+25% projectile duration,+25 % de durée des projectiles,+25% de duración de los proyectiles
+UPG_LUCK_UP,Fortuna,Luck,Chance,Suerte
+UPG_LUCK_UP_DESC,+15% probabilità di drop,+15% drop chance,+15 % de chance de butin,+15% de probabilidad de botín
+UPG_MAGNET_UP,Magnete,Magnet,Aimant,Imán
+UPG_MAGNET_UP_DESC,+30% raggio di raccolta,+30% pickup radius,+30 % de rayon de ramassage,+30% de radio de recogida
+UPG_MAX_HP_UP,Vigore,Vigor,Vigueur,Vigor
+UPG_MAX_HP_UP_DESC,+1 HP massimi (e cura 1),+1 max HP (and heals 1),+1 PV max (et soigne 1),+1 PV máx. (y cura 1)
+UPG_MOVE_SPEED_UP,Agilità,Agility,Agilité,Agilidad
+UPG_MOVE_SPEED_UP_DESC,+10% velocità di movimento,+10% movement speed,+10 % de vitesse de déplacement,+10% de velocidad de movimiento
+UPG_MULTISHOT_UP,Ventaglio,Spread,Éventail,Abanico
+UPG_MULTISHOT_UP_DESC,+1 proiettile per colpo,+1 projectile per shot,+1 projectile par tir,+1 proyectil por disparo
+UPG_PIERCE_UP,Perforazione,Pierce,Perforation,Perforación
+UPG_PIERCE_UP_DESC,I proiettili attraversano +1 nemico,Projectiles pass through +1 enemy,Les projectiles traversent +1 ennemi,Los proyectiles atraviesan +1 enemigo
+UPG_PROJECTILE_SPEED_UP,Gittata,Reach,Portée,Alcance
+UPG_PROJECTILE_SPEED_UP_DESC,+20% velocità proiettili,+20% projectile speed,+20 % de vitesse des projectiles,+20% de velocidad de los proyectiles
+MAT_BONE_SHARD,Frammento d'osso,Bone shard,Éclat d'os,Fragmento de hueso
+MAT_SHADOW_ESSENCE,Essenza d'ombra,Shadow essence,Essence d'ombre,Esencia de sombra
+MAT_SLIME_CORE,Nucleo di slime,Slime core,Noyau de slime,Núcleo de slime
+MAT_SLIME_GEL,Gelatina,Slime gel,Gelée,Gelatina
+EQ_BONE_WAND,Bacchetta d'ossa,Bone wand,Baguette d'os,Varita de hueso
+EQ_BONE_WAND_DESC,+1 danno e i proiettili attraversano +1 nemico,+1 damage and projectiles pass through +1 enemy,+1 dégât et les projectiles traversent +1 ennemi,+1 de daño y los proyectiles atraviesan +1 enemigo
+EQ_CORE_AMULET,Amuleto del nucleo,Core amulet,Amulette du noyau,Amuleto del núcleo
+EQ_CORE_AMULET_DESC,+2 HP massimi,+2 max HP,+2 PV max,+2 PV máx.
+EQ_GEL_WAND,Bacchetta di gelatina,Gel wand,Baguette de gelée,Varita de gelatina
+EQ_GEL_WAND_DESC,+1 danno per proiettile,+1 damage per projectile,+1 dégât par projectile,+1 de daño por proyectil
+EQ_RAPID_WAND,Bacchetta rapida,Rapid wand,Baguette rapide,Varita rápida
+EQ_RAPID_WAND_DESC,+25% cadenza di fuoco,+25% fire rate,+25 % de cadence de tir,+25% de cadencia de disparo
+EQ_SLIME_BOOTS,Stivali viscosi,Slimy boots,Bottes visqueuses,Botas viscosas
+EQ_SLIME_BOOTS_DESC,+10% velocità di movimento,+10% movement speed,+10 % de vitesse de déplacement,+10% de velocidad de movimiento
+ARENA_CRYPT,Cripta,Crypt,Crypte,Cripta
+ARENA_CRYPT_DESC,Sotterranei umidi infestati dagli slime. L'arena iniziale.,Damp vaults infested with slimes. The starting arena.,Souterrains humides infestés de slimes. L'arène de départ.,Sótanos húmedos infestados de slimes. La arena inicial.
+ARENA_OSSUARY,Ossario,Ossuary,Ossuaire,Osario
+ARENA_OSSUARY_DESC,"Catacombe dimenticate, quasi al buio. Ghoul affamati e scheletri arcieri. Qui si trova l'Essenza d'ombra.","Forgotten catacombs, almost pitch dark. Hungry ghouls and skeleton archers. Shadow essence is found here.","Catacombes oubliées, presque dans le noir. Goules affamées et squelettes archers. C'est ici qu'on trouve l'Essence d'ombre.","Catacumbas olvidadas, casi a oscuras. Ghouls hambrientos y esqueletos arqueros. Aquí se encuentra la Esencia de sombra."
+BOSS_KING_SLIME,Re Slime,King Slime,Roi Slime,Rey Slime

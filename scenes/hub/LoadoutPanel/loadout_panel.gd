@@ -6,8 +6,8 @@ signal equip_requested(item: EquipmentData)
 signal unequip_requested(slot: EquipmentData.Slot)
 
 const SLOT_NAMES: Dictionary[int, String] = {
-	EquipmentData.Slot.WEAPON: "Arma",
-	EquipmentData.Slot.ACCESSORY: "Accessorio",
+	EquipmentData.Slot.WEAPON: "SLOT_WEAPON",
+	EquipmentData.Slot.ACCESSORY: "SLOT_ACCESSORY",
 }
 
 @export var catalog: EquipmentCatalog
@@ -21,7 +21,7 @@ func refresh(loadout: EquipmentLoadout) -> void:
 	for slot: int in EquipmentData.Slot.values():
 		var header := Label.new()
 		var equipped := catalog.find(loadout.equipped_id(slot))
-		header.text = "%s: %s" % [SLOT_NAMES[slot], equipped.display_name if equipped else "nessuno"]
+		header.text = "%s: %s" % [tr(SLOT_NAMES[slot]), tr(equipped.display_name) if equipped else tr("SLOT_NONE")]
 		_slot_list.add_child(header)
 		var owned_any := false
 		for item in catalog.items:
@@ -31,15 +31,15 @@ func refresh(loadout: EquipmentLoadout) -> void:
 			_slot_list.add_child(_item_button(item, loadout.is_equipped(item.id)))
 		if not owned_any:
 			var hint := Label.new()
-			hint.text = "  nessun pezzo: craftalo dal fabbro"
+			hint.text = tr("LOADOUT_NO_ITEM")
 			hint.modulate = Color(1, 1, 1, 0.5)
 			_slot_list.add_child(hint)
 
 
 func _item_button(item: EquipmentData, equipped: bool) -> Button:
 	var button := Button.new()
-	button.text = "%s  —  %s" % [item.display_name, "equipaggiato" if equipped else item.description]
-	button.tooltip_text = item.description
+	button.text = "%s  —  %s" % [tr(item.display_name), tr("LOADOUT_EQUIPPED") if equipped else tr(item.description)]
+	button.tooltip_text = tr(item.description)
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.icon = item.icon
 	button.add_theme_constant_override("icon_max_width", 32)

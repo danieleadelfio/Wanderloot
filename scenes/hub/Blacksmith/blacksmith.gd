@@ -15,9 +15,9 @@ func refresh(inventory: MetaInventory, loadout: EquipmentLoadout, material_names
 	for recipe in recipe_book.recipes:
 		var state := Crafting.check(recipe, inventory, loadout)
 		var button := Button.new()
-		var detail := "posseduto" if state == Crafting.Result.ALREADY_OWNED else _cost_text(recipe, material_names)
-		button.text = "%s  —  %s" % [recipe.result.display_name, detail]
-		button.tooltip_text = recipe.result.description
+		var detail := tr("BLACKSMITH_OWNED") if state == Crafting.Result.ALREADY_OWNED else _cost_text(recipe, material_names)
+		button.text = "%s  —  %s" % [tr(recipe.result.display_name), detail]
+		button.tooltip_text = tr(recipe.result.description)
 		button.icon = recipe.result.icon
 		button.add_theme_constant_override("icon_max_width", 32)
 		button.expand_icon = true

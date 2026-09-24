@@ -7,5 +7,5 @@
 script = ExtResource("1")
 icon = ExtResource("ic")
 id = &"bone_shard"
-display_name = "Frammento d'osso"
+display_name = "MAT_BONE_SHARD"
 rarity = 0

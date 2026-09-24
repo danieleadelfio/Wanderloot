@@ -132,3 +132,8 @@ inventory={
 
 rendering_device/driver.windows="d3d12"
 environment/defaults/default_clear_color=Color(0.05, 0.05, 0.07, 1)
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://data/i18n/strings.it.translation", "res://data/i18n/strings.en.translation", "res://data/i18n/strings.fr.translation", "res://data/i18n/strings.es.translation")
+locale/fallback="en"

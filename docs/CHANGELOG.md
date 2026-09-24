@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Lingue italiano, inglese, francese e spagnolo: testi di scene, dati e codice come chiavi in `data/i18n/strings.csv`, selettore nelle Opzioni; a partita avviata il cambio lingua salva e torna al menu iniziale; lingua salvata nel file impostazioni e riapplicata all'avvio; `LocaleSettings` e test sulle traduzioni (#44).
 - Opzioni anche dal menu di pausa (run e hub): pannello Opzioni unico riusato dal menu iniziale, Cancella dati solo nel menu iniziale (#43).
 - Statistiche del personaggio nell'HUD della run (aggiornate a ogni potenziamento); nell'hub finestra Inventario con schede Inventario e Statistiche, aperta con I, C, icone cliccabili in alto a destra o dal baule: si equipaggia senza andare al baule; `StatSheet` testato (#42).
 - Salvando dalla piazza si salva anche la posizione del player: Carica e Continua lo rimettono nello stesso punto (salvataggio v4, compatibile con v3); test dedicati (#41).

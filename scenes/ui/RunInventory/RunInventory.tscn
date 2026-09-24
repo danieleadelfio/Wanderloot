@@ -36,18 +36,18 @@ theme_override_constants/separation = 12
 [node name="Title" type="Label" parent="Panel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "Inventario"
+text = "TAB_INVENTORY"
 
 [node name="Hint" type="Label" parent="Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.5)
 theme_override_font_sizes/font_size = 13
-text = "Gioco in pausa · I o ESC per chiudere"
+text = "RUNINV_HINT"
 
 [node name="EquipTitle" type="Label" parent="Panel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Equipaggiato"
+text = "RUNINV_EQUIPPED"
 
 [node name="EquipList" type="VBoxContainer" parent="Panel/VBox"]
 unique_name_in_owner = true
@@ -56,7 +56,7 @@ layout_mode = 2
 [node name="LootTitle" type="Label" parent="Panel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Raccolto in questa run"
+text = "RUNINV_TITLE"
 
 [node name="LootList" type="VBoxContainer" parent="Panel/VBox"]
 unique_name_in_owner = true

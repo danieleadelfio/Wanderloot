@@ -15,12 +15,14 @@ extends Control
 
 func _ready() -> void:
 	get_tree().paused = false
+	LocaleSettings.load_and_apply()
 	AudioSettings.load_and_apply()
 	_continue_button.pressed.connect(_on_continue_pressed)
 	_new_game_button.pressed.connect(_on_new_game_pressed)
 	_options_button.pressed.connect(_show_options.bind(true))
 	_options_panel.back_requested.connect(_show_options.bind(false))
 	_options_panel.delete_confirmed.connect(_on_delete_confirmed)
+	_options_panel.language_selected.connect(_on_language_selected)
 	_quit_button.pressed.connect(get_tree().quit)
 	_show_options(false)
 
@@ -62,5 +64,12 @@ func _on_delete_confirmed() -> void:
 	MetaProgression.new_game()
 	_refresh()
 	_options_panel.open(MetaProgression.has_save())
-	_options_panel.show_status("Dati cancellati." if ok else "Cancellazione non riuscita.")
+	_options_panel.show_status(tr("DATA_DELETED") if ok else tr("DATA_DELETE_FAIL"))
 	_sfx.play(&"ui_select")
+
+
+## Dal menu iniziale non c'e' una partita in corso da salvare: si applica la lingua e si ricarica il menu.
+func _on_language_selected(locale: String) -> void:
+	LocaleSettings.save_locale(locale)
+	TranslationServer.set_locale(locale)
+	get_tree().reload_current_scene.call_deferred()

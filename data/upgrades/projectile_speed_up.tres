@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Gittata"
-description = "+20% velocita' proiettili"
+display_name = "UPG_PROJECTILE_SPEED_UP"
+description = "UPG_PROJECTILE_SPEED_UP_DESC"
 stat = 2
 amount = 1.2
 is_multiplier = true

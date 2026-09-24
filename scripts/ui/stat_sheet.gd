@@ -1,24 +1,24 @@
 class_name StatSheet
 extends RefCounted
-## Righe [etichetta, valore] delle statistiche del personaggio (HUD in run, scheda Statistiche nell'hub).
+## Righe [chiave di traduzione, valore] delle statistiche del personaggio (HUD in run, scheda Statistiche nell'hub).
 ## Logica pura: legge PlayerStats e WeaponData gia' calcolati (base + equip + potenziamenti).
 
 
 static func rows(stats: PlayerStats, weapon: WeaponData) -> Array[PackedStringArray]:
 	var result: Array[PackedStringArray] = []
-	result.append(PackedStringArray(["Vita max", str(stats.max_hp)]))
-	result.append(PackedStringArray(["Velocità", str(roundi(stats.move_speed))]))
-	result.append(PackedStringArray(["Danno", str(weapon.damage)]))
-	result.append(PackedStringArray(["Cadenza", "%.1f/s" % weapon.fire_rate]))
-	result.append(PackedStringArray(["Proiettili", str(weapon.projectile_count)]))
-	result.append(PackedStringArray(["Perforazione", str(weapon.pierce)]))
-	result.append(PackedStringArray(["Vel. proiettile", str(roundi(weapon.projectile_speed))]))
-	result.append(PackedStringArray(["Durata proiettile", "%.2fs" % weapon.projectile_lifetime]))
-	result.append(PackedStringArray(["Spinta", str(roundi(weapon.knockback))]))
-	result.append(PackedStringArray(["Raggio magnete", str(roundi(stats.pickup_radius))]))
-	result.append(PackedStringArray(["Invulnerabilità", "%.2fs" % stats.invulnerability_time]))
-	result.append(PackedStringArray(["Bonus exp", _percent(stats.exp_multiplier)]))
-	result.append(PackedStringArray(["Bonus drop", _percent(stats.drop_chance_multiplier)]))
+	result.append(PackedStringArray(["STAT_MAX_HP", str(stats.max_hp)]))
+	result.append(PackedStringArray(["STAT_MOVE_SPEED", str(roundi(stats.move_speed))]))
+	result.append(PackedStringArray(["STAT_DAMAGE", str(weapon.damage)]))
+	result.append(PackedStringArray(["STAT_FIRE_RATE", "%.1f/s" % weapon.fire_rate]))
+	result.append(PackedStringArray(["STAT_PROJECTILES", str(weapon.projectile_count)]))
+	result.append(PackedStringArray(["STAT_PIERCE", str(weapon.pierce)]))
+	result.append(PackedStringArray(["STAT_PROJECTILE_SPEED", str(roundi(weapon.projectile_speed))]))
+	result.append(PackedStringArray(["STAT_PROJECTILE_LIFETIME", "%.2fs" % weapon.projectile_lifetime]))
+	result.append(PackedStringArray(["STAT_KNOCKBACK", str(roundi(weapon.knockback))]))
+	result.append(PackedStringArray(["STAT_PICKUP_RADIUS", str(roundi(stats.pickup_radius))]))
+	result.append(PackedStringArray(["STAT_INVULNERABILITY", "%.2fs" % stats.invulnerability_time]))
+	result.append(PackedStringArray(["STAT_EXP_BONUS", _percent(stats.exp_multiplier)]))
+	result.append(PackedStringArray(["STAT_DROP_BONUS", _percent(stats.drop_chance_multiplier)]))
 	return result
 
 

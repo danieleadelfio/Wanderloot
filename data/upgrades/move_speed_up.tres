@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Agilita'"
-description = "+10% velocita' di movimento"
+display_name = "UPG_MOVE_SPEED_UP"
+description = "UPG_MOVE_SPEED_UP_DESC"
 stat = 3
 amount = 1.1
 is_multiplier = true

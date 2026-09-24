@@ -7,6 +7,8 @@ signal action_requested(action: PauseState.Action)
 signal save_requested
 signal load_requested
 signal menu_requested
+## Lingua scelta nelle Opzioni: la composition root salva e torna al menu iniziale.
+signal language_requested(locale: String)
 
 ## Con modifiche non salvate "Torna al menu" chiede una seconda pressione.
 var _unsaved_changes: bool = false
@@ -33,6 +35,7 @@ func _ready() -> void:
 	_menu_button.pressed.connect(_on_menu_pressed)
 	_options_button.pressed.connect(_show_options.bind(true))
 	_options_panel.back_requested.connect(_show_options.bind(false))
+	_options_panel.language_selected.connect(language_requested.emit)
 
 
 func show_mode(mode: PauseState.Mode) -> void:
@@ -78,6 +81,6 @@ func set_unsaved_changes(unsaved: bool) -> void:
 func _on_menu_pressed() -> void:
 	if _unsaved_changes and not _menu_armed:
 		_menu_armed = true
-		show_status("Modifiche non salvate: premi di nuovo per uscire")
+		show_status(tr("PAUSE_UNSAVED"))
 		return
 	menu_requested.emit()

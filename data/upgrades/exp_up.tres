@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Saggezza"
-description = "+15% exp raccolta"
+display_name = "UPG_EXP_UP"
+description = "UPG_EXP_UP_DESC"
 stat = 7
 amount = 0.15
 is_multiplier = false

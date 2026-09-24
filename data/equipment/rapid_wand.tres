@@ -13,7 +13,7 @@ is_multiplier = true
 [resource]
 script = ExtResource("1")
 id = &"rapid_wand"
-display_name = "Bacchetta rapida"
-description = "+25% cadenza di fuoco"
+display_name = "EQ_RAPID_WAND"
+description = "EQ_RAPID_WAND_DESC"
 icon = ExtResource("ic")
 modifiers = Array[ExtResource("2")]([SubResource("mod_1")])
