@@ -5,9 +5,12 @@ extends RefCounted
 
 signal warned(seconds: int, next_level: int)
 signal level_changed(level: int)
-signal boss_due
+## count = bosses_per_wave: tanti boss quanti ne compaiono all'estrazione (M11.2).
+signal boss_due(count: int)
 
 var data: OvertimeData
+## Boss per ondata: li imposta la composition root (boss dell'arena + guadagnati con gli eventi). Non si azzera con start().
+var bosses_per_wave: int = 1
 var level: int = 0
 var elapsed: float = 0.0
 var _running: bool = false
@@ -53,7 +56,7 @@ func tick(delta: float) -> void:
 		_boss_left -= delta
 		if _boss_left <= 0.0:
 			_boss_left += boss_interval()
-			boss_due.emit()
+			boss_due.emit(bosses_per_wave)
 
 
 func speed_multiplier() -> float:

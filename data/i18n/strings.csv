@@ -196,6 +196,6 @@ BLACKSMITH_SALVAGE_CONFIRM,Clic di nuovo per smontare: %s,Click again to salvage
 OVERTIME_TITLE,OVERTIME x%d,OVERTIME x%d,PROLONGATION x%d,PRÓRROGA x%d
 OVERTIME_WARNING,Overtime x%d tra %d s,Overtime x%d in %d s,Prolongation x%d dans %d s,Prórroga x%d en %d s
 OVERTIME_WARNING_SUB,Estrai prima che l'arena diventi impossibile,Extract before the arena becomes impossible,Extrayez-vous avant que l'arène devienne impossible,Extrae antes de que la arena sea imposible
-OVERTIME_SUB,Un boss ogni %s s · nemici in rage · velocità x%s · vita +%d%%,A boss every %s s · raged enemies · speed x%s · health +%d%%,Un boss toutes les %s s · ennemis enragés · vitesse x%s · vie +%d %%,Un jefe cada %s s · enemigos furiosos · velocidad x%s · vida +%d%%
+OVERTIME_SUB,Boss: %d ogni %s s · nemici in rage · velocità x%s · vita +%d%%,Bosses: %d every %s s · raged enemies · speed x%s · health +%d%%,Boss : %d toutes les %s s · ennemis enragés · vitesse x%s · vie +%d %%,Jefes: %d cada %s s · enemigos furiosos · velocidad x%s · vida +%d%%
 EVENT_DASH_TITLE,Passo d'ombra,Shadow Step,Pas de l'ombre,Paso de sombra
 EVENT_DASH_SUBTITLE,"Non puoi sparare: scatta per schivare (clic, Spazio o tasto destro)","You can't shoot: dash to dodge (click, Space or right button)","Impossible de tirer : faites un bond pour esquiver (clic, Espace ou bouton droit)","No puedes disparar: esquiva con el impulso (clic, Espacio o botón derecho)"

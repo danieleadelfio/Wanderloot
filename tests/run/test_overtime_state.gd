@@ -18,7 +18,7 @@ func before_test() -> void:
 	_bosses[0] = 0
 	_state.warned.connect(func(seconds: int, next_level: int) -> void: _warnings.append([seconds, next_level]))
 	_state.level_changed.connect(func(level: int) -> void: _levels.append(level))
-	_state.boss_due.connect(func() -> void: _bosses[0] += 1)
+	_state.boss_due.connect(func(count: int) -> void: _bosses[0] += count)
 	_state.start(DATA)
 
 
@@ -57,6 +57,24 @@ func test_each_level_multiplies_the_modifiers() -> void:
 	assert_float(_state.boss_interval()).is_equal_approx(10.0 / 3.0, 0.001)
 	# Avvisi anche prima di ogni livello successivo.
 	assert_bool(_warnings.has([10, 3])).is_true()
+
+
+func test_boss_waves_match_the_run_boss_count() -> void:
+	_state.bosses_per_wave = 2
+	_run(50.1)
+	assert_int(_bosses[0]).is_equal(2)
+	_run(10.0)
+	assert_int(_bosses[0]).is_equal(4)
+	# Un Pentagramma superato in overtime alza le ondate successive.
+	_state.bosses_per_wave = 3
+	_run(10.0)
+	assert_int(_bosses[0]).is_equal(7)
+
+
+func test_bosses_per_wave_survives_start() -> void:
+	_state.bosses_per_wave = 2
+	_state.start(DATA)
+	assert_int(_state.bosses_per_wave).is_equal(2)
 
 
 func test_boss_interval_has_a_floor() -> void:

@@ -130,7 +130,7 @@ func _ready() -> void:
 	_boss_timer.timeout.connect(_spawn_boss)
 	overtime.warned.connect(_on_overtime_warned)
 	overtime.level_changed.connect(_on_overtime_level)
-	overtime.boss_due.connect(_spawn_bosses.bind(1))
+	overtime.boss_due.connect(_spawn_bosses)
 	RunManager.start_run(level_curve)
 
 
@@ -182,6 +182,7 @@ func _on_event_completed(event: RunEventData) -> void:
 	_hud.end_event(true, tr("EVENT_PENTAGRAM_REWARD") if event.bonus_bosses > 0 else "")
 	if event.bonus_bosses > 0 and arena.boss_scene != null:
 		_extra_bosses += event.bonus_bosses
+		_refresh_overtime_bosses()
 		# Boss gia' comparsi: quello in piu' arriva subito, altrimenti si aggiunge alla comparsa.
 		if _bosses_spawned:
 			_spawn_bosses(event.bonus_bosses)
@@ -382,12 +383,18 @@ func _open_extraction() -> void:
 	_sfx.play(&"ui_select")
 	if arena.boss_scene != null:
 		_boss_timer.start(arena.boss_delay)
+	_refresh_overtime_bosses()
 	overtime.start(arena.overtime)
 
 
 func _physics_process(delta: float) -> void:
 	if RunManager.state == RunManager.State.RUNNING and not get_tree().paused:
 		overtime.tick(delta)
+
+
+## Ondate di boss dell'overtime = boss della run (arena + guadagnati col Pentagramma, anche in overtime).
+func _refresh_overtime_bosses() -> void:
+	overtime.bosses_per_wave = maxi(arena.boss_count + _extra_bosses, 1)
 
 
 func _on_overtime_warned(seconds: int, next_level: int) -> void:
@@ -401,7 +408,7 @@ func _on_overtime_level(level: int) -> void:
 	_wave_spawner.overtime_speed = overtime.speed_multiplier()
 	_wave_spawner.overtime_hp = overtime.hp_multiplier()
 	_hud.set_overtime(level)
-	var subtitle := tr("OVERTIME_SUB") % [snappedf(overtime.boss_interval(), 0.1), snappedf(overtime.speed_multiplier(), 0.1), roundi((overtime.hp_multiplier() - 1.0) * 100.0)]
+	var subtitle := tr("OVERTIME_SUB") % [overtime.bosses_per_wave, snappedf(overtime.boss_interval(), 0.1), snappedf(overtime.speed_multiplier(), 0.1), roundi((overtime.hp_multiplier() - 1.0) * 100.0)]
 	_hud.announce(tr("OVERTIME_TITLE") % level, subtitle, 3.5)
 	_sfx.play(&"overtime_start")
 
