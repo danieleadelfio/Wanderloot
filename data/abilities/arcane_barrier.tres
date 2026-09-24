@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WandAbility" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/wand_ability.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/run/abilities/shield_effect.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_arcane_barrier.png" id="3"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("2")
+
+
+[resource]
+script = ExtResource("1")
+id = &"arcane_barrier"
+display_name = "ABILITY_ARCANE_BARRIER"
+description = "ABILITY_ARCANE_BARRIER_DESC"
+icon = ExtResource("3")
+trigger = 0
+cooldown = 12.0
+effect = SubResource("effect")
+projectile_tint = Color(1, 0.88, 0.5, 1)

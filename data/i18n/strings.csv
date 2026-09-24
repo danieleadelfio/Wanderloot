@@ -125,3 +125,16 @@ ARENA_CRYPT_DESC,Sotterranei umidi infestati dagli slime. L'arena iniziale.,Damp
 ARENA_OSSUARY,Ossario,Ossuary,Ossuaire,Osario
 ARENA_OSSUARY_DESC,"Catacombe dimenticate, quasi al buio. Ghoul affamati e scheletri arcieri. Qui si trova l'Essenza d'ombra.","Forgotten catacombs, almost pitch dark. Hungry ghouls and skeleton archers. Shadow essence is found here.","Catacombes oubliées, presque dans le noir. Goules affamées et squelettes archers. C'est ici qu'on trouve l'Essence d'ombre.","Catacumbas olvidadas, casi a oscuras. Ghouls hambrientos y esqueletos arqueros. Aquí se encuentra la Esencia de sombra."
 BOSS_KING_SLIME,Re Slime,King Slime,Roi Slime,Rey Slime
+ABILITY_ARCANE_RING,Anello arcano,Arcane ring,Anneau arcanique,Anillo arcano
+ABILITY_ARCANE_RING_DESC,Libera un anello di 10 proiettili attorno a te.,Releases a ring of 10 projectiles around you.,Libère un anneau de 10 projectiles autour de vous.,Libera un anillo de 10 proyectiles a tu alrededor.
+ABILITY_WANDERING_LIGHTNING,Fulmine errante,Wandering lightning,Foudre errante,Rayo errante
+ABILITY_WANDERING_LIGHTNING_DESC,Un fulmine colpisce il nemico più vicino e chi gli sta attorno.,Lightning strikes the nearest enemy and those around it.,La foudre frappe l'ennemi le plus proche et ceux qui l'entourent.,Un rayo golpea al enemigo más cercano y a los que lo rodean.
+ABILITY_ARCANE_BARRIER,Barriera arcana,Arcane barrier,Barrière arcanique,Barrera arcana
+ABILITY_ARCANE_BARRIER_DESC,Annulla il prossimo colpo subito; si ricarica dopo essersi rotta.,Negates the next hit you take; recharges after breaking.,Annule le prochain coup subi ; se recharge après avoir cédé.,Anula el próximo golpe recibido; se recarga tras romperse.
+ABILITY_TRIGGER_SHOTS,Ogni %d colpi,Every %d shots,Tous les %d tirs,Cada %d disparos
+ABILITY_TRIGGER_DISTANCE,Ogni %d px percorsi,Every %d px travelled,Tous les %d px parcourus,Cada %d px recorridos
+ABILITY_TRIGGER_COOLDOWN,Ricarica %.0f s,Recharge %.0f s,Recharge %.0f s,Recarga %.0f s
+ABILITY_TRIGGER_PERMANENT,Sempre attiva,Always active,Toujours active,Siempre activa
+ABILITY_CHOICE_TITLE,Scegli un'abilità per la bacchetta,Choose an ability for your wand,Choisissez une capacité pour la baguette,Elige una habilidad para la varita
+ABILITY_REPLACE_TITLE,Slot pieni: cosa sostituisci con %s?,Slots full: what do you replace with %s?,Emplacements pleins : que remplacer par %s ?,Huecos llenos: ¿qué sustituyes por %s?
+ABILITY_KEEP,Tieni la bacchetta com'è,Keep your wand as it is,Garder la baguette telle quelle,Deja la varita como está

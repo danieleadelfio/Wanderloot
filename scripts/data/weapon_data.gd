@@ -22,3 +22,5 @@ extends Resource
 @export var projectile_texture: Texture2D
 ## Scala dello sprite del proiettile; 0 = quella della scena.
 @export var projectile_scale: float = 0.0
+## Colore dei proiettili (abilita' della bacchetta, M10). Bianco = invariato.
+@export var projectile_tint: Color = Color.WHITE

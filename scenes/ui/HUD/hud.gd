@@ -11,6 +11,7 @@ extends CanvasLayer
 @onready var _loot_label: Label = %LootLabel
 @onready var _boss_panel: Control = %BossPanel
 @onready var _stats_grid: GridContainer = %StatsGrid
+@onready var _ability_bar: HBoxContainer = %AbilityBar
 @onready var _boss_name: Label = %BossName
 @onready var _boss_bar: ProgressBar = %BossBar
 
@@ -47,6 +48,29 @@ func set_loot(total: int) -> void:
 ## Statistiche del personaggio sotto le barre (solo in run), aggiornate a ogni potenziamento.
 func set_stats(stats: PlayerStats, weapon: WeaponData) -> void:
 	StatSheet.fill(_stats_grid, StatSheet.rows(stats, weapon), 13)
+
+
+## Icone delle abilita' della bacchetta (M10); il riempimento mostra l'avanzamento verso l'attivazione.
+func set_abilities(abilities: Array[WandAbility]) -> void:
+	for child in _ability_bar.get_children():
+		child.queue_free()
+	for ability in abilities:
+		var icon := TextureProgressBar.new()
+		icon.texture_under = ability.icon
+		icon.texture_progress = ability.icon
+		icon.tint_under = Color(0.35, 0.35, 0.4)
+		icon.fill_mode = TextureProgressBar.FILL_BOTTOM_TO_TOP
+		icon.nine_patch_stretch = true
+		icon.custom_minimum_size = Vector2(36, 36)
+		icon.max_value = 1.0
+		icon.step = 0.01
+		icon.tooltip_text = tr(ability.display_name)
+		_ability_bar.add_child(icon)
+
+
+func set_ability_progress(index: int, ratio: float) -> void:
+	if index < _ability_bar.get_child_count():
+		(_ability_bar.get_child(index) as TextureProgressBar).value = ratio
 
 
 func show_boss(boss_name: String, current: int, maximum: int) -> void:

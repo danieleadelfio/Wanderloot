@@ -21,6 +21,7 @@ var _base_weapon: WeaponData
 @onready var _knockback: Knockback = %Knockback
 ## Luce portata dal player (atmosfera cupa, M7): colore/energia/raggio li imposta la scena che lo ospita.
 @onready var light: PointLight2D = %Light
+@onready var _shield: Node2D = %Shield
 
 
 func _ready() -> void:
@@ -29,6 +30,7 @@ func _ready() -> void:
 	_weapon.fired.connect(shot_requested.emit)
 	health.died.connect(died.emit)
 	_hurtbox.knocked.connect(_knockback.apply)
+	_hurtbox.shield_broken.connect(set_shield.bind(false))
 	begin_run([])
 
 
@@ -40,6 +42,7 @@ func begin_run(equipment: Array[EquipmentData]) -> void:
 	StatApplier.apply_equipment(equipment, stats, _weapon.data)
 	health.reset(stats.max_hp)
 	_knockback.reset()
+	set_shield(false)
 	_hurtbox.invulnerability_time = stats.invulnerability_time
 
 
@@ -56,6 +59,16 @@ func _physics_process(delta: float) -> void:
 ## Arma della run (copia con equip e potenziamenti applicati): letta per le statistiche a schermo.
 func weapon_data() -> WeaponData:
 	return _weapon.data
+
+
+## Barriera (abilita' Barriera arcana): annulla il prossimo colpo.
+func set_shield(active: bool) -> void:
+	_hurtbox.shield_charges = 1 if active else 0
+	_shield.visible = active
+
+
+func has_shield() -> bool:
+	return _hurtbox.shield_charges > 0
 
 
 func apply_upgrade(upgrade: UpgradeData) -> void:

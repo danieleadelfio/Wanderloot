@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WandAbility" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/wand_ability.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/run/abilities/strike_nearest_effect.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_wandering_lightning.png" id="3"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("2")
+range = 420.0
+radius = 70.0
+damage_bonus = 2
+
+[resource]
+script = ExtResource("1")
+id = &"wandering_lightning"
+display_name = "ABILITY_WANDERING_LIGHTNING"
+description = "ABILITY_WANDERING_LIGHTNING_DESC"
+icon = ExtResource("3")
+trigger = 2
+every_distance = 350.0
+effect = SubResource("effect")
+projectile_tint = Color(0.6, 0.9, 1, 1)

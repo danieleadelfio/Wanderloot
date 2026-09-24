@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/player.png" id="s1"]
 [ext_resource type="Script" path="res://scripts/combat/frame_cycler.gd" id="s2"]
 
+[ext_resource type="Script" path="res://scripts/combat/shield_visual.gd" id="sv"]
 [sub_resource type="Gradient" id="light_grad"]
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.4, 1, 1, 1, 0)
@@ -44,6 +45,11 @@ offset = Vector2(0, -8)
 hframes = 2
 script = ExtResource("s2")
 frame_time = 0.4
+
+[node name="Shield" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("sv")
 
 [node name="Light" type="PointLight2D" parent="."]
 unique_name_in_owner = true

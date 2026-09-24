@@ -5,11 +5,15 @@ extends Area2D
 signal hurt(amount: int)
 signal knocked(impulse: Vector2)
 signal invulnerable_changed(active: bool)
+## La barriera ha assorbito un colpo (M10).
+signal shield_broken
 
 @export var health: Health
 @export var invulnerability_time: float = 0.0
 
 var _invulnerable: bool = false
+## Colpi assorbiti prima di subire danno (barriera). 0 = nessuna.
+var shield_charges: int = 0
 var _iframe_timer: Timer
 
 
@@ -27,6 +31,11 @@ func _try_hit(area: Area2D) -> void:
 	if hitbox == null or not hitbox.active or _invulnerable:
 		return
 	if health == null or health.is_dead():
+		return
+	if shield_charges > 0:
+		shield_charges -= 1
+		hitbox.notify_hit(self)
+		shield_broken.emit()
 		return
 	health.take_damage(hitbox.damage)
 	hitbox.notify_hit(self)

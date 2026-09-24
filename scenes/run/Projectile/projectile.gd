@@ -39,6 +39,7 @@ func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 	_pierce_left = weapon.pierce
 	_body.texture = weapon.projectile_texture if weapon.projectile_texture else _default_texture
 	_body.scale = Vector2.ONE * weapon.projectile_scale if weapon.projectile_scale > 0.0 else _default_scale
+	_body.modulate = weapon.projectile_tint
 	_active = true
 	_set_enabled(true)
 

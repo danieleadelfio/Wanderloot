@@ -579,6 +579,32 @@ def build_hub_icons():
     save("icon_stats", [icon_stats()], 64)
 
 
+# --- Icone delle abilita' della bacchetta (M10) ----------------------------------------------------
+def ability_frame(inner, c1, c2):
+    defs = '<radialGradient id="bg" cx="0.5" cy="0.45" r="0.6"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></radialGradient>' % (c1, c2)
+    return svg('<rect x="4" y="4" width="56" height="56" rx="12" fill="url(#bg)" stroke="#141a2c" stroke-width="3.5"/>' + inner, defs, 64)
+
+
+def icon_arcane_ring():
+    dots = "".join('<circle cx="%.1f" cy="%.1f" r="4.5" fill="#f4e0ff" stroke="#3a1060" stroke-width="1.5"/>' % (32 + 17 * math.cos(a), 32 + 17 * math.sin(a)) for a in [i * math.tau / 8 for i in range(8)])
+    return ability_frame('<circle cx="32" cy="32" r="17" fill="none" stroke="#c77dff" stroke-width="3" opacity="0.7"/>' + dots + '<circle cx="32" cy="32" r="6" fill="#fff"/>', "#7b2cbf", "#240046")
+
+
+def icon_wandering_lightning():
+    return ability_frame('<path d="M36 8 L20 36 L31 36 L26 56 L46 26 L34 26 Z" fill="#e8f7ff" stroke="#1d4e89" stroke-width="3" stroke-linejoin="round"/>', "#4ab0ff", "#10305a")
+
+
+def icon_arcane_barrier():
+    return ability_frame('<path d="M32 10 L50 18 L48 36 Q44 50 32 56 Q20 50 16 36 L14 18 Z" fill="#ffe29a" stroke="#7a4d1c" stroke-width="3" stroke-linejoin="round"/>'
+                         '<path d="M32 18 L32 48 M22 30 L42 30" stroke="#b8741a" stroke-width="3" stroke-linecap="round"/>', "#e0a030", "#5a3510")
+
+
+def build_ability_icons():
+    save("icon_arcane_ring", [icon_arcane_ring()], 64)
+    save("icon_wandering_lightning", [icon_wandering_lightning()], 64)
+    save("icon_arcane_barrier", [icon_arcane_barrier()], 64)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -588,4 +614,5 @@ if __name__ == "__main__":
     build_hub()
     build_boss()
     build_hub_icons()
+    build_ability_icons()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

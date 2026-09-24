@@ -85,6 +85,7 @@ func _drive(a, dodging: bool) -> void:
 		var p = a.get_node("%Player")
 		say("run 2: hp max=%d danno=%d (equip applicato)" % [p.health.max_hp, p._weapon.data.damage])
 	# riusa la guida del bot; in run 2 il player sta fermo e non spara (morte certa)
+	if BotDriver.resolve_menus(a): return
 	if dodging:
 		BotDriver.drive(a)
 	else:

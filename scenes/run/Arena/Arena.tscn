@@ -29,6 +29,9 @@
 [ext_resource type="PackedScene" path="res://scenes/run/Projectile/EnemyProjectile.tscn" id="31"]
 [ext_resource type="Script" path="res://scripts/run/fog_drift.gd" id="32"]
 
+[ext_resource type="Script" path="res://scripts/run/wand_abilities.gd" id="wand"]
+[ext_resource type="PackedScene" path="res://scenes/ui/AbilityChoice/AbilityChoice.tscn" id="ability_choice"]
+
 [sub_resource type="Gradient" id="vignette_grad"]
 offsets = PackedFloat32Array(0.45, 1)
 colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.75)
@@ -229,4 +232,11 @@ script = ExtResource("24")
 unique_name_in_owner = true
 
 [node name="RunInventory" parent="." instance=ExtResource("26")]
+unique_name_in_owner = true
+
+[node name="WandAbilities" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("wand")
+
+[node name="AbilityChoice" parent="." instance=ExtResource("ability_choice")]
 unique_name_in_owner = true

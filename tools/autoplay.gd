@@ -60,6 +60,7 @@ func _physics_process(_d: float) -> bool:
 		var lvl = a.get_node("%LevelUpChoice")
 		lvl._on_choice_pressed(BotDriver.choose(a.upgrade_table.pick(a.choices_per_level, rng)))
 		return false
+	if BotDriver.resolve_menus(a): return false
 	BotDriver.drive(a)
 	return false
 

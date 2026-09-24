@@ -9,6 +9,10 @@ signal finished(telegraph: Telegraph)
 const PULSE_TIME: float = 0.12
 
 @export var color: Color = Color(1, 0.18, 0.12)
+## Layer della Hitbox: 16 = enemy_attack (colpisce il player), 8 = player_attack (colpisce i nemici).
+@export_flags_2d_physics var attack_layer: int = 16
+## Disegna un fulmine dall'alto nell'istante del colpo (eventi, abilita').
+@export var lightning: bool = false
 
 var radius: float = 100.0
 var _duration: float = 1.0
@@ -23,6 +27,7 @@ var _shape := CircleShape2D.new()
 
 func _ready() -> void:
 	_collision.shape = _shape
+	_hitbox.collision_layer = attack_layer
 	_set_hitbox(false)
 	visible = false
 	set_process(false)
@@ -71,6 +76,7 @@ func _process(delta: float) -> void:
 		if _hitbox.damage > 0:
 			_pulse_left = PULSE_TIME
 			_set_hitbox(true)
+			queue_redraw()
 		else:
 			_finish()
 
@@ -90,3 +96,12 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, radius, Color(color, 0.12))
 	draw_circle(Vector2.ZERO, radius * p, Color(color, 0.32))
 	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(color, 0.9), 3.0, true)
+	if lightning and _pulse_left > 0.0:
+		var points := PackedVector2Array()
+		var rng := RandomNumberGenerator.new()
+		rng.seed = int(global_position.x * 7.0 + global_position.y)
+		for i in 9:
+			points.append(Vector2(rng.randf_range(-14.0, 14.0) if 0 < i and i < 8 else 0.0, -260.0 + 260.0 * i / 8.0))
+		draw_polyline(points, Color(1, 1, 1, 0.95), 5.0, true)
+		draw_polyline(points, Color(color, 0.8), 9.0, true)
+		draw_circle(Vector2.ZERO, radius * 0.6, Color(1, 1, 1, 0.5))

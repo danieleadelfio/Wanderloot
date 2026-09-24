@@ -42,6 +42,18 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
   - **Stato M3 (#14)**: pannello "Equipaggiamento" nell'hub (un pezzo per slot, click per equipaggiare/togliere). A inizio run `Arena` passa `MetaProgression.equipped_items()` a `Player.begin_run()`, che riparte da copie fresche di `PlayerStats`/`WeaponData` e applica i modificatori (`StatApplier`, stessa logica degli upgrade di run, che si sommano sopra). L'equip è letto una sola volta: cambiarlo vale dalla run successiva.
 - Sblocco progressivo di strutture/NPC nell'hub in base a milestone (es. numero di estrazioni riuscite, materiali totali raccolti, boss sconfitti).
 
+### 3.3 Abilità della bacchetta (M10, #45)
+
+La bacchetta ha **3 slot** di abilità per la run; l'ordine non conta e le abilità si perdono a fine run. Ogni abilità (`WandAbility`, `data/abilities/`) ha un criterio di attivazione: **ricarica** (ogni N secondi), **ogni N colpi** sparati, **ogni N pixel percorsi** o **sempre attiva**; l'effetto è una Resource riusabile (`AbilityEffect`: anello di proiettili, fulmine sul più vicino, barriera). Ogni abilità dà un colore ai proiettili (media dei colori delle abilità presenti). Si ottengono dagli **eventi della run** (§3.4): a evento superato il gioco si ferma e si sceglie tra 3 abilità non ancora possedute; con gli slot pieni si sceglie quale sostituire o si tiene la bacchetta com'è. Nell'HUD, sotto le statistiche, le icone delle abilità si riempiono verso la prossima attivazione.
+
+| Abilità | Attivazione | Effetto | Colore |
+|---|---|---|---|
+| Anello arcano | ogni 8 colpi | anello di 10 proiettili con l'arma della run | viola |
+| Fulmine errante | ogni 350 px percorsi | fulmine sul nemico più vicino entro 420 px: danno dell'arma + 2 in raggio 70 | azzurro |
+| Barriera arcana | ricarica 12 s dopo la rottura | annulla il prossimo colpo (attiva subito alla presa) | oro |
+
+Il catalogo completo (abilità di Magicraft riadattate e originali) è in `docs/catalog/` (§13).
+
 ## 4. Extraction shooter layer — regole di rischio
 
 - Il loot grezzo vive in un "inventario di run" separato da quello permanente.
@@ -138,6 +150,9 @@ res://
   scripts/run/                       # enemy_pool, wave_spawner, enemy_movement, spawn_utils, loot_run_inventory, loot_transfer, stat_applier, pickup_pool, pause_state, pause_controller, fog_drift
   scenes/run/Bosses/boss.gd          # script boss condiviso (macchina a stati guidata da BossData)
   scenes/run/Telegraph/              # cerchio di preavviso con Hitbox a impulso (attacchi ad area)
+  data/abilities/                    # abilità della bacchetta + ability_catalog
+  scripts/run/abilities/             # effetti delle abilità (AbilityEffect e sottoclassi)
+  scenes/ui/AbilityChoice/           # scelta dell'abilità (pausa), sostituzione con slot pieni
   scripts/hub/                       # interactable (punto di interazione, nearest_index testato), spinner (vortice del portale)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
   scenes/hub/Hub/                    # Hub.tscn + hub.gd: piazza esplorabile, scena principale, composition root dell'hub

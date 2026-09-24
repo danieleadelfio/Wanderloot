@@ -25,6 +25,9 @@ var _exp_remainder: float = 0.0
 @onready var _player: Player = %Player
 ## Boss della run (null finche' non compare o se l'arena non ne ha). Letto anche dal bot di playtest.
 var boss: Boss = null
+## Abilita' che gli eventi possono offrire (M10).
+@export var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
+var _choosing_ability: bool = false
 var boss_defeated: bool = false
 var _boss_timer := Timer.new()
 @onready var _enemies: Node2D = %Enemies
@@ -50,6 +53,8 @@ var _boss_timer := Timer.new()
 @onready var _pause: PauseController = %PauseController
 @onready var _pause_menu: PauseMenu = %PauseMenu
 @onready var _run_inventory: RunInventory = %RunInventory
+@onready var _wand: WandAbilities = %WandAbilities
+@onready var _ability_choice: AbilityChoice = %AbilityChoice
 
 
 func _ready() -> void:
@@ -80,6 +85,9 @@ func _ready() -> void:
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player.stats, _player.weapon_data())
 	_create_enemy_pools()
+	_wand.setup(_player, _projectile_pool, targetable_enemies)
+	_wand.changed.connect(_hud.set_abilities)
+	_ability_choice.resolved.connect(_on_ability_resolved)
 	_pickup_pool.target = _player
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pickup_pool.exp_collected.connect(_on_exp_collected)
@@ -105,6 +113,37 @@ func active_enemies() -> Array[Enemy]:
 			if enemy is Enemy and enemy.visible:
 				result.append(enemy)
 	return result
+
+
+## Nemici e boss colpibili dalle abilita' della bacchetta.
+func targetable_enemies() -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	result.assign(active_enemies())
+	if is_instance_valid(boss):
+		result.append(boss)
+	return result
+
+
+## Ricompensa degli eventi: il gioco si ferma e si sceglie un'abilita' tra quelle non ancora nella bacchetta.
+func offer_abilities(count: int = 3) -> void:
+	var options := ability_catalog.pick(count, _wand.slots.ids(), _rng)
+	if options.is_empty() or RunManager.state != RunManager.State.RUNNING:
+		return
+	_choosing_ability = true
+	_pause.enabled = false
+	_refresh_pause()
+	_ability_choice.present(options, _wand.slots.abilities, _wand.slots.is_full())
+
+
+func _on_ability_resolved(ability: WandAbility, replace_index: int) -> void:
+	_choosing_ability = false
+	_pause.enabled = RunManager.state == RunManager.State.RUNNING
+	if ability != null and _wand.equip(ability, replace_index):
+		# Le abilita' a ricarica partono cariche (es. Barriera arcana attiva subito).
+		if ability.trigger == WandAbility.Trigger.COOLDOWN and ability.effect:
+			ability.effect.activate(_wand)
+		_sfx.play(&"level_up")
+	_refresh_pause()
 
 
 func _create_enemy_pools() -> void:
@@ -180,6 +219,8 @@ func _place_torches(per_wall: int, color: Color) -> void:
 
 
 func _process(_delta: float) -> void:
+	for i in _wand.slots.abilities.size():
+		_hud.set_ability_progress(i, 1.0 if _player.has_shield() and _wand.slots.abilities[i].effect is ShieldEffect else _wand.progress_of(i))
 	if not _extraction_timer.is_stopped():
 		_hud.set_extraction_countdown(_extraction_timer.time_left)
 
@@ -293,7 +334,7 @@ func _on_player_died() -> void:
 
 
 func _on_run_state_changed(state: RunManager.State) -> void:
-	_pause.enabled = state == RunManager.State.RUNNING
+	_pause.enabled = state == RunManager.State.RUNNING and not _choosing_ability
 	_refresh_pause()
 
 
@@ -326,7 +367,7 @@ func _on_save_requested() -> void:
 
 ## Due fonti di pausa: lo stato della run (level-up, fine run) e le pause del giocatore (ESC, P).
 func _refresh_pause() -> void:
-	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused()
+	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused() or _choosing_ability
 
 
 func _on_run_ended(result: RunManager.Result) -> void:

@@ -66,6 +66,17 @@ static func drive(a: Node) -> void:
 	set_axis("aim_left", "aim_right", aim.x)
 	set_axis("aim_up", "aim_down", aim.y)
 
+## Scelta dell'abilita' (M10): prende la prima proposta; con slot pieni sostituisce il primo slot.
+static func resolve_menus(a: Node) -> bool:
+	var choice = a.get_node_or_null("%AbilityChoice")
+	if choice == null or not choice.visible:
+		return false
+	var buttons = choice.get_node("%Choices").get_children().filter(func(b): return not b.is_queued_for_deletion())
+	if not buttons.is_empty():
+		buttons[0].pressed.emit()
+	return true
+
+
 static func set_axis(neg: String, pos_a: String, v: float) -> void:
 	Input.action_release(neg); Input.action_release(pos_a)
 	if v < -0.05: Input.action_press(neg, -v)
