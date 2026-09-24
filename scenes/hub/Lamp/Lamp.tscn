@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/lamp.png" id="1"]
+[ext_resource type="Script" path="res://scripts/combat/light_flicker.gd" id="2"]
+
+[sub_resource type="Gradient" id="light_grad"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.4, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="light_tex"]
+gradient = SubResource("light_grad")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="unshaded"]
+light_mode = 1
+
+[sub_resource type="CircleShape2D" id="base"]
+radius = 8.0
+
+[node name="Lamp" type="StaticBody2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("unshaded")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1")
+offset = Vector2(0, -116)
+
+[node name="Light" type="PointLight2D" parent="."]
+position = Vector2(0, -94)
+color = Color(1, 0.78, 0.48, 1)
+energy = 0.55
+texture = SubResource("light_tex")
+texture_scale = 2.6
+script = ExtResource("2")
+amplitude = 0.05
+speed = 3.0
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("base")

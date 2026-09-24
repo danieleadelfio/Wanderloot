@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Hub come piazza all'aperto esplorabile: fontana, forgia, magazzino, alberi, lampioni e portale in stile vettoriale, atmosfera serale; il player cammina e con E apre le finestre di fabbro, baule/equipaggiamento e portale (mondo in pausa, ESC o E chiude); `Interactable` e azione `interact`, test dedicati (#35).
 - Arena Ossario: buio quasi totale, candele rosse, nebbia, decorazioni macabre, musica cupa, ondate più dure, sblocco dopo 3 estrazioni nella Cripta; nuova ricetta Bacchetta d'ossa con i materiali dell'Ossario (#33).
 - Nemici macabri: Ghoul (veloce, fragile) e Scheletro arciere (mantiene la distanza e tira dardi, primo nemico a distanza con proiettili nemici poolati); comportamento e arma nei dati, nuovi materiali Frammento d'osso ed Essenza d'ombra, test dedicati (#34).
 - Arene guidate dai dati: `ArenaData` (aspetto, luci, musica, ondate, nemici con peso e tempo minimo, sblocco), `ArenaCatalog`, spawner multi-nemico, pannello Portale nell'hub, estrazioni per arena e arena scelta nel salvataggio v3 (#32).

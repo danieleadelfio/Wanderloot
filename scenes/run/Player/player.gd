@@ -8,6 +8,8 @@ signal died
 const AIM_DEADZONE: float = 0.3
 
 @export var stats: PlayerStats
+## Falso nell'hub: il player cammina ma non spara.
+@export var weapon_enabled: bool = true
 
 ## Riferimenti ai .tres base (condivisi, mai modificati): ogni run parte da copie fresche.
 var _base_stats: PlayerStats
@@ -47,7 +49,7 @@ func _physics_process(delta: float) -> void:
 	velocity = move_dir * stats.move_speed + _knockback.velocity
 	move_and_slide()
 	var aim := _get_aim_direction()
-	if aim != Vector2.ZERO:
+	if weapon_enabled and aim != Vector2.ZERO:
 		_weapon.try_fire(aim)
 
 

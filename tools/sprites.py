@@ -381,10 +381,153 @@ def build_ossuary():
     save("icon_bone_wand", [icon_bone_wand()], 64)
 
 
+# --- Hub: piazza all'aperto (M7) --------------------------------------------------------------------
+def save_rect(name, svg_text, w, h):
+    """Come save() ma per un singolo sprite non quadrato."""
+    os.makedirs(ART, exist_ok=True)
+    os.makedirs(OUT, exist_ok=True)
+    with open(os.path.join(ART, name + ".svg"), "w", newline="\n") as f:
+        f.write(svg_text)
+    render(svg_text, w, h).save(os.path.join(OUT, name + ".png"))
+
+
+def svg_rect(body, defs, vw, vh):
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d"><defs>%s</defs>%s</svg>' % (vw, vh, defs, body)
+
+
+def plaza_floor_svg():
+    parts = ['<rect width="384" height="384" fill="#2c2932"/>']
+    y = 0
+    row = 0
+    while y < 384:
+        h = 48
+        x = -24 if row % 2 else 0
+        while x < 384:
+            w = RNG.randint(40, 64)
+            v = RNG.randint(-8, 8)
+            parts.append('<rect x="%d" y="%d" width="%d" height="%d" rx="12" fill="rgb(%d,%d,%d)"/>' % (x + 3, y + 3, w - 6, h - 6, 94 + v, 88 + v, 96 + v))
+            parts.append('<rect x="%d" y="%d" width="%d" height="5" rx="3" fill="#ffffff" opacity="0.08"/>' % (x + 6, y + 6, w - 12))
+            x += w
+        y += h
+        row += 1
+    return svg("".join(parts), "", 384)
+
+
+def fountain_svg():
+    defs = ('<radialGradient id="w" cx="0.5" cy="0.45" r="0.6"><stop offset="0" stop-color="#b8f0ff"/><stop offset="0.6" stop-color="#4a8fd0"/><stop offset="1" stop-color="#1f4a80"/></radialGradient>'
+            '<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b7b2bf"/><stop offset="1" stop-color="#6e6878"/></linearGradient>')
+    O = 'stroke="#1d1a24" stroke-width="7"'
+    return svg('<ellipse cx="240" cy="330" rx="210" ry="120" fill="#000" opacity="0.3"/>'
+               '<ellipse cx="240" cy="300" rx="200" ry="110" fill="url(#s)" %s/>'
+               '<ellipse cx="240" cy="290" rx="170" ry="86" fill="url(#w)" stroke="#2c4a6a" stroke-width="4"/>'
+               '<path d="M130 290 Q160 276 190 290 T250 290 T310 290 T350 290" stroke="#e0fbff" stroke-width="4" fill="none" opacity="0.6"/>'
+               '<rect x="222" y="150" width="36" height="140" rx="10" fill="url(#s)" %s/>'
+               '<ellipse cx="240" cy="160" rx="70" ry="26" fill="url(#s)" %s/>'
+               '<ellipse cx="240" cy="154" rx="54" ry="16" fill="url(#w)"/>'
+               '<path d="M240 110 Q200 120 190 200 M240 110 Q280 120 290 200 M240 110 L240 150" stroke="#cdf6ff" stroke-width="7" fill="none" opacity="0.75" stroke-linecap="round"/>'
+               '<circle cx="240" cy="104" r="10" fill="#e0fbff" opacity="0.9"/>' % (O, O, O), defs, 480)
+
+
+def house_svg(roof, roof_dark, window_glow, sign):
+    defs = ('<linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d8494"/><stop offset="1" stop-color="#5a5262"/></linearGradient>'
+            '<linearGradient id="roof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>'
+            '<radialGradient id="glow"><stop offset="0" stop-color="%s" stop-opacity="0.95"/><stop offset="1" stop-color="%s" stop-opacity="0.2"/></radialGradient>'
+            % (roof, roof_dark, window_glow, window_glow))
+    O = 'stroke="#1d1a24" stroke-width="6" stroke-linejoin="round"'
+    stones = "".join('<rect x="%d" y="%d" width="46" height="20" rx="4" fill="#ffffff" opacity="0.06"/>' % (40 + (i % 7) * 50 + (10 if (i // 7) % 2 else 0), 150 + (i // 7) * 26) for i in range(28))
+    return svg_rect('<ellipse cx="210" cy="252" rx="200" ry="10" fill="#000" opacity="0.35"/>'
+                    '<rect x="30" y="130" width="360" height="120" fill="url(#wall)" %s/>%s'
+                    '<path d="M10 140 L70 30 L350 30 L410 140 Z" fill="url(#roof)" %s/>'
+                    '<path d="M40 120 L380 120 M58 90 L362 90 M74 60 L346 60" stroke="%s" stroke-width="5" opacity="0.7"/>'
+                    '<rect x="300" y="0" width="36" height="60" fill="#5a5262" %s/>'
+                    '<rect x="180" y="170" width="60" height="80" rx="26" fill="#3a2418" %s/>'
+                    '<rect x="70" y="160" width="70" height="50" rx="6" fill="url(#glow)" %s/><path d="M105 160 L105 210 M70 185 L140 185" stroke="#1d1a24" stroke-width="5"/>'
+                    '<rect x="280" y="160" width="70" height="50" rx="6" fill="url(#glow)" %s/><path d="M315 160 L315 210 M280 185 L350 185" stroke="#1d1a24" stroke-width="5"/>'
+                    '<rect x="160" y="128" width="100" height="34" rx="6" fill="#5a3218" %s/>%s'
+                    % (O, stones, O, roof_dark, O, O, O, O, O, sign), defs, 420, 260)
+
+
+def forge_sign():
+    return '<path d="M186 140 L234 140 L228 148 L214 148 L216 156 L204 156 L206 148 L192 148 Z" fill="#c8c0b0"/>'
+
+
+def store_sign():
+    return '<rect x="196" y="136" width="28" height="20" rx="3" fill="#9a6035" stroke="#1d1a24" stroke-width="2"/><rect x="196" y="143" width="28" height="3" fill="#ffcd75"/>'
+
+
+def anvil_svg():
+    defs = '<linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9aa0b0"/><stop offset="1" stop-color="#3a3f4e"/></linearGradient>'
+    O = 'stroke="#141a2c" stroke-width="5" stroke-linejoin="round"'
+    return svg('<ellipse cx="64" cy="112" rx="44" ry="8" fill="#000" opacity="0.4"/>'
+               '<rect x="44" y="84" width="40" height="26" rx="4" fill="#5a3218" %s/>'
+               '<path d="M14 52 L100 52 Q116 52 118 62 L96 66 L90 84 L38 84 L32 66 Q14 64 14 52 Z" fill="url(#m)" %s/>'
+               '<path d="M20 54 L98 54" stroke="#e0e6f0" stroke-width="3" opacity="0.6"/>' % (O, O), defs, 128)
+
+
+def chest_svg():
+    defs = '<linearGradient id="wd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b87a45"/><stop offset="1" stop-color="#6a3f1f"/></linearGradient>'
+    O = 'stroke="#141a2c" stroke-width="5" stroke-linejoin="round"'
+    return svg('<ellipse cx="64" cy="112" rx="50" ry="8" fill="#000" opacity="0.4"/>'
+               '<rect x="16" y="54" width="96" height="54" rx="6" fill="url(#wd)" %s/>'
+               '<path d="M16 58 Q64 18 112 58 Z" fill="url(#wd)" %s/>'
+               '<path d="M36 40 L36 108 M92 40 L92 108" stroke="#6b7690" stroke-width="7"/>'
+               '<rect x="54" y="58" width="20" height="22" rx="4" fill="#ffcd75" stroke="#7a4d1c" stroke-width="3"/>' % (O, O), defs, 128)
+
+
+def portal_arch_svg():
+    defs = '<linearGradient id="s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a5466"/><stop offset="0.5" stop-color="#9a94a6"/><stop offset="1" stop-color="#4a4456"/></linearGradient>'
+    O = 'stroke="#1d1a24" stroke-width="8" stroke-linejoin="round"'
+    runes = "".join('<circle cx="%d" cy="%d" r="6" fill="#c77dff"/>' % (240 + 150 * math.cos(a), 250 - 150 * math.sin(a)) for a in [math.pi * (i + 0.5) / 7 for i in range(7)])
+    return svg('<ellipse cx="240" cy="440" rx="180" ry="22" fill="#000" opacity="0.4"/>'
+               '<path d="M60 440 L60 250 A180 180 0 0 1 420 250 L420 440 L360 440 L360 250 A120 120 0 0 0 120 250 L120 440 Z" fill="url(#s)" %s/>'
+               '<rect x="40" y="420" width="100" height="24" rx="6" fill="#6e6878" %s/><rect x="340" y="420" width="100" height="24" rx="6" fill="#6e6878" %s/>%s' % (O, O, O, runes), defs, 480)
+
+
+def portal_swirl_svg():
+    defs = '<radialGradient id="p" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff"/><stop offset="0.25" stop-color="#e0b0ff"/><stop offset="0.7" stop-color="#7b2cbf"/><stop offset="1" stop-color="#240046" stop-opacity="0.9"/></radialGradient>'
+    arms = "".join('<path d="M128 128 Q%d %d %d %d" stroke="#f4eeff" stroke-width="6" fill="none" opacity="0.55" stroke-linecap="round"/>'
+                   % (128 + 70 * math.cos(a), 128 + 70 * math.sin(a), 128 + 110 * math.cos(a + 1.2), 128 + 110 * math.sin(a + 1.2)) for a in [i * math.tau / 5 for i in range(5)])
+    return svg('<circle cx="128" cy="128" r="120" fill="url(#p)"/>' + arms, defs, 256)
+
+
+def lamp_svg():
+    defs = '<radialGradient id="l"><stop offset="0" stop-color="#fffbe8"/><stop offset="0.5" stop-color="#ffcd75"/><stop offset="1" stop-color="#ef7d57"/></radialGradient>'
+    O = 'stroke="#141a2c" stroke-width="5" stroke-linejoin="round"'
+    return svg('<ellipse cx="128" cy="244" rx="34" ry="8" fill="#000" opacity="0.4"/>'
+               '<rect x="120" y="70" width="16" height="170" fill="#2a2632" %s/><rect x="104" y="228" width="48" height="14" rx="4" fill="#2a2632" %s/>'
+               '<path d="M98 40 L158 40 L150 80 L106 80 Z" fill="url(#l)" %s/><path d="M92 40 L164 40 L128 16 Z" fill="#2a2632" %s/>' % (O, O, O, O), defs, 256)
+
+
+def tree_svg(tint=0):
+    g = [("#3f7a4a", "#23452c", "#142a1b"), ("#4d6e3a", "#2c4422", "#182614")][tint]
+    defs = '<radialGradient id="c" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="%s"/><stop offset="0.6" stop-color="%s"/><stop offset="1" stop-color="%s"/></radialGradient>' % g
+    O = 'stroke="#0e1a12" stroke-width="7"'
+    return svg('<ellipse cx="160" cy="300" rx="90" ry="16" fill="#000" opacity="0.4"/>'
+               '<rect x="144" y="190" width="32" height="110" rx="8" fill="#5a3218" %s/>'
+               '<circle cx="110" cy="160" r="70" fill="url(#c)" %s/><circle cx="210" cy="160" r="70" fill="url(#c)" %s/>'
+               '<circle cx="160" cy="100" r="84" fill="url(#c)" %s/>'
+               '<circle cx="130" cy="80" r="18" fill="#ffffff" opacity="0.08"/>' % (O, O, O, O), defs, 320)
+
+
+def build_hub():
+    save("plaza_floor", [plaza_floor_svg()], 384)
+    save("fountain", [fountain_svg()], 480)
+    save_rect("house_forge", house_svg("#8a3a33", "#4a1c1a", "#ffb347", forge_sign()), 840, 520)
+    save_rect("house_store", house_svg("#3f5f8a", "#1f2f4a", "#ffe29a", store_sign()), 840, 520)
+    save("anvil", [anvil_svg()], 128)
+    save("chest", [chest_svg()], 128)
+    save("portal_arch", [portal_arch_svg()], 480)
+    save("portal_swirl", [portal_swirl_svg()], 256)
+    save("lamp", [lamp_svg()], 256)
+    save("tree", [tree_svg(0)], 320)
+    save("tree_b", [tree_svg(1)], 320)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
     build_props()
     build_ossuary_enemies()
     build_ossuary()
+    build_hub()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

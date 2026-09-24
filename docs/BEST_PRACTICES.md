@@ -73,6 +73,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 
 - Suoni sempre per id tramite `SfxPlayer.play(&"id")` e `SoundBank` (`.tres`): mai `AudioStreamPlayer` sparsi con stream hardcoded. Un id nuovo va aggiunto al banco e alla lista del test `tests/audio/test_sound_bank.gd`.
 - Collegamento via segnali nella composition root (`Arena`, `Hub`), mai chiamate audio dalle entità.
+- Interazioni nel mondo (hub, M7): un `Interactable` (Area2D) sa solo se il player è nel raggio e quale finestra apre (export `window`); l'apertura, la pausa e il focus li gestisce la composition root. Le finestre restano scene UI riusabili (`Blacksmith`, `LoadoutPanel`, `ArenaSelect`) con unique name, così `tools/flow.gd` le pilota senza passare dal mondo.
 - Bus: `Music`, `SFX` (Master sopra). Asset sorgente riproducibili: `tools/audio.py`.
 
 ## 3.2 Collision layers (vincolanti)

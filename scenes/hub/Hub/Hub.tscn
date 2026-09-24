@@ -1,115 +1,668 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/hub/Hub/hub.gd" id="1"]
-[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="2"]
-[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/hub/Blacksmith/Blacksmith.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/hub/LoadoutPanel/LoadoutPanel.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://scenes/hub/ArenaSelect/ArenaSelect.tscn" id="10"]
-[ext_resource type="Script" path="res://scripts/audio/sfx_player.gd" id="6"]
-[ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="7"]
-[ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="8"]
-[ext_resource type="AudioStream" path="res://assets/audio/music_hub.wav" id="9"]
-[ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m1"]
-[ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m2"]
+[ext_resource type="Script" path="res://scenes/hub/Hub/hub.gd" id="hub"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="m_core"]
+[ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m_bone"]
+[ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m_ess"]
+[ext_resource type="PackedScene" path="res://scenes/hub/Blacksmith/Blacksmith.tscn" id="blacksmith"]
+[ext_resource type="PackedScene" path="res://scenes/hub/LoadoutPanel/LoadoutPanel.tscn" id="loadout"]
+[ext_resource type="PackedScene" path="res://scenes/hub/ArenaSelect/ArenaSelect.tscn" id="arena_select"]
+[ext_resource type="Script" path="res://scripts/audio/sfx_player.gd" id="sfx"]
+[ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="bank"]
+[ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="music"]
+[ext_resource type="AudioStream" path="res://assets/audio/music_hub.wav" id="music_hub"]
+[ext_resource type="PackedScene" path="res://scenes/run/Player/Player.tscn" id="player"]
+[ext_resource type="PackedScene" path="res://scenes/hub/Lamp/Lamp.tscn" id="lamp"]
+[ext_resource type="Script" path="res://scripts/hub/interactable.gd" id="interactable"]
+[ext_resource type="Script" path="res://scripts/hub/spinner.gd" id="spinner"]
+[ext_resource type="Script" path="res://scripts/combat/light_flicker.gd" id="flicker"]
+[ext_resource type="Texture2D" path="res://assets/sprites/plaza_floor.png" id="plaza_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/fountain.png" id="fountain"]
+[ext_resource type="Texture2D" path="res://assets/sprites/house_forge.png" id="house_forge"]
+[ext_resource type="Texture2D" path="res://assets/sprites/house_store.png" id="house_store"]
+[ext_resource type="Texture2D" path="res://assets/sprites/anvil.png" id="anvil"]
+[ext_resource type="Texture2D" path="res://assets/sprites/chest.png" id="chest"]
+[ext_resource type="Texture2D" path="res://assets/sprites/portal_arch.png" id="portal_arch"]
+[ext_resource type="Texture2D" path="res://assets/sprites/portal_swirl.png" id="portal_swirl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tree.png" id="tree"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tree_b.png" id="tree_b"]
 
-[node name="Hub" type="Control"]
+[sub_resource type="Gradient" id="light_grad"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.4, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="light_tex"]
+gradient = SubResource("light_grad")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="unshaded"]
+light_mode = 1
+
+[sub_resource type="CapsuleShape2D" id="fountain_shape"]
+radius = 52.0
+height = 206.0
+
+[sub_resource type="RectangleShape2D" id="house_shape"]
+size = Vector2(360, 120)
+
+[sub_resource type="RectangleShape2D" id="prop_shape"]
+size = Vector2(52, 24)
+
+[sub_resource type="RectangleShape2D" id="pillar_shape"]
+size = Vector2(34, 22)
+
+[sub_resource type="RectangleShape2D" id="wall_h"]
+size = Vector2(1800, 40)
+
+[sub_resource type="RectangleShape2D" id="wall_v"]
+size = Vector2(40, 1300)
+
+[sub_resource type="CircleShape2D" id="spot_big"]
+radius = 110.0
+
+[sub_resource type="CircleShape2D" id="spot_small"]
+radius = 90.0
+
+[sub_resource type="StyleBoxFlat" id="window_style"]
+content_margin_left = 20.0
+content_margin_top = 18.0
+content_margin_right = 20.0
+content_margin_bottom = 14.0
+bg_color = Color(0.1, 0.09, 0.14, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.62, 0.36, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Hub" type="Node2D"]
+process_mode = 3
+script = ExtResource("hub")
+materials = Array[Resource]([ExtResource("m_gel"), ExtResource("m_core"), ExtResource("m_bone"), ExtResource("m_ess")])
+
+[node name="Sfx" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("sfx")
+bank = ExtResource("bank")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("music_hub")
+script = ExtResource("music")
+
+[node name="Ambient" type="CanvasModulate" parent="."]
+color = Color(0.52, 0.49, 0.68, 1)
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="Floor" type="Sprite2D" parent="World"]
+z_index = -10
+texture_repeat = 2
+position = Vector2(0, -50)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("plaza_floor")
+region_enabled = true
+region_rect = Rect2(0, 0, 3600, 2600)
+
+[node name="Bounds" type="StaticBody2D" parent="World"]
+
+[node name="Top" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(0, -420)
+shape = SubResource("wall_h")
+
+[node name="Bottom" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(0, 580)
+shape = SubResource("wall_h")
+
+[node name="Left" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-880, -50)
+shape = SubResource("wall_v")
+
+[node name="Right" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(880, -50)
+shape = SubResource("wall_v")
+
+[node name="Props" type="Node2D" parent="World"]
+y_sort_enabled = true
+
+[node name="Forge" type="StaticBody2D" parent="World/Props"]
+position = Vector2(-450, -420)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Forge"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("house_forge")
+offset = Vector2(0, -244)
+
+[node name="Shape0" type="CollisionShape2D" parent="World/Props/Forge"]
+position = Vector2(0, -62)
+shape = SubResource("house_shape")
+
+[node name="Store" type="StaticBody2D" parent="World/Props"]
+position = Vector2(450, -420)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Store"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("house_store")
+offset = Vector2(0, -244)
+
+[node name="Shape0" type="CollisionShape2D" parent="World/Props/Store"]
+position = Vector2(0, -62)
+shape = SubResource("house_shape")
+
+[node name="Fountain" type="StaticBody2D" parent="World/Props"]
+position = Vector2(0, -20)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Fountain"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("fountain")
+offset = Vector2(0, -60)
+
+[node name="Shape" type="CollisionShape2D" parent="World/Props/Fountain"]
+rotation = 1.5708
+shape = SubResource("fountain_shape")
+
+[node name="Anvil" type="StaticBody2D" parent="World/Props"]
+position = Vector2(-250, -330)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Anvil"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("anvil")
+offset = Vector2(0, -48)
+
+[node name="Shape0" type="CollisionShape2D" parent="World/Props/Anvil"]
+position = Vector2(0, -10)
+shape = SubResource("prop_shape")
+
+[node name="Chest" type="StaticBody2D" parent="World/Props"]
+position = Vector2(250, -330)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Chest"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("chest")
+offset = Vector2(0, -48)
+
+[node name="Shape0" type="CollisionShape2D" parent="World/Props/Chest"]
+position = Vector2(0, -10)
+shape = SubResource("prop_shape")
+
+[node name="Portal" type="StaticBody2D" parent="World/Props"]
+position = Vector2(0, 540)
+
+[node name="Swirl" type="Sprite2D" parent="World/Props/Portal"]
+material = SubResource("unshaded")
+position = Vector2(0, -74)
+scale = Vector2(0.46, 0.5)
+texture = ExtResource("portal_swirl")
+script = ExtResource("spinner")
+
+[node name="Arch" type="Sprite2D" parent="World/Props/Portal"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("portal_arch")
+offset = Vector2(0, -200)
+
+[node name="Light" type="PointLight2D" parent="World/Props/Portal"]
+position = Vector2(0, -80)
+color = Color(0.75, 0.45, 1, 1)
+energy = 1.2
+texture = SubResource("light_tex")
+texture_scale = 2.4
+script = ExtResource("flicker")
+amplitude = 0.12
+speed = 2.0
+
+[node name="Pillar0" type="CollisionShape2D" parent="World/Props/Portal"]
+position = Vector2(-75, -10)
+shape = SubResource("pillar_shape")
+
+[node name="Pillar1" type="CollisionShape2D" parent="World/Props/Portal"]
+position = Vector2(75, -10)
+shape = SubResource("pillar_shape")
+
+[node name="ForgeGlow" type="PointLight2D" parent="World"]
+position = Vector2(-450, -470)
+color = Color(1, 0.55, 0.25, 1)
+energy = 0.9
+texture = SubResource("light_tex")
+texture_scale = 2.0
+
+[node name="Tree0" type="Node2D" parent="World/Props"]
+position = Vector2(-150, -470)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree0"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree1" type="Node2D" parent="World/Props"]
+position = Vector2(150, -470)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree1"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+
+[node name="Tree2" type="Node2D" parent="World/Props"]
+position = Vector2(-820, -470)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree2"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree3" type="Node2D" parent="World/Props"]
+position = Vector2(820, -470)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree3"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+
+[node name="Tree4" type="Node2D" parent="World/Props"]
+position = Vector2(-850, -300)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree4"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree5" type="Node2D" parent="World/Props"]
+position = Vector2(-850, -120)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree5"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+
+[node name="Tree6" type="Node2D" parent="World/Props"]
+position = Vector2(-850, 60)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree6"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree7" type="Node2D" parent="World/Props"]
+position = Vector2(-850, 240)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree7"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+
+[node name="Tree8" type="Node2D" parent="World/Props"]
+position = Vector2(-850, 420)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree8"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree9" type="Node2D" parent="World/Props"]
+position = Vector2(850, -300)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree9"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+
+[node name="Tree10" type="Node2D" parent="World/Props"]
+position = Vector2(850, -120)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree10"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree11" type="Node2D" parent="World/Props"]
+position = Vector2(850, 60)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree11"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+
+[node name="Tree12" type="Node2D" parent="World/Props"]
+position = Vector2(850, 240)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree12"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree13" type="Node2D" parent="World/Props"]
+position = Vector2(850, 420)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree13"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+
+[node name="Tree14" type="Node2D" parent="World/Props"]
+position = Vector2(-760, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree14"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree15" type="Node2D" parent="World/Props"]
+position = Vector2(-560, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree15"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+
+[node name="Tree16" type="Node2D" parent="World/Props"]
+position = Vector2(-360, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree16"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree17" type="Node2D" parent="World/Props"]
+position = Vector2(-180, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree17"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+
+[node name="Tree18" type="Node2D" parent="World/Props"]
+position = Vector2(180, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree18"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree19" type="Node2D" parent="World/Props"]
+position = Vector2(360, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree19"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+
+[node name="Tree20" type="Node2D" parent="World/Props"]
+position = Vector2(560, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree20"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree")
+offset = Vector2(0, -140)
+flip_h = true
+
+[node name="Tree21" type="Node2D" parent="World/Props"]
+position = Vector2(760, 640)
+
+[node name="Sprite" type="Sprite2D" parent="World/Props/Tree21"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("tree_b")
+offset = Vector2(0, -140)
+
+[node name="Lamp0" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(-230, -150)
+
+[node name="Lamp1" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(230, -150)
+
+[node name="Lamp2" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(-230, 150)
+
+[node name="Lamp3" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(230, 150)
+
+[node name="Lamp4" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(-150, 470)
+
+[node name="Lamp5" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(150, 470)
+
+[node name="Lamp6" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(-250, -420)
+
+[node name="Lamp7" parent="World/Props" instance=ExtResource("lamp")]
+position = Vector2(250, -420)
+
+[node name="Player" parent="World/Props" instance=ExtResource("player")]
+unique_name_in_owner = true
+position = Vector2(0, 260)
+weapon_enabled = false
+
+[node name="Light" parent="World/Props/Player" index="1"]
+energy = 0.45
+texture_scale = 2.4
+
+[node name="Camera2D" type="Camera2D" parent="World/Props/Player"]
+limit_left = -900
+limit_top = -700
+limit_right = 900
+limit_bottom = 600
+zoom = Vector2(0.85, 0.85)
+position_smoothing_enabled = true
+
+[node name="ForgeSpot" type="Area2D" parent="World" node_paths=PackedStringArray("window")]
+position = Vector2(-270, -320)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("interactable")
+prompt = "E — Fabbro (crafting)"
+window = NodePath("../../UI/BlacksmithWindow")
+
+[node name="Shape" type="CollisionShape2D" parent="World/ForgeSpot"]
+shape = SubResource("spot_big")
+
+[node name="ChestSpot" type="Area2D" parent="World" node_paths=PackedStringArray("window")]
+position = Vector2(250, -310)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("interactable")
+prompt = "E — Baule ed equipaggiamento"
+window = NodePath("../../UI/StashWindow")
+
+[node name="Shape" type="CollisionShape2D" parent="World/ChestSpot"]
+shape = SubResource("spot_small")
+
+[node name="PortalSpot" type="Area2D" parent="World" node_paths=PackedStringArray("window")]
+position = Vector2(0, 470)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("interactable")
+prompt = "E — Portale (scegli l'arena e parti)"
+window = NodePath("../../UI/PortalWindow")
+
+[node name="Shape" type="CollisionShape2D" parent="World/PortalSpot"]
+shape = SubResource("spot_big")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="UI"]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 600.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "Piazza di Wanderloot"
+
+[node name="Hint" type="Label" parent="UI"]
+offset_left = 24.0
+offset_top = 56.0
+offset_right = 600.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.85)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "WASD muoviti · E interagisci · ESC chiudi"
+
+[node name="Prompt" type="Label" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -90.0
+offset_right = 300.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="Dim" type="ColorRect" parent="UI"]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1")
-materials = Array[Resource]([ExtResource("2"), ExtResource("3"), ExtResource("m1"), ExtResource("m2")])
+color = Color(0, 0, 0, 0.55)
 
-[node name="Sfx" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("6")
-bank = ExtResource("7")
-
-[node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("9")
-script = ExtResource("8")
-
-[node name="Background" type="ColorRect" parent="."]
-layout_mode = 1
+[node name="StashWindow" type="CenterContainer" parent="UI"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.09, 0.08, 0.12, 1)
 
-[node name="Margin" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 48
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 48
-theme_override_constants/margin_bottom = 32
-
-[node name="VBox" type="VBoxContainer" parent="Margin"]
+[node name="Panel" type="PanelContainer" parent="UI/StashWindow"]
+custom_minimum_size = Vector2(980, 0)
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_styles/panel = SubResource("window_style")
 
-[node name="TitleLabel" type="Label" parent="Margin/VBox"]
+[node name="VBox" type="VBoxContainer" parent="UI/StashWindow/Panel"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Hub"
-horizontal_alignment = 1
+theme_override_constants/separation = 16
 
-[node name="Panels" type="HBoxContainer" parent="Margin/VBox"]
-unique_name_in_owner = true
+[node name="Panels" type="HBoxContainer" parent="UI/StashWindow/Panel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="StashPanel" type="PanelContainer" parent="Margin/VBox/Panels"]
+[node name="StashPanel" type="PanelContainer" parent="UI/StashWindow/Panel/VBox/Panels"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.5
 
-[node name="VBox" type="VBoxContainer" parent="Margin/VBox/Panels/StashPanel"]
+[node name="VBox" type="VBoxContainer" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel"]
 layout_mode = 2
 
-[node name="StashTitle" type="Label" parent="Margin/VBox/Panels/StashPanel/VBox"]
+[node name="StashTitle" type="Label" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Baule"
 
-[node name="StashLabel" type="Label" parent="Margin/VBox/Panels/StashPanel/VBox"]
+[node name="StashLabel" type="Label" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 1)
 text = "Baule vuoto: estrai loot da una run."
 
-[node name="StashList" type="VBoxContainer" parent="Margin/VBox/Panels/StashPanel/VBox"]
+[node name="StashList" type="VBoxContainer" parent="UI/StashWindow/Panel/VBox/Panels/StashPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Blacksmith" parent="Margin/VBox/Panels" instance=ExtResource("4")]
+[node name="LoadoutPanel" parent="UI/StashWindow/Panel/VBox/Panels" instance=ExtResource("loadout")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_stretch_ratio = 1.25
 
-[node name="LoadoutPanel" parent="Margin/VBox/Panels" instance=ExtResource("5")]
+[node name="CloseHint" type="Label" parent="UI/StashWindow/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
+text = "ESC o E per chiudere"
+horizontal_alignment = 1
+
+[node name="BlacksmithWindow" type="CenterContainer" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="UI/BlacksmithWindow"]
+custom_minimum_size = Vector2(760, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("window_style")
+
+[node name="VBox" type="VBoxContainer" parent="UI/BlacksmithWindow/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Blacksmith" parent="UI/BlacksmithWindow/Panel/VBox" instance=ExtResource("blacksmith")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_stretch_ratio = 1.25
+size_flags_vertical = 3
 
-[node name="ArenaSelect" parent="Margin/VBox" instance=ExtResource("10")]
+[node name="CloseHint" type="Label" parent="UI/BlacksmithWindow/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
+text = "ESC o E per chiudere"
+horizontal_alignment = 1
+
+[node name="PortalWindow" type="CenterContainer" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="UI/PortalWindow"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("window_style")
+
+[node name="VBox" type="VBoxContainer" parent="UI/PortalWindow/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ArenaSelect" parent="UI/PortalWindow/Panel/VBox" instance=ExtResource("arena_select")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 3
 
-[node name="StartButton" type="Button" parent="Margin/VBox"]
+[node name="StartButton" type="Button" parent="UI/PortalWindow/Panel/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(240, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Parti per la run"
+text = "Attraversa il portale"
+
+[node name="CloseHint" type="Label" parent="UI/PortalWindow/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
+text = "ESC o E per chiudere"
+horizontal_alignment = 1
