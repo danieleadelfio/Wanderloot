@@ -15,6 +15,6 @@ script = ExtResource("1")
 id = &"slime_boots"
 display_name = "EQ_SLIME_BOOTS"
 description = "EQ_SLIME_BOOTS_DESC"
-slot = 1
+slot = 6
 icon = ExtResource("ic")
 modifiers = Array[ExtResource("2")]([SubResource("mod_1")])

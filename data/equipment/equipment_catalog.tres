@@ -7,7 +7,12 @@
 [ext_resource type="Resource" path="res://data/equipment/core_amulet.tres" id="4"]
 [ext_resource type="Resource" path="res://data/equipment/slime_boots.tres" id="5"]
 [ext_resource type="Resource" path="res://data/equipment/bone_wand.tres" id="9"]
+[ext_resource type="Resource" path="res://data/equipment/wanderer_hood.tres" id="n0"]
+[ext_resource type="Resource" path="res://data/equipment/smith_gloves.tres" id="n1"]
+[ext_resource type="Resource" path="res://data/equipment/bone_armor.tres" id="n2"]
+[ext_resource type="Resource" path="res://data/equipment/leather_pants.tres" id="n3"]
+[ext_resource type="Resource" path="res://data/equipment/gel_ring.tres" id="n4"]
 
 [resource]
 script = ExtResource("1")
-items = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("9")])
+items = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("9"), ExtResource("n0"), ExtResource("n1"), ExtResource("n2"), ExtResource("n3"), ExtResource("n4")])

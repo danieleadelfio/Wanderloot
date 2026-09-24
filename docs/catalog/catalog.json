@@ -517,32 +517,32 @@
   {
    "name": "Cappuccio del viandante",
    "slot": "Testa",
-   "status": "pianificato",
-   "desc": "+raggio magnete, +exp."
+   "status": "M11",
+   "desc": "+20% raggio di raccolta, +10% exp. Ricetta: 20 Gelatina, 2 Nuclei."
   },
   {
    "name": "Guanti del fabbro",
    "slot": "Guanti",
-   "status": "pianificato",
-   "desc": "+cadenza, +spinta."
+   "status": "M11",
+   "desc": "+10% cadenza, +20% spinta. Ricetta: 30 Gelatina."
   },
   {
    "name": "Corazza d'osso",
    "slot": "Armatura",
-   "status": "pianificato",
-   "desc": "+HP, +invulnerabilità."
+   "status": "M11",
+   "desc": "+1 HP, +0,1 s invulnerabilità. Ricetta: 25 Frammenti d'osso, 2 Essenze d'ombra."
   },
   {
    "name": "Brache di cuoio",
    "slot": "Pantaloni",
-   "status": "pianificato",
-   "desc": "+velocità, +HP."
+   "status": "M11",
+   "desc": "+5% velocità, +1 HP. Ricetta: 25 Gelatina, 1 Nucleo."
   },
   {
    "name": "Anello di gelatina",
    "slot": "Anello",
-   "status": "pianificato",
-   "desc": "+danno o +drop (bonus casuali)."
+   "status": "M11",
+   "desc": "+10% probabilità di drop. Ricetta: 15 Gelatina, 1 Nucleo."
   },
   {
    "name": "Corona del Re Slime",

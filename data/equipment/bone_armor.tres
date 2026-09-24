@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_bone_armor.png" id="ic"]
+
+[sub_resource type="Resource" id="mod_0"]
+script = ExtResource("2")
+stat = 4
+amount = 1.0
+is_multiplier = false
+
+[sub_resource type="Resource" id="mod_1"]
+script = ExtResource("2")
+stat = 9
+amount = 0.1
+is_multiplier = false
+
+[resource]
+script = ExtResource("1")
+id = &"bone_armor"
+display_name = "EQ_BONE_ARMOR"
+description = "EQ_BONE_ARMOR_DESC"
+slot = 4
+icon = ExtResource("ic")
+modifiers = Array[ExtResource("2")]([SubResource("mod_0"), SubResource("mod_1")])

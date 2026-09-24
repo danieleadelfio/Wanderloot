@@ -4,7 +4,7 @@ extends RefCounted
 ## Logica pura, senza I/O: la persistenza e' in MetaProgression.
 
 ## Slot del manichino. Nuove voci solo in coda (salvate per nome, ma usate negli indici dell'UI).
-enum EquipSlot { WEAPON, AMULET }
+enum EquipSlot { WEAPON, AMULET, HEAD, GLOVES, ARMOR, PANTS, BOOTS, RING_1, RING_2 }
 
 var _items: Dictionary[int, ItemInstance] = {}
 ## EquipSlot -> uid dell'istanza indossata.
@@ -17,6 +17,18 @@ static func slots_for(item_slot: EquipmentData.Slot) -> Array[int]:
 	match item_slot:
 		EquipmentData.Slot.WEAPON:
 			return [EquipSlot.WEAPON]
+		EquipmentData.Slot.HEAD:
+			return [EquipSlot.HEAD]
+		EquipmentData.Slot.GLOVES:
+			return [EquipSlot.GLOVES]
+		EquipmentData.Slot.ARMOR:
+			return [EquipSlot.ARMOR]
+		EquipmentData.Slot.PANTS:
+			return [EquipSlot.PANTS]
+		EquipmentData.Slot.BOOTS:
+			return [EquipSlot.BOOTS]
+		EquipmentData.Slot.RING:
+			return [EquipSlot.RING_1, EquipSlot.RING_2]
 	return [EquipSlot.AMULET]
 
 

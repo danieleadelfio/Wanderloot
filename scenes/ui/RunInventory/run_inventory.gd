@@ -3,10 +3,7 @@ extends CanvasLayer
 ## Inventario di run (tasto I): equipaggiamento indossato e loot raccolto nella run (a rischio).
 ## Occupa la meta' destra dello schermo; la pausa la gestisce la composition root.
 
-const SLOT_NAMES: Dictionary[int, String] = {
-	EquipmentLoadout.EquipSlot.WEAPON: "SLOT_WEAPON",
-	EquipmentLoadout.EquipSlot.AMULET: "SLOT_ACCESSORY",
-}
+const SLOT_NAMES := LoadoutPanel.SLOT_NAMES
 const ICON_SIZE: Vector2 = Vector2(32, 32)
 const LOOT_COLOR: Color = Color(1, 0.8, 0.35)
 
@@ -32,8 +29,10 @@ func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int]) -> vo
 	_clear(_loot_list)
 	for slot: int in EquipmentLoadout.EquipSlot.values():
 		var item := loadout.equipped_in(slot)
-		var text := "%s: %s" % [tr(SLOT_NAMES[slot]), ("%s  (%s)" % [tr(item.base.display_name), tr(item.base.description)]) if item else tr("SLOT_NONE")]
-		_equip_list.add_child(_row(item.base.icon if item else null, text, Color.WHITE))
+		if item == null:
+			continue
+		var text := "%s: %s  (%s)" % [tr(SLOT_NAMES[slot]), ItemText.title(item), tr(item.base.description)]
+		_equip_list.add_child(_row(item.base.icon, text, ItemText.color(item)))
 	var total := 0
 	for id in loot:
 		var material := _material(id)

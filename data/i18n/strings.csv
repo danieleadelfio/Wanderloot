@@ -51,7 +51,7 @@ LOADOUT_TITLE,Equipaggiamento,Equipment,Équipement,Equipo
 LOADOUT_NO_ITEM,  nessun pezzo: craftalo dal fabbro,  no item: craft it at the blacksmith,  aucun objet : fabriquez-le chez le forgeron,  ningún objeto: fabrícalo en el herrero
 LOADOUT_EQUIPPED,equipaggiato,equipped,équipé,equipado
 SLOT_WEAPON,Arma,Weapon,Arme,Arma
-SLOT_ACCESSORY,Accessorio,Accessory,Accessoire,Accesorio
+SLOT_ACCESSORY,Amuleto,Amulet,Amulette,Amuleto
 SLOT_NONE,nessuno,none,aucun,ninguno
 STASH_TITLE,Baule,Chest,Coffre,Cofre
 STASH_EMPTY,Baule vuoto: estrai loot da una run.,Chest empty: extract loot from a run.,Coffre vide : extrayez du butin d'une expédition.,Cofre vacío: extrae botín de una expedición.
@@ -159,3 +159,20 @@ EVENT_PENTAGRAM_HOLD,Resta nel cerchio finché le candele si spengono,Stay in th
 EVENT_PENTAGRAM_REWARD,Un boss in più ti aspetta,One more boss awaits you,Un boss de plus vous attend,Te espera un jefe más
 EVENT_PENTAGRAM_FAILED_HINT,Il pentagramma si è dissolto,The pentagram has faded,Le pentagramme s'est dissipé,El pentagrama se ha desvanecido
 BLACKSMITH_OWNED_COUNT,posseduti: %d,owned: %d,possédés : %d,en posesión: %d
+SLOT_HEAD,Testa,Head,Tête,Cabeza
+SLOT_GLOVES,Guanti,Gloves,Gants,Guantes
+SLOT_ARMOR,Armatura,Armor,Armure,Armadura
+SLOT_PANTS,Pantaloni,Pants,Pantalon,Pantalones
+SLOT_BOOTS,Stivali,Boots,Bottes,Botas
+SLOT_RING,Anello,Ring,Anneau,Anillo
+LOADOUT_CLICK_HINT,"Clic su un oggetto per indossarlo, clic su uno slot per toglierlo.","Click an item to wear it, click a slot to take it off.","Cliquez sur un objet pour le porter, sur un emplacement pour le retirer.",Haz clic en un objeto para ponértelo y en una ranura para quitártelo.
+EQ_WANDERER_HOOD,Cappuccio del viandante,Wanderer's hood,Capuche du vagabond,Capucha del errante
+EQ_WANDERER_HOOD_DESC,"+20% raggio di raccolta, +10% exp","+20% pickup radius, +10% exp","+20 % de rayon de ramassage, +10 % d'exp","+20% de radio de recogida, +10% de exp"
+EQ_SMITH_GLOVES,Guanti del fabbro,Smith's gloves,Gants du forgeron,Guantes del herrero
+EQ_SMITH_GLOVES_DESC,"+10% cadenza, +20% spinta","+10% fire rate, +20% knockback","+10 % de cadence, +20 % de recul","+10% de cadencia, +20% de empuje"
+EQ_BONE_ARMOR,Corazza d'osso,Bone armor,Armure d'os,Coraza de hueso
+EQ_BONE_ARMOR_DESC,"+1 HP massimi, +0,1 s di invulnerabilità","+1 max HP, +0.1s invulnerability","+1 PV max, +0,1 s d'invulnérabilité","+1 PV máx., +0,1 s de invulnerabilidad"
+EQ_LEATHER_PANTS,Brache di cuoio,Leather breeches,Braies de cuir,Calzas de cuero
+EQ_LEATHER_PANTS_DESC,"+5% velocità, +1 HP massimi","+5% speed, +1 max HP","+5 % de vitesse, +1 PV max","+5% de velocidad, +1 PV máx."
+EQ_GEL_RING,Anello di gelatina,Gel ring,Anneau de gelée,Anillo de gelatina
+EQ_GEL_RING_DESC,+10% probabilità di drop,+10% drop chance,+10 % de chance de butin,+10% de probabilidad de botín

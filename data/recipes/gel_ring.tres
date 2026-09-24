@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/recipe_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/material_cost.gd" id="2"]
+[ext_resource type="Resource" path="res://data/equipment/gel_ring.tres" id="3"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="m_core"]
+
+[sub_resource type="Resource" id="cost_gel"]
+script = ExtResource("2")
+material = ExtResource("m_gel")
+amount = 15
+
+[sub_resource type="Resource" id="cost_core"]
+script = ExtResource("2")
+material = ExtResource("m_core")
+amount = 1
+
+[resource]
+script = ExtResource("1")
+result = ExtResource("3")
+costs = Array[ExtResource("2")]([SubResource("cost_gel"), SubResource("cost_core")])

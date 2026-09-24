@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- 9 slot dell'equipaggiamento (Testa, Guanti, Armatura, Pantaloni, Stivali, 2 Anelli, Amuleto, Bacchetta) con manichino nell'inventario: clic su un oggetto per indossarlo, clic su uno slot per toglierlo; 5 nuovi oggetti base con ricette e icone vettoriali; test (#56).
 - Oggetti unici: ogni pezzo posseduto è un'istanza con oggetto base, rarità, bonus e abilità; il fabbro crafta anche duplicati; salvataggio v5 con conversione dei salvataggi precedenti in oggetti Comuni; test su istanze, loadout, crafting e migrazione (#55).
 - Guida al bilanciamento (`docs/GUIDA_CONTENUTI.md` §8): per ogni valore regolabile dall'Inspector il file, il campo, il valore attuale e l'effetto, con il metodo di verifica col bot (#54).
 - Evento Pentagramma di sangue: compare in un punto a caso con 15 candele e aspetta 20 s; nel cerchio si resiste 15 s (una candela al secondo) con mostri +30% subito e nuovi mostri già in rage; uscire o non entrare fa fallire; riuscita = un boss in più. Boss multipli sempre in punti diversi e distanti, barra HP totale; test (#53).

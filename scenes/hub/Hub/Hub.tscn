@@ -596,7 +596,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="UI/InventoryWindow"]
-custom_minimum_size = Vector2(980, 0)
+custom_minimum_size = Vector2(1080, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("window_style")
 
@@ -616,8 +616,8 @@ size_flags_vertical = 3
 theme_override_constants/separation = 24
 
 [node name="StashPanel" type="PanelContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="VBox" type="VBoxContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel"]
 layout_mode = 2

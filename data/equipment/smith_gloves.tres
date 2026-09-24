@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_smith_gloves.png" id="ic"]
+
+[sub_resource type="Resource" id="mod_0"]
+script = ExtResource("2")
+stat = 1
+amount = 1.1
+is_multiplier = true
+
+[sub_resource type="Resource" id="mod_1"]
+script = ExtResource("2")
+stat = 10
+amount = 1.2
+is_multiplier = true
+
+[resource]
+script = ExtResource("1")
+id = &"smith_gloves"
+display_name = "EQ_SMITH_GLOVES"
+description = "EQ_SMITH_GLOVES_DESC"
+slot = 3
+icon = ExtResource("ic")
+modifiers = Array[ExtResource("2")]([SubResource("mod_0"), SubResource("mod_1")])

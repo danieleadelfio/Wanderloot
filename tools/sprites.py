@@ -649,6 +649,55 @@ def build_consumables():
     save("icon_frenzy", [icon_frenzy()], 64)
 
 
+# --- Equipaggiamento M11: icone dei nuovi slot e manichino ------------------------------------------
+def icon_hood():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6fbf"/><stop offset="1" stop-color="#3a2a5a"/></linearGradient>'
+    return svg('<path d="M32 6 C14 8 10 28 12 44 L20 58 L44 58 L52 44 C54 28 50 8 32 6 Z" fill="url(#g)" %s/>'
+               '<path d="M20 44 C20 28 44 28 44 44 C44 52 20 52 20 44 Z" fill="#141a2c"/>' % OUTLINE, defs, 64)
+
+
+def icon_gloves():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset="1" stop-color="#6a3f1f"/></linearGradient>'
+    return svg('<path d="M20 58 L20 30 L18 16 Q18 12 22 12 Q25 12 25 16 L26 28 L27 10 Q27 6 31 6 Q34 6 34 10 L34 27 L36 12 Q36 8 40 8 Q43 9 43 13 L41 30 L44 22 Q46 18 49 20 Q51 22 50 26 L44 44 L44 58 Z" fill="url(#g)" %s/>'
+               '<rect x="18" y="48" width="28" height="10" rx="2" fill="#4a2a14" stroke="#141a2c" stroke-width="3"/>' % OUTLINE, defs, 64)
+
+
+def icon_armor():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe8d6"/><stop offset="1" stop-color="#a89a80"/></linearGradient>'
+    ribs = "".join('<path d="M22 %d Q32 %d 42 %d" stroke="#6a5a40" stroke-width="2.5" fill="none"/>' % (y, y + 5, y) for y in (26, 34, 42))
+    return svg('<path d="M14 14 L24 8 Q32 14 40 8 L50 14 L54 26 L46 30 L46 56 L18 56 L18 30 L10 26 Z" fill="url(#g)" %s/>%s' % (OUTLINE, ribs), defs, 64)
+
+
+def icon_pants():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6035"/><stop offset="1" stop-color="#5a3218"/></linearGradient>'
+    return svg('<path d="M16 8 L48 8 L52 58 L38 58 L32 26 L26 58 L12 58 Z" fill="url(#g)" %s/>'
+               '<rect x="16" y="8" width="32" height="7" fill="#3a2210" stroke="#141a2c" stroke-width="3"/>' % OUTLINE, defs, 64)
+
+
+def icon_ring():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2a8"/><stop offset="1" stop-color="#b8741a"/></linearGradient>'
+    return svg('<circle cx="32" cy="38" r="17" fill="none" stroke="#141a2c" stroke-width="11"/><circle cx="32" cy="38" r="17" fill="none" stroke="url(#g)" stroke-width="6"/>'
+               '<circle cx="32" cy="18" r="9" fill="#38b764" stroke="#141a2c" stroke-width="3.5"/><circle cx="29" cy="15" r="3" fill="#fff" opacity="0.6"/>', defs, 64)
+
+
+def mannequin_svg():
+    body = ('<g fill="#2a2638" stroke="#4a4458" stroke-width="4" stroke-linejoin="round" opacity="0.95">'
+            '<circle cx="180" cy="70" r="40"/>'
+            '<path d="M120 130 Q180 110 240 130 L250 260 L110 260 Z"/>'
+            '<path d="M120 135 L80 250 L100 258 L135 160 Z"/><path d="M240 135 L280 250 L260 258 L225 160 Z"/>'
+            '<path d="M115 262 L245 262 L235 400 L195 400 L180 300 L165 400 L125 400 Z"/></g>')
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 440">%s</svg>' % body
+
+
+def build_equipment_slots():
+    save("icon_wanderer_hood", [icon_hood()], 64)
+    save("icon_smith_gloves", [icon_gloves()], 64)
+    save("icon_bone_armor", [icon_armor()], 64)
+    save("icon_leather_pants", [icon_pants()], 64)
+    save("icon_gel_ring", [icon_ring()], 64)
+    save_rect("mannequin", mannequin_svg(), 360, 440)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -661,4 +710,5 @@ if __name__ == "__main__":
     build_ability_icons()
     build_cursors()
     build_consumables()
+    build_equipment_slots()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_gel_ring.png" id="ic"]
+
+[sub_resource type="Resource" id="mod_0"]
+script = ExtResource("2")
+stat = 8
+amount = 0.1
+is_multiplier = false
+
+[resource]
+script = ExtResource("1")
+id = &"gel_ring"
+display_name = "EQ_GEL_RING"
+description = "EQ_GEL_RING_DESC"
+slot = 7
+icon = ExtResource("ic")
+modifiers = Array[ExtResource("2")]([SubResource("mod_0")])

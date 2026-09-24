@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_leather_pants.png" id="ic"]
+
+[sub_resource type="Resource" id="mod_0"]
+script = ExtResource("2")
+stat = 3
+amount = 1.05
+is_multiplier = true
+
+[sub_resource type="Resource" id="mod_1"]
+script = ExtResource("2")
+stat = 4
+amount = 1.0
+is_multiplier = false
+
+[resource]
+script = ExtResource("1")
+id = &"leather_pants"
+display_name = "EQ_LEATHER_PANTS"
+description = "EQ_LEATHER_PANTS_DESC"
+slot = 5
+icon = ExtResource("ic")
+modifiers = Array[ExtResource("2")]([SubResource("mod_0"), SubResource("mod_1")])
