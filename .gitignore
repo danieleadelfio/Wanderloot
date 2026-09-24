@@ -19,3 +19,6 @@ Claude outputs/
 
 # GdUnit4 test reports
 reports/
+
+# Python
+__pycache__/
