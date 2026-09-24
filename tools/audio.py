@@ -178,4 +178,10 @@ save("event_start", mix(rumble, 0.4 * triangle(sweep(90, 60, d)) * env(int(SR * 
 d = 0.35
 crack = lowpass(noise(d), 0.6) * env(int(SR * d), curve=5)
 save("lightning", mix(crack, 0.5 * lowpass(noise(d), 0.08) * env(int(SR * d), curve=2)), 0.6)
+# --- Consumabili (M10.1): arpeggio breve ascendente ---
+parts = []
+for i, n in enumerate((72, 76, 79, 84)):
+    d = 0.09
+    parts.append(np.pad(square(note(n) * t(d), 0.25) * env(int(SR * d), curve=2) * 0.5, (int(SR * 0.055 * i), 0)))
+save("power_up", mix(*parts), 0.5)
 print("audio:", sorted(os.listdir(OUT)))

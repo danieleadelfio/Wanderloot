@@ -31,6 +31,9 @@ extends Resource
 @export var extraction_data: ExtractionData
 @export var enemies: Array[EnemySpawn] = []
 
+## Consumabili che i nemici possono lasciare (M10.1); vuoto = nessuno.
+@export var consumables: ConsumableTable
+
 @export_group("Boss")
 ## Scena del boss (script Boss); vuota = nessun boss in questa arena.
 @export var boss_scene: PackedScene

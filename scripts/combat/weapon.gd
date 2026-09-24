@@ -9,6 +9,8 @@ signal fired(origin: Vector2, direction: Vector2, data: WeaponData)
 @export var data: WeaponData
 
 var _cooldown: float = 0.0
+## Moltiplicatore temporaneo della cadenza (consumabile Furia, M10.1). Non tocca i dati dell'arma.
+var rate_multiplier: float = 1.0
 
 
 func _physics_process(delta: float) -> void:
@@ -21,7 +23,7 @@ func _physics_process(delta: float) -> void:
 func try_fire(direction: Vector2) -> int:
 	if data == null or data.fire_rate <= 0.0 or _cooldown > 0.0 or direction == Vector2.ZERO:
 		return 0
-	var interval := 1.0 / data.fire_rate
+	var interval := 1.0 / (data.fire_rate * maxf(rate_multiplier, 0.01))
 	var aim := direction.normalized()
 	var shots := 0
 	while _cooldown <= 0.0:

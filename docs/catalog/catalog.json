@@ -579,5 +579,38 @@
    "Collezionista",
    "Scopri tutte le voci dell'enciclopedia di un'arena."
   ]
+ ],
+ "consumables_intro": "Oggetti a terra con effetto immediato o a tempo: non sono loot e non vanno nel baule. Li lasciano i nemici (1,2% per uccisione, più il bonus drop) e il boss (2 garantiti).",
+ "consumables": [
+  {
+   "name": "Magnete",
+   "status": "M10.1",
+   "source": "wanderloot",
+   "desc": "Per 4 s attira verso il player tutto ciò che è a terra in tutta l'arena (exp, materiali, altri consumabili)."
+  },
+  {
+   "name": "Cuore",
+   "status": "M10.1",
+   "source": "wanderloot",
+   "desc": "Cura 2 HP."
+  },
+  {
+   "name": "Furia",
+   "status": "M10.1",
+   "source": "wanderloot",
+   "desc": "Cadenza di fuoco +50% per 6 s."
+  },
+  {
+   "name": "Bomba",
+   "status": "pianificato",
+   "source": "wanderloot",
+   "desc": "Danno a tutti i nemici sullo schermo."
+  },
+  {
+   "name": "Clessidra",
+   "status": "pianificato",
+   "source": "wanderloot",
+   "desc": "Rallenta i nemici del 50% per 5 s."
+  }
  ]
 }

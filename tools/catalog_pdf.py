@@ -100,6 +100,13 @@ def build():
         rows.append([Paragraph("<b>%s</b>" % e["name"], cell), Paragraph(e["desc"], cell), Paragraph(e["status"], cell_m)])
     story += [table(rows, [40 * mm, 110 * mm, 24 * mm]), Spacer(1, 10)]
 
+    if data.get("consumables"):
+        story += [Paragraph("2b. Consumabili", h1), Paragraph(data["consumables_intro"], body)]
+        rows = [header_row("Consumabile", "Effetto", "Stato")]
+        for e in data["consumables"]:
+            rows.append([Paragraph("<b>%s</b>" % e["name"], cell), Paragraph(e["desc"], cell), Paragraph(e["status"], cell_m)])
+        story += [table(rows, [40 * mm, 110 * mm, 24 * mm]), Spacer(1, 10)]
+
     story += [Paragraph("3. Equipaggiamento", h1), Paragraph(data["equipment_intro"], body)]
     story.append(Paragraph("Slot", h2))
     story.append(Paragraph(" · ".join(data["slots"]), body))

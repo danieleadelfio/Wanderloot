@@ -12,6 +12,7 @@ extends CanvasLayer
 @onready var _boss_panel: Control = %BossPanel
 @onready var _stats_grid: GridContainer = %StatsGrid
 @onready var _ability_bar: HBoxContainer = %AbilityBar
+@onready var _buff_label: Label = %BuffLabel
 @onready var _event_banner: Control = %EventBanner
 @onready var _event_title: Label = %EventTitle
 @onready var _event_subtitle: Label = %EventSubtitle
@@ -105,6 +106,14 @@ func end_event(success: bool) -> void:
 	_banner_tween.tween_interval(1.6)
 	_banner_tween.tween_property(_event_banner, "modulate:a", 0.0, 0.4)
 	_banner_tween.tween_callback(_event_banner.hide)
+
+
+## Effetti a tempo dei consumabili (nome tradotto -> secondi rimasti).
+func set_buffs(buffs: Dictionary) -> void:
+	var parts: PackedStringArray = []
+	for name in buffs:
+		parts.append(tr("HUD_BUFF") % [tr(name), ceili(buffs[name])])
+	_buff_label.text = "  ".join(parts)
 
 
 func show_boss(boss_name: String, current: int, maximum: int) -> void:

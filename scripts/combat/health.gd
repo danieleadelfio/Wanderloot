@@ -30,6 +30,14 @@ func set_max_hp(new_max: int) -> void:
 	changed.emit(current, max_hp)
 
 
+## Cura fino al massimo (consumabile Cuore, M10.1).
+func heal(amount: int) -> void:
+	if is_dead() or amount <= 0:
+		return
+	current = mini(current + amount, max_hp)
+	changed.emit(current, max_hp)
+
+
 func take_damage(amount: int) -> void:
 	if is_dead() or amount <= 0:
 		return

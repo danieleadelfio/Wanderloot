@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/consumable_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_heart.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"heart"
+display_name = "CONS_HEART"
+description = "CONS_HEART_DESC"
+icon = ExtResource("2")
+kind = 1
+duration = 0.0
+amount = 2.0
+weight = 1.0

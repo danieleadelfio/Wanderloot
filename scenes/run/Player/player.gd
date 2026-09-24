@@ -13,6 +13,7 @@ const AIM_DEADZONE: float = 0.3
 
 ## Riferimenti ai .tres base (condivisi, mai modificati): ogni run parte da copie fresche.
 var _base_stats: PlayerStats
+var _frenzy_token: int = 0
 var _base_weapon: WeaponData
 
 @onready var health: Health = %Health
@@ -65,6 +66,17 @@ func weapon_data() -> WeaponData:
 func set_shield(active: bool) -> void:
 	_hurtbox.shield_charges = 1 if active else 0
 	_shield.visible = active
+
+
+## Furia (consumabile): cadenza moltiplicata per `seconds`; si ferma con la pausa del gioco.
+func boost_fire_rate(multiplier: float, seconds: float) -> void:
+	_frenzy_token += 1
+	var token := _frenzy_token
+	_weapon.rate_multiplier = multiplier
+	await get_tree().create_timer(seconds, false).timeout
+	# Una Furia raccolta nel frattempo rinnova la durata: vale solo l'ultima.
+	if is_inside_tree() and token == _frenzy_token:
+		_weapon.rate_multiplier = 1.0
 
 
 func has_shield() -> bool:

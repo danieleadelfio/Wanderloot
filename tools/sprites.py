@@ -624,6 +624,31 @@ def build_cursors():
     save("cursor_crosshair", [cursor_crosshair_svg()], 48)
 
 
+# --- Consumabili (M10.1): magnete, cuore, furia -----------------------------------------------------
+def icon_magnet():
+    return svg('<path d="M14 12 L26 12 L26 34 Q26 42 32 42 Q38 42 38 34 L38 12 L50 12 L50 34 Q50 56 32 56 Q14 56 14 34 Z" fill="#e8433a" %s/>'
+               '<rect x="14" y="12" width="12" height="9" fill="#dfe6f0" stroke="#141a2c" stroke-width="3"/><rect x="38" y="12" width="12" height="9" fill="#dfe6f0" stroke="#141a2c" stroke-width="3"/>'
+               '<path d="M18 30 Q18 50 32 50" stroke="#fff" stroke-width="3" fill="none" opacity="0.4"/>' % OUTLINE, "", 64)
+
+
+def icon_heart():
+    defs = '<radialGradient id="g" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#ffb3c1"/><stop offset="0.5" stop-color="#e8436a"/><stop offset="1" stop-color="#8a1a3a"/></radialGradient>'
+    return svg('<path d="M32 56 C10 40 6 28 10 20 C14 10 28 10 32 20 C36 10 50 10 54 20 C58 28 54 40 32 56 Z" fill="url(#g)" %s/>'
+               '<ellipse cx="21" cy="22" rx="5" ry="3.5" fill="#fff" opacity="0.7" transform="rotate(-30 21 22)"/>' % OUTLINE, defs, 64)
+
+
+def icon_frenzy():
+    defs = '<linearGradient id="f" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ef7d57"/><stop offset="0.6" stop-color="#ffcd75"/><stop offset="1" stop-color="#fff4c0"/></linearGradient>'
+    return svg('<path d="M32 6 C36 18 48 22 48 38 C48 50 40 58 32 58 C24 58 16 50 16 38 C16 30 20 26 24 22 C24 30 28 32 30 32 C28 22 30 14 32 6 Z" fill="url(#f)" %s/>'
+               '<path d="M32 36 C35 40 38 42 38 47 C38 52 35 55 32 55 C29 55 26 52 26 47 C26 43 30 41 32 36 Z" fill="#fff4c0"/>' % OUTLINE, defs, 64)
+
+
+def build_consumables():
+    save("icon_magnet", [icon_magnet()], 64)
+    save("icon_heart", [icon_heart()], 64)
+    save("icon_frenzy", [icon_frenzy()], 64)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -635,4 +660,5 @@ if __name__ == "__main__":
     build_hub_icons()
     build_ability_icons()
     build_cursors()
+    build_consumables()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

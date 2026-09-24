@@ -6,6 +6,7 @@ extends Node2D
 
 signal exp_collected(amount: int)
 signal material_collected(material: MaterialData, amount: int)
+signal consumable_collected(consumable: ConsumableData)
 
 @export var pickup_scene: PackedScene
 @export var initial_size: int = 96
@@ -18,6 +19,8 @@ signal material_collected(material: MaterialData, amount: int)
 
 var target: Node2D
 var attract_radius: float = 90.0
+## Secondi rimasti del Magnete (consumabile): tutto quello che e' a terra viene attratto.
+var _attract_all_left: float = 0.0
 
 var _free: Array[Pickup] = []
 var _active: Array[Pickup] = []
@@ -36,6 +39,16 @@ func spawn_material(at: Vector2, material: MaterialData, amount: int) -> void:
 	_spawn(at, Pickup.Kind.MATERIAL, amount, material, material.icon, 0.375)
 
 
+func spawn_consumable(at: Vector2, consumable: ConsumableData) -> void:
+	_spawn(at, Pickup.Kind.CONSUMABLE, 1, null, consumable.icon, 0.5)
+	_active.back().consumable = consumable
+
+
+## Magnete: per `seconds` ogni oggetto a terra, anche quelli che cadono nel frattempo, vola verso il player.
+func attract_all(seconds: float) -> void:
+	_attract_all_left = maxf(_attract_all_left, seconds)
+
+
 func active_count() -> int:
 	return _active.size()
 
@@ -44,6 +57,7 @@ func _physics_process(delta: float) -> void:
 	if target == null or _active.is_empty():
 		return
 	var goal := target.global_position
+	_attract_all_left = maxf(_attract_all_left - delta, 0.0)
 	var radius_sq := attract_radius * attract_radius
 	var i := _active.size() - 1
 	while i >= 0:
@@ -51,7 +65,7 @@ func _physics_process(delta: float) -> void:
 		if not pickup.attracted:
 			pickup.global_position += pickup.pop_velocity * delta
 			pickup.pop_velocity *= exp(-10.0 * delta)
-			pickup.attracted = pickup.global_position.distance_squared_to(goal) <= radius_sq
+			pickup.attracted = _attract_all_left > 0.0 or pickup.global_position.distance_squared_to(goal) <= radius_sq
 		if pickup.attracted:
 			pickup.speed = minf(pickup.speed + attract_acceleration * delta, max_speed)
 			var to_goal := goal - pickup.global_position
@@ -81,6 +95,8 @@ func _collect(index: int) -> void:
 	_free.append(pickup)
 	if pickup.kind == Pickup.Kind.EXP:
 		exp_collected.emit(pickup.amount)
+	elif pickup.kind == Pickup.Kind.CONSUMABLE:
+		consumable_collected.emit(pickup.consumable)
 	else:
 		material_collected.emit(pickup.item_material, pickup.amount)
 

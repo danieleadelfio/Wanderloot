@@ -42,6 +42,10 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
   - **Stato M3 (#14)**: pannello "Equipaggiamento" nell'hub (un pezzo per slot, click per equipaggiare/togliere). A inizio run `Arena` passa `MetaProgression.equipped_items()` a `Player.begin_run()`, che riparte da copie fresche di `PlayerStats`/`WeaponData` e applica i modificatori (`StatApplier`, stessa logica degli upgrade di run, che si sommano sopra). L'equip è letto una sola volta: cambiarlo vale dalla run successiva.
 - Sblocco progressivo di strutture/NPC nell'hub in base a milestone (es. numero di estrazioni riuscite, materiali totali raccolti, boss sconfitti).
 
+### 3.2b Consumabili (M10.1, #50)
+
+I nemici possono lasciare **consumabili** (1,2% per uccisione, moltiplicato dal bonus drop; il boss ne lascia 2): oggetti a terra con effetto alla raccolta, attratti dal magnete come exp e materiali, che **non sono loot** (non vanno nel baule). **Magnete**: per 4 s attira tutto ciò che è a terra in tutta l'arena. **Cuore**: cura 2 HP. **Furia**: cadenza +50% per 6 s. Gli effetti a tempo compaiono nell'HUD con i secondi rimasti. Dati in `data/consumables/` (`ConsumableData`, `ConsumableTable` assegnata da `ArenaData.consumables`).
+
 ### 3.3 Abilità della bacchetta (M10, #45)
 
 La bacchetta ha **3 slot** di abilità per la run; l'ordine non conta e le abilità si perdono a fine run. Ogni abilità (`WandAbility`, `data/abilities/`) ha un criterio di attivazione: **ricarica** (ogni N secondi), **ogni N colpi** sparati, **ogni N pixel percorsi** o **sempre attiva**; l'effetto è una Resource riusabile (`AbilityEffect`: anello di proiettili, fulmine sul più vicino, barriera). Ogni abilità dà un colore ai proiettili (media dei colori delle abilità presenti). Si ottengono dagli **eventi della run** (§3.4): a evento superato il gioco si ferma e si sceglie tra 3 abilità non ancora possedute; con gli slot pieni si sceglie quale sostituire o si tiene la bacchetta com'è. Nell'HUD, sotto le statistiche, le icone delle abilità si riempiono verso la prossima attivazione.
@@ -191,6 +195,7 @@ res://
   scenes/ui/AbilityChoice/           # scelta dell'abilità (pausa), sostituzione con slot pieni
   data/events/                       # eventi della run (RunEventData)
   scripts/run/run_event_director.gd  # fa partire gli eventi e ne applica le regole (fulmini con Telegraph)
+  data/consumables/                  # consumabili a terra e tabella dei drop
   scripts/hub/                       # interactable (punto di interazione, nearest_index testato), spinner (vortice del portale)
   scripts/audio/                     # sound_entry, sound_bank, sfx_player, music_player
   scenes/hub/Hub/                    # Hub.tscn + hub.gd: piazza esplorabile, scena principale, composition root dell'hub

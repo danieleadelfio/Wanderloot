@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Consumabili a terra: Magnete (4 s, attira tutto ciò che è a terra nell'arena), Cuore (+2 HP), Furia (cadenza +50% per 6 s); drop dai nemici (1,2%) e dal boss (2), effetti a tempo nell'HUD, suono dedicato, catalogo aggiornato; test (#50).
 - Cursore del mouse sempre visibile: freccia chiara con contorno scuro nei menu e nell'hub, mirino in run, freccia nei menu della run (#49).
 - Tremolio del personaggio in movimento risolto: interpolazione della fisica attiva, camera sui tick di fisica, reset dell'interpolazione negli spostamenti istantanei, nebbia e vortice mossi sui tick di fisica (#48).
 - Catalogo di Wanderloot (`docs/catalog/catalog.json` → `Wanderloot_Catalogo.pdf` con `tools/catalog_pdf.py`): abilità con provenienza Magicraft o originale, eventi, equipaggiamento, rarità, achievement. GDD: progetto di slot con manichino, 6 rarità, drop fino a Leggendario, fusione di oggetti identici, mitici da ricette dei boss, enciclopedia in gioco; roadmap M8–M12 (#47).

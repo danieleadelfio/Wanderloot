@@ -28,6 +28,8 @@ var boss: Boss = null
 ## Abilita' che gli eventi possono offrire (M10).
 @export var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
 var _choosing_ability: bool = false
+## Effetti a tempo dei consumabili attivi: chiave di traduzione -> secondi rimasti (solo per l'HUD).
+var _buffs: Dictionary = {}
 var boss_defeated: bool = false
 var _boss_timer := Timer.new()
 @onready var _enemies: Node2D = %Enemies
@@ -101,6 +103,7 @@ func _ready() -> void:
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pickup_pool.exp_collected.connect(_on_exp_collected)
 	_pickup_pool.material_collected.connect(_on_material_collected)
+	_pickup_pool.consumable_collected.connect(_on_consumable_collected)
 	_wave_spawner.start(_player)
 	_extraction_point.data = extraction_data
 	_extraction_indicator.target = _extraction_point
@@ -249,7 +252,13 @@ func _place_torches(per_wall: int, color: Color) -> void:
 			(torch.get_node("Light") as PointLight2D).color = color
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if not get_tree().paused and not _buffs.is_empty():
+		for key in _buffs.keys():
+			_buffs[key] -= delta
+			if _buffs[key] <= 0.0:
+				_buffs.erase(key)
+		_hud.set_buffs(_buffs)
 	for i in _wand.slots.abilities.size():
 		_hud.set_ability_progress(i, 1.0 if _player.has_shield() and _wand.slots.abilities[i].effect is ShieldEffect else _wand.progress_of(i))
 	if not _extraction_timer.is_stopped():
@@ -262,6 +271,10 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	RunManager.register_kill(0)
 	_pickup_pool.spawn_exp(enemy.global_position, enemy.data.exp_reward)
 	_roll_drops(enemy)
+	if arena.consumables:
+		var consumable := arena.consumables.roll(_rng, _player.stats.drop_chance_multiplier)
+		if consumable:
+			_pickup_pool.spawn_consumable(enemy.global_position, consumable)
 
 
 func _roll_drops(enemy: Enemy) -> void:
@@ -277,6 +290,19 @@ func _on_exp_collected(amount: int) -> void:
 	var whole := floori(total)
 	_exp_remainder = total - whole
 	RunManager.add_exp(whole)
+
+
+func _on_consumable_collected(consumable: ConsumableData) -> void:
+	_sfx.play(&"power_up")
+	match consumable.kind:
+		ConsumableData.Kind.MAGNET:
+			_pickup_pool.attract_all(consumable.duration)
+		ConsumableData.Kind.HEAL:
+			_player.health.heal(roundi(consumable.amount))
+		ConsumableData.Kind.FRENZY:
+			_player.boost_fire_rate(consumable.amount, consumable.duration)
+	if consumable.duration > 0.0:
+		_buffs[consumable.display_name] = consumable.duration
 
 
 func _on_material_collected(material: MaterialData, amount: int) -> void:
@@ -329,6 +355,12 @@ func _on_boss_died(dead: Boss) -> void:
 	for entry in dead.data.drops:
 		for i in entry.roll(_rng, _player.stats.drop_chance_multiplier):
 			_pickup_pool.spawn_material(dead.global_position, entry.material, 1)
+	# Il boss lascia sempre due consumabili.
+	if arena.consumables:
+		for i in 2:
+			var consumable := arena.consumables.pick(_rng)
+			if consumable:
+				_pickup_pool.spawn_consumable(dead.global_position, consumable)
 	dead.queue_free()
 	boss = null
 

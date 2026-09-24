@@ -2,11 +2,12 @@ class_name Pickup
 extends Node2D
 ## Oggetto a terra (gemma di exp o materiale). Poolable; il movimento lo gestisce PickupPool.
 
-enum Kind { EXP, MATERIAL }
+enum Kind { EXP, MATERIAL, CONSUMABLE }
 
 var kind: Kind = Kind.EXP
 var amount: int = 1
 var item_material: MaterialData
+var consumable: ConsumableData
 ## Da quando entra nel raggio resta attratto fino all'assorbimento.
 var attracted: bool = false
 var speed: float = 0.0

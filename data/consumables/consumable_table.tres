@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ConsumableTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/consumable_table.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/consumable_data.gd" id="0"]
+[ext_resource type="Resource" path="res://data/consumables/magnet.tres" id="2"]
+[ext_resource type="Resource" path="res://data/consumables/heart.tres" id="3"]
+[ext_resource type="Resource" path="res://data/consumables/frenzy.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+entries = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4")])
+drop_chance = 0.012
