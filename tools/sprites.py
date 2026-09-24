@@ -101,6 +101,7 @@ def exp_gem_svg():
 def build_characters():
     save("player", [player_svg(), player_svg(up=True)], 96)
     save("slime", [slime_svg(), slime_svg(squash=True)], 88)
+    save("slime_rage", [slime_svg(rage=True), slime_svg(squash=True, rage=True)], 88)
     save("projectile", [projectile_svg()], 32)
     save("exp_gem", [exp_gem_svg()], 32)
 

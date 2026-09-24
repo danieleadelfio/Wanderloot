@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Rage dei nemici: dopo 5s in vita lo slime diventa rosso, più veloce (×1,5) e più dannoso (+1); valori in `EnemyData`, test dedicati (#29).
 - Arena e icone in stile vettoriale: pavimento a lastre, muri a mattoni, icone di materiali ed equipaggiamento per hub, inventario e oggetti a terra (#28).
 - Grafica vettoriale (addio pixel art) per player, slime, proiettile e gemma di exp: sorgenti SVG, PNG a 2x, filtro lineare, collider dello slime riallineati; `tools/sprites.py` diventa il generatore vettoriale (#27).
 - 8 nuovi potenziamenti di level-up (13 totali, senza tetto): Persistenza, Magnete, Saggezza, Fortuna, Guardia, Impatto, Ventaglio (multishot) e Perforazione; test dedicati (#25).

@@ -57,6 +57,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 - Player controllato con movimento in 8 direzioni (WASD/stick) + mira libera (mouse o stick destro) — twin-stick style.
 - Arma di partenza singola (es. "arco" o "baccheta magica base"), a distanza, con cooldown/fire-rate.
 - I proiettili sono sprite semplici (piccoli cerchi/frecce), riutilizzabili via object pooling per performance.
+- **Rage (M6, #29)**: un nemico vivo da più di `rage_after` secondi (slime: 5s) va in rage: velocità ×1,5, +1 danno da contatto, sprite che sfuma in 0,35s verso una variante rossa e arrabbiata. Si azzera quando il nemico torna nel pool. Valori in `EnemyData` (gruppo Rage). Con lo spawn ad almeno 300px e ~3s per raggiungere il player, quasi tutti i nemici che arrivano a contatto sono in rage: di fatto alza la pressione generale (voluto, vedi §10.3).
 - Nemici: pattern semplici (inseguimento diretto, mantenimento distanza + attacco ranged, pattern a pattuglia). Nessuna animazione complessa richiesta: 1-2 frame di movimento + 1 di attacco/morte sono sufficienti in stile pixel art.
 - Combat feel gestito via codice: knockback, hit-flash, hitstop leggero, i-frames sul player — nessun bisogno di asset aggiuntivi per "sentire" l'impatto.
 - **Stato M4 (#16)**: knockback come componente `Knockback` (spinta che decade, `resistance` 0–1), alimentato da `Hurtbox.knocked`; intensità nei dati (`WeaponData.knockback` 320 → ~40px sullo slime, `EnemyData.contact_knockback` 380 → ~27px sul player, `knockback_resistance`). **Decisione hitstop**: sui colpi ai nemici (molto frequenti) solo freeze locale del nemico colpito (`EnemyData.hit_freeze` 0.05s); hitstop globale (`HitStop`, `Engine.time_scale` 0.05 per 0.08s reali) solo quando il player subisce danno, e `time_scale` viene sempre ripristinato all'uscita dalla scena. I-frames del player ora visibili (lampeggio `Blink`); il knockback da contatto allontana il player dal nemico, quindi il danno ripetuto a contatto diventa raro.
@@ -245,6 +246,10 @@ Con exp e materiali da raccogliere il bot che si limita a scappare crolla (estra
 
 Con i nuovi potenziamenti (#25) il bot sceglie al level-up come un giocatore (prima combattimento: danno, cadenza, Ventaglio, Perforazione, HP). Risultato: **100% di estrazioni** su 20 run, ma lo stesso bot con i soli 5 potenziamenti di M4 fa ugualmente 100% (12 run). Il 63% misurato in M4 dipendeva dalla scelta casuale del bot, non dal gioco. **Da verificare con il playtest umano**: se chi sceglie bene estrae quasi sempre, la run a 120s è troppo facile e va alzata la pressione (ondate o zona più tardi). Non ritoccato ora per non bilanciare contro un bot.
 Stress test "rompere tutto": 300 colpi/s × 20 proiettili × perforazione 5 → ~5.800 proiettili attivi, il gioco resta stabile ma la simulazione scende a circa metà velocità su una CPU cloud. Accettato: nessun tetto per scelta; eventuale ottimizzazione (proiettili fusi o fisica più leggera) solo se diventa un problema nel gioco reale.
+
+### 10.4 Verifica M6 (#29, rage)
+
+Con il bot che sceglie bene i potenziamenti la rage non cambia l'esito: 100% di estrazioni su 20 run; in una run campione 22 slime su 179 sono andati in rage e il player non ha subito nessun danno. Il problema non è la rage ma la potenza del player a metà run (Ventaglio, Perforazione, cadenza senza tetto). Leve possibili, da decidere dopo il playtest umano: rage più aggressiva (soglia più bassa, +velocità), più HP ai nemici nel tempo, un nemico a distanza, ondate più fitte dopo i 60s.
 
 ## 11. Open questions
 
