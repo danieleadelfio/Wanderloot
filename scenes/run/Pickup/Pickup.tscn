@@ -5,9 +5,31 @@
 [sub_resource type="CanvasItemMaterial" id="unshaded"]
 light_mode = 1
 
+[sub_resource type="CanvasItemMaterial" id="glow_mat"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Gradient" id="glow_gradient"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 1, 1, 0.85, 1, 1, 1, 0.35, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="glow_texture"]
+gradient = SubResource("glow_gradient")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [node name="Pickup" type="Node2D"]
 visible = false
 script = ExtResource("1")
+
+[node name="Glow" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+material = SubResource("glow_mat")
+texture = SubResource("glow_texture")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true

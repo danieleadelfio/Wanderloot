@@ -16,3 +16,7 @@ extends Resource
 @export var drop_weight: float = 1.0
 ## Moltiplicatore dei materiali restituiti dallo smontaggio.
 @export var salvage_multiplier: int = 1
+## Suono quando un oggetto di questa rarita' cade in run (id del banco suoni, M11.1 #61).
+@export var drop_sound: StringName = &"drop_common"
+## Dimensione dell'alone colorato dell'oggetto a terra (1 = come l'icona).
+@export var glow_scale: float = 1.0

@@ -22,6 +22,13 @@
 [ext_resource type="AudioStream" path="res://assets/audio/power_up.wav" id="pu"]
 [ext_resource type="AudioStream" path="res://assets/audio/candle_out.wav" id="co"]
 
+[ext_resource type="AudioStream" path="res://assets/audio/drop_common.wav" id="s_drop_common"]
+[ext_resource type="AudioStream" path="res://assets/audio/drop_uncommon.wav" id="s_drop_uncommon"]
+[ext_resource type="AudioStream" path="res://assets/audio/drop_rare.wav" id="s_drop_rare"]
+[ext_resource type="AudioStream" path="res://assets/audio/drop_super_rare.wav" id="s_drop_super_rare"]
+[ext_resource type="AudioStream" path="res://assets/audio/drop_legendary.wav" id="s_drop_legendary"]
+[ext_resource type="AudioStream" path="res://assets/audio/drop_mythic.wav" id="s_drop_mythic"]
+
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("2")
 id = &"shoot"
@@ -145,6 +152,48 @@ stream = ExtResource("co")
 volume_db = -6.0
 pitch_variance = 0.15
 
+[sub_resource type="Resource" id="e_drop_common"]
+script = ExtResource("2")
+id = &"drop_common"
+stream = ExtResource("s_drop_common")
+volume_db = -8.0
+pitch_variance = 0.05
+
+[sub_resource type="Resource" id="e_drop_uncommon"]
+script = ExtResource("2")
+id = &"drop_uncommon"
+stream = ExtResource("s_drop_uncommon")
+volume_db = -7.0
+pitch_variance = 0.0
+
+[sub_resource type="Resource" id="e_drop_rare"]
+script = ExtResource("2")
+id = &"drop_rare"
+stream = ExtResource("s_drop_rare")
+volume_db = -6.0
+pitch_variance = 0.0
+
+[sub_resource type="Resource" id="e_drop_super_rare"]
+script = ExtResource("2")
+id = &"drop_super_rare"
+stream = ExtResource("s_drop_super_rare")
+volume_db = -5.0
+pitch_variance = 0.0
+
+[sub_resource type="Resource" id="e_drop_legendary"]
+script = ExtResource("2")
+id = &"drop_legendary"
+stream = ExtResource("s_drop_legendary")
+volume_db = -3.0
+pitch_variance = 0.0
+
+[sub_resource type="Resource" id="e_drop_mythic"]
+script = ExtResource("2")
+id = &"drop_mythic"
+stream = ExtResource("s_drop_mythic")
+volume_db = -2.0
+pitch_variance = 0.0
+
 [resource]
 script = ExtResource("1")
-entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10"), SubResource("e11"), SubResource("e_boss_appear"), SubResource("e_boss_warn"), SubResource("e_boss_slam"), SubResource("e_event_start"), SubResource("e_lightning"), SubResource("e_power_up"), SubResource("e_candle_out")])
+entries = Array[ExtResource("2")]([SubResource("e0"), SubResource("e1"), SubResource("e2"), SubResource("e3"), SubResource("e4"), SubResource("e5"), SubResource("e6"), SubResource("e7"), SubResource("e8"), SubResource("e9"), SubResource("e10"), SubResource("e11"), SubResource("e_boss_appear"), SubResource("e_boss_warn"), SubResource("e_boss_slam"), SubResource("e_event_start"), SubResource("e_lightning"), SubResource("e_power_up"), SubResource("e_candle_out"), SubResource("e_drop_common"), SubResource("e_drop_uncommon"), SubResource("e_drop_rare"), SubResource("e_drop_super_rare"), SubResource("e_drop_legendary"), SubResource("e_drop_mythic")])

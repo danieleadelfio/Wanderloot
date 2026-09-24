@@ -188,3 +188,22 @@ save("power_up", mix(*parts), 0.5)
 d = 0.25
 save("candle_out", mix(lowpass(noise(d), 0.35) * env(int(SR * d), attack=0.02, curve=2.5), 0.3 * np.sin(2 * np.pi * sweep(900, 400, d)) * env(int(SR * d), curve=4)), 0.35)
 print("audio:", sorted(os.listdir(OUT)))
+# --- Drop di equipaggiamento per rarita' (M11.1): dal rintocco singolo del Comune alla fanfara del Mitico ---
+def tone(n, dur, wave=triangle, curve=2.2, vib=0.0):
+    ph = np.cumsum(note(n) * (1 + vib * np.sin(2 * np.pi * 5.5 * t(dur)))) / SR
+    return wave(ph) * env(int(SR * dur), curve=curve)
+def arp(notes, step, dur, wave=triangle, gain=1.0):
+    return mix(*[np.pad(tone(n, dur, wave) * gain, (int(SR * step * i), 0)) for i, n in enumerate(notes)])
+def shimmer(dur, base=96):
+    return mix(*[np.pad(np.sin(2 * np.pi * note(base + k) * t(dur - 0.05 * j)) * env(int(SR * (dur - 0.05 * j)), attack=0.1, curve=1.6) * 0.25, (int(SR * 0.05 * j), 0)) for j, k in enumerate((0, 4, 7, 12))])
+def boom(dur, f0=110, f1=40):
+    return np.sin(2 * np.pi * sweep(f0, f1, dur)) * env(int(SR * dur), curve=2.0)
+save("drop_common", tone(84, 0.18), 0.35)
+save("drop_uncommon", arp((79, 86), 0.07, 0.22), 0.42)
+save("drop_rare", mix(arp((76, 79, 83, 88), 0.06, 0.25), np.pad(tone(88, 0.5, curve=1.6) * 0.6, (int(SR * 0.18), 0))), 0.5)
+save("drop_super_rare", mix(arp((72, 76, 79, 84, 88), 0.06, 0.3), np.pad(shimmer(0.9), (int(SR * 0.2), 0)), np.pad(tone(91, 0.7, curve=1.4) * 0.5, (int(SR * 0.3), 0))), 0.58)
+brass = lambda n, d: tone(n, d, lambda p: square(p, 0.3), curve=1.1, vib=0.004) * 0.35
+save("drop_legendary", mix(boom(0.8) * 0.8, brass(55, 1.2), brass(62, 1.2), brass(67, 1.2), np.pad(arp((79, 83, 86, 91, 95), 0.07, 0.35), (int(SR * 0.15), 0)), np.pad(shimmer(1.3, 98), (int(SR * 0.4), 0))), 0.7)
+pad = lambda n, d: lowpass(sum(square(np.cumsum(np.full(int(SR * d), note(n) * (1 + dt))) / SR, 0.5) for dt in (-0.006, 0.0, 0.006)), 0.08) * env(int(SR * d), attack=0.25, curve=1.0)
+save("drop_mythic", mix(boom(1.2, 90, 30), np.pad(boom(0.9, 70, 30) * 0.6, (int(SR * 0.45), 0)), pad(50, 2.2) * 0.5, pad(57, 2.2) * 0.4, pad(62, 2.2) * 0.4, brass(62, 1.6), brass(69, 1.6), np.pad(arp((74, 78, 81, 86, 90, 93, 98), 0.08, 0.4), (int(SR * 0.2), 0)), np.pad(shimmer(1.8, 100), (int(SR * 0.6), 0))), 0.8)
+print("drop sounds ok")

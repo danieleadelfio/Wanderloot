@@ -322,7 +322,10 @@ func _on_enemy_died(enemy: Enemy) -> void:
 func _drop_item(at: Vector2, base: EquipmentData, from_boss: bool) -> void:
 	var tier := arena.item_drops.roll_tier(MetaProgression.rarity_table, _rng, from_boss)
 	var item := MetaProgression.make_item(base, tier)
-	_pickup_pool.spawn_item(at, item, MetaProgression.rarity_table.tier(tier).color)
+	var rarity := MetaProgression.rarity_table.tier(tier)
+	_pickup_pool.spawn_item(at, item, rarity.color, rarity.glow_scale)
+	# Piu' e' raro, piu' il suono e' epico (M11.1).
+	_sfx.play(rarity.drop_sound)
 
 
 func _on_item_collected(item: ItemInstance) -> void:

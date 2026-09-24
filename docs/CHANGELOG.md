@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Oggetti a terra con alone pulsante del colore della rarità e suono di drop sempre più epico dal Comune al Mitico (`drop_sound`, `glow_scale` in `rarity_table.tres`) (#61).
 - Smontaggio del fabbro in lavorazione: la scheda mostra Work in progress e non smonta; la resa sarà in materiali ottenibili solo smontando (#60).
 - Fabbro a schede Crafting/Fusione/Smontaggio: due oggetti identici della stessa rarità → rarità successiva con bonus ritirati (fino a Leggendario); smontaggio in materiali secondo la rarità; logica in `Forge`; test (#59).
 - Oggetti trovati in run: `ItemDropTable` per arena (drop per uccisione, boss con almeno un Raro), rarità fino a Leggendario, icona tinta a terra, loot a rischio nell'inventario di run e nel riepilogo, nel baule solo estraendo; test (#58).

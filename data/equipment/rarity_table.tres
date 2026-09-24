@@ -13,6 +13,8 @@ roll_max = 0.35
 ability_count = 0
 drop_weight = 60.0
 salvage_multiplier = 1
+drop_sound = &"drop_common"
+glow_scale = 1.0
 
 [sub_resource type="Resource" id="t1"]
 script = ExtResource("2")
@@ -24,6 +26,8 @@ roll_max = 0.55
 ability_count = 0
 drop_weight = 25.0
 salvage_multiplier = 2
+drop_sound = &"drop_uncommon"
+glow_scale = 1.15
 
 [sub_resource type="Resource" id="t2"]
 script = ExtResource("2")
@@ -35,6 +39,8 @@ roll_max = 0.75
 ability_count = 0
 drop_weight = 10.0
 salvage_multiplier = 3
+drop_sound = &"drop_rare"
+glow_scale = 1.35
 
 [sub_resource type="Resource" id="t3"]
 script = ExtResource("2")
@@ -46,6 +52,8 @@ roll_max = 0.9
 ability_count = 1
 drop_weight = 4.0
 salvage_multiplier = 5
+drop_sound = &"drop_super_rare"
+glow_scale = 1.6
 
 [sub_resource type="Resource" id="t4"]
 script = ExtResource("2")
@@ -57,6 +65,8 @@ roll_max = 1.0
 ability_count = 1
 drop_weight = 1.0
 salvage_multiplier = 8
+drop_sound = &"drop_legendary"
+glow_scale = 1.9
 
 [sub_resource type="Resource" id="t5"]
 script = ExtResource("2")
@@ -68,6 +78,8 @@ roll_max = 1.0
 ability_count = 1
 drop_weight = 0.0
 salvage_multiplier = 12
+drop_sound = &"drop_mythic"
+glow_scale = 2.3
 
 [resource]
 script = ExtResource("1")

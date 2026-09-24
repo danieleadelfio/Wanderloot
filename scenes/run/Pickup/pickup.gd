@@ -15,7 +15,11 @@ var speed: float = 0.0
 ## Piccolo "salto" allo spawn, poi si ferma a terra.
 var pop_velocity: Vector2 = Vector2.ZERO
 
+## Alone degli oggetti di equipaggiamento (colore e dimensione della rarita').
+var glow_scale: float = 0.0
+
 @onready var _sprite: Sprite2D = %Sprite
+@onready var _glow: Sprite2D = %Glow
 
 
 func activate(at: Vector2, new_kind: Kind, new_amount: int, new_material: MaterialData, texture: Texture2D, texture_scale: float, pop: Vector2) -> void:
@@ -29,6 +33,8 @@ func activate(at: Vector2, new_kind: Kind, new_amount: int, new_material: Materi
 	_sprite.texture = texture
 	_sprite.scale = Vector2.ONE * texture_scale
 	_sprite.self_modulate = Color.WHITE
+	glow_scale = 0.0
+	_glow.hide()
 	visible = true
 	reset_physics_interpolation()
 
@@ -36,6 +42,22 @@ func activate(at: Vector2, new_kind: Kind, new_amount: int, new_material: Materi
 ## Tinta dell'icona (oggetti: colore della rarita').
 func set_tint(color: Color) -> void:
 	_sprite.self_modulate = color
+
+
+## Alone pulsante dietro l'icona (oggetti trovati in run).
+func set_glow(color: Color, size: float) -> void:
+	glow_scale = size
+	_glow.modulate = color
+	_glow.scale = Vector2.ONE * size
+	_glow.show()
+
+
+## Chiamata dal pool a ogni tick: l'alone respira.
+func pulse(time: float) -> void:
+	if glow_scale > 0.0:
+		var wave := sin(time * 4.0 + position.x * 0.01)
+		_glow.scale = Vector2.ONE * glow_scale * (1.0 + 0.12 * wave)
+		_glow.modulate.a = 0.75 + 0.25 * wave
 
 
 func deactivate() -> void:

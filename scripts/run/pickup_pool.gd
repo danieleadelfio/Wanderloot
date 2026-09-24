@@ -22,6 +22,7 @@ var target: Node2D
 var attract_radius: float = 90.0
 ## Secondi rimasti del Magnete (consumabile): tutto quello che e' a terra viene attratto.
 var _attract_all_left: float = 0.0
+var _time: float = 0.0
 
 var _free: Array[Pickup] = []
 var _active: Array[Pickup] = []
@@ -45,12 +46,13 @@ func spawn_consumable(at: Vector2, consumable: ConsumableData) -> void:
 	_active.back().consumable = consumable
 
 
-## Oggetto di equipaggiamento trovato: icona dell'oggetto schiarita col colore della rarita'.
-func spawn_item(at: Vector2, item: ItemInstance, tint: Color) -> void:
+## Oggetto di equipaggiamento trovato: icona schiarita col colore della rarita' e alone pulsante.
+func spawn_item(at: Vector2, item: ItemInstance, tint: Color, glow_scale: float = 1.0) -> void:
 	_spawn(at, Pickup.Kind.ITEM, 1, null, item.base.icon, 0.6)
 	var pickup: Pickup = _active.back()
 	pickup.item = item
 	pickup.set_tint(tint.lerp(Color.WHITE, 0.35))
+	pickup.set_glow(tint, glow_scale)
 
 
 ## Magnete: per `seconds` ogni oggetto a terra, anche quelli che cadono nel frattempo, vola verso il player.
@@ -65,12 +67,14 @@ func active_count() -> int:
 func _physics_process(delta: float) -> void:
 	if target == null or _active.is_empty():
 		return
+	_time += delta
 	var goal := target.global_position
 	_attract_all_left = maxf(_attract_all_left - delta, 0.0)
 	var radius_sq := attract_radius * attract_radius
 	var i := _active.size() - 1
 	while i >= 0:
 		var pickup := _active[i]
+		pickup.pulse(_time)
 		if not pickup.attracted:
 			pickup.global_position += pickup.pop_velocity * delta
 			pickup.pop_velocity *= exp(-10.0 * delta)
