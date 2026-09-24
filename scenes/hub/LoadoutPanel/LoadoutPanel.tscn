@@ -46,6 +46,33 @@ theme_override_font_sizes/font_size = 13
 text = "LOADOUT_CLICK_HINT"
 autowrap_mode = 3
 
+[node name="Sort" type="HBoxContainer" parent="HBox/Stash"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SortLabel" type="Label" parent="HBox/Stash/Sort"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "SORT_LABEL"
+
+[node name="SortArrival" type="Button" parent="HBox/Stash/Sort"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "SORT_ARRIVAL"
+
+[node name="SortRarity" type="Button" parent="HBox/Stash/Sort"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "SORT_RARITY"
+
+[node name="SortCategory" type="Button" parent="HBox/Stash/Sort"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "SORT_CATEGORY"
+
 [node name="EmptyHint" type="Label" parent="HBox/Stash"]
 unique_name_in_owner = true
 layout_mode = 2

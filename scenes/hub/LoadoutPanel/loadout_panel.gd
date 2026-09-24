@@ -32,12 +32,34 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.EquipSlot.RING_2: "SLOT_RING",
 }
 
+## Ordine del baule scelto: resta finche' il gioco e' aperto.
+static var sort_mode: StashSort.Mode = StashSort.Mode.ARRIVAL
+
+var _loadout: EquipmentLoadout
+
 @onready var _slots: Control = %Slots
 @onready var _grid: GridContainer = %ItemGrid
 @onready var _empty_hint: Label = %EmptyHint
 
 
+func _ready() -> void:
+	var group := ButtonGroup.new()
+	for pair in [[%SortArrival, StashSort.Mode.ARRIVAL], [%SortRarity, StashSort.Mode.RARITY], [%SortCategory, StashSort.Mode.CATEGORY]]:
+		var button: Button = pair[0]
+		button.toggle_mode = true
+		button.button_group = group
+		button.button_pressed = pair[1] == sort_mode
+		button.pressed.connect(_on_sort_pressed.bind(pair[1]))
+
+
+func _on_sort_pressed(mode: StashSort.Mode) -> void:
+	sort_mode = mode
+	if _loadout:
+		refresh(_loadout)
+
+
 func refresh(loadout: EquipmentLoadout) -> void:
+	_loadout = loadout
 	for child in _slots.get_children():
 		child.queue_free()
 	for slot: int in SLOT_POSITIONS:
@@ -51,7 +73,7 @@ func refresh(loadout: EquipmentLoadout) -> void:
 		_slots.add_child(button)
 	for child in _grid.get_children():
 		child.queue_free()
-	var stash := loadout.stash_items()
+	var stash := StashSort.sorted(loadout.stash_items(), sort_mode)
 	_empty_hint.visible = stash.is_empty()
 	for item in stash:
 		var button := _item_button(item, "")

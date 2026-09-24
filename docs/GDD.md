@@ -124,6 +124,8 @@ Ogni oggetto posseduto è un'**istanza** (`ItemInstance`): oggetto base (`Equipm
 
 Slot: **Testa, Guanti, Armatura, Pantaloni, Stivali, Anello (×2), Amuleto** e **Bacchetta** (l'arma, che porta anche gli slot delle abilità). Gli oggetti esistenti passano agli slot nuovi: bacchette → Bacchetta, Stivali viscosi → Stivali, Amuleto del nucleo → Amuleto. Nell'inventario dell'hub un **manichino** mostra gli slot con l'icona dell'oggetto indossato: **clic su un oggetto** del baule → va nel suo slot (sostituendo quello presente); **clic su uno slot occupato** → l'oggetto torna nel baule. I due anelli si riempiono in ordine (il secondo clic su un anello va nello slot libero, poi sostituisce il primo). Nuovi oggetti base: Cappuccio del viandante (Testa), Guanti del fabbro (Guanti), Corazza d'osso (Armatura), Brache di cuoio (Pantaloni), Anello di gelatina (Anello), ognuno con ricetta; gli Stivali viscosi passano allo slot Stivali. Il bordo degli slot e degli oggetti prende il colore della rarità (§6.2).
 
+Il baule degli oggetti si ordina con tre bottoni sopra la griglia: **Arrivo** (dal più vecchio), **Rarità** (dal più raro, poi per slot) e **Categoria** (per slot: bacchetta, amuleto, testa, guanti, armatura, pantaloni, stivali, anelli; poi dal più raro). La scelta resta finché il gioco è aperto (`StashSort`, M11.3 #69).
+
 ### 6.2 Rarità (M11, #57)
 
 | Rarità | Colore | Drop tra gli oggetti trovati | Contenuto |

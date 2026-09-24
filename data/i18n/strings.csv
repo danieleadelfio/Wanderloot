@@ -203,3 +203,7 @@ RUNEND_VIEW_LOOT,Guarda il loot,View loot,Voir le butin,Ver botín
 LOOT_VIEW_EXTRACTED,Estratto con successo,Extracted successfully,Extrait avec succès,Extraído con éxito
 LOOT_VIEW_LOST,Perso: non sei riuscito a estrarre,Lost: you did not extract,Perdu : vous ne vous êtes pas extrait,Perdido: no has extraído
 LOOT_VIEW_HINT,Passa col mouse su un'icona per i dettagli,Hover an icon for details,Survolez une icône pour les détails,Pasa el ratón por un icono para ver los detalles
+SORT_LABEL,Ordina:,Sort:,Trier :,Ordenar:
+SORT_ARRIVAL,Arrivo,Newest last,Arrivée,Llegada
+SORT_RARITY,Rarità,Rarity,Rareté,Rareza
+SORT_CATEGORY,Categoria,Category,Catégorie,Categoría
