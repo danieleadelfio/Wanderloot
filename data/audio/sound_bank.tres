@@ -1,22 +1,22 @@
-[gd_resource type="Resource" script_class="SoundBank" format=3]
+[gd_resource type="Resource" script_class="SoundBank" format=3 uid="uid://cngrcd5xbu63u"]
 
-[ext_resource type="Script" path="res://scripts/audio/sound_bank.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/audio/sound_entry.gd" id="2"]
-[ext_resource type="AudioStream" path="res://assets/audio/shoot.wav" id="a0"]
-[ext_resource type="AudioStream" path="res://assets/audio/enemy_hit.wav" id="a1"]
-[ext_resource type="AudioStream" path="res://assets/audio/enemy_die.wav" id="a2"]
-[ext_resource type="AudioStream" path="res://assets/audio/player_hurt.wav" id="a3"]
-[ext_resource type="AudioStream" path="res://assets/audio/level_up.wav" id="a4"]
-[ext_resource type="AudioStream" path="res://assets/audio/extract.wav" id="a5"]
-[ext_resource type="AudioStream" path="res://assets/audio/player_death.wav" id="a6"]
-[ext_resource type="AudioStream" path="res://assets/audio/craft.wav" id="a7"]
-[ext_resource type="AudioStream" path="res://assets/audio/ui_select.wav" id="a8"]
-[ext_resource type="AudioStream" path="res://assets/audio/pickup_exp.wav" id="a9"]
-[ext_resource type="AudioStream" path="res://assets/audio/pickup_item.wav" id="a10"]
-[ext_resource type="AudioStream" path="res://assets/audio/enemy_shoot.wav" id="a11"]
-[ext_resource type="AudioStream" path="res://assets/audio/boss_appear.wav" id="b0"]
-[ext_resource type="AudioStream" path="res://assets/audio/boss_warn.wav" id="b1"]
-[ext_resource type="AudioStream" path="res://assets/audio/boss_slam.wav" id="b2"]
+[ext_resource type="Script" uid="uid://dmg7nh3p01ro8" path="res://scripts/audio/sound_bank.gd" id="1"]
+[ext_resource type="Script" uid="uid://cevw1mxcxcywn" path="res://scripts/audio/sound_entry.gd" id="2"]
+[ext_resource type="AudioStream" uid="uid://dg3y3bdsbtxbv" path="res://assets/audio/shoot.wav" id="a0"]
+[ext_resource type="AudioStream" uid="uid://c3b5746vyfnx5" path="res://assets/audio/enemy_hit.wav" id="a1"]
+[ext_resource type="AudioStream" uid="uid://3w1h2x5jvb4m" path="res://assets/audio/enemy_die.wav" id="a2"]
+[ext_resource type="AudioStream" uid="uid://cvgjalldrw4an" path="res://assets/audio/player_hurt.wav" id="a3"]
+[ext_resource type="AudioStream" uid="uid://de5f3cim4yj6e" path="res://assets/audio/level_up.wav" id="a4"]
+[ext_resource type="AudioStream" uid="uid://cyw71l27xsxvv" path="res://assets/audio/extract.wav" id="a5"]
+[ext_resource type="AudioStream" uid="uid://cvb5hgsa33ihb" path="res://assets/audio/player_death.wav" id="a6"]
+[ext_resource type="AudioStream" uid="uid://kkmtrm1i2q16" path="res://assets/audio/craft.wav" id="a7"]
+[ext_resource type="AudioStream" uid="uid://borartf025flk" path="res://assets/audio/ui_select.wav" id="a8"]
+[ext_resource type="AudioStream" uid="uid://lcj6onmn5k3i" path="res://assets/audio/pickup_exp.wav" id="a9"]
+[ext_resource type="AudioStream" uid="uid://bq1ouaq3fjtop" path="res://assets/audio/pickup_item.wav" id="a10"]
+[ext_resource type="AudioStream" uid="uid://c7v11va8756o1" path="res://assets/audio/enemy_shoot.wav" id="a11"]
+[ext_resource type="AudioStream" uid="uid://b31mc172tjnw3" path="res://assets/audio/boss_appear.wav" id="b0"]
+[ext_resource type="AudioStream" uid="uid://b477va0kgfp3s" path="res://assets/audio/boss_warn.wav" id="b1"]
+[ext_resource type="AudioStream" uid="uid://be8btd3kifngi" path="res://assets/audio/boss_slam.wav" id="b2"]
 
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("2")
@@ -43,29 +43,22 @@ pitch_variance = 0.1
 script = ExtResource("2")
 id = &"player_hurt"
 stream = ExtResource("a3")
-volume_db = 0.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e4"]
 script = ExtResource("2")
 id = &"level_up"
 stream = ExtResource("a4")
 volume_db = -2.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e5"]
 script = ExtResource("2")
 id = &"extract"
 stream = ExtResource("a5")
-volume_db = 0.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e6"]
 script = ExtResource("2")
 id = &"player_death"
 stream = ExtResource("a6")
-volume_db = 0.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e7"]
 script = ExtResource("2")
@@ -79,7 +72,6 @@ script = ExtResource("2")
 id = &"ui_select"
 stream = ExtResource("a8")
 volume_db = -6.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e9"]
 script = ExtResource("2")
@@ -107,14 +99,12 @@ script = ExtResource("2")
 id = &"boss_appear"
 stream = ExtResource("b0")
 volume_db = -2.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_boss_warn"]
 script = ExtResource("2")
 id = &"boss_warn"
 stream = ExtResource("b1")
 volume_db = -6.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_boss_slam"]
 script = ExtResource("2")

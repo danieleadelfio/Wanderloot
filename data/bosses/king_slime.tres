@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="BossData" format=3]
+[gd_resource type="Resource" script_class="BossData" format=3 uid="uid://xr8uvhc82ham"]
 
 [ext_resource type="Script" path="res://scripts/data/boss_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/drop_entry.gd" id="2"]
+[ext_resource type="Script" uid="uid://b1tu3o4nntegy" path="res://scripts/data/drop_entry.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="3"]
-[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="gel"]
-[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="core"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/king_slime_fan.tres" id="a1"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/king_slime_ring.tres" id="a2"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/king_slime_leap.tres" id="a3"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/king_slime_spiral.tres" id="a4"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="core"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="gel"]
 
 [sub_resource type="Resource" id="d0"]
 script = ExtResource("2")
@@ -30,14 +30,9 @@ id = &"king_slime"
 display_name = "Re Slime"
 max_hp = 400
 move_speed = 80.0
-contact_damage = 2
-contact_knockback = 520.0
 exp_reward = 40
 drops = Array[ExtResource("2")]([SubResource("d0"), SubResource("d1")])
 attacks = Array[ExtResource("3")]([ExtResource("a1"), ExtResource("a2"), ExtResource("a3"), ExtResource("a4")])
 first_attack_delay = 2.5
 chase_time = 1.4
-phase_two_threshold = 0.5
-phase_two_speed_multiplier = 1.25
-phase_two_tempo_multiplier = 0.7
 phase_two_tint = Color(1, 0.72, 0.62, 1)

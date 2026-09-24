@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="EquipmentData" format=3]
-[ext_resource type="Texture2D" path="res://assets/sprites/icon_rapid_wand.png" id="ic"]
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://udxtaemaq32k"]
 
-[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
+[ext_resource type="Script" uid="uid://dctkhh4x8gi4m" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://b3dmi0rw7ply7" path="res://scripts/data/stat_modifier.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dlhru1wxl3fn6" path="res://assets/sprites/icon_rapid_wand.png" id="ic"]
 
 [sub_resource type="Resource" id="mod_1"]
 script = ExtResource("2")
@@ -12,9 +12,8 @@ is_multiplier = true
 
 [resource]
 script = ExtResource("1")
-icon = ExtResource("ic")
 id = &"rapid_wand"
 display_name = "Bacchetta rapida"
 description = "+25% cadenza di fuoco"
-slot = 0
+icon = ExtResource("ic")
 modifiers = Array[ExtResource("2")]([SubResource("mod_1")])

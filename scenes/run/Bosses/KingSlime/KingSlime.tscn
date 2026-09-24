@@ -1,24 +1,17 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cmyk53big7wyo"]
 
-[ext_resource type="Script" path="res://scenes/run/Bosses/boss.gd" id="1"]
+[ext_resource type="Script" uid="uid://cghuxpbei0lfg" path="res://scenes/run/Bosses/boss.gd" id="1"]
 [ext_resource type="Resource" path="res://data/bosses/king_slime.tres" id="2"]
-[ext_resource type="Script" path="res://scripts/combat/health.gd" id="3"]
-[ext_resource type="Script" path="res://scripts/combat/hurtbox.gd" id="4"]
-[ext_resource type="Script" path="res://scripts/combat/hitbox.gd" id="5"]
-[ext_resource type="Script" path="res://scripts/combat/hit_flash.gd" id="6"]
-[ext_resource type="Script" path="res://scripts/combat/frame_cycler.gd" id="7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/king_slime.png" id="8"]
-[ext_resource type="Texture2D" path="res://assets/sprites/boss_shadow.png" id="9"]
+[ext_resource type="Script" uid="uid://co7f2n8jk8yw7" path="res://scripts/combat/health.gd" id="3"]
+[ext_resource type="Script" uid="uid://dbbsf4a8gppp6" path="res://scripts/combat/hurtbox.gd" id="4"]
+[ext_resource type="Script" uid="uid://cy1i0ja53fn2o" path="res://scripts/combat/hitbox.gd" id="5"]
+[ext_resource type="Script" uid="uid://bsjn1s07gyye5" path="res://scripts/combat/hit_flash.gd" id="6"]
+[ext_resource type="Script" uid="uid://dfordjwj86si4" path="res://scripts/combat/frame_cycler.gd" id="7"]
+[ext_resource type="Texture2D" uid="uid://db3t0njhl1fqs" path="res://assets/sprites/king_slime.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://h4lgvp07bgde" path="res://assets/sprites/boss_shadow.png" id="9"]
 [ext_resource type="PackedScene" path="res://scenes/run/Telegraph/Telegraph.tscn" id="10"]
 
-[sub_resource type="CircleShape2D" id="body_shape"]
-radius = 42.0
-
-[sub_resource type="CircleShape2D" id="box_shape"]
-radius = 52.0
-
 [sub_resource type="Gradient" id="light_grad"]
-offsets = PackedFloat32Array(0, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="light_tex"]
@@ -29,30 +22,36 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[node name="KingSlime" type="CharacterBody2D"]
+[sub_resource type="CircleShape2D" id="body_shape"]
+radius = 42.0
+
+[sub_resource type="CircleShape2D" id="box_shape"]
+radius = 52.0
+
+[node name="KingSlime" type="CharacterBody2D" unique_id=1767560486]
 collision_layer = 4
-collision_mask = 1
 motion_mode = 1
 script = ExtResource("1")
 data = ExtResource("2")
 
-[node name="Impact" parent="." instance=ExtResource("10")]
+[node name="Impact" parent="." unique_id=325046684 instance=ExtResource("10")]
 unique_name_in_owner = true
 top_level = true
 
-[node name="Windup" parent="." instance=ExtResource("10")]
+[node name="Windup" parent="." unique_id=128522559 instance=ExtResource("10")]
 unique_name_in_owner = true
 color = Color(1, 0.6, 0.2, 1)
 
-[node name="Shadow" type="Sprite2D" parent="."]
+[node name="Shadow" type="Sprite2D" parent="." unique_id=1563215614]
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("9")
 offset = Vector2(0, 104)
 
-[node name="Body" type="Node2D" parent="."]
+[node name="Body" type="Node2D" parent="." unique_id=1330869856]
 unique_name_in_owner = true
 
-[node name="Sprite" type="Sprite2D" parent="Body"]
+[node name="Sprite" type="Sprite2D" parent="Body" unique_id=1850044256]
+position = Vector2(0, 16)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("8")
 offset = Vector2(0, -40)
@@ -60,42 +59,44 @@ hframes = 2
 script = ExtResource("7")
 frame_time = 0.45
 
-[node name="Light" type="PointLight2D" parent="."]
+[node name="Light" type="PointLight2D" parent="." unique_id=720456988]
 color = Color(0.55, 1, 0.55, 1)
 energy = 0.6
 texture = SubResource("light_tex")
 texture_scale = 2.2
 
-[node name="CollisionShape" type="CollisionShape2D" parent="."]
+[node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=1956623414]
+position = Vector2(0, 10)
 shape = SubResource("body_shape")
 
-[node name="Health" type="Node" parent="."]
+[node name="Health" type="Node" parent="." unique_id=553339707]
 unique_name_in_owner = true
 script = ExtResource("3")
 
-[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1642077821 node_paths=PackedStringArray("health")]
 unique_name_in_owner = true
+position = Vector2(0, 2)
 collision_layer = 0
 collision_mask = 8
 monitorable = false
 script = ExtResource("4")
 health = NodePath("../Health")
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Hurtbox" unique_id=1204777540]
 shape = SubResource("box_shape")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=1216034530]
 unique_name_in_owner = true
+position = Vector2(0, 6)
 collision_layer = 16
 collision_mask = 0
 monitoring = false
 script = ExtResource("5")
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Hitbox" unique_id=1831676287]
 shape = SubResource("body_shape")
 
-[node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("target")]
+[node name="HitFlash" type="Node" parent="." unique_id=1338341475 node_paths=PackedStringArray("target")]
 unique_name_in_owner = true
 script = ExtResource("6")
 target = NodePath("../Body/Sprite")
-
