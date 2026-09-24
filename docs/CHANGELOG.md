@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Fine run: bottone Guarda il loot con griglia di icone e tooltip di oggetti e materiali, estratti o persi; Torna all'hub sempre disponibile (#68).
 - Overtime: ogni ondata di boss ha tanti boss quanti quelli della run (arena + Pentagrammi superati, anche in overtime), non uno solo; test (#66).
 - Terzo evento: 10 s dopo aver sconfitto tutti i boss parte un evento in più (una volta per run, `ArenaData.boss_event_delay`); test (#65).
 - Icona dell'eseguibile: portale viola in PNG, .ico e .icns, impostata come icona del progetto e icona nativa per l'export (#64).

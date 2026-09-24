@@ -199,3 +199,7 @@ OVERTIME_WARNING_SUB,Estrai prima che l'arena diventi impossibile,Extract before
 OVERTIME_SUB,Boss: %d ogni %s s · nemici in rage · velocità x%s · vita +%d%%,Bosses: %d every %s s · raged enemies · speed x%s · health +%d%%,Boss : %d toutes les %s s · ennemis enragés · vitesse x%s · vie +%d %%,Jefes: %d cada %s s · enemigos furiosos · velocidad x%s · vida +%d%%
 EVENT_DASH_TITLE,Passo d'ombra,Shadow Step,Pas de l'ombre,Paso de sombra
 EVENT_DASH_SUBTITLE,"Non puoi sparare: scatta per schivare (clic, Spazio o tasto destro)","You can't shoot: dash to dodge (click, Space or right button)","Impossible de tirer : faites un bond pour esquiver (clic, Espace ou bouton droit)","No puedes disparar: esquiva con el impulso (clic, Espacio o botón derecho)"
+RUNEND_VIEW_LOOT,Guarda il loot,View loot,Voir le butin,Ver botín
+LOOT_VIEW_EXTRACTED,Estratto con successo,Extracted successfully,Extrait avec succès,Extraído con éxito
+LOOT_VIEW_LOST,Perso: non sei riuscito a estrarre,Lost: you did not extract,Perdu : vous ne vous êtes pas extrait,Perdido: no has extraído
+LOOT_VIEW_HINT,Passa col mouse su un'icona per i dettagli,Hover an icon for details,Survolez une icône pour les détails,Pasa el ratón por un icono para ver los detalles

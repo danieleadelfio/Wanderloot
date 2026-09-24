@@ -575,10 +575,11 @@ func _on_run_ended(result: RunManager.Result) -> void:
 		MetaProgression.register_extraction(arena.id)
 	# Unico punto in cui il loot di run raggiunge MetaProgression (GDD §4).
 	var items := RunManager.loot.items()
+	var amounts: Dictionary = RunManager.loot.to_dictionary()
 	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot, MetaProgression.deposit_run_items)
 	_run_end_screen.present(
 		extracted, RunManager.level, RunManager.elapsed, RunManager.kills,
-		loot_amount, MetaProgression.inventory.total(), items
+		loot_amount, MetaProgression.inventory.total(), items, amounts
 	)
 
 
