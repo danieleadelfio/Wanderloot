@@ -41,6 +41,8 @@ extends Resource
 @export_group("Boss")
 ## Scena del boss (script Boss); vuota = nessun boss in questa arena.
 @export var boss_scene: PackedScene
+## Boss possibili (M11.3): se non vuoto, ogni boss che compare e' scelto a caso da qui (boss_scene ignorato).
+@export var boss_scenes: Array[PackedScene] = []
 ## Secondi dopo l'apertura della zona di estrazione in cui compare il boss.
 @export var boss_delay: float = 20.0
 @export var boss_spawn_min_distance: float = 380.0
@@ -48,6 +50,16 @@ extends Resource
 @export var boss_count: int = 1
 ## Distanza minima tra due boss che compaiono.
 @export var boss_min_separation: float = 350.0
+
+func has_boss() -> bool:
+	return boss_scene != null or not boss_scenes.is_empty()
+
+
+func pick_boss_scene(rng: RandomNumberGenerator) -> PackedScene:
+	if boss_scenes.is_empty():
+		return boss_scene
+	return boss_scenes[rng.randi_range(0, boss_scenes.size() - 1)]
+
 
 @export_group("Eventi")
 ## Eventi possibili (uno a caso a ogni tempo di event_times).

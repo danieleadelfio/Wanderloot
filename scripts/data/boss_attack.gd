@@ -3,7 +3,7 @@ extends Resource
 ## Un attacco del moveset di un boss (dati): tipo, preavviso, proiettili, salto, recupero, peso nella scelta.
 ## Nuovi tipi solo in coda all'enum (valore salvato nei .tres).
 
-enum Kind { AIMED_FAN, RING, LEAP_SLAM }
+enum Kind { AIMED_FAN, RING, LEAP_SLAM, SUMMON, RAIN, CHARGE, STOMP, SCREAM }
 
 @export var display_name: String = ""
 @export var kind: Kind = Kind.AIMED_FAN
@@ -18,6 +18,8 @@ enum Kind { AIMED_FAN, RING, LEAP_SLAM }
 @export var show_windup: bool = true
 ## Pausa dopo l'attacco, in cui il boss si muove lentamente (finestra per colpirlo).
 @export var recovery: float = 1.0
+## Dopo l'attacco il boss sparisce e ricompare lontano dal player (M11.3).
+@export var teleport_after: bool = false
 
 @export_group("Proiettili")
 ## Arma dei proiettili (danno, velocita', durata, texture). Vuota = nessun proiettile.
@@ -37,6 +39,22 @@ enum Kind { AIMED_FAN, RING, LEAP_SLAM }
 @export var knockback: float = 600.0
 @export var leap_time: float = 0.45
 @export var leap_height: float = 90.0
+
+@export_group("Evocazione")
+## SUMMON: nemici evocati attorno al boss (la scena deve essere tra i nemici dell'arena).
+@export var summon_scene: PackedScene
+@export var summon_count: int = 4
+
+@export_group("Pioggia")
+## RAIN: cerchi rossi sul player e attorno (raggio = radius, danno = damage).
+@export var rain_count: int = 6
+@export var rain_spread: float = 220.0
+
+@export_group("Carica")
+## CHARGE: corsa in linea retta verso dove era il player a inizio preavviso; la corsia e' segnata da cerchi.
+@export var charge_speed: float = 720.0
+@export var charge_distance: float = 560.0
+@export var charge_lane_radius: float = 44.0
 
 
 ## Indice dell'attacco scelto per peso tra quelli ammessi nella fase; -1 se nessuno.

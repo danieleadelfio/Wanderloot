@@ -26,6 +26,13 @@ extends Resource
 ## Moltiplica inseguimento e recupero in fase 2 (< 1 = attacchi piu' ravvicinati).
 @export var phase_two_tempo_multiplier: float = 0.7
 @export var phase_two_tint: Color = Color(1, 0.7, 0.7)
+## All'ingresso in fase 2 evoca questi nemici (null = nessuno).
+@export var phase_two_summon_scene: PackedScene
+@export var phase_two_summon_count: int = 0
+
+@export_group("Teletrasporto")
+## Distanza minima dal player del punto di ricomparsa (attacchi con teleport_after).
+@export var teleport_distance: float = 280.0
 
 
 func phase_for(hp_ratio: float) -> int:

@@ -28,7 +28,6 @@ var bosses: Array[Boss] = []
 ## Boss in piu' guadagnati dagli eventi (Pentagramma di sangue).
 var _extra_bosses: int = 0
 var _bosses_spawned: bool = false
-var _boss_name: String = ""
 ## Abilita' che gli eventi possono offrire (M10).
 @export var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
 var _choosing_ability: bool = false
@@ -149,8 +148,7 @@ func active_enemies() -> Array[Enemy]:
 func danger_zones() -> Array[Vector3]:
 	var zones := _events.danger_zones()
 	for alive in bosses:
-		if alive.danger_zone().z > 0.0:
-			zones.append(alive.danger_zone())
+		zones.append_array(alive.danger_zones())
 	return zones
 
 
@@ -181,7 +179,7 @@ func _end_surge() -> void:
 func _on_event_completed(event: RunEventData) -> void:
 	_end_surge()
 	_hud.end_event(true, tr("EVENT_PENTAGRAM_REWARD") if event.bonus_bosses > 0 else "")
-	if event.bonus_bosses > 0 and arena.boss_scene != null:
+	if event.bonus_bosses > 0 and arena.has_boss():
 		_extra_bosses += event.bonus_bosses
 		_refresh_overtime_bosses()
 		# Boss gia' comparsi: quello in piu' arriva subito, altrimenti si aggiunge alla comparsa.
@@ -382,7 +380,7 @@ func _open_extraction() -> void:
 	)
 	_extraction_point.activate(spawn_position)
 	_sfx.play(&"ui_select")
-	if arena.boss_scene != null:
+	if arena.has_boss():
 		_boss_timer.start(arena.boss_delay)
 	_refresh_overtime_bosses()
 	overtime.start(arena.overtime)
@@ -422,14 +420,15 @@ func _spawn_boss() -> void:
 
 
 func _spawn_bosses(count: int) -> void:
-	if RunManager.state == RunManager.State.ENDED or count <= 0 or arena.boss_scene == null:
+	if RunManager.state == RunManager.State.ENDED or count <= 0 or not arena.has_boss():
 		return
 	var taken: Array[Vector2] = []
 	for alive in bosses:
 		taken.append(alive.global_position)
 	var points := SpawnUtils.separated_points(extraction_spawn_rect, _player.global_position, arena.boss_spawn_min_distance, arena.boss_min_separation, count, _rng, taken)
 	for point in points:
-		var new_boss: Boss = arena.boss_scene.instantiate()
+		var new_boss: Boss = arena.pick_boss_scene(_rng).instantiate()
+		new_boss.bounds = extraction_spawn_rect
 		new_boss.target = _player
 		new_boss.position = point
 		_enemies.add_child(new_boss)
@@ -440,8 +439,10 @@ func _spawn_bosses(count: int) -> void:
 		new_boss.slammed.connect(_sfx.play.bind(&"boss_slam").unbind(2))
 		new_boss.health.changed.connect(_refresh_boss_bar.unbind(2))
 		new_boss.died.connect(_on_boss_died)
+		new_boss.summon_requested.connect(_on_boss_summon, CONNECT_DEFERRED)
+		new_boss.scream_requested.connect(_on_boss_scream)
+		new_boss.teleported.connect(_sfx.play.bind(&"dash"))
 		bosses.append(new_boss)
-		_boss_name = new_boss.data.display_name
 	_refresh_boss_bar()
 	_sfx.play(&"boss_appear")
 
@@ -456,7 +457,34 @@ func _refresh_boss_bar() -> void:
 	for alive in bosses:
 		current += alive.health.current
 		maximum += alive.health.max_hp
-	_hud.show_boss(tr(_boss_name) + ("  ×%d" % bosses.size() if bosses.size() > 1 else ""), current, maximum)
+	# Boss diversi insieme: nomi separati; stesso boss piu' volte: nome x N.
+	var names: PackedStringArray = []
+	for alive in bosses:
+		if not names.has(tr(alive.data.display_name)):
+			names.append(tr(alive.data.display_name))
+	var title := " · ".join(names)
+	if names.size() == 1 and bosses.size() > 1:
+		title += "  ×%d" % bosses.size()
+	_hud.show_boss(title, current, maximum)
+
+
+## Evocazione di un boss: nemici dal pool dell'arena della stessa scena, attorno al boss.
+func _on_boss_summon(scene: PackedScene, count: int, at: Vector2) -> void:
+	for i in arena.enemies.size():
+		if arena.enemies[i].scene != scene:
+			continue
+		for k in count:
+			var point := (at + Vector2.RIGHT.rotated(TAU * k / maxi(count, 1)) * _rng.randf_range(70.0, 130.0)).clamp(extraction_spawn_rect.position, extraction_spawn_rect.end)
+			_enemy_pools[i].spawn(point, _player)
+		_sfx.play(&"boss_warn")
+		return
+
+
+## Urlo di un boss: tutti i nemici vivi in rage.
+func _on_boss_scream() -> void:
+	for enemy in active_enemies():
+		enemy.force_rage()
+	_sfx.play(&"boss_appear")
 
 
 func _on_boss_attack_started(attack: BossAttack) -> void:

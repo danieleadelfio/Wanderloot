@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Sistema boss esteso: evocazione, pioggia di cerchi, carica in linea, pestone, urlo, balzi a catena, teletrasporto, evocazione in fase 2; più boss possibili per arena; vita di tutti i boss x2; test (#75).
 - Cripta: slime celesti di base, più rari lo Slime tossico (spara gocce avvelenate, alone di nube), lo Slime del vuoto (sfera che diventa un buco nero e attira) e lo Slime di pietra (vita x4, velocità /2); sprite, test (#74).
 - Veleno (1 danno ogni 1,5 s per 4,5 s, si rinnova senza sommarsi, player verde) per i proiettili nemici; vita base del player a 10; test (#73).
 - Abilità a livelli: gli oggetti le portano a Lv1/Lv2/Lv3 (Super raro/Leggendario/Mitico); la stessa abilità da equip ed eventi si somma di livello; gli eventi propongono anche le abilità possedute (Lv+1, senza slot); livello nell'HUD e nel tooltip; test (#72).

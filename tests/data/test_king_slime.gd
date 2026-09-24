@@ -6,7 +6,7 @@ const PLAYER_SPEED: float = 220.0
 
 func test_crypt_has_king_slime_20s_after_extraction() -> void:
 	var crypt: ArenaData = load("res://data/arenas/crypt.tres")
-	assert_object(crypt.boss_scene).is_not_null()
+	assert_bool(crypt.has_boss()).is_true()
 	assert_float(crypt.boss_delay).is_equal(20.0)
 
 
