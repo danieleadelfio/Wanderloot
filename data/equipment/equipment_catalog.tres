@@ -6,7 +6,8 @@
 [ext_resource type="Resource" path="res://data/equipment/rapid_wand.tres" id="3"]
 [ext_resource type="Resource" path="res://data/equipment/core_amulet.tres" id="4"]
 [ext_resource type="Resource" path="res://data/equipment/slime_boots.tres" id="5"]
+[ext_resource type="Resource" path="res://data/equipment/bone_wand.tres" id="9"]
 
 [resource]
 script = ExtResource("1")
-items = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])
+items = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("9")])

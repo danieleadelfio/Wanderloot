@@ -143,4 +143,22 @@ chime = lambda n, dur: triangle(np.cumsum(np.full(int(SR * dur), note(n))) / SR)
 save("pickup_item", mix(chime(88, 0.16), np.pad(chime(95, 0.2), (int(SR * 0.06), 0))), 0.5)
 # --- nemici a distanza (M7): schiocco d'arco + sibilo ---
 d = 0.16; save("enemy_shoot", mix(triangle(sweep(620, 240, d)) * env(int(SR * d), curve=2.5), 0.35 * lowpass(noise(d), 0.3) * env(int(SR * d), curve=1.5)), 0.45)
+# --- Ossario (M7): bordone cupo con dissonanza, campana lontana, battito (loop esatto di 24s) ---
+D = 24.0
+tt = t(D)
+lfo = 0.6 + 0.4 * np.sin(2 * np.pi * tt / 8.0)
+drone = lfo * (0.5 * np.sin(2 * np.pi * 55.0 * tt) + 0.28 * np.sin(2 * np.pi * 82.5 * tt) + 0.18 * np.sin(2 * np.pi * 58.25 * tt))
+bells = np.zeros(len(tt))
+for start in (0.0, 6.0, 12.0, 18.0):
+    a = int(SR * start); n = int(SR * 5.5)
+    b = t(5.5)
+    tone = sum(w * np.sin(2 * np.pi * f * b) for f, w in ((196.0, 0.5), (466.0, 0.25), (741.0, 0.12)))
+    bells[a:a + n] += tone * np.exp(-b * 0.9) * 0.35
+beat = np.zeros(len(tt))
+for i in range(int(D / 1.2)):
+    for off, vol in ((0.0, 1.0), (0.22, 0.6)):
+        a = int(SR * (i * 1.2 + off)); n = int(SR * 0.16)
+        thump = np.sin(2 * np.pi * sweep(70, 38, 0.16)) * env(n, curve=3) * vol * 0.55
+        beat[a:a + n] += thump[:max(0, len(beat) - a)]
+save("music_ossuary", mix(drone, bells, beat), 0.6)
 print("audio:", sorted(os.listdir(OUT)))

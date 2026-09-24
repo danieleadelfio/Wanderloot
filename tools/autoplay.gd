@@ -1,6 +1,6 @@
 extends SceneTree
 ## Bot di playtest: gioca N run nell'Arena (kiting + mira automatica + va all'estrazione) e stampa metriche.
-## Uso (dalla root del progetto): godot --headless --fixed-fps 60 --path . -s tools/autoplay.gd -- <runs> [equip_ids...]
+## Uso (dalla root del progetto): godot --headless --fixed-fps 60 --path . -s tools/autoplay.gd -- <runs> [equip_ids...] [arena=<id>]
 ## --fixed-fps fa girare la simulazione alla massima velocita' con delta fisso. Il salvataggio usato e' user://bot.cfg.
 ## Non e' un test: serve a confrontare i .tres di bilanciamento a parita' di giocatore.
 var runs := 10
@@ -13,11 +13,19 @@ var ended := false
 var damage_taken := 0
 var last_gel := 0
 var last_core := 0
+var last_loot: Dictionary = {}
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 0: runs = int(args[0])
-	for i in range(1, args.size()): equip.append(StringName(args[i]))
+	for i in range(1, args.size()):
+		if args[i].begins_with("arena="):
+			var m = root.get_node("MetaProgression")
+			m.save_path = "user://bot.cfg"
+			for arena in m.arena_catalog.arenas: m.extractions[arena.unlock_arena] = 99
+			m.select_arena(StringName(args[i].trim_prefix("arena=")))
+		else:
+			equip.append(StringName(args[i]))
 	rng.seed = 42
 	_start()
 
@@ -44,6 +52,7 @@ func _physics_process(_d: float) -> bool:
 	var rm = root.get_node("RunManager")
 	last_gel = rm.loot.amount_of(&"slime_gel")
 	last_core = rm.loot.amount_of(&"slime_core")
+	last_loot = rm.loot.to_dictionary()
 	if rm.elapsed > 600: rm.end_run(0); return false
 	if rm.state == 2:  # LEVEL_UP
 		var lvl = a.get_node("%LevelUpChoice")
@@ -57,7 +66,7 @@ func _on_end(result) -> void:
 	var rm = root.get_node("RunManager")
 	var gel = last_gel
 	var core = last_core
-	results.append({"r": "EXT" if result == 1 else "DIE", "t": rm.elapsed, "lv": rm.level, "k": rm.kills, "gel": gel, "core": core, "dmg": damage_taken})
+	results.append({"r": "EXT" if result == 1 else "DIE", "t": rm.elapsed, "lv": rm.level, "k": rm.kills, "gel": gel, "core": core, "dmg": damage_taken, "loot": last_loot})
 	done += 1
 	if done >= runs:
 		_report()
@@ -73,4 +82,9 @@ func _report() -> void:
 		t += r.t; k += r.k; gel += r.gel; core += r.core; lv += r.lv
 	var n := float(results.size())
 	print("per-run: ", results.map(func(r): return "%s%d/%dk" % [r.r[0], int(r.t), r.k]))
+	var per_material := {}
+	for r in results:
+		for id in r.loot: per_material[id] = per_material.get(id, 0) + r.loot[id]
+	for id in per_material: per_material[id] = snappedf(per_material[id] / float(results.size()), 0.1)
+	print("loot medio per run (raccolto, anche se poi perso): ", per_material)
 	print("RUNS=%d extract=%d%% avg_t=%.0fs avg_lv=%.1f avg_kills=%.0f gel/run=%.1f core/run=%.2f death_times=%s" % [n, ext * 100 / n, t / n, lv / n, k / n, gel / n, core / n, tdie])

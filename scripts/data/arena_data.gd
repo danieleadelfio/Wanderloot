@@ -17,6 +17,14 @@ extends Resource
 @export var torches_per_wall: int = 5
 @export var torch_color: Color = Color(1, 0.62, 0.32)
 @export var music: AudioStream
+## Decorazioni sparse sul pavimento (senza collisioni), scelte a caso da questa lista.
+@export var decorations: Array[Texture2D] = []
+@export var decoration_count: int = 0
+@export var candle_count: int = 0
+@export var candle_color: Color = Color(1, 0.3, 0.25)
+## Nebbia: alpha 0 = nessuna.
+@export var fog_color: Color = Color(0, 0, 0, 0)
+@export var fog_count: int = 0
 
 @export_group("Gioco")
 @export var wave_data: WaveData

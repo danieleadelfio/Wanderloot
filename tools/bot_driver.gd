@@ -16,6 +16,12 @@ static func drive(a: Node) -> void:
 		if d < nd: nd = d; nearest = e
 		if d < 240.0:
 			flee += (pos - e.global_position).normalized() * pow(1.0 - d / 240.0, 2) * 3.0
+	if a.has_node("%EnemyProjectilePool"):
+		for b in a.get_node("%EnemyProjectilePool").get_children():
+			if b.visible and pos.distance_to(b.global_position) < 140.0:
+				var side: Vector2 = Vector2.RIGHT.rotated(b.rotation).orthogonal()
+				if side.dot(pos - b.global_position) < 0.0: side = -side
+				flee += side * 2.0
 	var center := Vector2.ZERO
 	if absf(pos.x) > 600: center.x = -signf(pos.x) * (absf(pos.x) - 600) / 100.0
 	if absf(pos.y) > 330: center.y = -signf(pos.y) * (absf(pos.y) - 330) / 80.0
@@ -23,7 +29,9 @@ static func drive(a: Node) -> void:
 	var ep = a.get_node("%ExtractionPoint")
 	if ep.visible:
 		var to: Vector2 = ep.global_position - pos
-		goal = to.normalized() * (1.2 if to.length() > 30 else 0.0)
+		# Con zona aperta l'estrazione ha la priorita': fuga limitata (serve nelle arene affollate).
+		goal = to.normalized() * (2.2 if to.length() > 30 else 0.0)
+		flee = flee.limit_length(1.5)
 		if to.length() < 40: flee *= 0.25
 	# Raccolta (M5): se non ci sono nemici vicini va verso l'oggetto a terra piu' vicino.
 	if goal == Vector2.ZERO and flee.length() < 0.4 and a.has_node("%PickupPool"):

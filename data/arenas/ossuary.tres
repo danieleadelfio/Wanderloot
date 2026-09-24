@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="ArenaData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/arena_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/enemy_spawn.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ossuary_floor.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ossuary_wall.png" id="4"]
+[ext_resource type="AudioStream" path="res://assets/audio/music_ossuary.wav" id="5"]
+[ext_resource type="Resource" path="res://data/waves/wave_ossuary.tres" id="6"]
+[ext_resource type="Resource" path="res://data/run/extraction_ossuary.tres" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/Ghoul/Ghoul.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SkeletonArcher/SkeletonArcher.tscn" id="9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/deco_skull.png" id="d0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/deco_bones.png" id="d1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/deco_ribcage.png" id="d2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/deco_blood.png" id="d3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/deco_gravestone.png" id="d4"]
+
+[sub_resource type="Resource" id="ghoul"]
+script = ExtResource("2")
+scene = ExtResource("8")
+weight = 1.0
+min_time = 0.0
+
+[sub_resource type="Resource" id="archer"]
+script = ExtResource("2")
+scene = ExtResource("9")
+weight = 0.3
+min_time = 15.0
+
+[resource]
+script = ExtResource("1")
+id = &"ossuary"
+display_name = "Ossario"
+description = "Catacombe dimenticate, quasi al buio. Ghoul affamati e scheletri arcieri. Qui si trova l'Essenza d'ombra."
+floor_texture = ExtResource("3")
+wall_texture = ExtResource("4")
+ambient_color = Color(0.19, 0.16, 0.22, 1)
+player_light_color = Color(0.95, 0.8, 0.7, 1)
+player_light_energy = 1.2
+player_light_scale = 3.0
+torches_per_wall = 0
+torch_color = Color(1, 0.3, 0.25, 1)
+music = ExtResource("5")
+wave_data = ExtResource("6")
+extraction_data = ExtResource("7")
+enemies = Array[ExtResource("2")]([SubResource("ghoul"), SubResource("archer")])
+decorations = Array[Texture2D]([ExtResource("d0"), ExtResource("d1"), ExtResource("d2"), ExtResource("d3"), ExtResource("d4"), ExtResource("d0")])
+decoration_count = 34
+candle_count = 12
+candle_color = Color(1, 0.3, 0.25, 1)
+fog_color = Color(0.42, 0.36, 0.5, 0.12)
+fog_count = 16
+unlock_arena = &"crypt"
+unlock_extractions = 3

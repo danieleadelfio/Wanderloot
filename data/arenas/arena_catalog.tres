@@ -3,7 +3,8 @@
 [ext_resource type="Script" path="res://scripts/data/arena_catalog.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/data/arena_data.gd" id="0"]
 [ext_resource type="Resource" path="res://data/arenas/crypt.tres" id="2"]
+[ext_resource type="Resource" path="res://data/arenas/ossuary.tres" id="3"]
 
 [resource]
 script = ExtResource("1")
-arenas = Array[ExtResource("0")]([ExtResource("2")])
+arenas = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3")])

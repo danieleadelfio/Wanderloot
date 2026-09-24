@@ -83,6 +83,7 @@ Per l'MVP, hub ridotto a:
   - **Stato M3 (#13)**: pannello "Fabbro" nell'hub con le ricette fisse di `data/recipes/recipe_book.tres` (`RecipeData`: risultato + righe `MaterialCost`). Costi iniziali: Bacchetta di gelatina 6 Gelatina, Stivali viscosi 8 Gelatina, Bacchetta rapida 10 Gelatina + 1 Nucleo, Amuleto del nucleo 4 Gelatina + 2 Nuclei. Bottone disabilitato se mancano materiali o il pezzo è già posseduto. **Decisione**: ogni pezzo si crafta una sola volta (niente duplicati né potenziamento nell'MVP: potenziamento/smontaggio in v2). Regole in `Crafting` (logica pura); `MetaProgression.craft()` è l'unico punto che scala i materiali e salva.
 - **1 baule/inventario permanente**: dove finisce il loot dopo un'estrazione riuscita.
 - **1 portale/punto di partenza run**.
+- **Stato M7 (#33, Ossario)**: seconda arena, si sblocca dopo **3 estrazioni riuscite nella Cripta**. Buio quasi totale (ambiente 0.19, 0.16, 0.22: ancora abbastanza per leggere i nemici), luce del player più corta, niente torce ma 12 candele rosse tremolanti, nebbia viola che scorre (`FogDrift`), pavimento di lastre scure con crepe e macchie di sangue, muri con teschi, 34 decorazioni (teschi, ossa, costole, lapidi, sangue). Musica: bordone dissonante, campana lontana e battito (`music_ossuary`, loop di 24s). Ondate più dure (`wave_ossuary.tres`: tetto 55, fase avanzata da 50s), estrazione a 120s con canale di 7s e zona ad almeno 450px. Nemici: Ghoul dall'inizio, Scheletro arciere dal secondo 15. Ricompensa: **Bacchetta d'ossa** (arma, +1 danno e +1 perforazione) = 40 Frammenti d'osso + 6 Essenze d'ombra.
 - **Stato M7 (#32, arene)**: ogni arena è un `ArenaData` (`data/arenas/`): pavimento, muri, luce ambiente e del player, torce, musica, `WaveData`, `ExtractionData` e lista di `EnemySpawn` (scena, peso, da che secondo compare). `Arena.tscn` è una sola scena che si configura dall'arena scelta; il `WaveSpawner` crea un pool per tipo di nemico e sceglie il tipo per peso. Il portale (pannello nell'hub) mostra le arene: quelle bloccate indicano quante estrazioni servono e in quale arena. `MetaProgression` salva estrazioni riuscite per arena e arena scelta (salvataggio v3, carica v1/v2). Prima arena: **Cripta**, sempre disponibile.
 - **Stato M3 (#11)**: l'hub è una schermata UI (`scenes/hub/Hub/`), non ancora un ambiente esplorabile: pannello "Baule" con i materiali permanenti e bottone "Parti per la run". È la scena principale del gioco. A fine run (morte o estrazione) "Torna all'hub" sostituisce "Nuova run". **Decisione**: hub esplorabile con NPC fisici rinviato (M4 o v2), per l'MVP conta il ciclo hub→run→hub. Cambi scena via `change_scene_to_file` con percorsi in `SceneRoutes` (nessun autoload aggiuntivo).
 
@@ -188,7 +189,8 @@ res://
   scenes/run/Projectile/EnemyProjectile.tscn # dardo nemico (layer enemy_attack)
   addons/gdUnit4/                    # framework di test (v6.2.1, vendored)
   tests/                             # test GdUnit4, specchio di scripts/ e autoload/
-  data/arenas/                       # arena_catalog + un .tres per arena (crypt)
+  data/arenas/                       # arena_catalog + un .tres per arena (crypt, ossuary)
+  scenes/run/Candle/                 # candela con luce tremolante (decorazioni)
   scenes/hub/ArenaSelect/            # scelta dell'arena (portale)
   scripts/data/                      # classi Resource: arena_data, arena_catalog, enemy_spawn, weapon_data, enemy_data, player_stats, wave_data, level_curve, upgrade_data, upgrade_table, extraction_data, material_data, drop_entry, stat_modifier, equipment_data, equipment_catalog, material_cost, recipe_data, recipe_book
   data/{weapons,enemies,player,waves,run,upgrades,materials,equipment,recipes}/ # .tres: starter_wand, enemy_basic, player_default, wave_default, level_curve, extraction_default, upgrade_*, slime_gel, slime_core, equipment_catalog + pezzi, recipe_book + ricette
@@ -258,6 +260,18 @@ Stress test "rompere tutto": 300 colpi/s × 20 proiettili × perforazione 5 → 
 ### 10.4 Verifica M6 (#29, rage)
 
 Con il bot che sceglie bene i potenziamenti la rage non cambia l'esito: 100% di estrazioni su 20 run; in una run campione 22 slime su 179 sono andati in rage e il player non ha subito nessun danno. Il problema non è la rage ma la potenza del player a metà run (Ventaglio, Perforazione, cadenza senza tetto). Leve possibili, da decidere dopo il playtest umano: rage più aggressiva (soglia più bassa, +velocità), più HP ai nemici nel tempo, un nemico a distanza, ondate più fitte dopo i 60s.
+
+### 10.5 Verifica M7 (#33/#34, Ossario)
+
+Bot migliorato per le arene affollate (schiva i dardi nemici; con la zona aperta dà priorità all'estrazione) e con resoconto del loot per materiale. Risultati:
+
+| Arena | Equipaggiamento | Estrazioni | Uccisioni medie | Loot raccolto per run |
+|---|---|---|---|---|
+| Cripta | nessuno | 90% (10 run) | 273 | ~43 Gelatina, ~2,8 Nuclei |
+| Ossario | nessuno | 20% (5 run) | 616 | — |
+| Ossario | Bacchetta di gelatina + Amuleto | 60% (5 run) | 602 | ~27 Frammenti d'osso, ~2 Essenze |
+
+Correzioni fatte durante la verifica: prima versione impossibile (0% anche con equip) perché i ghoul in rage erano più veloci del player e gli arcieri colpivano 5–8 volte per run senza possibilità di schivare → ghoul rage ×1,25 dopo 4s, dardi a 240px/s ogni 2,6s, meno arcieri (peso 0,3). Drop ridotti perché nell'Ossario si uccide 2–3 volte più che nella Cripta; la Bacchetta d'ossa arriva dopo ~3 estrazioni riuscite nell'Ossario.
 
 ## 11. Open questions
 

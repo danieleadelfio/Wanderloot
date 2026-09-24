@@ -287,9 +287,104 @@ def build_ossuary_enemies():
     save("icon_shadow_essence", [icon_essence()], 64)
 
 
+# --- Ossario (M7): pavimento, muri, decorazioni macabre ---------------------------------------------
+def ossuary_floor_svg():
+    parts = ['<rect width="384" height="384" fill="#141219"/>']
+    for gy in range(3):
+        for gx in range(3):
+            v = RNG.randint(-3, 3)
+            x, y = gx * 128 + 3, gy * 128 + 3
+            parts.append('<rect x="%d" y="%d" width="122" height="122" rx="6" fill="rgb(%d,%d,%d)"/>' % (x, y, 34 + v, 31 + v, 40 + v))
+            if RNG.random() < 0.45:
+                cx, cy = x + RNG.randint(20, 90), y + RNG.randint(20, 90)
+                parts.append('<path d="M%d %d l%d %d l%d %d l%d %d" stroke="#1a1720" stroke-width="3" fill="none"/>'
+                             % (cx, cy, RNG.randint(8, 24), RNG.randint(4, 16), RNG.randint(-12, 8), RNG.randint(8, 20), RNG.randint(4, 14), RNG.randint(-6, 8)))
+            if RNG.random() < 0.12:
+                parts.append('<ellipse cx="%d" cy="%d" rx="%d" ry="%d" fill="#2a1418" opacity="0.45"/>' % (x + RNG.randint(30, 90), y + RNG.randint(30, 90), RNG.randint(10, 22), RNG.randint(6, 14)))
+    return svg("".join(parts), "", 384)
+
+
+def ossuary_wall_svg():
+    parts = ['<rect width="64" height="64" fill="#0c0b10"/>']
+    for row in range(2):
+        off = 0 if row == 0 else -16
+        for col in range(3):
+            parts.append('<rect x="%d" y="%d" width="28" height="28" rx="3" fill="#2a2632"/>' % (off + col * 32 + 2, row * 32 + 2))
+            parts.append('<rect x="%d" y="%d" width="28" height="5" rx="2" fill="#3a3544"/>' % (off + col * 32 + 2, row * 32 + 2))
+    parts.append('<circle cx="32" cy="16" r="7" fill="#b8b0a0"/><circle cx="29" cy="15" r="2" fill="#0c0b10"/><circle cx="35" cy="15" r="2" fill="#0c0b10"/>')
+    return svg("".join(parts), "", 64)
+
+
+BONE = 'fill="#d9d1bf" stroke="#141a2c" stroke-width="4"'
+
+
+def skull_svg():
+    return svg('<ellipse cx="64" cy="112" rx="40" ry="8" fill="#000" opacity="0.4"/>'
+               '<path d="M28 64 C28 26 100 26 100 64 C100 80 92 88 84 90 L84 104 L44 104 L44 90 C36 88 28 80 28 64 Z" %s/>'
+               '<ellipse cx="50" cy="64" rx="11" ry="12" fill="#0b0a10"/><ellipse cx="78" cy="64" rx="11" ry="12" fill="#0b0a10"/>'
+               '<path d="M60 80 L64 88 L68 80 Z" fill="#0b0a10"/><path d="M52 96 L52 104 M60 96 L60 104 M68 96 L68 104 M76 96 L76 104" stroke="#0b0a10" stroke-width="3"/>' % BONE, "", 128)
+
+
+def bones_svg():
+    def bone(x1, y1, x2, y2):
+        return ('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="#141a2c" stroke-width="16" stroke-linecap="round"/>'
+                '<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="#d9d1bf" stroke-width="9" stroke-linecap="round"/>' % (x1, y1, x2, y2, x1, y1, x2, y2))
+    return svg('<ellipse cx="64" cy="100" rx="50" ry="10" fill="#000" opacity="0.35"/>' + bone(24, 90, 100, 60) + bone(30, 60, 104, 94) + bone(44, 100, 84, 40), "", 128)
+
+
+def ribcage_svg():
+    ribs = "".join('<path d="M64 %d Q%d %d %d %d" stroke="#141a2c" stroke-width="10" fill="none" stroke-linecap="round"/>'
+                   '<path d="M64 %d Q%d %d %d %d" stroke="#d9d1bf" stroke-width="5" fill="none" stroke-linecap="round"/>'
+                   % (y, 64 + s * 40, y + 6, 64 + s * 34, y + 22, y, 64 + s * 40, y + 6, 64 + s * 34, y + 22)
+                   for y in (34, 50, 66) for s in (-1, 1))
+    return svg('<ellipse cx="64" cy="104" rx="48" ry="10" fill="#000" opacity="0.35"/>'
+               '<line x1="64" y1="26" x2="64" y2="98" stroke="#141a2c" stroke-width="12" stroke-linecap="round"/>'
+               '<line x1="64" y1="26" x2="64" y2="98" stroke="#d9d1bf" stroke-width="6" stroke-linecap="round"/>' + ribs, "", 128)
+
+
+def blood_svg():
+    return svg('<path d="M30 60 C20 40 50 26 66 36 C84 22 110 40 100 62 C112 80 88 100 70 90 C52 104 26 90 36 76 C24 72 24 64 30 60 Z" fill="#4a0f14" opacity="0.8"/>'
+               '<circle cx="104" cy="92" r="5" fill="#4a0f14" opacity="0.8"/><circle cx="22" cy="40" r="4" fill="#4a0f14" opacity="0.8"/>', "", 128)
+
+
+def gravestone_svg():
+    defs = '<linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a4658"/><stop offset="0.5" stop-color="#6b667a"/><stop offset="1" stop-color="#3a3646"/></linearGradient>'
+    return svg('<ellipse cx="64" cy="116" rx="44" ry="8" fill="#000" opacity="0.45"/>'
+               '<path d="M30 116 L30 50 C30 20 98 20 98 50 L98 116 Z" fill="url(#g)" stroke="#141a2c" stroke-width="5"/>'
+               '<path d="M64 44 L64 88 M50 58 L78 58" stroke="#2a2632" stroke-width="7" stroke-linecap="round"/>'
+               '<path d="M38 116 Q44 100 52 116 M76 116 Q84 104 92 116" stroke="#2c3d33" stroke-width="5" fill="none"/>', defs, 128)
+
+
+def candle_svg():
+    defs = '<radialGradient id="f" cx="0.5" cy="0.6" r="0.6"><stop offset="0" stop-color="#fff2e0"/><stop offset="0.45" stop-color="#ff7a5c"/><stop offset="1" stop-color="#b3202a" stop-opacity="0"/></radialGradient>'
+    return svg('<ellipse cx="32" cy="58" rx="16" ry="4" fill="#000" opacity="0.4"/>'
+               '<rect x="24" y="30" width="16" height="28" rx="3" fill="#d8cfbf" stroke="#141a2c" stroke-width="3"/>'
+               '<path d="M26 34 Q30 42 28 48" stroke="#b8ae9a" stroke-width="3" fill="none"/>'
+               '<path d="M32 8 C38 16 40 22 38 27 C36 31 28 31 26 27 C24 22 26 16 32 8 Z" fill="url(#f)"/>', defs, 64)
+
+
+def icon_bone_wand():
+    defs = '<radialGradient id="g" cx="0.35" cy="0.35" r="0.7"><stop offset="0" stop-color="#f4eeff"/><stop offset="0.4" stop-color="#9d4edd"/><stop offset="1" stop-color="#240046"/></radialGradient>'
+    return svg('<line x1="10" y1="56" x2="42" y2="22" stroke="#141a2c" stroke-width="11" stroke-linecap="round"/>'
+               '<line x1="10" y1="56" x2="42" y2="22" stroke="#d9d1bf" stroke-width="5" stroke-linecap="round"/>'
+               '<path d="M12 50 l6 6 M20 42 l6 6 M28 34 l6 6" stroke="#141a2c" stroke-width="2"/>'
+               '<circle cx="46" cy="18" r="11" fill="#d9d1bf" %s/><circle cx="42" cy="16" r="2.5" fill="#0b0a10"/><circle cx="50" cy="16" r="2.5" fill="#0b0a10"/>'
+               '<circle cx="46" cy="18" r="16" fill="url(#g)" opacity="0.35"/>' % OUTLINE, defs, 64)
+
+
+def build_ossuary():
+    save("ossuary_floor", [ossuary_floor_svg()], 384)
+    save("ossuary_wall", [ossuary_wall_svg()], 64)
+    for name, fn in [("deco_skull", skull_svg), ("deco_bones", bones_svg), ("deco_ribcage", ribcage_svg), ("deco_blood", blood_svg), ("deco_gravestone", gravestone_svg)]:
+        save(name, [fn()], 128)
+    save("candle", [candle_svg()], 64)
+    save("icon_bone_wand", [icon_bone_wand()], 64)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
     build_props()
     build_ossuary_enemies()
+    build_ossuary()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

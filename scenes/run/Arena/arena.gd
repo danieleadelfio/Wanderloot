@@ -9,6 +9,9 @@ extends Node2D
 @export var arena_override: ArenaData
 @export var extraction_spawn_rect: Rect2 = Rect2(-700.0, -400.0, 1400.0, 800.0)
 @export var torch_scene: PackedScene = preload("res://scenes/run/Torch/Torch.tscn")
+@export var candle_scene: PackedScene = preload("res://scenes/run/Candle/Candle.tscn")
+## Zona in cui spargere decorazioni e candele (lontano dal centro, dove parte il player).
+@export var decoration_rect: Rect2 = Rect2(-740.0, -440.0, 1480.0, 880.0)
 ## Torce per lato lungo (muro alto e basso), distribuite in modo uniforme.
 
 var arena: ArenaData
@@ -26,6 +29,8 @@ var _exp_remainder: float = 0.0
 @onready var _wall_tiles: Node2D = %WallTiles
 @onready var _ambient: CanvasModulate = %Ambient
 @onready var _music: AudioStreamPlayer = %Music
+@onready var _decorations: Node2D = %Decorations
+@onready var _fog: FogDrift = %Fog
 @onready var _wave_spawner: WaveSpawner = %WaveSpawner
 @onready var _projectile_pool: ProjectilePool = %ProjectilePool
 @onready var _pickup_pool: PickupPool = %PickupPool
@@ -116,9 +121,39 @@ func _apply_arena_look() -> void:
 	_player.light.energy = arena.player_light_energy
 	_player.light.texture_scale = arena.player_light_scale
 	_place_torches(arena.torches_per_wall, arena.torch_color)
+	_place_decorations()
+	if arena.fog_color.a > 0.0 and arena.fog_count > 0:
+		_fog.setup(arena.fog_color, arena.fog_count, _rng)
 	if arena.music:
 		_music.stream = arena.music
 		_music.play()
+
+
+## Decorazioni e candele: posizioni casuali ma stabili per arena (seme dall'id), lontano dal centro.
+func _place_decorations() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(arena.id)
+	var unshaded := CanvasItemMaterial.new()
+	for i in arena.decoration_count if not arena.decorations.is_empty() else 0:
+		var sprite := Sprite2D.new()
+		sprite.texture = arena.decorations[rng.randi() % arena.decorations.size()]
+		sprite.scale = Vector2.ONE * rng.randf_range(0.28, 0.4)
+		sprite.rotation = rng.randf_range(-0.4, 0.4)
+		sprite.position = _random_away_from_center(rng)
+		_decorations.add_child(sprite)
+	for i in arena.candle_count:
+		var candle := candle_scene.instantiate() as Node2D
+		candle.position = _random_away_from_center(rng)
+		(candle.get_node("Light") as PointLight2D).color = arena.candle_color
+		_decorations.add_child(candle)
+
+
+func _random_away_from_center(rng: RandomNumberGenerator) -> Vector2:
+	for attempt in 20:
+		var point := Vector2(rng.randf_range(decoration_rect.position.x, decoration_rect.end.x), rng.randf_range(decoration_rect.position.y, decoration_rect.end.y))
+		if point.length() > 140.0:
+			return point
+	return decoration_rect.end
 
 
 ## Torce sui muri alto e basso (i muri visibili sono a y = ±484).
