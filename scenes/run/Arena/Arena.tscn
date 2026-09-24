@@ -170,6 +170,7 @@ limit_left = -800
 limit_top = -500
 limit_right = 800
 limit_bottom = 500
+process_callback = 0
 position_smoothing_enabled = true
 
 [node name="Sfx" type="Node" parent="."]

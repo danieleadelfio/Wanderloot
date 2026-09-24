@@ -40,6 +40,7 @@ static func progress(elapsed: float, duration: float) -> float:
 
 func start(center: Vector2, area_radius: float, duration: float, damage: int = 0, knockback: float = 0.0) -> void:
 	global_position = center
+	reset_physics_interpolation()
 	radius = area_radius
 	_shape.radius = area_radius
 	_duration = duration

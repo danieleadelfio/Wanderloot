@@ -66,6 +66,7 @@ func _restore_saved_position() -> void:
 		return
 	var player: Node2D = %Player
 	player.global_position = MetaProgression.take_pending_hub_position()
+	player.reset_physics_interpolation()
 	(player.get_node("Camera2D") as Camera2D).reset_smoothing()
 
 

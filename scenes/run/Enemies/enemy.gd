@@ -57,6 +57,8 @@ func _physics_process(delta: float) -> void:
 
 func activate(spawn_position: Vector2) -> void:
 	global_position = spawn_position
+	# Arriva dal pool: niente interpolazione dalla posizione precedente.
+	reset_physics_interpolation()
 	health.reset(data.max_hp)
 	_knockback.reset()
 	_freeze_left = 0.0

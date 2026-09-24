@@ -32,7 +32,8 @@ func setup(color: Color, count: int, rng: RandomNumberGenerator) -> void:
 		_velocities.append(Vector2.RIGHT.rotated(rng.randf_range(-0.4, 0.4)) * rng.randf_range(speed_range.x, speed_range.y))
 
 
-func _process(delta: float) -> void:
+# Movimento sui tick di fisica: con l'interpolazione attiva resta fluido (M10.1).
+func _physics_process(delta: float) -> void:
 	for i in _blobs.size():
 		var blob := _blobs[i]
 		blob.position += _velocities[i] * delta
