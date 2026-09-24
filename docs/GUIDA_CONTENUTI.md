@@ -116,6 +116,31 @@ Non serve altro: `Arena` crea un `EnemyPool` per ogni voce e il `WaveSpawner` sc
 
 ---
 
+## 1b. Nuovo boss
+
+Tutti i boss usano lo script `scenes/run/Bosses/boss.gd`; cambiano dati (`BossData` + `BossAttack`) e grafica. Esempio completo: **Re Slime** (`scenes/run/Bosses/KingSlime/`, `data/bosses/king_slime.tres`, `data/bosses/attacks/king_slime_*.tres`).
+
+1. **Grafica**: in `sprites.py` copia `king_slime_svg` e `build_boss()`. Il PNG del Re Slime è 256 px per frame (128 a schermo), 2 frame. Serve anche l'ombra (`boss_shadow.png`, riutilizzabile).
+2. **Proiettili**: crea un `WeaponData` (danno, velocità, durata) con `projectile_texture` e `projectile_scale` per un aspetto dedicato (es. `king_slime_goo.tres`). I proiettili usano il pool dei proiettili nemici.
+3. **Attacchi**: un `.tres` per attacco (`BossAttack`), riutilizzabili tra boss:
+
+| Campo | Significato |
+|---|---|
+| `kind` | `AIMED_FAN` (ventaglio verso il player), `RING` (anello a 360°), `LEAP_SLAM` (salto sulla posizione del player) |
+| `weight`, `min_phase` | peso nella scelta; 2 = solo in fase 2 |
+| `telegraph_time` | preavviso: carica arancione attorno al boss (raffiche) o cerchio rosso a terra (salto) |
+| `recovery` | pausa dopo l'attacco: la finestra per colpirlo |
+| `projectile`, `projectile_count`, `spread_degrees`, `repeats`, `repeat_interval`, `ring_rotation_degrees` | proiettili (anche all'impatto del salto) |
+| `radius`, `damage`, `knockback`, `leap_time`, `leap_height` | salto schiacciante |
+
+   Regola: per `LEAP_SLAM`, `telegraph_time + leap_time` deve bastare a uscire dal cerchio anche partendo dal centro (`radius / 220` s × 1,5; lo verifica `tests/data/test_king_slime.gd`).
+4. **Boss**: duplica `king_slime.tres` → HP, velocità, contatto, exp, `drops` (chance 1 = garantito), `attacks`, `first_attack_delay`, `chase_time`, gruppo **Fase 2** (soglia di HP, velocità, ritmo, tinta).
+5. **Scena**: duplica `KingSlime.tscn`: radice → `data`; `Body/Sprite` → texture; raggi di collisione. Nodi obbligatori con unique name: `%Health`, `%Hurtbox` (mask 8), `%Hitbox` (layer 16), `%Body`, `%HitFlash`, `%Impact` (Telegraph con `top_level = true`), `%Windup` (Telegraph). La radice ha layer 4 e mask 1.
+6. **Arena**: in `ArenaData`, gruppo **Boss** → `boss_scene`, `boss_delay` (secondi dopo l'apertura dell'estrazione), `boss_spawn_min_distance`. Barra HP, suoni, drop ed exp sono già collegati.
+7. **Verifica**: `-- 8 boss arena=<id>` (il bot resta a combatterlo) e `-- 8 arena=<id>` (gioco normale); riporta la tabella nel GDD come in §10.6.
+
+Un **tipo di attacco nuovo** (es. carica in linea retta) è codice: voce in coda a `BossAttack.Kind`, ramo in `Boss._begin_attack`/`_execute`, test sulla parte pura in `BossPatterns`.
+
 ## 2. Nuova arena
 
 Un'arena è **un solo `.tres`** (`ArenaData`). La scena `Arena.tscn` è unica e si configura da lì: pavimento, muri, luci, torce, candele, nebbia, decorazioni, musica, ondate, estrazione, nemici e sblocco.
@@ -241,6 +266,7 @@ Le stat disponibili sono quelle dell'enum `UpgradeData.Stat` (danno, cadenza, ve
 
 | Novità | Dove | Test |
 |---|---|---|
+| Tipo di attacco del boss | voce **in coda** a `BossAttack.Kind`, rami in `boss.gd`, pattern puri in `scripts/run/boss_patterns.gd` | `tests/run/test_boss_logic.gd` |
 | Comportamento di movimento nemico (es. "gira attorno", "carica") | voce **in coda** a `EnemyData.Behavior`, funzione statica pura in `scripts/run/enemy_movement.gd`, ramo in `enemy.gd::_desired_direction()` | sulla funzione statica (modello `keep_distance`) |
 | Attacco nemico diverso (es. esplosione a contatto) | nuovo componente-nodo in `scripts/combat/` (composizione), collegato via segnale in `arena.gd` | logica pura del componente |
 | Nuova stat per upgrade o equipaggiamento | voce **in coda** a `UpgradeData.Stat`, campo in `PlayerStats` o `WeaponData`, ramo in `StatApplier` | `tests/run/test_stat_applier.gd` |

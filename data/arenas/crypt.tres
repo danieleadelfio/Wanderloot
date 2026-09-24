@@ -9,6 +9,8 @@
 [ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/run/Enemies/EnemyBasic/EnemyBasic.tscn" id="8"]
 
+[ext_resource type="PackedScene" path="res://scenes/run/Bosses/KingSlime/KingSlime.tscn" id="boss"]
+
 [sub_resource type="Resource" id="slime"]
 script = ExtResource("2")
 scene = ExtResource("8")
@@ -32,5 +34,7 @@ music = ExtResource("5")
 wave_data = ExtResource("6")
 extraction_data = ExtResource("7")
 enemies = Array[ExtResource("2")]([SubResource("slime")])
+boss_scene = ExtResource("boss")
+boss_delay = 20.0
 unlock_arena = &""
 unlock_extractions = 0

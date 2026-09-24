@@ -69,6 +69,8 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 
 Sistema riutilizzabile: un boss è una scena con lo script condiviso `Boss` + un `BossData` (HP, velocità, contatto, exp, drop, attacchi, fase 2) + una lista di `BossAttack` (.tres). Tipi di attacco: **raffica a ventaglio** mirata al player, **anello** di proiettili (con rotazione tra le ripetizioni), **salto schiacciante** sulla posizione del player. Ogni attacco ha un **preavviso**: carica sul posto (cerchio attorno al boss) per le raffiche, **cerchio rosso a terra** che si riempie per il salto (`Telegraph`): il bersaglio è fissato all'inizio del preavviso, il player ha `telegraph_time + leap_time` per uscirne; a fine riempimento l'area colpisce per un istante. Dopo ogni attacco il boss recupera (si muove piano: finestra per colpirlo). Sotto `phase_two_threshold` HP entra in fase 2: più veloce, attacchi più ravvicinati, sblocca gli attacchi con `min_phase = 2`, colore alterato. Scelta per peso tra gli attacchi della fase. `ArenaData` (gruppo Boss): scena del boss, secondi di ritardo dall'apertura dell'estrazione (default 20), distanza minima di comparsa. Barra HP del boss in alto al centro. I proiettili del boss usano il pool dei proiettili nemici; `WeaponData` ha texture e scala opzionali del proiettile. Alla morte: exp in 6 gemme e drop come i nemici. Il boss non è poolato (uno per run).
 
+- **Stato M8 (#39, Re Slime)**: primo boss, nella **Cripta**, compare **20 s dopo l'apertura della zona di estrazione** (chi estrae subito non lo incontra: è la sfida per chi resta). 400 HP, lento (80), contatto 2. Moveset: **Raffica di gelatina** (3 ventagli da 5 mirati, preavviso 0,7 s), **Anello di gelatina** (2 anelli da 14 sfalsati), **Salto reale** (cerchio rosso di 140 px sulla posizione del player, 1,1 s di preavviso + 0,5 s di salto; all'impatto danno 2 e anello da 10). **Fase 2** sotto il 50% HP: +25% velocità, pause −30%, sblocca la **Spirale furiosa** (6 anelli rotanti da 10). Drop garantiti: 12–18 Gelatina, 3–5 Nuclei, 40 exp. Proiettili: palle di gelatina lente (220 px/s) e ben visibili.
+
 ## 6. Loot e crafting (scope MVP)
 
 - I nemici droppano: exp (sempre) + eventualmente 1 tipo di materiale comune.
@@ -234,6 +236,18 @@ Bot migliorato per le arene affollate (schiva i dardi nemici; con la zona aperta
 | Ossario | Bacchetta di gelatina + Amuleto | 60% (5 run) | 602 | ~27 Frammenti d'osso, ~2 Essenze |
 
 Correzioni fatte durante la verifica: prima versione impossibile (0% anche con equip) perché i ghoul in rage erano più veloci del player e gli arcieri colpivano 5–8 volte per run senza possibilità di schivare → ghoul rage ×1,25 dopo 4s, dardi a 240px/s ogni 2,6s, meno arcieri (peso 0,3). Drop ridotti perché nell'Ossario si uccide 2–3 volte più che nella Cripta; la Bacchetta d'ossa arriva dopo ~3 estrazioni riuscite nell'Ossario.
+
+### 10.6 Verifica M8 (#39, Re Slime)
+
+Bot con opzione `boss` (resta nell'arena finché il boss comparso è vivo, poi va all'estrazione; schiva i cerchi rossi), 8 run per riga, Cripta:
+
+| Configurazione | Boss sconfitto | Estrazioni | Durata media | Gelatina / Nuclei raccolti per run |
+|---|---|---|---|---|
+| Normale (estrae appena può) | 0/8 (non lo incontra) | 75% | 122 s | 36 / 3,3 |
+| Combatte il boss, senza equip | 4/8 | 37% | 180 s | 107 / 10,1 |
+| Combatte il boss, Bacchetta di gelatina + Amuleto | 6/8 | 50% | 183 s | 118 / 10,8 |
+
+Lettura: chi estrae subito non è toccato dal boss; chi resta rischia molto di più ma raccoglie circa il triplo (soprattutto per le uccisioni in più, fase avanzata delle ondate inclusa). Le morti arrivano quasi tutte dopo i 170 s, quando boss e ondate fitte si sommano. Da rivedere col playtest umano: il bot schiva i cerchi in modo quasi perfetto ma subisce i proiettili.
 
 ## 11. Open questions
 

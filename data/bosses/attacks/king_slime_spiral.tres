@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="Resource" path="res://data/weapons/king_slime_goo.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Spirale furiosa"
+kind = 1
+projectile = ExtResource("2")
+weight = 1.2
+min_phase = 2
+telegraph_time = 0.8
+recovery = 1.1
+projectile_count = 10
+repeats = 6
+repeat_interval = 0.18
+ring_rotation_degrees = 15.0

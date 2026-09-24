@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="Resource" path="res://data/weapons/king_slime_goo.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Anello di gelatina"
+kind = 1
+projectile = ExtResource("2")
+weight = 1.0
+telegraph_time = 0.9
+recovery = 1.0
+projectile_count = 14
+repeats = 2
+repeat_interval = 0.5
+ring_rotation_degrees = 12.8

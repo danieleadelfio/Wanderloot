@@ -523,6 +523,42 @@ def build_hub():
     save("tree_b", [tree_svg(1)], 320)
 
 
+# --- Boss Re Slime (M8): grande slime con corona, 2 frame; palla di gelatina; ombra --------------------
+def king_slime_svg(squash=False):
+    c = ("#d8ffa0", "#3fc46c", "#1a6a42", "#0e3a24")
+    t = ' transform="translate(128 232) scale(1.06 0.93) translate(-128 -232)"' if squash else ""
+    defs = ('<radialGradient id="b" cx="0.38" cy="0.3" r="0.85"><stop offset="0" stop-color="%s"/>'
+            '<stop offset="0.45" stop-color="%s"/><stop offset="1" stop-color="%s"/></radialGradient>'
+            '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a8"/><stop offset="1" stop-color="#e0a030"/></linearGradient>' % c[:3])
+    blobs = "".join('<circle cx="%d" cy="%d" r="%d" fill="#ffffff" opacity="0.18"/>' % p for p in ((70, 170, 8), (180, 186, 6), (150, 214, 5)))
+    body = ('<g%s>'
+            '<path d="M22 206 C22 110 80 58 128 58 C176 58 234 110 234 206 C234 230 210 236 128 236 C46 236 22 230 22 206 Z" fill="url(#b)" stroke="%s" stroke-width="8"/>'
+            '<ellipse cx="86" cy="104" rx="30" ry="15" fill="#fff" opacity="0.6" transform="rotate(-28 86 104)"/>%s'
+            '<path d="M84 150 L118 160" stroke="%s" stroke-width="9" stroke-linecap="round"/><path d="M172 150 L138 160" stroke="%s" stroke-width="9" stroke-linecap="round"/>'
+            '<ellipse cx="102" cy="176" rx="13" ry="16" fill="%s"/><ellipse cx="154" cy="176" rx="13" ry="16" fill="%s"/>'
+            '<circle cx="106" cy="170" r="5" fill="#fff"/><circle cx="158" cy="170" r="5" fill="#fff"/>'
+            '<path d="M104 206 Q128 194 152 206" stroke="%s" stroke-width="6" fill="none" stroke-linecap="round"/>'
+            '<path d="M84 74 L90 30 L108 56 L128 22 L148 56 L166 30 L172 74 Z" fill="url(#g)" stroke="#6a4210" stroke-width="6" stroke-linejoin="round"/>'
+            '<circle cx="128" cy="58" r="7" fill="#e8433a" stroke="#6a4210" stroke-width="3"/><circle cx="102" cy="64" r="5" fill="#4ab0ff"/><circle cx="154" cy="64" r="5" fill="#4ab0ff"/></g>'
+            % (t, c[3], blobs, c[3], c[3], c[3], c[3], c[3]))
+    return svg(body, defs)
+
+
+def slime_ball_svg():
+    defs = '<radialGradient id="g" cx="0.35" cy="0.35" r="0.7"><stop offset="0" stop-color="#f0ffd0"/><stop offset="0.5" stop-color="#7ee06a"/><stop offset="1" stop-color="#1d6e45"/></radialGradient>'
+    return svg('<circle cx="32" cy="32" r="22" fill="url(#g)" stroke="#11402a" stroke-width="4"/><ellipse cx="25" cy="24" rx="7" ry="4" fill="#fff" opacity="0.7"/>', defs, 64)
+
+
+def boss_shadow_svg():
+    return svg('<ellipse cx="128" cy="128" rx="110" ry="30" fill="#000" opacity="0.4"/>', "", 256)
+
+
+def build_boss():
+    save("king_slime", [king_slime_svg(), king_slime_svg(squash=True)], 256)
+    save("slime_ball", [slime_ball_svg()], 48)
+    save("boss_shadow", [boss_shadow_svg()], 256)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
@@ -530,4 +566,5 @@ if __name__ == "__main__":
     build_ossuary_enemies()
     build_ossuary()
     build_hub()
+    build_boss()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

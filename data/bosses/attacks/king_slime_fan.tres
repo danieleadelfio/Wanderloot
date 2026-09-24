@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="Resource" path="res://data/weapons/king_slime_goo.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Raffica di gelatina"
+kind = 0
+projectile = ExtResource("2")
+weight = 1.2
+telegraph_time = 0.7
+recovery = 0.9
+projectile_count = 5
+spread_degrees = 50.0
+repeats = 3
+repeat_interval = 0.35

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Boss Re Slime nella Cripta: compare 20s dopo l'apertura dell'estrazione; raffica a ventaglio, anelli, salto schiacciante con cerchio rosso di preavviso, spirale in fase 2; drop garantiti di gelatina e nuclei; grafica vettoriale e test sui dati (#39).
 - Sistema boss riutilizzabile: `BossData` e `BossAttack` (.tres) con raffica a ventaglio, anello e salto schiacciante, preavviso con cerchio rosso a terra (`Telegraph`), fase 2 sotto soglia di HP, comparsa configurabile in `ArenaData`, barra HP del boss nell'HUD, texture opzionale dei proiettili in `WeaponData`, suoni dedicati, bot che schiva i cerchi; test sulla logica pura (#38).
 - Menu iniziale (scena principale): Continua se esiste un salvataggio, Nuova partita, Opzioni con volume di Musica ed Effetti (salvati in `user://settings.cfg`) e cancellazione dei dati con conferma, Esci; Torna al menu nel menu di pausa; `AudioSettings` testato (#37).
 - Salvataggi manuali: nulla viene scritto su disco finché non si preme Salva nel menu di pausa (ESC) in run o nella piazza; menu di pausa con Riprendi, Salva, Carica; Carica abbandona la run e torna all'hub; `MetaProgression.save_game/load_game/new_game/delete_save`, `GameSession`, `RunManager.abort_run`; il vecchio salvataggio automatico viene cancellato (si riparte da zero); test dedicati (#36).
