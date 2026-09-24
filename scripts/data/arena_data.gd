@@ -33,6 +33,8 @@ extends Resource
 
 ## Consumabili che i nemici possono lasciare (M10.1); vuoto = nessuno.
 @export var consumables: ConsumableTable
+## Oggetti di equipaggiamento trovabili in run (M11, #58).
+@export var item_drops: ItemDropTable
 
 @export_group("Boss")
 ## Scena del boss (script Boss); vuota = nessun boss in questa arena.

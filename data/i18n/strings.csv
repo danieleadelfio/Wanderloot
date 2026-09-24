@@ -183,3 +183,5 @@ RARITY_SUPER_RARE,Super raro,Super rare,Super rare,Súper raro
 RARITY_LEGENDARY,Leggendario,Legendary,Légendaire,Legendario
 RARITY_MYTHIC,Mitico,Mythic,Mythique,Mítico
 ITEM_ABILITY,★ Abilità: %s,★ Ability: %s,★ Capacité : %s,★ Habilidad: %s
+RUNEND_ITEMS_EXTRACTED,Oggetti portati in salvo: %s,Items brought back: %s,Objets ramenés : %s,Objetos traídos de vuelta: %s
+RUNEND_ITEMS_LOST,Oggetti persi: %s,Items lost: %s,Objets perdus : %s,Objetos perdidos: %s

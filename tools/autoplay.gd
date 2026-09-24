@@ -14,6 +14,7 @@ var damage_taken := 0
 var last_gel := 0
 var last_core := 0
 var last_loot: Dictionary = {}
+var last_items: Array[String] = []
 var events_won := 0
 var events_lost := 0
 var pentas_won := 0
@@ -62,6 +63,9 @@ func _physics_process(_d: float) -> bool:
 	last_gel = rm.loot.amount_of(&"slime_gel")
 	last_core = rm.loot.amount_of(&"slime_core")
 	last_loot = rm.loot.to_dictionary()
+	last_items.clear()
+	for item in rm.loot.items():
+		last_items.append("%s/%d" % [item.base.id, item.rarity])
 	if rm.elapsed > 600: rm.end_run(0); return false
 	if rm.state == 2:  # LEVEL_UP
 		var lvl = a.get_node("%LevelUpChoice")
@@ -76,7 +80,7 @@ func _on_end(result) -> void:
 	var rm = root.get_node("RunManager")
 	var gel = last_gel
 	var core = last_core
-	results.append({"r": "EXT" if result == 1 else "DIE", "t": rm.elapsed, "lv": rm.level, "k": rm.kills, "gel": gel, "core": core, "dmg": damage_taken, "loot": last_loot, "boss": arena.boss_defeated if is_instance_valid(arena) else false})
+	results.append({"r": "EXT" if result == 1 else "DIE", "t": rm.elapsed, "lv": rm.level, "k": rm.kills, "gel": gel, "core": core, "dmg": damage_taken, "loot": last_loot, "items": last_items.duplicate(), "boss": arena.boss_defeated if is_instance_valid(arena) else false})
 	done += 1
 	if done >= runs:
 		_report()
@@ -99,4 +103,5 @@ func _report() -> void:
 	print("eventi superati: %d/%d (pentagrammi %d/%d)" % [events_won, events_won + events_lost, pentas_won, pentas_won + pentas_lost])
 	print("boss sconfitti: %d/%d" % [results.filter(func(r): return r.boss).size(), results.size()])
 	print("loot medio per run (raccolto, anche se poi perso): ", per_material)
+	print("oggetti trovati (base/rarita'): ", results.map(func(r): return r.items))
 	print("RUNS=%d extract=%d%% avg_t=%.0fs avg_lv=%.1f avg_kills=%.0f gel/run=%.1f core/run=%.2f death_times=%s" % [n, ext * 100 / n, t / n, lv / n, k / n, gel / n, core / n, tdie])

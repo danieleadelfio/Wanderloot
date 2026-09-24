@@ -118,6 +118,16 @@ func deposit_run_loot(loot: Dictionary[StringName, int]) -> void:
 	_mark_changed()
 
 
+
+## Oggetti trovati in run, dopo un'estrazione riuscita: entrano nel baule con un uid nuovo.
+func deposit_run_items(items: Array[ItemInstance]) -> void:
+	if items.is_empty():
+		return
+	for item in items:
+		loadout.add(item)
+	_mark_changed()
+
+
 ## Unico punto di crafting: regole in Crafting (logica pura), qui solo stato e notifica.
 func craft(recipe: RecipeData) -> Crafting.Result:
 	var result := Crafting.check(recipe, inventory)

@@ -15,7 +15,7 @@ func _ready() -> void:
 	_restart_button.pressed.connect(_on_restart_pressed)
 
 
-func present(extracted: bool, level: int, elapsed: float, kills: int, loot_amount: int, stash_total: int) -> void:
+func present(extracted: bool, level: int, elapsed: float, kills: int, loot_amount: int, stash_total: int, items: Array[ItemInstance] = []) -> void:
 	_title_label.text = tr("RUNEND_EXTRACTED") if extracted else tr("RUNEND_DEAD")
 	var seconds := int(elapsed)
 	_summary_label.text = tr("RUNEND_SUMMARY") % [level, seconds / 60, seconds % 60, kills]
@@ -23,6 +23,11 @@ func present(extracted: bool, level: int, elapsed: float, kills: int, loot_amoun
 		_loot_label.text = tr("RUNEND_LOOT_EXTRACTED") % [loot_amount, stash_total]
 	else:
 		_loot_label.text = tr("RUNEND_LOOT_LOST") % loot_amount
+	if not items.is_empty():
+		var names := PackedStringArray()
+		for item in items:
+			names.append(ItemText.title(item))
+		_loot_label.text += "\n" + (tr("RUNEND_ITEMS_EXTRACTED") if extracted else tr("RUNEND_ITEMS_LOST")) % ", ".join(names)
 	show()
 	_restart_button.grab_focus()
 

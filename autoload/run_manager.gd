@@ -74,6 +74,12 @@ func add_loot(material: MaterialData, amount: int) -> void:
 	loot.add(material, amount)
 
 
+func add_loot_item(item: ItemInstance) -> void:
+	if not is_running():
+		return
+	loot.add_item(item)
+
+
 func begin_level_up() -> void:
 	if state == State.RUNNING:
 		_set_state(State.LEVEL_UP)

@@ -19,6 +19,8 @@
 
 [ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
 
+[ext_resource type="Resource" path="res://data/equipment/drops_ossuary.tres" id="items"]
+
 [ext_resource type="Resource" path="res://data/events/blood_pentagram.tres" id="pentagram"]
 
 [sub_resource type="Resource" id="ghoul"]
@@ -58,3 +60,4 @@ unlock_extractions = 3
 events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram")])
 event_times = PackedFloat32Array(30, 75)
 consumables = ExtResource("cons")
+item_drops = ExtResource("items")

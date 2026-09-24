@@ -477,7 +477,7 @@
  ],
  "tiers_note": "Percentuali di drop indicative, tra gli oggetti trovati in run (da bilanciare col bot). Gli oggetti trovati in run sono loot a rischio: si tengono solo estraendo.",
  "equipment_rules": [
-  "In run si possono trovare oggetti da Comune a Leggendario; il boss ha probabilità migliori.",
+  "In run si possono trovare oggetti da Comune a Leggendario (Cripta 0,4 %, Ossario 0,6 % per uccisione); ogni boss lascia almeno un Raro.",
   "Dal fabbro due oggetti identici della stessa rarità si uniscono in uno della rarità successiva, con bonus ritirati (Comune+Comune → Non comune, fino a Leggendario).",
   "Comune, Non comune e Raro hanno solo statistiche; Super raro e Leggendario aggiungono un modificatore di gameplay casuale (dalla lista delle abilità, come effetto sempre attivo o potenziato).",
   "I Mitici non si trovano: si craftano da una ricetta che si sblocca dai boss e resta riutilizzabile. La ricetta fissa oggetto e poteri; ogni craft ritira i valori dentro un intervallo (es. Danno da +1 a +10).",

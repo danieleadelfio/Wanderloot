@@ -7,6 +7,7 @@ extends Node2D
 signal exp_collected(amount: int)
 signal material_collected(material: MaterialData, amount: int)
 signal consumable_collected(consumable: ConsumableData)
+signal item_collected(item: ItemInstance)
 
 @export var pickup_scene: PackedScene
 @export var initial_size: int = 96
@@ -42,6 +43,14 @@ func spawn_material(at: Vector2, material: MaterialData, amount: int) -> void:
 func spawn_consumable(at: Vector2, consumable: ConsumableData) -> void:
 	_spawn(at, Pickup.Kind.CONSUMABLE, 1, null, consumable.icon, 0.5)
 	_active.back().consumable = consumable
+
+
+## Oggetto di equipaggiamento trovato: icona dell'oggetto schiarita col colore della rarita'.
+func spawn_item(at: Vector2, item: ItemInstance, tint: Color) -> void:
+	_spawn(at, Pickup.Kind.ITEM, 1, null, item.base.icon, 0.6)
+	var pickup: Pickup = _active.back()
+	pickup.item = item
+	pickup.set_tint(tint.lerp(Color.WHITE, 0.35))
 
 
 ## Magnete: per `seconds` ogni oggetto a terra, anche quelli che cadono nel frattempo, vola verso il player.
@@ -91,12 +100,16 @@ func _spawn(at: Vector2, kind: Pickup.Kind, amount: int, material: MaterialData,
 func _collect(index: int) -> void:
 	var pickup := _active[index]
 	_active.remove_at(index)
+	var item := pickup.item
+	var consumable := pickup.consumable
 	pickup.deactivate()
 	_free.append(pickup)
 	if pickup.kind == Pickup.Kind.EXP:
 		exp_collected.emit(pickup.amount)
 	elif pickup.kind == Pickup.Kind.CONSUMABLE:
-		consumable_collected.emit(pickup.consumable)
+		consumable_collected.emit(consumable)
+	elif pickup.kind == Pickup.Kind.ITEM:
+		item_collected.emit(item)
 	else:
 		material_collected.emit(pickup.item_material, pickup.amount)
 

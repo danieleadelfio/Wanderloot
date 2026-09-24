@@ -392,6 +392,10 @@ Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s) ed `eve
 | Rarità | `data/equipment/rarity_table.tres` | per ogni rarità: `affix_count`, `roll_min`/`roll_max` (qualità 0–1 dei tiri), `ability_count`, `drop_weight` (tra gli oggetti trovati), `salvage_multiplier`, `color` |
 | Bonus possibili | `data/equipment/affix_table.tres` | `stat`, `min_value`/`max_value` (moltiplicatori es. 1,05–1,25), `is_multiplier`, `slots` (tipi di oggetto ammessi, vuoto = tutti), `weight` |
 
+### 8.7c Oggetti trovati in run
+
+Ogni arena ha `item_drops` (`data/equipment/drops_<arena>.tres`, script `ItemDropTable`): `items` (oggetti base possibili, anche senza ricetta), `drop_chance`, `max_tier`, `boss_drops`, `boss_min_tier`. Per un oggetto nuovo trovabile in run basta aggiungerlo alla lista `items` della tabella dell'arena; la rarità segue i `drop_weight` di `rarity_table.tres`.
+
 ### 8.8 Loot, consumabili e abilità
 
 | Cosa | File | Campo | Attuale |

@@ -2,12 +2,13 @@ class_name Pickup
 extends Node2D
 ## Oggetto a terra (gemma di exp o materiale). Poolable; il movimento lo gestisce PickupPool.
 
-enum Kind { EXP, MATERIAL, CONSUMABLE }
+enum Kind { EXP, MATERIAL, CONSUMABLE, ITEM }
 
 var kind: Kind = Kind.EXP
 var amount: int = 1
 var item_material: MaterialData
 var consumable: ConsumableData
+var item: ItemInstance
 ## Da quando entra nel raggio resta attratto fino all'assorbimento.
 var attracted: bool = false
 var speed: float = 0.0
@@ -27,9 +28,17 @@ func activate(at: Vector2, new_kind: Kind, new_amount: int, new_material: Materi
 	pop_velocity = pop
 	_sprite.texture = texture
 	_sprite.scale = Vector2.ONE * texture_scale
+	_sprite.self_modulate = Color.WHITE
 	visible = true
 	reset_physics_interpolation()
 
 
+## Tinta dell'icona (oggetti: colore della rarita').
+func set_tint(color: Color) -> void:
+	_sprite.self_modulate = color
+
+
 func deactivate() -> void:
 	visible = false
+	item = null
+	consumable = null

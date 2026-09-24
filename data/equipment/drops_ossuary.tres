@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemDropTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_drop_table.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="0"]
+[ext_resource type="Resource" path="res://data/equipment/gel_wand.tres" id="e0"]
+[ext_resource type="Resource" path="res://data/equipment/rapid_wand.tres" id="e1"]
+[ext_resource type="Resource" path="res://data/equipment/core_amulet.tres" id="e2"]
+[ext_resource type="Resource" path="res://data/equipment/slime_boots.tres" id="e3"]
+[ext_resource type="Resource" path="res://data/equipment/gel_ring.tres" id="e4"]
+[ext_resource type="Resource" path="res://data/equipment/wanderer_hood.tres" id="e5"]
+[ext_resource type="Resource" path="res://data/equipment/smith_gloves.tres" id="e6"]
+[ext_resource type="Resource" path="res://data/equipment/leather_pants.tres" id="e7"]
+[ext_resource type="Resource" path="res://data/equipment/bone_wand.tres" id="e8"]
+[ext_resource type="Resource" path="res://data/equipment/bone_armor.tres" id="e9"]
+
+[resource]
+script = ExtResource("1")
+items = Array[ExtResource("0")]([ExtResource("e0"), ExtResource("e1"), ExtResource("e2"), ExtResource("e3"), ExtResource("e4"), ExtResource("e5"), ExtResource("e6"), ExtResource("e7"), ExtResource("e8"), ExtResource("e9")])
+drop_chance = 0.006
+boss_min_tier = 2

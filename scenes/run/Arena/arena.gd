@@ -112,6 +112,7 @@ func _ready() -> void:
 	_pickup_pool.exp_collected.connect(_on_exp_collected)
 	_pickup_pool.material_collected.connect(_on_material_collected)
 	_pickup_pool.consumable_collected.connect(_on_consumable_collected)
+	_pickup_pool.item_collected.connect(_on_item_collected)
 	_wave_spawner.start(_player)
 	_extraction_point.data = extraction_data
 	_extraction_indicator.target = _extraction_point
@@ -311,6 +312,22 @@ func _on_enemy_died(enemy: Enemy) -> void:
 		var consumable := arena.consumables.roll(_rng, _player.stats.drop_chance_multiplier)
 		if consumable:
 			_pickup_pool.spawn_consumable(enemy.global_position, consumable)
+	if arena.item_drops:
+		var base := arena.item_drops.roll(_rng, _player.stats.drop_chance_multiplier)
+		if base:
+			_drop_item(enemy.global_position, base, false)
+
+
+## Oggetto trovato: rarita' tirata dalla tabella dell'arena, bonus tirati subito (resta a rischio fino all'estrazione).
+func _drop_item(at: Vector2, base: EquipmentData, from_boss: bool) -> void:
+	var tier := arena.item_drops.roll_tier(MetaProgression.rarity_table, _rng, from_boss)
+	var item := MetaProgression.make_item(base, tier)
+	_pickup_pool.spawn_item(at, item, MetaProgression.rarity_table.tier(tier).color)
+
+
+func _on_item_collected(item: ItemInstance) -> void:
+	_sfx.play(&"pickup_item")
+	RunManager.add_loot_item(item)
 
 
 func _roll_drops(enemy: Enemy) -> void:
@@ -424,6 +441,12 @@ func _on_boss_died(dead: Boss) -> void:
 			var consumable := arena.consumables.pick(_rng)
 			if consumable:
 				_pickup_pool.spawn_consumable(dead.global_position, consumable)
+	# Oggetti garantiti, almeno Rari (GDD §6.3).
+	if arena.item_drops:
+		for i in arena.item_drops.boss_drops:
+			var base := arena.item_drops.pick(_rng)
+			if base:
+				_drop_item(dead.global_position, base, true)
 	dead.queue_free()
 
 
@@ -468,7 +491,7 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_pause_menu.show_mode(mode)
 	if mode == PauseState.Mode.INVENTORY:
-		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary())
+		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items())
 	else:
 		_run_inventory.close()
 	_refresh_pause()
@@ -508,10 +531,11 @@ func _on_run_ended(result: RunManager.Result) -> void:
 	if extracted:
 		MetaProgression.register_extraction(arena.id)
 	# Unico punto in cui il loot di run raggiunge MetaProgression (GDD §4).
-	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot)
+	var items := RunManager.loot.items()
+	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot, MetaProgression.deposit_run_items)
 	_run_end_screen.present(
 		extracted, RunManager.level, RunManager.elapsed, RunManager.kills,
-		loot_amount, MetaProgression.inventory.total()
+		loot_amount, MetaProgression.inventory.total(), items
 	)
 
 

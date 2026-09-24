@@ -24,7 +24,7 @@ func close() -> void:
 	_panel.hide()
 
 
-func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int]) -> void:
+func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items: Array[ItemInstance] = []) -> void:
 	_clear(_equip_list)
 	_clear(_loot_list)
 	for slot: int in EquipmentLoadout.EquipSlot.values():
@@ -39,7 +39,14 @@ func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int]) -> vo
 		var name := tr(material.display_name) if material else String(id)
 		_loot_list.add_child(_row(material.icon if material else null, "%s × %d" % [name, loot[id]], LOOT_COLOR))
 		total += loot[id]
-	if loot.is_empty():
+	# Oggetti trovati in run: a rischio come i materiali, col colore della rarita'.
+	for item in items:
+		var row := _row(item.base.icon, ItemText.title(item), ItemText.color(item))
+		row.tooltip_text = ItemText.tooltip(item)
+		row.mouse_filter = Control.MOUSE_FILTER_PASS
+		_loot_list.add_child(row)
+		total += 1
+	if loot.is_empty() and items.is_empty():
 		_loot_list.add_child(_row(null, tr("RUNINV_NOTHING"), Color(1, 1, 1, 0.5)))
 	_loot_total.text = tr("RUNINV_TOTAL") % total
 	_panel.show()
