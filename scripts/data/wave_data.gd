@@ -18,9 +18,24 @@ extends Resource
 @export var max_alive_growth_period: float = 30.0
 @export var max_alive_growth: int = 5
 
+@export_group("Fase avanzata")
+## Da questo secondo in poi le ondate si fanno piu' fitte (0 = mai).
+@export var late_start: float = 60.0
+## Moltiplicatore dell'intervallo tra batch nella fase avanzata (anche sotto min_interval).
+@export var late_interval_multiplier: float = 0.6
+## Nemici vivi in piu' consentiti nella fase avanzata, oltre alla crescita normale.
+@export var late_max_alive_bonus: int = 20
+
 
 func interval_at(elapsed: float) -> float:
-	return maxf(min_interval, start_interval - interval_decay * elapsed)
+	var interval := maxf(min_interval, start_interval - interval_decay * elapsed)
+	if is_late(elapsed):
+		interval *= late_interval_multiplier
+	return interval
+
+
+func is_late(elapsed: float) -> bool:
+	return late_start > 0.0 and elapsed >= late_start
 
 
 func batch_at(elapsed: float) -> int:
@@ -28,6 +43,9 @@ func batch_at(elapsed: float) -> int:
 
 
 func max_alive_at(elapsed: float) -> int:
-	if max_alive_growth_period <= 0.0:
-		return max_alive
-	return max_alive + int(elapsed / max_alive_growth_period) * max_alive_growth
+	var cap := max_alive
+	if max_alive_growth_period > 0.0:
+		cap += int(elapsed / max_alive_growth_period) * max_alive_growth
+	if is_late(elapsed):
+		cap += late_max_alive_bonus
+	return cap

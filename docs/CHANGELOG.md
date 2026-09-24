@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Bilanciamento dal playtest: rage più veloce (×1,8) e fase avanzata delle ondate dopo 60s (spawn 40% più rapido, +20 nemici vivi) (#30).
 - Rage dei nemici: dopo 5s in vita lo slime diventa rosso, più veloce (×1,5) e più dannoso (+1); valori in `EnemyData`, test dedicati (#29).
 - Arena e icone in stile vettoriale: pavimento a lastre, muri a mattoni, icone di materiali ed equipaggiamento per hub, inventario e oggetti a terra (#28).
 - Grafica vettoriale (addio pixel art) per player, slime, proiettile e gemma di exp: sorgenti SVG, PNG a 2x, filtro lineare, collider dello slime riallineati; `tools/sprites.py` diventa il generatore vettoriale (#27).

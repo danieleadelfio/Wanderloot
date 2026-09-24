@@ -12,3 +12,6 @@ batch_growth_period = 40.0
 max_alive = 45
 max_alive_growth_period = 30.0
 max_alive_growth = 5
+late_start = 60.0
+late_interval_multiplier = 0.6
+late_max_alive_bonus = 20
