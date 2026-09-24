@@ -353,7 +353,7 @@ Regola: un nemico in rage non dovrebbe superare la velocità del player (`move_s
 | Slime tossico / del vuoto / di pietra | `data/enemies/slime_toxic.tres`, `slime_void.tres`, `slime_stone.tres` | `max_hp` (6 / 6 / 12), `move_speed` (110 / 110 / 55), `attack_interval`, `attack_range` |
 | Frequenza | `data/arenas/crypt.tres` → `enemies` | `weight` (celeste 1, tossico 0,18, vuoto 0,15, pietra 0,22), `min_time` (30 / 45 / 20 s) |
 | Veleno | `WeaponData` gruppo *Veleno* | `poison_duration`, `poison_interval`, `poison_damage` |
-| Buco nero | `WeaponData` gruppo *Buco nero* | `grow_after` (px), `grow_scale`, `grown_speed_multiplier`, `pull_radius`, `pull_strength` |
+| Buco nero | `WeaponData` gruppo *Buco nero* | `grow_after` (px), `grow_scale`, `grown_speed_multiplier`, `pull_radius` (Sfera del vuoto: 360), `pull_strength`; dimensione `projectile_scale` (0,7) |
 
 ### 8.4 Ondate e numero di mostri
 

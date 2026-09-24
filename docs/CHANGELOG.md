@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Sfera dello Slime del vuoto grande il doppio e con raggio di attrazione doppio (360 px) (#83).
 - Baule: N gialla sugli oggetti nuovi (estratti, craftati, fusi) fino al passaggio del mouse o all'equipaggiamento, salvata; filtro Mostra per nuovi, rarità o categoria; test (#81).
 - Inventario di run: manichino dell'hub in sola lettura con tooltip, raccolto in una griglia scorrevole con statistiche e confronto (#80).
 - Tooltip: intervalli dei bonus in bianco e sfondo quasi opaco (tema del progetto `data/ui/wanderloot_theme.tres`) (#79).
