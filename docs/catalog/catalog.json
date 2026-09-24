@@ -1,0 +1,583 @@
+{
+ "version": "M10 (settembre 2026)",
+ "intro": "Questo catalogo è la fonte per i contenuti di Wanderloot e la base della futura enciclopedia consultabile in gioco. Ogni voce indica da dove viene l'idea: dalle spell di <b>Magicraft</b> (riadattate, con nomi italiani e numeri nostri) oppure <b>originale</b>. Le voci segnate M10 sono nel gioco, le altre sono pianificate e i numeri sono indicativi. Il file sorgente è <font face='Sans'>docs/catalog/catalog.json</font>; il PDF si rigenera con <font face='Sans'>tools/catalog_pdf.py</font>.",
+ "sources": {
+  "magicraft_wiki": {
+   "label": "Magicraft (wiki, link del proprietario)",
+   "url": "https://magicraft.fandom.com/wiki/Spells",
+   "short": "Magicraft (wiki)",
+   "note": "Link indicato dal proprietario. Non è stato leggibile dall'ambiente di lavoro (errore 402): nessuna voce è stata copiata da lì, da riverificare sulla wiki."
+  },
+  "magicraft_steam": {
+   "label": "Magicraft (guida Steam)",
+   "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3477176826",
+   "short": "Magicraft",
+   "note": "Nomi e idea di base presi dal gioco Magicraft tramite questa guida; meccanica e numeri riadattati a Wanderloot."
+  },
+  "magicraft_shapes": {
+   "label": "Magicraft (riepilogo shapes.inc)",
+   "url": "https://shapes.inc/fandom/magicraft/spells-and-wands",
+   "short": "Magicraft",
+   "note": "Nomi e idea di base presi dal gioco Magicraft tramite questo riepilogo; da verificare sulla wiki."
+  },
+  "wanderloot": {
+   "label": "Wanderloot (originale)",
+   "url": "",
+   "short": "Originale",
+   "note": "Abilità pensate per Wanderloot, legate ad arene, boss e materiali del gioco."
+  }
+ },
+ "spells_intro": "La bacchetta ha <b>3 slot</b> di abilità per la run (l'ordine non conta). Ogni abilità ha un modo di attivarsi: <b>ricarica</b> (ogni N secondi), <b>ogni N colpi</b> sparati, <b>ogni N metri</b> percorsi o <b>sempre attiva</b>. Si ottengono superando gli <b>eventi</b> della run: a evento completato il gioco si ferma e si sceglie tra 3 abilità; con gli slot pieni si sceglie quale sostituire. Ogni abilità cambia anche il colore dei proiettili per la run. Le abilità si perdono a fine run.",
+ "spells": [
+  {
+   "id": "arcane_ring",
+   "name": "Anello arcano",
+   "original": "Arcane Nova",
+   "source": "magicraft_steam",
+   "trigger": "colpi",
+   "trigger_value": "ogni 8 colpi",
+   "status": "M10",
+   "desc": "Ogni 8 colpi sparati la bacchetta libera un anello di 10 proiettili attorno al player, con il danno dell'arma. I proiettili diventano viola."
+  },
+  {
+   "id": "wandering_lightning",
+   "name": "Fulmine errante",
+   "original": "Lightning Dash / Thunderstorm",
+   "source": "magicraft_steam",
+   "trigger": "distanza",
+   "trigger_value": "ogni 350 px percorsi",
+   "status": "M10",
+   "desc": "Muovendosi si carica: ogni 350 px percorsi un fulmine colpisce il nemico più vicino (entro 420 px) e chi gli sta attorno. Premia il movimento continuo. Proiettili azzurri."
+  },
+  {
+   "id": "arcane_barrier",
+   "name": "Barriera arcana",
+   "original": "Arcane Barrier",
+   "source": "magicraft_steam",
+   "trigger": "cooldown",
+   "trigger_value": "12 s",
+   "status": "M10",
+   "desc": "Una barriera attorno al player annulla il prossimo colpo subito; si ricarica 12 s dopo essersi rotta. Proiettili dorati."
+  },
+  {
+   "id": "magic_bullet",
+   "name": "Proiettile maledetto",
+   "original": "Magic Bullet",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "I colpi marcano il nemico: per 3 s subisce +20% di danno da tutte le fonti."
+  },
+  {
+   "id": "shining_star",
+   "name": "Stella cadente",
+   "original": "Shining Star",
+   "source": "magicraft_steam",
+   "trigger": "cooldown",
+   "trigger_value": "6 s",
+   "status": "pianificata",
+   "desc": "Una stella cade sul nemico con più HP in vista e infligge un danno molto alto in una piccola area."
+  },
+  {
+   "id": "laser",
+   "name": "Raggio",
+   "original": "Laser",
+   "source": "magicraft_steam",
+   "trigger": "cooldown",
+   "trigger_value": "8 s",
+   "status": "pianificata",
+   "desc": "Per 1,5 s la bacchetta emette un raggio continuo nella direzione di mira che attraversa tutti i nemici."
+  },
+  {
+   "id": "shadow_serpent",
+   "name": "Serpe d'ombra",
+   "original": "Shadow Serpent",
+   "source": "magicraft_steam",
+   "trigger": "colpi",
+   "trigger_value": "ogni 12 colpi",
+   "status": "pianificata",
+   "desc": "Parte un proiettile sinuoso e lento che serpeggia tra i nemici e guadagna danno a ogni bersaglio attraversato."
+  },
+  {
+   "id": "thunderstorm",
+   "name": "Temporale",
+   "original": "Thunderstorm",
+   "source": "magicraft_steam",
+   "trigger": "cooldown",
+   "trigger_value": "15 s",
+   "status": "pianificata",
+   "desc": "Per 4 s cadono fulmini casuali sui nemici entro 300 px dal player."
+  },
+  {
+   "id": "rune_hammer",
+   "name": "Martello runico",
+   "original": "Rune Hammer",
+   "source": "magicraft_steam",
+   "trigger": "cooldown",
+   "trigger_value": "5 s",
+   "status": "pianificata",
+   "desc": "Un martello spettrale colpisce il terreno attorno al player: danno e forte spinta in cerchio. Ignora i bonus di cadenza."
+  },
+  {
+   "id": "volley",
+   "name": "Salva",
+   "original": "Volley",
+   "source": "magicraft_steam",
+   "trigger": "colpi",
+   "trigger_value": "ogni 5 colpi",
+   "status": "pianificata",
+   "desc": "Il quinto colpo parte con il doppio dei proiettili a ventaglio."
+  },
+  {
+   "id": "echo",
+   "name": "Eco",
+   "original": "Echo",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "Ogni colpo viene ripetuto 0,3 s dopo con metà del danno."
+  },
+  {
+   "id": "fireworks",
+   "name": "Fuochi d'artificio",
+   "original": "Dazzling Fireworks",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "A fine corsa i proiettili esplodono in 5 scintille che colpiscono i nemici vicini."
+  },
+  {
+   "id": "butterfly",
+   "name": "Farfalla",
+   "original": "Butterfly",
+   "source": "magicraft_steam",
+   "trigger": "colpi",
+   "trigger_value": "ogni 10 colpi",
+   "status": "pianificata",
+   "desc": "Tre proiettili partono a spirale e si allargano, coprendo un'area a forma di ali."
+  },
+  {
+   "id": "orbit",
+   "name": "Orbita",
+   "original": "Orbit",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "Un proiettile su quattro non parte ma orbita attorno al player per 3 s, colpendo chi si avvicina."
+  },
+  {
+   "id": "track",
+   "name": "Ricerca",
+   "original": "Track",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "I proiettili curvano verso il nemico più vicino. Annulla l'effetto di Orbita."
+  },
+  {
+   "id": "poison",
+   "name": "Veleno",
+   "original": "Poison",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "I colpi avvelenano: 1 danno al secondo per 4 s, cumulabile. Più colpisci spesso, più rende."
+  },
+  {
+   "id": "coreflame",
+   "name": "Fiamma del nucleo",
+   "original": "Coreflame",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "I colpi incendiano: il nemico brucia e il fuoco passa ai nemici a contatto."
+  },
+  {
+   "id": "multi_shot",
+   "name": "Moltiplicatore",
+   "original": "Multi Shot",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "+2 proiettili per colpo, ma −25% danno per proiettile."
+  },
+  {
+   "id": "mimic",
+   "name": "Mimesi",
+   "original": "Mimic",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "Copia l'abilità nello slot precedente con metà dell'efficacia (in Wanderloot l'ordine non conta: copia l'ultima acquisita)."
+  },
+  {
+   "id": "blast_surge",
+   "name": "Onda compressa",
+   "original": "Blast Surge",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "Le aree di effetto sono più piccole del 30% ma fanno +50% di danno."
+  },
+  {
+   "id": "fall",
+   "name": "Caduta",
+   "original": "Fall",
+   "source": "magicraft_steam",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "+40% raggio di tutte le aree di effetto (esplosioni, fulmini, martello)."
+  },
+  {
+   "id": "flying_swords",
+   "name": "Spade volanti",
+   "original": "Bi'an Flying Swords",
+   "source": "magicraft_steam",
+   "trigger": "cooldown",
+   "trigger_value": "10 s",
+   "status": "pianificata",
+   "desc": "Tre spade orbitano attorno al player e poi partono una alla volta verso i nemici più vicini."
+  },
+  {
+   "id": "black_hole",
+   "name": "Buco nero",
+   "original": "Black Hole",
+   "source": "magicraft_shapes",
+   "trigger": "cooldown",
+   "trigger_value": "18 s",
+   "status": "pianificata",
+   "desc": "Apre per 3 s un vortice che attira i nemici e infligge danno continuo."
+  },
+  {
+   "id": "splitter",
+   "name": "Dardo scisso",
+   "original": "Splitter Bolt",
+   "source": "magicraft_shapes",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "All'impatto il proiettile si divide in 2 frammenti con metà del danno."
+  },
+  {
+   "id": "bounce",
+   "name": "Rimbalzo",
+   "original": "Bouncing",
+   "source": "magicraft_shapes",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "I proiettili rimbalzano sui muri fino a 2 volte invece di fermarsi."
+  },
+  {
+   "id": "chain_lightning",
+   "name": "Catena elettrica",
+   "original": "Lightning Chain",
+   "source": "magicraft_shapes",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "Un colpo su cinque salta su altri 3 nemici vicini con danno decrescente."
+  },
+  {
+   "id": "summon_slime",
+   "name": "Slime alleato",
+   "original": "Summon Slime",
+   "source": "magicraft_shapes",
+   "trigger": "cooldown",
+   "trigger_value": "20 s",
+   "status": "pianificata",
+   "desc": "Evoca uno slime amico che insegue i nemici e li colpisce a contatto per 15 s."
+  },
+  {
+   "id": "bone_step",
+   "name": "Passo d'ossa",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "distanza",
+   "trigger_value": "ogni 250 px",
+   "status": "pianificata",
+   "desc": "Lascia a terra una mina d'osso che esplode al passaggio di un nemico."
+  },
+  {
+   "id": "sticky_gel",
+   "name": "Gelatina appiccicosa",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "I nemici colpiti sono rallentati del 30% per 1,5 s. Proiettili verdi."
+  },
+  {
+   "id": "mirror",
+   "name": "Doppio riflesso",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "cooldown",
+   "trigger_value": "14 s",
+   "status": "pianificata",
+   "desc": "Per 4 s un riflesso del player spara nella direzione opposta alla mira."
+  },
+  {
+   "id": "last_breath",
+   "name": "Ultimo respiro",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "Sotto il 30% di vita la cadenza aumenta del 60%."
+  },
+  {
+   "id": "hungry_magnet",
+   "name": "Magnete famelico",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "Ogni 40 punti exp raccolti curano 1 HP."
+  },
+  {
+   "id": "royal_leap",
+   "name": "Salto del Re",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "cooldown",
+   "trigger_value": "16 s",
+   "status": "pianificata",
+   "desc": "Il player salta sul punto mirato come il Re Slime: cerchio d'impatto e anello di gelatina. Si ottiene solo dal Re Slime."
+  },
+  {
+   "id": "black_candle",
+   "name": "Candela nera",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "I nemici uccisi lasciano per 2 s una fiamma che brucia chi ci passa. Tipica dell'Ossario."
+  },
+  {
+   "id": "lantern",
+   "name": "Lanterna",
+   "original": "",
+   "source": "wanderloot",
+   "trigger": "sempre",
+   "trigger_value": "",
+   "status": "pianificata",
+   "desc": "La luce del player si allarga del 40% e i nemici illuminati subiscono +15% di danno."
+  }
+ ],
+ "events_intro": "Durante la run partono eventi a tempo: al centro dello schermo compaiono un titolo grande e un sottotitolo di poche parole con l'obiettivo, e una barra del tempo. Superato l'evento si sceglie un'abilità; fallito, si continua senza premio.",
+ "events": [
+  {
+   "name": "Tempesta di fulmini",
+   "status": "M10",
+   "source": "wanderloot",
+   "desc": "Per 10 s cadono fulmini: un cerchio azzurro segnala dove, 0,8 s prima del colpo. Se non vieni colpito scegli un'abilità della bacchetta. Compare nella Cripta al secondo 35 e 80."
+  },
+  {
+   "name": "Pioggia di gelatina",
+   "status": "pianificato",
+   "source": "wanderloot",
+   "desc": "Gocce di gelatina cadono e lasciano pozze che rallentano: raggiungi 3 bolle luminose prima che scadano 15 s."
+  },
+  {
+   "name": "Cerchio sacro",
+   "status": "pianificato",
+   "source": "wanderloot",
+   "desc": "Un cerchio compare lontano: restaci dentro 8 s complessivi mentre i nemici accorrono."
+  },
+  {
+   "name": "Caccia",
+   "status": "pianificato",
+   "source": "wanderloot",
+   "desc": "Uccidi 30 nemici in 15 s."
+  },
+  {
+   "name": "Eclissi",
+   "status": "pianificato",
+   "source": "wanderloot",
+   "desc": "Buio totale per 12 s: sopravvivi senza perdere più di 1 HP. Tipico dell'Ossario."
+  }
+ ],
+ "equipment_intro": "L'equipaggiamento è permanente (hub) e diventa istanze uniche con rarità e bonus tirati a caso. Nell'inventario un <b>manichino</b> mostra gli slot: cliccando un oggetto va nel suo slot, cliccando un oggetto equipaggiato lo si toglie.",
+ "slots": [
+  "Testa",
+  "Guanti",
+  "Armatura",
+  "Pantaloni",
+  "Stivali",
+  "Anello 1",
+  "Anello 2",
+  "Amuleto",
+  "Bacchetta (arma)"
+ ],
+ "tiers": [
+  [
+   "Comune",
+   "#b8b8b8",
+   "60%",
+   "statistiche base (1 bonus)",
+   "—"
+  ],
+  [
+   "Non comune",
+   "#5bd16a",
+   "25%",
+   "statistiche migliori (2 bonus)",
+   "—"
+  ],
+  [
+   "Raro",
+   "#4a8fd0",
+   "10%",
+   "statistiche alte (3 bonus)",
+   "—"
+  ],
+  [
+   "Super raro",
+   "#b05bd6",
+   "4%",
+   "3 bonus + 1 modificatore di gameplay casuale",
+   "casuale"
+  ],
+  [
+   "Leggendario",
+   "#f0a030",
+   "1%",
+   "4 bonus alti + 1 modificatore forte casuale",
+   "casuale"
+  ],
+  [
+   "Mitico",
+   "#e8433a",
+   "non droppa",
+   "4 bonus massimi + poteri fissi della ricetta",
+   "fisso (ricetta)"
+  ]
+ ],
+ "tiers_note": "Percentuali di drop indicative, tra gli oggetti trovati in run (da bilanciare col bot). Gli oggetti trovati in run sono loot a rischio: si tengono solo estraendo.",
+ "equipment_rules": [
+  "In run si possono trovare oggetti da Comune a Leggendario; il boss ha probabilità migliori.",
+  "Dal fabbro due oggetti identici della stessa rarità si uniscono in uno della rarità successiva, con bonus ritirati (Comune+Comune → Non comune, fino a Leggendario).",
+  "Comune, Non comune e Raro hanno solo statistiche; Super raro e Leggendario aggiungono un modificatore di gameplay casuale (dalla lista delle abilità, come effetto sempre attivo o potenziato).",
+  "I Mitici non si trovano: si craftano da una ricetta che si sblocca dai boss e resta riutilizzabile. La ricetta fissa oggetto e poteri; ogni craft ritira i valori dentro un intervallo (es. Danno da +1 a +10).",
+  "Un Mitico deve costare almeno quanto trovare un Leggendario: materiali composti (ottenuti unendo altri materiali) e grandi quantità di risorse."
+ ],
+ "equipment": [
+  {
+   "name": "Bacchetta di gelatina",
+   "slot": "Bacchetta",
+   "status": "esistente",
+   "desc": "+1 danno. Ricetta: 25 Gelatina."
+  },
+  {
+   "name": "Bacchetta rapida",
+   "slot": "Bacchetta",
+   "status": "esistente",
+   "desc": "+25% cadenza. Ricetta: 40 Gelatina, 4 Nuclei."
+  },
+  {
+   "name": "Bacchetta d'ossa",
+   "slot": "Bacchetta",
+   "status": "esistente",
+   "desc": "+1 danno, +1 perforazione. Ricetta: 40 Frammenti d'osso, 6 Essenze d'ombra."
+  },
+  {
+   "name": "Stivali viscosi",
+   "slot": "Stivali",
+   "status": "esistente",
+   "desc": "+10% velocità. Ricetta: 30 Gelatina."
+  },
+  {
+   "name": "Amuleto del nucleo",
+   "slot": "Amuleto",
+   "status": "esistente",
+   "desc": "+2 HP massimi. Ricetta: 20 Gelatina, 3 Nuclei."
+  },
+  {
+   "name": "Cappuccio del viandante",
+   "slot": "Testa",
+   "status": "pianificato",
+   "desc": "+raggio magnete, +exp."
+  },
+  {
+   "name": "Guanti del fabbro",
+   "slot": "Guanti",
+   "status": "pianificato",
+   "desc": "+cadenza, +spinta."
+  },
+  {
+   "name": "Corazza d'osso",
+   "slot": "Armatura",
+   "status": "pianificato",
+   "desc": "+HP, +invulnerabilità."
+  },
+  {
+   "name": "Brache di cuoio",
+   "slot": "Pantaloni",
+   "status": "pianificato",
+   "desc": "+velocità, +HP."
+  },
+  {
+   "name": "Anello di gelatina",
+   "slot": "Anello",
+   "status": "pianificato",
+   "desc": "+danno o +drop (bonus casuali)."
+  },
+  {
+   "name": "Corona del Re Slime",
+   "slot": "Testa",
+   "status": "pianificato (mitico)",
+   "desc": "Mitico da ricetta del Re Slime: ogni 16 s Salto del Re; bonus tirati a ogni craft."
+  }
+ ],
+ "achievements_intro": "Proposte per il futuro sistema di achievement, legato all'enciclopedia (le voci si sbloccano quando le incontri).",
+ "achievements": [
+  [
+   "Prima estrazione",
+   "Estrai per la prima volta."
+  ],
+  [
+   "Regicida",
+   "Sconfiggi il Re Slime."
+  ],
+  [
+   "Occhio al cielo",
+   "Supera una Tempesta di fulmini senza essere colpito."
+  ],
+  [
+   "Tre slot pieni",
+   "Completa una run con 3 abilità nella bacchetta."
+  ],
+  [
+   "Alchimista",
+   "Porta un oggetto a Leggendario unendo oggetti identici."
+  ],
+  [
+   "Mito",
+   "Crafta il primo oggetto Mitico."
+  ],
+  [
+   "Nelle ossa",
+   "Estrai dall'Ossario 5 volte."
+  ],
+  [
+   "Collezionista",
+   "Scopri tutte le voci dell'enciclopedia di un'arena."
+  ]
+ ]
+}

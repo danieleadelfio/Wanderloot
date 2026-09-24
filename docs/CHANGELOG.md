@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Catalogo di Wanderloot (`docs/catalog/catalog.json` → `Wanderloot_Catalogo.pdf` con `tools/catalog_pdf.py`): abilità con provenienza Magicraft o originale, eventi, equipaggiamento, rarità, achievement. GDD: progetto di slot con manichino, 6 rarità, drop fino a Leggendario, fusione di oggetti identici, mitici da ricette dei boss, enciclopedia in gioco; roadmap M8–M12 (#47).
 - Eventi della run: `RunEventData` e tempi in `ArenaData`, titolo e sottotitolo a schermo con barra del tempo, Tempesta di fulmini (10 s, cerchi azzurri di preavviso) che se superata senza colpi fa scegliere un'abilità; due eventi per run in Cripta e Ossario, suoni dedicati, bot che schiva i fulmini; test (#46).
 - Abilità della bacchetta: 3 slot senza ordine, attivazione a ricarica, ogni N colpi, ogni N metri o sempre attiva, effetti come Resource riusabili, colore dei proiettili per la run; Anello arcano, Fulmine errante, Barriera arcana; scelta con sostituzione a slot pieni, icone con avanzamento nell'HUD; test (#45).
 - Lingue italiano, inglese, francese e spagnolo: testi di scene, dati e codice come chiavi in `data/i18n/strings.csv`, selettore nelle Opzioni; a partita avviata il cambio lingua salva e torna al menu iniziale; lingua salvata nel file impostazioni e riapplicata all'avvio; `LocaleSettings` e test sulle traduzioni (#44).

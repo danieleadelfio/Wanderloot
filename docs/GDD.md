@@ -100,6 +100,36 @@ Sistema riutilizzabile: un boss è una scena con lo script condiviso `Boss` + un
 - **Stato M3 (#12, dati)**: `EquipmentData` (id, nome, descrizione, slot `WEAPON`/`ACCESSORY`, lista di `StatModifier`) in `data/equipment/`, tutti elencati in `EquipmentCatalog` (risolve gli id salvati). `StatModifier` riusa l'enum di `UpgradeData.Stat` (danno, cadenza, velocità proiettili, movimento, HP max). Pezzi iniziali: Bacchetta di gelatina (+1 danno), Bacchetta rapida (+25% cadenza), Amuleto del nucleo (+2 HP), Stivali viscosi (+10% movimento). **Decisione**: lo slot arma modifica la bacchetta base, non la sostituisce (nuovi tipi di arma: v2). L'equipaggiamento grezzo droppato in run resta fuori dall'MVP: i pezzi si ottengono solo col crafting.
 - `EquipmentLoadout` (logica pura, in `MetaProgression.loadout`): pezzi posseduti per id, un pezzo equipaggiato per slot; si può equipaggiare solo ciò che si possiede.
 
+### 6.1 Slot dell'equipaggiamento (progetto M11)
+
+Slot: **Testa, Guanti, Armatura, Pantaloni, Stivali, Anello (×2), Amuleto** e **Bacchetta** (l'arma, che porta anche gli slot delle abilità). Gli oggetti esistenti passano agli slot nuovi: bacchette → Bacchetta, Stivali viscosi → Stivali, Amuleto del nucleo → Amuleto. Nell'inventario dell'hub un **manichino** mostra gli slot con l'icona dell'oggetto indossato: **clic su un oggetto** del baule → va nel suo slot (sostituendo quello presente); **clic su uno slot occupato** → l'oggetto torna nel baule. I due anelli si riempiono in ordine (il secondo clic su un anello va nello slot libero, poi sostituisce il primo). Salvataggio v5 con migrazione degli slot attuali.
+
+### 6.2 Rarità (progetto M11)
+
+| Rarità | Colore | Drop tra gli oggetti trovati | Contenuto |
+|---|---|---|---|
+| Comune | grigio | 60% | statistiche base (1 bonus) |
+| Non comune | verde | 25% | 2 bonus migliori |
+| Raro | blu | 10% | 3 bonus alti |
+| Super raro | viola | 4% | 3 bonus + **1 modificatore di gameplay casuale** |
+| Leggendario | arancio | 1% | 4 bonus alti + **1 modificatore forte casuale** |
+| Mitico | rosso | non si trova | 4 bonus massimi + **poteri fissi della ricetta** |
+
+Percentuali indicative, da bilanciare col bot. Ogni oggetto diventa un'**istanza unica** (id, oggetto base, rarità, bonus tirati) invece di un id di catalogo. I bonus sono tirati dentro intervalli che crescono con la rarità (`StatModifier` con minimo/massimo per rarità). I modificatori di Super raro e Leggendario vengono dalla lista delle abilità (§3.3, catalogo): lo stesso effetto (`AbilityEffect`) sempre attivo o potenziato, così i due sistemi non si duplicano.
+
+### 6.3 Drop in run e fusione (progetto M11)
+
+- In run i nemici possono lasciare oggetti da Comune a **Leggendario** (probabilità bassa per uccisione, più alta per il boss). Sono **loot a rischio** come i materiali: si tengono solo estraendo.
+- **Fusione dal fabbro**: due oggetti **identici** (stesso oggetto base) della **stessa rarità** → uno della rarità successiva, con bonus e modificatore ritirati. Si sale fino a Leggendario; il Mitico non si ottiene per fusione.
+- **Smontaggio** di un oggetto in materiali (quantità crescente con la rarità), per gestire il baule.
+
+### 6.4 Mitici (progetto M12)
+
+- Si craftano solo da una **ricetta mitica**, che si sblocca dai **boss** (drop raro della ricetta; una volta sbloccata resta per sempre e si può usare più volte).
+- La ricetta fissa **oggetto e poteri**; a ogni craft si ritirano i **valori** dentro intervalli ampi (es. Danno da +1 a +10).
+- Costo volutamente alto, **non più facile che trovare un Leggendario**: **materiali composti** (ottenuti dal fabbro unendo altri materiali, es. Gelatina reale = Gelatina + Nuclei + drop del boss) e grandi quantità di risorse di più arene.
+- Esempio: **Corona del Re Slime** (Testa, dal Re Slime): ogni 16 s *Salto del Re* sotto il cursore; bonus a vita e danno tirati a ogni craft.
+
 ## 7. Hub centrale (scope MVP)
 
 Per l'MVP, hub ridotto a:
@@ -211,6 +241,11 @@ Note tecniche:
 **M5 — Post-MVP: controlli e UI** ✅ (2026-09-23): cadenza senza tetto, raccolta a magnete, pausa (ESC/P), inventario di run (I), 8 nuovi potenziamenti, barre HUD e scalatura della finestra.
 **M6 — Grafica vettoriale e rage** ✅ (2026-09-23): addio pixel art, arena e icone vettoriali, rage dei nemici, fase avanzata delle ondate dopo 60s.
 **M7 — Atmosfera, arene, hub esplorabile** ✅ (2026-09-24): luci 2D e Cripta cupa, arene guidate dai dati con scelta dal portale, Ossario con Ghoul e Scheletro arciere, hub come piazza all'aperto.
+**M8 — Salvataggi, menu, boss** ✅ (2026-09-24): salvataggi manuali, menu iniziale con opzioni audio, sistema boss riutilizzabile, Re Slime.
+**M9 — Rifiniture dal playtest** ✅ (2026-09-24): statistiche, inventario nell'hub con I/C, opzioni in pausa, posizione salvata nella piazza, 4 lingue.
+**M10 — Abilità ed eventi** ✅ (2026-09-24): abilità della bacchetta (3 slot), eventi della run (Tempesta di fulmini), catalogo PDF, progetto di rarità/slot/mitici/enciclopedia (§6.1–6.4).
+**M11 — Rarità ed equipaggiamento** (pianificata): istanze uniche con rarità e bonus casuali, 9 slot con manichino, drop in run fino a Leggendario, fusione di due oggetti identici, modificatori da Super raro (§6.1–6.3).
+**M12 — Mitici, enciclopedia, achievement** (pianificata): ricette mitiche dai boss, materiali composti, enciclopedia in gioco, achievement (§6.4, §13).
 
 Fuori da questa roadmap (v2+): più NPC/strutture nell'hub, crafting proceduralmente ricco, più biomi/arene, boss, sistema di rarità loot più profondo, meccaniche di estrazione a rischio variabile.
 
@@ -298,10 +333,17 @@ Lettura: le abilità alzano molto la potenza della run (Anello arcano e Fulmine 
 - **Zoom della camera in arena**: in attesa del valore scelto dal playtest del proprietario (oggi zoom 1). Nell'hub è 0,85.
 - **Difficoltà per giocatori esperti**: il bot estrae nel 90% delle run nella Cripta; da verificare con giocatori umani se serve una curva più dura o se basta l'Ossario come sfida.
 - **Scelta del personaggio**: non prevista finora; percorso tecnico descritto in `docs/GUIDA_CONTENUTI.md` §3.3, da pianificare con una issue.
+- **Sblocco delle ricette mitiche**: deciso che arrivano dai boss; resta da fissare la probabilità di drop della ricetta e se servono più frammenti (M12).
+- **Potenza con le abilità**: con le abilità della bacchetta il bot estrae nel 100% delle run (§10.7); la difficoltà va rivista insieme alle rarità.
 
 ## 12. Processo e versionamento
 
 - Repo GitHub: `danieleadelfio/Wanderloot` (remote `origin`, branch `main`).
 - Task tracking: GitHub Issues + Projects, attivo. Una milestone per ogni M del §10; nessun sistema di task parallelo.
 - Vedi `docs/BEST_PRACTICES.md` per convenzioni di codice, architettura e testing (GdUnit4). Vedi `docs/CHANGELOG.md` per lo storico modifiche. Vedi `docs/GUIDA_CONTENUTI.md` per le procedure operative (nuovi nemici, arene, personaggi, equipaggiamento, suoni).
+- **Catalogo** (`docs/catalog/`): `catalog.json` è la fonte di abilità, eventi, equipaggiamento, rarità e achievement (con la provenienza di ogni idea: Magicraft o originale); `tools/catalog_pdf.py` rigenera `Wanderloot_Catalogo.pdf` (richiede reportlab). Ogni contenuto nuovo va aggiunto al JSON nello stesso commit.
 - **Regola fissa**: ogni modifica a feature/grafica/scope/genere/gameplay loop va riportata in questo documento (sezione pertinente) e come voce in `docs/CHANGELOG.md`, nello stesso commit della modifica.
+
+## 13. Enciclopedia in gioco (progetto M12)
+
+Finestra consultabile dall'hub (e dalla pausa) con schede **Abilità, Equipaggiamento, Nemici e boss, Eventi, Achievement**, costruita dagli stessi dati del gioco (`.tres`) e ordinata come il catalogo (`docs/catalog/`). Una voce si **sblocca quando la incontri** (abilità scelta almeno una volta, oggetto trovato, nemico ucciso, evento visto); le voci non ancora scoperte mostrano solo la sagoma e "???". Le scoperte si salvano in `MetaProgression` (sezione dedicata). Gli **achievement** (proposte nel catalogo: Prima estrazione, Regicida, Occhio al cielo, Alchimista, Mito…) si registrano allo stesso modo e possono sbloccare ricompense (ricette, cosmetici).
