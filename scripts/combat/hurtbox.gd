@@ -7,6 +7,8 @@ signal knocked(impulse: Vector2)
 signal invulnerable_changed(active: bool)
 ## La barriera ha assorbito un colpo (M10).
 signal shield_broken
+## Colpo avvelenato (M11.3).
+signal poisoned(duration: float, interval: float, damage: int)
 
 @export var health: Health
 @export var invulnerability_time: float = 0.0
@@ -42,6 +44,8 @@ func _try_hit(area: Area2D) -> void:
 	health.take_damage(hitbox.damage)
 	hitbox.notify_hit(self)
 	hurt.emit(hitbox.damage)
+	if hitbox.poison_duration > 0.0:
+		poisoned.emit(hitbox.poison_duration, hitbox.poison_interval, hitbox.poison_damage)
 	if hitbox.knockback > 0.0:
 		var direction := hitbox.knockback_direction
 		if direction == Vector2.ZERO:

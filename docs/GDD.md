@@ -85,6 +85,9 @@ A tempi fissi della run (`ArenaData.event_times`) parte un evento scelto tra que
 
 ## 5. Combattimento (ranged)
 
+- **Vita base del player: 10** (da M11.3, #73; prima 5).
+- **Veleno (M11.3, #73)**: alcuni proiettili nemici avvelenano (`WeaponData` gruppo *Veleno*): **1 danno ogni 1,5 s per 4,5 s** (3 danni in tutto). Un nuovo colpo rinnova la durata senza sommare il danno; il player diventa verde finché dura. Logica in `PoisonState` (testata), nodo `Poison` sul player; a inizio run si azzera.
+
 - Player controllato con movimento in 8 direzioni (WASD/stick) + mira libera (mouse o stick destro) — twin-stick style.
 - Arma di partenza singola (es. "arco" o "baccheta magica base"), a distanza, con cooldown/fire-rate.
 - I proiettili sono sprite semplici (piccoli cerchi/frecce), riutilizzabili via object pooling per performance.

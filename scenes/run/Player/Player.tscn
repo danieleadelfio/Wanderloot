@@ -14,6 +14,7 @@
 
 [ext_resource type="Script" path="res://scripts/combat/shield_visual.gd" id="sv"]
 [ext_resource type="Script" path="res://scripts/combat/dash_ring.gd" id="dr"]
+[ext_resource type="Script" path="res://scripts/combat/poison.gd" id="po"]
 [sub_resource type="Gradient" id="light_grad"]
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.4, 1, 1, 1, 0)
@@ -93,6 +94,12 @@ data = ExtResource("6")
 [node name="HitFlash" type="Node" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("7")
 target = NodePath("../Body")
+
+[node name="Poison" type="Node" parent="." node_paths=PackedStringArray("health", "tint_target")]
+unique_name_in_owner = true
+script = ExtResource("po")
+health = NodePath("../Health")
+tint_target = NodePath("../Body")
 
 [node name="Knockback" type="Node" parent="."]
 unique_name_in_owner = true

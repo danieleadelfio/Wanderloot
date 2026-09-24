@@ -36,6 +36,9 @@ func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 	_hitbox.damage = weapon.damage
 	_hitbox.knockback = weapon.knockback
 	_hitbox.knockback_direction = direction
+	_hitbox.poison_duration = weapon.poison_duration
+	_hitbox.poison_interval = weapon.poison_interval
+	_hitbox.poison_damage = weapon.poison_damage
 	_pierce_left = weapon.pierce
 	_body.texture = weapon.projectile_texture if weapon.projectile_texture else _default_texture
 	_body.scale = Vector2.ONE * weapon.projectile_scale if weapon.projectile_scale > 0.0 else _default_scale

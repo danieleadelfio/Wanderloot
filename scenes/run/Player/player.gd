@@ -34,6 +34,8 @@ var _dash_direction: Vector2 = Vector2.ZERO
 @onready var _shield: Node2D = %Shield
 @onready var _body: CanvasItem = %Body
 @onready var _dash_ring: DashRing = %DashRing
+## Veleno (M11.3): applicato dai colpi avvelenati, azzerato a inizio run.
+@onready var poison: Poison = %Poison
 
 
 func _ready() -> void:
@@ -43,6 +45,7 @@ func _ready() -> void:
 	health.died.connect(died.emit)
 	_hurtbox.knocked.connect(_knockback.apply)
 	_hurtbox.shield_broken.connect(set_shield.bind(false))
+	_hurtbox.poisoned.connect(poison.apply)
 	begin_run([])
 
 
@@ -53,6 +56,7 @@ func begin_run(equipment: Array[StatModifier]) -> void:
 	_weapon.data = _base_weapon.duplicate()
 	StatApplier.apply_modifiers(equipment, stats, _weapon.data)
 	health.reset(stats.max_hp)
+	poison.clear()
 	_knockback.reset()
 	set_shield(false)
 	_hurtbox.invulnerability_time = stats.invulnerability_time

@@ -67,7 +67,7 @@ Duplica `ghoul.tres` (in mischia) o `skeleton_archer.tres` (a distanza) e modifi
 
 | Campo | Significato | Riferimenti |
 |---|---|---|
-| `max_hp`, `move_speed`, `contact_damage`, `exp_reward` | statistiche base | player: 220 di velocità, 5 HP |
+| `max_hp`, `move_speed`, `contact_damage`, `exp_reward` | statistiche base | player: 220 di velocità, 10 HP |
 | `contact_knockback`, `knockback_resistance` (0–1), `hit_freeze` | feeling dei colpi | |
 | **Comportamento** `behavior` | `CHASE` (insegue) o `KEEP_DISTANCE` (tiene `preferred_distance`) | |
 | `ranged_weapon` | un `WeaponData` → il nemico spara ogni `attack_interval` s entro `attack_range` | `data/weapons/skeleton_bow.tres` |
@@ -314,7 +314,7 @@ I test in `tests/data/` controllano alcuni vincoli (es. i cerchi dei boss e dei 
 
 | Cosa | File | Campo | Attuale | Effetto |
 |---|---|---|---|---|
-| Vita | `data/player/player_default.tres` | `max_hp` | 5 | HP a inizio run |
+| Vita | `data/player/player_default.tres` | `max_hp` | 10 | HP a inizio run |
 | Velocità | idem | `move_speed` | 220 | px/s; è anche il riferimento per i test dei cerchi |
 | Invulnerabilità dopo un colpo | idem | `invulnerability_time` | 0,8 s | |
 | Raggio del magnete | idem | `pickup_radius` | 90 | px da cui exp e oggetti volano verso il player |

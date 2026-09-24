@@ -17,6 +17,12 @@ extends Resource
 ## Nemici attraversati prima di sparire (upgrade "Perforazione").
 @export var pierce: int = 0
 
+@export_group("Veleno")
+## Secondi di veleno sul bersaglio colpito (0 = nessuno), ogni quanto e quanto danno (M11.3).
+@export var poison_duration: float = 0.0
+@export var poison_interval: float = 1.5
+@export var poison_damage: int = 1
+
 @export_group("Aspetto")
 ## Texture del proiettile; vuota = quella della scena del proiettile (M8, es. proiettili del boss).
 @export var projectile_texture: Texture2D
