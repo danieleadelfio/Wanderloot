@@ -14,6 +14,8 @@
 
 [ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
 
+[ext_resource type="Resource" path="res://data/events/blood_pentagram.tres" id="pentagram"]
+
 [sub_resource type="Resource" id="slime"]
 script = ExtResource("2")
 scene = ExtResource("8")
@@ -30,6 +32,6 @@ wave_data = ExtResource("6")
 extraction_data = ExtResource("7")
 enemies = Array[ExtResource("2")]([SubResource("slime")])
 boss_scene = ExtResource("boss")
-events = Array[Resource]([ExtResource("storm")])
+events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram")])
 event_times = PackedFloat32Array(35, 80)
 consumables = ExtResource("cons")

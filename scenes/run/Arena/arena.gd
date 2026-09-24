@@ -23,8 +23,12 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _exp_remainder: float = 0.0
 
 @onready var _player: Player = %Player
-## Boss della run (null finche' non compare o se l'arena non ne ha). Letto anche dal bot di playtest.
-var boss: Boss = null
+## Boss vivi della run (vuoto finche' non compaiono). Letto anche dal bot di playtest.
+var bosses: Array[Boss] = []
+## Boss in piu' guadagnati dagli eventi (Pentagramma di sangue).
+var _extra_bosses: int = 0
+var _bosses_spawned: bool = false
+var _boss_name: String = ""
 ## Abilita' che gli eventi possono offrire (M10).
 @export var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
 var _choosing_ability: bool = false
@@ -98,6 +102,8 @@ func _ready() -> void:
 	_events.event_progress.connect(_hud.set_event_progress)
 	_events.event_completed.connect(_on_event_completed)
 	_events.event_failed.connect(_on_event_failed)
+	_events.event_activated.connect(_on_event_activated)
+	_events.candle_out.connect(_sfx.play.bind(&"candle_out"))
 	_events.strike_landed.connect(_sfx.play.bind(&"lightning"))
 	_pickup_pool.target = _player
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
@@ -130,9 +136,15 @@ func active_enemies() -> Array[Enemy]:
 ## Zone di pericolo attive (boss + fulmini degli eventi) per il bot di playtest: centro x,y e raggio z.
 func danger_zones() -> Array[Vector3]:
 	var zones := _events.danger_zones()
-	if is_instance_valid(boss) and boss.danger_zone().z > 0.0:
-		zones.append(boss.danger_zone())
+	for alive in bosses:
+		if alive.danger_zone().z > 0.0:
+			zones.append(alive.danger_zone())
 	return zones
+
+
+## Pentagramma in attesa o attivo, per il bot di playtest (z = 0 se non c'e').
+func pentagram_zone() -> Vector3:
+	return _events.pentagram_zone()
 
 
 func _on_event_started(event: RunEventData) -> void:
@@ -140,21 +152,42 @@ func _on_event_started(event: RunEventData) -> void:
 	_sfx.play(&"event_start")
 
 
+## Pentagramma: il player e' nel cerchio. Mostri +bonus subito, tetto dei vivi +bonus, nuovi mostri in rage.
+func _on_event_activated(event: RunEventData) -> void:
+	_hud.set_event_subtitle(tr("EVENT_PENTAGRAM_HOLD"))
+	_wave_spawner.surge_multiplier = 1.0 + event.monster_bonus
+	_wave_spawner.spawn_raged = event.spawn_raged
+	_wave_spawner.burst(maxi(ceili(_wave_spawner.active_count() * event.monster_bonus), 5))
+	_sfx.play(&"boss_warn")
+
+
+func _end_surge() -> void:
+	_wave_spawner.surge_multiplier = 1.0
+	_wave_spawner.spawn_raged = false
+
+
 func _on_event_completed(event: RunEventData) -> void:
-	_hud.end_event(true)
-	offer_abilities(event.reward_choices)
+	_end_surge()
+	_hud.end_event(true, tr("EVENT_PENTAGRAM_REWARD") if event.bonus_bosses > 0 else "")
+	if event.bonus_bosses > 0 and arena.boss_scene != null:
+		_extra_bosses += event.bonus_bosses
+		# Boss gia' comparsi: quello in piu' arriva subito, altrimenti si aggiunge alla comparsa.
+		if _bosses_spawned:
+			_spawn_bosses(event.bonus_bosses)
+	if event.reward_choices > 0:
+		offer_abilities(event.reward_choices)
 
 
-func _on_event_failed(_event: RunEventData) -> void:
-	_hud.end_event(false)
+func _on_event_failed(event: RunEventData) -> void:
+	_end_surge()
+	_hud.end_event(false, tr("EVENT_PENTAGRAM_FAILED_HINT") if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM else "")
 
 
 ## Nemici e boss colpibili dalle abilita' della bacchetta.
 func targetable_enemies() -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	result.assign(active_enemies())
-	if is_instance_valid(boss):
-		result.append(boss)
+	result.append_array(bosses)
 	return result
 
 
@@ -320,23 +353,49 @@ func _open_extraction() -> void:
 		_boss_timer.start(arena.boss_delay)
 
 
-## Il boss compare arena.boss_delay secondi dopo l'apertura dell'estrazione, lontano dal player.
+## I boss compaiono arena.boss_delay secondi dopo l'apertura dell'estrazione, lontano dal player
+## e in punti diversi tra loro (boss_count + quelli guadagnati dagli eventi).
 func _spawn_boss() -> void:
-	if RunManager.state == RunManager.State.ENDED:
+	_bosses_spawned = true
+	_spawn_bosses(arena.boss_count + _extra_bosses)
+
+
+func _spawn_bosses(count: int) -> void:
+	if RunManager.state == RunManager.State.ENDED or count <= 0:
 		return
-	boss = arena.boss_scene.instantiate()
-	boss.target = _player
-	boss.position = SpawnUtils.random_point_away(extraction_spawn_rect, _player.global_position, arena.boss_spawn_min_distance)
-	_enemies.add_child(boss)
-	boss.shot_requested.connect(_enemy_projectile_pool.spawn)
-	boss.shot_requested.connect(_sfx.play.bind(&"enemy_shoot").unbind(3))
-	boss.hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
-	boss.attack_started.connect(_on_boss_attack_started)
-	boss.slammed.connect(_sfx.play.bind(&"boss_slam").unbind(2))
-	boss.health.changed.connect(_hud.set_boss_hp)
-	boss.died.connect(_on_boss_died)
-	_hud.show_boss(boss.data.display_name, boss.health.current, boss.health.max_hp)
+	var taken: Array[Vector2] = []
+	for alive in bosses:
+		taken.append(alive.global_position)
+	var points := SpawnUtils.separated_points(extraction_spawn_rect, _player.global_position, arena.boss_spawn_min_distance, arena.boss_min_separation, count, _rng, taken)
+	for point in points:
+		var new_boss: Boss = arena.boss_scene.instantiate()
+		new_boss.target = _player
+		new_boss.position = point
+		_enemies.add_child(new_boss)
+		new_boss.shot_requested.connect(_enemy_projectile_pool.spawn)
+		new_boss.shot_requested.connect(_sfx.play.bind(&"enemy_shoot").unbind(3))
+		new_boss.hurt.connect(_sfx.play.bind(&"enemy_hit").unbind(1))
+		new_boss.attack_started.connect(_on_boss_attack_started)
+		new_boss.slammed.connect(_sfx.play.bind(&"boss_slam").unbind(2))
+		new_boss.health.changed.connect(_refresh_boss_bar.unbind(2))
+		new_boss.died.connect(_on_boss_died)
+		bosses.append(new_boss)
+		_boss_name = new_boss.data.display_name
+	_refresh_boss_bar()
 	_sfx.play(&"boss_appear")
+
+
+## Barra unica con la vita di tutti i boss vivi (nome "× N" se piu' d'uno).
+func _refresh_boss_bar() -> void:
+	if bosses.is_empty():
+		_hud.hide_boss()
+		return
+	var current := 0
+	var maximum := 0
+	for alive in bosses:
+		current += alive.health.current
+		maximum += alive.health.max_hp
+	_hud.show_boss(tr(_boss_name) + ("  ×%d" % bosses.size() if bosses.size() > 1 else ""), current, maximum)
 
 
 func _on_boss_attack_started(attack: BossAttack) -> void:
@@ -345,8 +404,9 @@ func _on_boss_attack_started(attack: BossAttack) -> void:
 
 
 func _on_boss_died(dead: Boss) -> void:
-	boss_defeated = true
-	_hud.hide_boss()
+	bosses.erase(dead)
+	boss_defeated = bosses.is_empty()
+	_refresh_boss_bar()
 	_sfx.play(&"enemy_die")
 	RunManager.register_kill(0)
 	# Exp in piu' gemme e drop garantiti: si raccolgono come quelli dei nemici (magnete).
@@ -362,7 +422,6 @@ func _on_boss_died(dead: Boss) -> void:
 			if consumable:
 				_pickup_pool.spawn_consumable(dead.global_position, consumable)
 	dead.queue_free()
-	boss = null
 
 
 func _on_extracted() -> void:

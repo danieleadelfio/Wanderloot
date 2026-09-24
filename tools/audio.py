@@ -184,4 +184,7 @@ for i, n in enumerate((72, 76, 79, 84)):
     d = 0.09
     parts.append(np.pad(square(note(n) * t(d), 0.25) * env(int(SR * d), curve=2) * 0.5, (int(SR * 0.055 * i), 0)))
 save("power_up", mix(*parts), 0.5)
+# --- Pentagramma (M10.2): candela che si spegne (soffio breve) ---
+d = 0.25
+save("candle_out", mix(lowpass(noise(d), 0.35) * env(int(SR * d), attack=0.02, curve=2.5), 0.3 * np.sin(2 * np.pi * sweep(900, 400, d)) * env(int(SR * d), curve=4)), 0.35)
 print("audio:", sorted(os.listdir(OUT)))

@@ -64,7 +64,9 @@ Il catalogo completo (abilità di Magicraft riadattate e originali) è in `docs/
 
 A tempi fissi della run (`ArenaData.event_times`) parte un evento scelto tra quelli dell'arena (`RunEventData`, `data/events/`). Al centro in alto compaiono un **titolo grande** e un **sottotitolo di poche parole** con l'obiettivo, e una barra del tempo rimasto. Superato l'evento il gioco si ferma e si sceglie un'abilità della bacchetta tra 3 (§3.3); fallito, compare "Evento fallito" e si continua senza premio.
 
-**Tempesta di fulmini** (primo evento): 10 s; un fulmine ogni 0,55 s, annunciato da un cerchio azzurro di 70 px che si riempie in 0,8 s (35% sulla posizione del player, gli altri entro 260 px). Basta un colpo subito, da qualsiasi fonte, per fallire. Cripta: eventi a 35 s e 80 s; Ossario: 30 s e 75 s (massimo 2 abilità per run prima dell'estrazione). Il catalogo degli eventi pianificati è in `docs/catalog/`.
+**Tempesta di fulmini** (primo evento): 10 s; un fulmine ogni 0,55 s, annunciato da un cerchio azzurro di 70 px che si riempie in 0,8 s (35% sulla posizione del player, gli altri entro 260 px). Basta un colpo subito, da qualsiasi fonte, per fallire. Cripta: eventi a 35 s e 80 s; Ossario: 30 s e 75 s. A ogni tempo si sceglie a caso tra gli eventi dell'arena, senza ripetere l'ultimo.
+
+**Pentagramma di sangue** (M10.2, #53): in un punto a caso (ad almeno 320 px dal player) compare un pentagramma di sangue di 110 px di raggio con **15 candele** attorno; titolo "PENTAGRAMMA DI SANGUE", sottotitolo "Entra nel cerchio di candele" e barra di **20 s**: se il player non entra in tempo l'evento fallisce. Appena entra i mostri aumentano subito del **30%** (almeno 5 in più), il tetto dei vivi sale del 30% e i nuovi mostri compaiono **già in rage**; bisogna restare nel cerchio **15 s** mentre si spegne una candela al secondo. Uscire anche un attimo = fallimento, il pentagramma scompare. Essere colpiti non lo fa fallire. Riuscita: **un boss in più** in questa run (se i boss sono già comparsi arriva subito). Nessuna abilità in premio: la ricompensa è il loot del boss in più. Il catalogo degli eventi pianificati è in `docs/catalog/`.
 
 ## 4. Extraction shooter layer — regole di rischio
 
@@ -90,6 +92,8 @@ A tempi fissi della run (`ArenaData.event_times`) parte un evento scelto tra que
 - **Stato M0**: movimento 8 direzioni (WASD/frecce/stick sinistro), mira col mouse tenendo premuto il tasto sinistro oppure stick destro con auto-fire, fire-rate da `WeaponData`. Implementati hit-flash (nemici e player) e i-frames del player (0.8s, danno da contatto ripetuto finché si resta a contatto). Knockback e hitstop rinviati a M4 (rifinitura).
 
 ### 5.1 Boss (M8, #38)
+
+**Boss multipli (M10.2)**: `ArenaData.boss_count` (1 nella Cripta) più i boss guadagnati col Pentagramma; compaiono sempre in punti diversi, ad almeno `boss_min_separation` (350 px) l'uno dall'altro e da quelli già vivi (`SpawnUtils.separated_points`). Una sola barra HP con la vita totale e "× N".
 
 Sistema riutilizzabile: un boss è una scena con lo script condiviso `Boss` + un `BossData` (HP, velocità, contatto, exp, drop, attacchi, fase 2) + una lista di `BossAttack` (.tres). Tipi di attacco: **raffica a ventaglio** mirata al player, **anello** di proiettili (con rotazione tra le ripetizioni), **salto schiacciante** sulla posizione del player. Ogni attacco ha un **preavviso**: carica sul posto (cerchio attorno al boss, disattivabile per attacco con `show_windup`) per le raffiche, **cerchio rosso a terra** che si riempie per il salto (`Telegraph`): il bersaglio è fissato all'inizio del preavviso, il player ha `telegraph_time + leap_time` per uscirne; a fine riempimento l'area colpisce per un istante. Dopo ogni attacco il boss recupera (si muove piano: finestra per colpirlo). Sotto `phase_two_threshold` HP entra in fase 2: più veloce, attacchi più ravvicinati, sblocca gli attacchi con `min_phase = 2`, colore alterato. Scelta per peso tra gli attacchi della fase. `ArenaData` (gruppo Boss): scena del boss, secondi di ritardo dall'apertura dell'estrazione (default 20), distanza minima di comparsa. Barra HP del boss in alto al centro. I proiettili del boss usano il pool dei proiettili nemici; `WeaponData` ha texture e scala opzionali del proiettile. Alla morte: exp in 6 gemme e drop come i nemici. Il boss non è poolato (uno per run).
 
@@ -332,6 +336,17 @@ Bot aggiornato: schiva i cerchi dei fulmini come quelli del boss e prende la pri
 | Ossario, gelatina + amuleto (5 run) | 8/10 (80%) | 100% | prima delle abilità 60% |
 
 Lettura: le abilità alzano molto la potenza della run (Anello arcano e Fulmine errante raddoppiano di fatto il danno ad area). Il bot schiva quasi perfettamente, un giocatore umano fallirà più eventi. Da rivedere col playtest; il bilanciamento della difficoltà è previsto insieme alle rarità (M11), quando cresce anche la potenza dell'equipaggiamento.
+
+### 10.8 Verifica M10.2 (#53, Pentagramma e boss multipli)
+
+Bot: va nel pentagramma e ci resta schivando solo dentro il cerchio.
+
+| Configurazione | Pentagrammi superati | Eventi totali | Boss sconfitti | Estrazioni | Materiali per run |
+|---|---|---|---|---|---|
+| Cripta, senza equip, estrae appena può (8 run) | 6/6 | 10/13 | — | 75% (morti a 47 e 95 s) | 37 Gelatina, 2,4 Nuclei |
+| Cripta, gelatina + amuleto, resta per i boss (6 run) | 6/6 | 11/12 | 6/6 (spesso 2 Re Slime) | 100% | 169 Gelatina, 17,8 Nuclei |
+
+Lettura: il Pentagramma è un rischio breve (ondata di mostri in rage per 15 s) che il bot regge sempre; il costo vero è il boss in più, che con l'equipaggiamento vale molto loot. Da rivedere col playtest umano: se è troppo facile alzare `monster_bonus` o ridurre `circle_radius`.
 
 ## 11. Open questions
 

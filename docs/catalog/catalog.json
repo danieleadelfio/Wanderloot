@@ -389,6 +389,12 @@
    "desc": "Per 10 s cadono fulmini: un cerchio azzurro segnala dove, 0,8 s prima del colpo. Se non vieni colpito scegli un'abilità della bacchetta. Compare nella Cripta al secondo 35 e 80."
   },
   {
+   "name": "Pentagramma di sangue",
+   "status": "M10.2",
+   "source": "wanderloot",
+   "desc": "Compare in un punto a caso con 15 candele e aspetta 20 s: bisogna entrare e restare nel cerchio 15 s mentre si spegne una candela al secondo. Appena si entra i mostri aumentano del 30% e i nuovi arrivano già in rage. Uscire o non entrare in tempo lo fa fallire; superarlo aggiunge un boss alla run (sempre in un punto diverso dagli altri)."
+  },
+  {
    "name": "Pioggia di gelatina",
    "status": "pianificato",
    "source": "wanderloot",

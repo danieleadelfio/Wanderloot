@@ -153,3 +153,8 @@ HUD_BUFF,%s %ds,%s %ds,%s %d s,%s %d s
 UPG_COUNTER_UP,Contatore,Counter,Compteur,Contador
 UPG_COUNTER_UP_DESC,+1 proiettile allo sparo e alle abilità (non alla barriera); ogni Ventaglio preso dopo vale 1 in più,+1 projectile to your shots and abilities (not the barrier); every Spread taken later gives 1 more,+1 projectile aux tirs et aux capacités (pas à la barrière) ; chaque Éventail pris ensuite en donne 1 de plus,+1 proyectil a los disparos y habilidades (no a la barrera); cada Abanico posterior da 1 más
 STAT_COUNT_BONUS,Contatore,Counter,Compteur,Contador
+EVENT_PENTAGRAM_TITLE,PENTAGRAMMA DI SANGUE,BLOOD PENTAGRAM,PENTAGRAMME DE SANG,PENTAGRAMA DE SANGRE
+EVENT_PENTAGRAM_SUBTITLE,Entra nel cerchio di candele,Step into the circle of candles,Entrez dans le cercle de bougies,Entra en el círculo de velas
+EVENT_PENTAGRAM_HOLD,Resta nel cerchio finché le candele si spengono,Stay in the circle until the candles go out,Restez dans le cercle jusqu'à ce que les bougies s'éteignent,Quédate en el círculo hasta que se apaguen las velas
+EVENT_PENTAGRAM_REWARD,Un boss in più ti aspetta,One more boss awaits you,Un boss de plus vous attend,Te espera un jefe más
+EVENT_PENTAGRAM_FAILED_HINT,Il pentagramma si è dissolto,The pentagram has faded,Le pentagramme s'est dissipé,El pentagrama se ha desvanecido

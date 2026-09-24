@@ -20,8 +20,8 @@ static func drive(a: Node) -> void:
 		if d < nd: nd = d; nearest = e
 		if d < 240.0:
 			flee += (pos - e.global_position).normalized() * pow(1.0 - d / 240.0, 2) * 3.0
-	var boss = a.get("boss")
-	if boss != null and is_instance_valid(boss):
+	var bosses: Array = a.get("bosses") if a.get("bosses") != null else []
+	for boss in bosses:
 		var db: float = pos.distance_to(boss.global_position)
 		if db < nd: nd = db; nearest = boss
 		if db < 300.0:
@@ -43,7 +43,15 @@ static func drive(a: Node) -> void:
 	if absf(pos.y) > 330: center.y = -signf(pos.y) * (absf(pos.y) - 330) / 80.0
 	var goal := Vector2.ZERO
 	var ep = a.get_node("%ExtractionPoint")
-	var hold: bool = fight_boss and not a.get("boss_defeated") and (boss != null or a.get("_boss_timer").time_left > 0.0)
+	var hold: bool = fight_boss and not a.get("boss_defeated") and (not bosses.is_empty() or a.get("_boss_timer").time_left > 0.0)
+	# Pentagramma (M10.2): entra nel cerchio e ci resta, schivando solo dentro il cerchio.
+	var penta: Vector3 = a.pentagram_zone() if a.has_method("pentagram_zone") else Vector3.ZERO
+	if penta.z > 0.0:
+		var pc := Vector2(penta.x, penta.y)
+		var d_in: float = pos.distance_to(pc)
+		goal = pos.direction_to(pc) * (2.5 if d_in > penta.z * 0.5 else 1.2 * d_in / penta.z)
+		flee = flee.limit_length(0.5 if d_in < penta.z * 0.7 else 0.1)
+		hold = true
 	if ep.visible and not hold:
 		var to: Vector2 = ep.global_position - pos
 		# Con zona aperta l'estrazione ha la priorita': fuga limitata (serve nelle arene affollate).

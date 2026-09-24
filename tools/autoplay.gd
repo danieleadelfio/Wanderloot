@@ -16,6 +16,8 @@ var last_core := 0
 var last_loot: Dictionary = {}
 var events_won := 0
 var events_lost := 0
+var pentas_won := 0
+var pentas_lost := 0
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
@@ -54,7 +56,8 @@ func _physics_process(_d: float) -> bool:
 		root.get_node("RunManager").run_ended.connect(_on_end, CONNECT_ONE_SHOT)
 		var ev = a.get_node("%EventDirector")
 		ev.event_completed.connect(func(_e): events_won += 1)
-		ev.event_failed.connect(func(_e): events_lost += 1)
+		ev.event_failed.connect(func(e): events_lost += 1; pentas_lost += 1 if e.kind == 1 else 0)
+		ev.event_completed.connect(func(e): pentas_won += 1 if e.kind == 1 else 0)
 	if ended: return false
 	var rm = root.get_node("RunManager")
 	last_gel = rm.loot.amount_of(&"slime_gel")
@@ -94,7 +97,7 @@ func _report() -> void:
 	for r in results:
 		for id in r.loot: per_material[id] = per_material.get(id, 0) + r.loot[id]
 	for id in per_material: per_material[id] = snappedf(per_material[id] / float(results.size()), 0.1)
-	print("eventi superati: %d/%d" % [events_won, events_won + events_lost])
+	print("eventi superati: %d/%d (pentagrammi %d/%d)" % [events_won, events_won + events_lost, pentas_won, pentas_won + pentas_lost])
 	print("boss sconfitti: %d/%d" % [results.filter(func(r): return r.boss).size(), results.size()])
 	print("loot medio per run (raccolto, anche se poi perso): ", per_material)
 	print("RUNS=%d extract=%d%% avg_t=%.0fs avg_lv=%.1f avg_kills=%.0f gel/run=%.1f core/run=%.2f death_times=%s" % [n, ext * 100 / n, t / n, lv / n, k / n, gel / n, core / n, tdie])

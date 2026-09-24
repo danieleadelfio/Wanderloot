@@ -91,14 +91,18 @@ func show_event(title: String, subtitle: String) -> void:
 	_event_banner.visible = true
 
 
+func set_event_subtitle(text: String) -> void:
+	_event_subtitle.text = text
+
+
 func set_event_progress(ratio: float) -> void:
 	_event_bar.value = ratio
 
 
 ## Esito: il banner mostra il risultato e sparisce dopo poco (subito se si apre la scelta dell'abilita').
-func end_event(success: bool) -> void:
+func end_event(success: bool, detail: String = "") -> void:
 	_event_title.text = tr("EVENT_COMPLETED") if success else tr("EVENT_FAILED")
-	_event_subtitle.text = "" if success else tr("EVENT_FAILED_HINT")
+	_event_subtitle.text = detail if detail != "" or success else tr("EVENT_FAILED_HINT")
 	_event_bar.visible = false
 	if _banner_tween:
 		_banner_tween.kill()

@@ -13,6 +13,9 @@ var _cooldown: float = 0.0
 var _spawns: Array[EnemySpawn] = []
 var _pools: Array[EnemyPool] = []
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+## Ondata (Pentagramma di sangue): tetto dei vivi moltiplicato e nuovi mostri gia' in rage.
+var surge_multiplier: float = 1.0
+var spawn_raged: bool = false
 
 
 func _ready() -> void:
@@ -39,13 +42,24 @@ func _physics_process(delta: float) -> void:
 	if _cooldown > 0.0 or _pools.is_empty():
 		return
 	_cooldown = wave_data.interval_at(_elapsed)
-	var free_slots := wave_data.max_alive_at(_elapsed) - active_count()
-	for i in mini(wave_data.batch_at(_elapsed), free_slots):
+	var free_slots := roundi(wave_data.max_alive_at(_elapsed) * surge_multiplier) - active_count()
+	_spawn_batch(mini(wave_data.batch_at(_elapsed), free_slots))
+
+
+## Mostri subito in piu' (Pentagramma di sangue), oltre al ritmo delle ondate.
+func burst(count: int) -> void:
+	_spawn_batch(count)
+
+
+func _spawn_batch(count: int) -> void:
+	for i in count:
 		var index := EnemySpawn.pick_index(_spawns, _elapsed, _rng)
 		if index < 0:
 			return
 		var spawn_position := SpawnUtils.random_point_away(spawn_rect, _target.global_position, spawn_min_distance)
-		_pools[index].spawn(spawn_position, _target)
+		var enemy := _pools[index].spawn(spawn_position, _target)
+		if enemy and spawn_raged:
+			enemy.force_rage()
 
 
 func start(target: Node2D) -> void:

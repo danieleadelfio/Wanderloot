@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Evento Pentagramma di sangue: compare in un punto a caso con 15 candele e aspetta 20 s; nel cerchio si resiste 15 s (una candela al secondo) con mostri +30% subito e nuovi mostri già in rage; uscire o non entrare fa fallire; riuscita = un boss in più. Boss multipli sempre in punti diversi e distanti, barra HP totale; test (#53).
 - Proiettili, nemici e oggetti a terra non scivolano più quando compaiono: reset dell'interpolazione dopo averli resi visibili; strumento `tools/interpolation_check.gd` (#52).
 - Potenziamento Contatore: +1 ai proiettili dello sparo, dell'Anello arcano e ai fulmini del Fulmine errante (non alla Barriera); ogni Ventaglio preso dopo vale 1 + Contatori (1 → 2 → 3 → 5); riga nelle statistiche; test (#51).
 - Consumabili a terra: Magnete (4 s, attira tutto ciò che è a terra nell'arena), Cuore (+2 HP), Furia (cadenza +50% per 6 s); drop dai nemici (1,2%) e dal boss (2), effetti a tempo nell'HUD, suono dedicato, catalogo aggiornato; test (#50).

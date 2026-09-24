@@ -40,6 +40,10 @@ extends Resource
 ## Secondi dopo l'apertura della zona di estrazione in cui compare il boss.
 @export var boss_delay: float = 20.0
 @export var boss_spawn_min_distance: float = 380.0
+## Boss che compaiono insieme (il Pentagramma di sangue ne aggiunge); sempre in punti diversi.
+@export var boss_count: int = 1
+## Distanza minima tra due boss che compaiono.
+@export var boss_min_separation: float = 350.0
 
 @export_group("Eventi")
 ## Eventi possibili (uno a caso a ogni tempo di event_times).

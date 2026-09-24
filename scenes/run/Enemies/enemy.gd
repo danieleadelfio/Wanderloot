@@ -97,6 +97,12 @@ func _try_ranged_attack(delta: float, to_target: Vector2) -> void:
 	shot_requested.emit(global_position, to_target.normalized(), data.ranged_weapon)
 
 
+## Rage immediata (mostri del Pentagramma di sangue).
+func force_rage() -> void:
+	if not is_raged:
+		_enter_rage()
+
+
 func current_speed() -> float:
 	return data.move_speed * (data.rage_speed_multiplier if is_raged else 1.0)
 
