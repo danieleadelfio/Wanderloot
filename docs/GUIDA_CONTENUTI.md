@@ -296,3 +296,101 @@ Prima di scrivere: apri una issue e dichiara lo scope. Dopo: aggiorna GDD e CHAN
 | Tile pavimento / muro | 384 / 64 px | 192 / 32 px |
 | Arena calpestabile | — | 1600 x 1000 px |
 | Piazza dell'hub | — | circa 1720 x 960 px calpestabili, camera con zoom 0,85 |
+
+---
+
+## 8. Bilanciamento (fine tuning) dall'editor
+
+Tutti i numeri del gioco stanno nei `.tres`: si aprono con doppio clic nel FileSystem di Godot e si cambiano nell'**Inspector** (salvataggio con Ctrl/Cmd+S). Non serve toccare codice. Metodo consigliato:
+
+1. Cambia **un valore alla volta** (o un gruppo coerente).
+2. Misura col bot prima e dopo, stessa configurazione: `godot --headless --fixed-fps 60 --path . -s tools/autoplay.gd -- 10 arena=crypt` (aggiungi `boss` per restare a combattere il boss, gli id di equipaggiamento per provarlo).
+3. Prova a mano: il bot schiva meglio di un giocatore e sceglie sempre i potenziamenti di combattimento.
+4. Annota nel GDD (§10) il valore e il risultato, e aggiungi una riga al CHANGELOG.
+
+I test in `tests/data/` controllano alcuni vincoli (es. i cerchi dei boss e dei fulmini sono sempre evitabili a velocità base): se un test fallisce dopo una modifica, il valore rompe una regola di gioco.
+
+### 8.1 Player e livelli
+
+| Cosa | File | Campo | Attuale | Effetto |
+|---|---|---|---|---|
+| Vita | `data/player/player_default.tres` | `max_hp` | 5 | HP a inizio run |
+| Velocità | idem | `move_speed` | 220 | px/s; è anche il riferimento per i test dei cerchi |
+| Invulnerabilità dopo un colpo | idem | `invulnerability_time` | 0,8 s | |
+| Raggio del magnete | idem | `pickup_radius` | 90 | px da cui exp e oggetti volano verso il player |
+| Bonus exp / drop / Contatore | idem | `exp_multiplier`, `drop_chance_multiplier`, `count_bonus` | 1 / 1 / 0 | valori di partenza (li alzano potenziamenti ed equip) |
+| Danno, cadenza, proiettili | `data/weapons/starter_wand.tres` | `damage`, `fire_rate`, `projectile_count`, `spread_degrees`, `pierce` | 1, 4/s, 1, 10°, 0 | arma di partenza |
+| Gittata | idem | `projectile_speed`, `projectile_lifetime` | 650, 1 s | distanza = velocità × durata |
+| Spinta dei colpi | idem | `knockback` | 320 | |
+| Exp per livello | `data/run/level_curve.tres` | `base_exp`, `growth` | 5, 1,35 | exp per il livello N = base × growth^(N−1): growth più alto = livelli più lenti |
+| Scelte al level-up | `scenes/run/Arena/Arena.tscn` (nodo Arena) | `choices_per_level` | 3 | |
+
+### 8.2 Potenziamenti di level-up
+
+File in `data/upgrades/`, elenco in `upgrade_table.tres`. Per ciascuno: `amount` (quanto aggiunge), `is_multiplier` (vero = moltiplica, es. 1,2 = +20%), `weight` (frequenza di comparsa rispetto agli altri: 0,5 = metà delle volte). Ventaglio, Perforazione e Contatore hanno peso 0,6/0,6/0,5 perché cambiano molto la potenza. Il Contatore potenzia i Ventagli presi dopo (GDD §3.1).
+
+### 8.3 Nemici
+
+File in `data/enemies/` (`enemy_basic` = Slime, `ghoul`, `skeleton_archer`).
+
+| Campo | Effetto | Slime / Ghoul / Arciere |
+|---|---|---|
+| `max_hp` | colpi necessari (con danno 1) | 3 / 2 / 3 |
+| `contact_damage` | danno a contatto | 1 / 1 / 1 |
+| `move_speed` | px/s (il player ne fa 220) | 110 / 175 / 95 |
+| `exp_reward` | exp della gemma | 1 / 1 / 2 |
+| `contact_knockback`, `knockback_resistance` | spinta data / resistenza a quella ricevuta (0–1) | |
+| `rage_after`, `rage_speed_multiplier`, `rage_damage_bonus` | dopo quanti secondi in vita vanno in rage, quanto accelerano, danno in più (0 = niente rage) | 5 s ×1,8 +1 / 4 s ×1,25 +1 / 5 s |
+| `drops` | materiali: `chance` 0–1, `min_amount`/`max_amount` | Slime: Gelatina 20%, Nucleo 1,5% |
+| `ranged_weapon`, `attack_interval`, `attack_range`, `preferred_distance` | solo nemici a distanza (arciere: `data/weapons/skeleton_bow.tres` per danno e velocità del dardo) | |
+
+Regola: un nemico in rage non dovrebbe superare la velocità del player (`move_speed × rage_speed_multiplier` < 220), altrimenti non si può scappare.
+
+### 8.4 Ondate e numero di mostri
+
+File in `data/waves/` (`wave_default` = Cripta, `wave_ossuary`), assegnati in `ArenaData.wave_data`.
+
+| Campo | Effetto | Cripta / Ossario |
+|---|---|---|
+| `start_interval`, `min_interval`, `interval_decay` | secondi tra un gruppo e l'altro: parte da start, scende di decay ogni secondo fino a min | 2 → 0,5 (−0,008/s) / 1,6 → 0,45 (−0,01/s) |
+| `start_batch`, `batch_growth_period` | mostri per gruppo: +1 ogni N secondi | 1, +1 ogni 40 s / ogni 35 s |
+| `max_alive`, `max_alive_growth`, `max_alive_growth_period` | tetto dei mostri vivi: parte bassa e cresce di growth ogni period secondi fino a max | 45 (+5 ogni 30 s) / 55 (+6 ogni 30 s) |
+| `late_start`, `late_interval_multiplier`, `late_max_alive_bonus` | fase avanzata: dal secondo late_start gruppi più ravvicinati e tetto più alto | 60 s, ×0,6, +20 / 50 s, ×0,55, +25 |
+| Tipi di nemici | `data/arenas/<arena>.tres` → `enemies` (`weight` = frequenza, `min_time` = da che secondo) | Ossario: Ghoul 1, Arciere 0,3 dal 15° s |
+
+### 8.5 Estrazione
+
+File in `data/run/` (`extraction_default` = Cripta, `extraction_ossuary`): `appear_after` (secondi prima che compaia la zona: 120), `channel_time` (secondi da restare dentro: 6 / 7), `decay_rate` (quanto scende il progresso se esci), `spawn_min_distance` (distanza minima dal player).
+
+### 8.6 Boss
+
+| Cosa | File | Campo | Attuale |
+|---|---|---|---|
+| Quando compare | `data/arenas/<arena>.tres` | `boss_delay` (s dopo l'apertura dell'estrazione) | 20 |
+| **Quanti boss** | idem | `boss_count` | 1 (+1 per ogni Pentagramma superato) |
+| Distanza tra boss / dal player | idem | `boss_min_separation`, `boss_spawn_min_distance` | 350 / 380 |
+| Vita, velocità, contatto, exp | `data/bosses/king_slime.tres` | `max_hp`, `move_speed`, `contact_damage`, `exp_reward` | 400, 80, 2, 40 |
+| Drop | idem | `drops` | Gelatina 12–18, Nuclei 3–5 (garantiti) |
+| Ritmo | idem | `first_attack_delay`, `chase_time` | 2,5 s, 1,4 s |
+| Fase 2 | idem | `phase_two_threshold`, `phase_two_speed_multiplier`, `phase_two_tempo_multiplier` | 50% HP, ×1,25, ×0,7 |
+| Attacchi | `data/bosses/attacks/king_slime_*.tres` | `weight`, `telegraph_time`, `recovery`, `projectile_count`, `repeats`, `radius`, `damage` | vedi GDD §5.1 |
+| Proiettili del boss | `data/weapons/king_slime_goo.tres` | `damage`, `projectile_speed`, `projectile_lifetime` | 1, 220, 3 s |
+
+### 8.7 Eventi
+
+Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s) ed `events` (quali eventi possono uscire).
+
+| Evento | File | Campi principali | Attuale |
+|---|---|---|---|
+| Tempesta di fulmini | `data/events/lightning_storm.tres` | `duration`, `strike_interval`, `strike_telegraph`, `strike_radius`, `strike_damage`, `aimed_chance`, `reward_choices` | 10 s, 0,55 s, 0,8 s, 70 px, 1, 35%, 3 abilità |
+| Pentagramma di sangue | `data/events/blood_pentagram.tres` | `activation_timeout`, `duration`, `candle_count`, `circle_radius`, `monster_bonus`, `spawn_raged`, `bonus_bosses` | 20 s, 15 s, 15, 110 px, +30%, sì, +1 boss |
+
+### 8.8 Loot, consumabili e abilità
+
+| Cosa | File | Campo | Attuale |
+|---|---|---|---|
+| Drop dei materiali | `data/enemies/*.tres` → `drops` | `chance`, quantità | vedi §8.3 |
+| Consumabili | `data/consumables/consumable_table.tres` | `drop_chance` (per uccisione), `weight` di ciascuno | 1,2%; Magnete 1, Cuore 1, Furia 0,8 |
+| Durata ed effetto | `data/consumables/*.tres` | `duration`, `amount` | Magnete 4 s; Cuore 2 HP; Furia ×1,5 per 6 s |
+| Abilità | `data/abilities/*.tres` | `every_shots`, `every_distance`, `cooldown` e i campi dell'effetto (`count`, `damage_bonus`, `radius`, `range`) | Anello 8 colpi/10 proiettili; Fulmine 350 px/+2 danno; Barriera 12 s |
+| Ricette del fabbro | `data/recipes/*.tres` | `costs` | GDD §7 |

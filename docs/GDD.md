@@ -365,6 +365,7 @@ Lettura: il Pentagramma è un rischio breve (ondata di mostri in rage per 15 s) 
 - Repo GitHub: `danieleadelfio/Wanderloot` (remote `origin`, branch `main`).
 - Task tracking: GitHub Issues + Projects, attivo. Una milestone per ogni M del §10; nessun sistema di task parallelo.
 - Vedi `docs/BEST_PRACTICES.md` per convenzioni di codice, architettura e testing (GdUnit4). Vedi `docs/CHANGELOG.md` per lo storico modifiche. Vedi `docs/GUIDA_CONTENUTI.md` per le procedure operative (nuovi nemici, arene, personaggi, equipaggiamento, suoni).
+- **Bilanciamento**: dove si cambia ogni valore (player, livelli, potenziamenti, nemici, ondate, estrazione, boss e numero di boss, eventi, loot, consumabili, abilità) e come verificarlo col bot: `docs/GUIDA_CONTENUTI.md` §8.
 - **Catalogo** (`docs/catalog/`): `catalog.json` è la fonte di abilità, eventi, equipaggiamento, rarità e achievement (con la provenienza di ogni idea: Magicraft o originale); `tools/catalog_pdf.py` rigenera `Wanderloot_Catalogo.pdf` (richiede reportlab). Ogni contenuto nuovo va aggiunto al JSON nello stesso commit.
 - **Regola fissa**: ogni modifica a feature/grafica/scope/genere/gameplay loop va riportata in questo documento (sezione pertinente) e come voce in `docs/CHANGELOG.md`, nello stesso commit della modifica.
 
