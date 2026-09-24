@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Urlo della regina"
+kind = 7
+weight = 0.6
+telegraph_time = 0.9
+recovery = 0.8

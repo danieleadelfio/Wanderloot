@@ -853,6 +853,43 @@ def build_colossus():
     save("bone_spike", [bone_spike_svg()], 48)
 
 
+# --- Boss dell'Ossario (M11.3) ---
+def ghoul_queen_svg(squash=False):
+    t = ' transform="translate(128 236) scale(1.06 0.93) translate(-128 -236)"' if squash else ""
+    defs = ('<linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9c9a8"/><stop offset="1" stop-color="#4f6048"/></linearGradient>'
+            '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a8"/><stop offset="1" stop-color="#d08a20"/></linearGradient>')
+    O = 'stroke="%s" stroke-width="7" stroke-linejoin="round"' % OL
+    claws = "".join('<path d="M%d 206 L%d 232" stroke="#f2ecd8" stroke-width="5" stroke-linecap="round"/>' % (x, x + d) for x, d in ((30, -8), (40, -2), (50, 4), (206, -4), (216, 2), (226, 8)))
+    body = ('<ellipse cx="128" cy="242" rx="92" ry="12" fill="#000" opacity="0.35"/><g%s>' % t +
+            # corpo curvo
+            '<path d="M70 236 C60 180 76 120 128 112 C180 120 196 180 186 236 Q128 246 70 236 Z" fill="url(#s)" %s/>' % O +
+            '<path d="M96 150 Q128 166 160 150 M92 176 Q128 192 164 176" stroke="#33402e" stroke-width="5" fill="none"/>'
+            # braccia lunghe con artigli
+            '<path d="M80 130 C44 150 30 180 40 206" stroke="url(#s)" stroke-width="22" fill="none" stroke-linecap="round"/>'
+            '<path d="M80 130 C44 150 30 180 40 206" stroke="%s" stroke-width="30" fill="none" stroke-linecap="round" opacity="0.0"/>' % OL +
+            '<path d="M176 130 C212 150 226 180 216 206" stroke="url(#s)" stroke-width="22" fill="none" stroke-linecap="round"/>' + claws +
+            # testa
+            '<path d="M88 96 C84 52 172 52 168 96 C166 124 146 134 128 134 C110 134 90 124 88 96 Z" fill="url(#s)" %s/>' % O +
+            '<path d="M100 88 L120 98 M156 88 L136 98" stroke="%s" stroke-width="6" stroke-linecap="round"/>' % OL +
+            '<ellipse cx="112" cy="104" rx="8" ry="7" fill="#ff3a2a"/><ellipse cx="144" cy="104" rx="8" ry="7" fill="#ff3a2a"/>'
+            '<path d="M106 120 L112 128 L118 120 L124 128 L130 120 L136 128 L142 120 L148 128 L150 120" stroke="#f2ecd8" stroke-width="3" fill="none"/>'
+            # corona
+            '<path d="M92 66 L98 30 L114 52 L128 22 L142 52 L158 30 L164 66 Z" fill="url(#g)" stroke="#6a4210" stroke-width="6" stroke-linejoin="round"/>'
+            '<circle cx="128" cy="52" r="7" fill="#7b2cbf" stroke="#6a4210" stroke-width="3"/>'
+            '</g>')
+    return svg(body, defs)
+
+def claw_svg():
+    return svg('<path d="M10 52 Q34 32 58 8" stroke="#ffe0d0" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.9"/>'
+               '<path d="M4 40 Q26 24 46 4" stroke="#ff6a4a" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>'
+               '<path d="M18 60 Q42 42 62 20" stroke="#ff6a4a" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>', "", 64)
+
+
+def build_ghoul_queen():
+    save("ghoul_queen", [ghoul_queen_svg(), ghoul_queen_svg(squash=True)], 256)
+    save("ghoul_claw", [claw_svg()], 48)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="Resource" path="res://data/weapons/ghoul_claw.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Graffio"
+kind = 0
+weight = 1.2
+telegraph_time = 0.45
+recovery = 0.6
+projectile_count = 7
+spread_degrees = 110.0
+repeats = 2
+repeat_interval = 0.25
+projectile = ExtResource("2")

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BossAttack" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/Ghoul/Ghoul.tscn" id="3"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Richiamo del branco"
+kind = 3
+weight = 0.9
+min_phase = 2
+telegraph_time = 0.9
+recovery = 1.0
+summon_count = 5
+summon_scene = ExtResource("3")

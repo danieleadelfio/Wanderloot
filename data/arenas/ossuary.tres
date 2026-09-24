@@ -21,6 +21,8 @@
 
 [ext_resource type="PackedScene" path="res://scenes/run/Bosses/BoneColossus/BoneColossus.tscn" id="boss_BoneColossus"]
 
+[ext_resource type="PackedScene" path="res://scenes/run/Bosses/GhoulQueen/GhoulQueen.tscn" id="boss_GhoulQueen"]
+
 [ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
 
 [ext_resource type="Resource" path="res://data/run/overtime_default.tres" id="overtime"]
@@ -68,6 +70,6 @@ unlock_extractions = 3
 events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow")])
 event_times = PackedFloat32Array(30, 75)
 consumables = ExtResource("cons")
-boss_scenes = Array[PackedScene]([ExtResource("boss_Necromancer"), ExtResource("boss_BoneColossus")])
+boss_scenes = Array[PackedScene]([ExtResource("boss_Necromancer"), ExtResource("boss_BoneColossus"), ExtResource("boss_GhoulQueen")])
 item_drops = ExtResource("items")
 overtime = ExtResource("overtime")

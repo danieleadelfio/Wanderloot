@@ -34,7 +34,7 @@ func test_area_attacks_are_escapable() -> void:
 
 func test_ossuary_summons_use_ossuary_enemies() -> void:
 	var ossuary: ArenaData = load("res://data/arenas/ossuary.tres")
-	assert_int(ossuary.boss_scenes.size()).is_greater_equal(1)
+	assert_int(ossuary.boss_scenes.size()).is_equal(3)
 	var scenes: Array = ossuary.enemies.map(func(s: EnemySpawn) -> PackedScene: return s.scene)
 	for scene in ossuary.boss_scenes:
 		var boss: Boss = scene.instantiate()
