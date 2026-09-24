@@ -26,9 +26,9 @@ script = ExtResource("1")
 stats = ExtResource("2")
 
 [node name="Body" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("s1")
-offset = Vector2(0, -1)
+offset = Vector2(0, -8)
 hframes = 2
 script = ExtResource("s2")
 frame_time = 0.4

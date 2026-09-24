@@ -11,10 +11,10 @@
 [ext_resource type="Script" path="res://scripts/combat/frame_cycler.gd" id="s2"]
 
 [sub_resource type="CircleShape2D" id="body_shape"]
-radius = 11.0
+radius = 16.0
 
 [sub_resource type="CircleShape2D" id="box_shape"]
-radius = 12.0
+radius = 17.0
 
 [node name="EnemyBasic" type="CharacterBody2D"]
 collision_layer = 4
@@ -24,9 +24,9 @@ script = ExtResource("1")
 data = ExtResource("2")
 
 [node name="Body" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("s1")
-offset = Vector2(0, -2)
+offset = Vector2(0, -7)
 hframes = 2
 script = ExtResource("s2")
 frame_time = 0.3

@@ -60,6 +60,12 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - Riferimenti tra componenti della stessa scena: `@export` con NodePath impostato nella scena, o `%UniqueName`.
 - **Composition root**: la scena di livello (es. `Arena`) collega i segnali tra entità, pool, HUD e autoload. Le entità non si conoscono tra loro.
 
+## 3.1.0 Grafica (da M6)
+
+- Sorgente = SVG in `assets/art/`, generato da `tools/sprites.py` (o modificato in Inkscape); il PNG in `assets/sprites/` è un derivato, esportato a 2x della dimensione a schermo. In scena gli Sprite2D stanno a scala 0.5.
+- Filtro texture lineare (default di progetto). Non mischiare più pixel art e vettoriale nella stessa scena.
+- Stessa dimensione a schermo = stesso fattore: se un asset cambia dimensione si rigenera il PNG, non si cambia la scala del nodo.
+
 ## 3.1.1 Audio
 
 - Suoni sempre per id tramite `SfxPlayer.play(&"id")` e `SoundBank` (`.tres`): mai `AudioStreamPlayer` sparsi con stream hardcoded. Un id nuovo va aggiunto al banco e alla lista del test `tests/audio/test_sound_bank.gd`.

@@ -29,7 +29,7 @@ func _ready() -> void:
 
 
 func spawn_exp(at: Vector2, amount: int) -> void:
-	_spawn(at, Pickup.Kind.EXP, amount, null, exp_texture, 2.0)
+	_spawn(at, Pickup.Kind.EXP, amount, null, exp_texture, 0.5)
 
 
 func spawn_material(at: Vector2, material: MaterialData, amount: int) -> void:

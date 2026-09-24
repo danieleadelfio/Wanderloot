@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Grafica vettoriale (addio pixel art) per player, slime, proiettile e gemma di exp: sorgenti SVG, PNG a 2x, filtro lineare, collider dello slime riallineati; `tools/sprites.py` diventa il generatore vettoriale (#27).
 - 8 nuovi potenziamenti di level-up (13 totali, senza tetto): Persistenza, Magnete, Saggezza, Fortuna, Guardia, Impatto, Ventaglio (multishot) e Perforazione; test dedicati (#25).
 - Raccolta a magnete: gemme di exp e materiali restano a terra, entro un raggio volano verso il player e vengono assorbiti con due suoni distinti; `PickupPool` testato. Exp e loot contano solo se raccolti (#22).
 - Inventario di run con il tasto I: pannello sulla metà destra, gioco in pausa, equipaggiamento indossato e loot a rischio della run (#24).
