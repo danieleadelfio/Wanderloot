@@ -64,7 +64,8 @@ func refresh(loadout: EquipmentLoadout) -> void:
 		child.queue_free()
 	for slot: int in SLOT_POSITIONS:
 		var item := loadout.equipped_in(slot)
-		var button := _item_button(item, tr(SLOT_NAMES[slot]))
+		var button: Button = ItemTile.for_item(item) if item else _item_button(null, tr(SLOT_NAMES[slot]))
+		button.size = button.custom_minimum_size
 		button.position = SLOT_POSITIONS[slot]
 		if item:
 			button.pressed.connect(unequip_requested.emit.bind(slot))
@@ -76,9 +77,14 @@ func refresh(loadout: EquipmentLoadout) -> void:
 	var stash := StashSort.sorted(loadout.stash_items(), sort_mode)
 	_empty_hint.visible = stash.is_empty()
 	for item in stash:
-		var button := _item_button(item, "")
-		button.pressed.connect(equip_requested.emit.bind(item.uid))
-		_grid.add_child(button)
+		var tile := ItemTile.for_item(item)
+		tile.focus_mode = Control.FOCUS_ALL
+		for slot in EquipmentLoadout.slots_for(item.slot()):
+			var worn := loadout.equipped_in(slot)
+			if worn:
+				tile.compare.append(worn)
+		tile.pressed.connect(equip_requested.emit.bind(item.uid))
+		_grid.add_child(tile)
 
 
 func _item_button(item: ItemInstance, empty_label: String) -> Button:

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Tooltip degli oggetti: confronto con il pezzo equipaggiato nello stesso slot e intervallo possibile di ogni bonus per la rarità (#70).
 - Baule: ordinamento per arrivo, rarità o categoria (slot) nell'inventario dell'hub; `StashSort`, test (#69).
 - Fine run: bottone Guarda il loot con griglia di icone e tooltip di oggetti e materiali, estratti o persi; Torna all'hub sempre disponibile (#68).
 - Overtime: ogni ondata di boss ha tanti boss quanti quelli della run (arena + Pentagrammi superati, anche in overtime), non uno solo; test (#66).

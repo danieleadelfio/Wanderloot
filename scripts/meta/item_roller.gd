@@ -39,6 +39,11 @@ static func _modifier(source: AffixRoll, quality: float) -> StatModifier:
 	var modifier := StatModifier.new()
 	modifier.stat = source.stat
 	modifier.is_multiplier = source.is_multiplier
-	var value := lerpf(source.min_value, source.max_value, clampf(quality, 0.0, 1.0))
-	modifier.amount = maxf(roundf(value), 1.0) if INTEGER_STATS.has(int(source.stat)) and not source.is_multiplier else snappedf(value, 0.001)
+	modifier.amount = value_at(source, quality)
 	return modifier
+
+
+## Valore del bonus a una qualita' 0..1 (interi arrotondati, almeno 1). Usato anche per mostrare gli intervalli.
+static func value_at(source: AffixRoll, quality: float) -> float:
+	var value := lerpf(source.min_value, source.max_value, clampf(quality, 0.0, 1.0))
+	return maxf(roundf(value), 1.0) if INTEGER_STATS.has(int(source.stat)) and not source.is_multiplier else snappedf(value, 0.001)

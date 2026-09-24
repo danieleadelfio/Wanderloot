@@ -126,6 +126,8 @@ Slot: **Testa, Guanti, Armatura, Pantaloni, Stivali, Anello (×2), Amuleto** e *
 
 Il baule degli oggetti si ordina con tre bottoni sopra la griglia: **Arrivo** (dal più vecchio), **Rarità** (dal più raro, poi per slot) e **Categoria** (per slot: bacchetta, amuleto, testa, guanti, armatura, pantaloni, stivali, anelli; poi dal più raro). La scelta resta finché il gioco è aperto (`StashSort`, M11.3 #69).
 
+**Tooltip (M11.3, #70)**: passando su un oggetto del baule compare accanto il pezzo equipaggiato nello stesso slot (per gli anelli entrambi), per il confronto. Ogni bonus tirato mostra l'**intervallo possibile per la sua rarità**, es. *+13% Vel. proiettile (+10% – +20%)*: si vede subito se il tiro è vicino al minimo o al massimo. L'intervallo è quello del bonus in `affix_table.tres` letto tra `roll_min` e `roll_max` della rarità.
+
 ### 6.2 Rarità (M11, #57)
 
 | Rarità | Colore | Drop tra gli oggetti trovati | Contenuto |

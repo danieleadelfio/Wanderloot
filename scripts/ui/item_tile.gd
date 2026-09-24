@@ -8,6 +8,8 @@ const SIZE: Vector2 = Vector2(64, 64)
 var item: ItemInstance
 var item_material: MaterialData
 var amount: int = 0
+## Oggetti equipaggiati nello stesso slot, mostrati accanto nel tooltip (M11.3, #70).
+var compare: Array[ItemInstance] = []
 
 
 static func for_item(value: ItemInstance) -> ItemTile:
@@ -37,6 +39,12 @@ static func for_material(value: MaterialData, count: int) -> ItemTile:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tile.add_child(label)
 	return tile
+
+
+func _make_custom_tooltip(_for_text: String) -> Object:
+	if item == null:
+		return null
+	return ItemText.compare_panel(item, compare)
 
 
 func _style(border: Color) -> void:
