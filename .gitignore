@@ -22,3 +22,8 @@ reports/
 
 # Python
 __pycache__/
+
+# build esportate (troppo grandi per git; distribuire come GitHub Release)
+*.exe
+*.app/
+*.pck
