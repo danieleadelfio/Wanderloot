@@ -5,7 +5,11 @@
 [sub_resource type="CircleShape2D" id="zone_shape"]
 radius = 48.0
 
+[sub_resource type="CanvasItemMaterial" id="unshaded"]
+light_mode = 1
+
 [node name="ExtractionPoint" type="Area2D"]
+material = SubResource("unshaded")
 collision_layer = 0
 collision_mask = 2
 monitorable = false

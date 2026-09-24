@@ -6,6 +6,9 @@ extends Node2D
 @export var choices_per_level: int = 3
 @export var extraction_data: ExtractionData
 @export var extraction_spawn_rect: Rect2 = Rect2(-700.0, -400.0, 1400.0, 800.0)
+@export var torch_scene: PackedScene = preload("res://scenes/run/Torch/Torch.tscn")
+## Torce per lato lungo (muro alto e basso), distribuite in modo uniforme.
+@export var torches_per_wall: int = 5
 
 var _pending_level_ups: int = 0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -17,6 +20,7 @@ var _exp_remainder: float = 0.0
 @onready var _wave_spawner: WaveSpawner = %WaveSpawner
 @onready var _projectile_pool: ProjectilePool = %ProjectilePool
 @onready var _pickup_pool: PickupPool = %PickupPool
+@onready var _torches: Node2D = %Torches
 @onready var _hud: Hud = %HUD
 @onready var _level_up_choice: LevelUpChoice = %LevelUpChoice
 @onready var _extraction_point: ExtractionPoint = %ExtractionPoint
@@ -33,6 +37,7 @@ var _exp_remainder: float = 0.0
 func _ready() -> void:
 	get_tree().paused = false
 	_rng.randomize()
+	_place_torches(torches_per_wall)
 	RunManager.state_changed.connect(_on_run_state_changed)
 	RunManager.run_ended.connect(_on_run_ended)
 	RunManager.leveled_up.connect(_on_leveled_up)
@@ -63,6 +68,16 @@ func _ready() -> void:
 	_extraction_timer.timeout.connect(_open_extraction)
 	_extraction_timer.start(extraction_data.appear_after)
 	RunManager.start_run(level_curve)
+
+
+## Torce sui muri alto e basso (i muri visibili sono a y = ±484).
+func _place_torches(per_wall: int) -> void:
+	for i in per_wall:
+		var x := lerpf(-640.0, 640.0, (i + 0.5) / per_wall)
+		for y in [-462.0, 462.0]:
+			var torch := torch_scene.instantiate() as Node2D
+			torch.position = Vector2(x, y)
+			_torches.add_child(torch)
 
 
 func _process(_delta: float) -> void:

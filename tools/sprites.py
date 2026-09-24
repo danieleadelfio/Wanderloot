@@ -183,7 +183,23 @@ def build_arena_and_icons():
     save("icon_slime_boots", [icon_boots()], 64)
 
 
+
+# --- Luci e oggetti di scena (M7) -------------------------------------------------------------------
+def torch_svg():
+    defs = ('<radialGradient id="f" cx="0.5" cy="0.65" r="0.6"><stop offset="0" stop-color="#fffbe8"/><stop offset="0.45" stop-color="#ffcd75"/>'
+            '<stop offset="1" stop-color="#ef7d57" stop-opacity="0"/></radialGradient>')
+    return svg('<rect x="26" y="34" width="12" height="26" rx="3" fill="#5a3218" stroke="#141a2c" stroke-width="3"/>'
+               '<rect x="20" y="30" width="24" height="8" rx="3" fill="#6b7690" stroke="#141a2c" stroke-width="3"/>'
+               '<path d="M32 4 C40 14 44 20 42 28 C40 34 24 34 22 28 C20 20 26 14 32 4 Z" fill="url(#f)"/>'
+               '<path d="M32 14 C36 20 37 24 35 28 C33 31 30 31 29 28 C28 24 29 20 32 14 Z" fill="#fff6d8" opacity="0.9"/>', defs, 64)
+
+
+def build_props():
+    save("torch", [torch_svg()], 64)
+
+
 if __name__ == "__main__":
     build_characters()
     build_arena_and_icons()
+    build_props()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

@@ -17,6 +17,8 @@ var _base_weapon: WeaponData
 @onready var _hurtbox: Hurtbox = %Hurtbox
 @onready var _weapon: Weapon = %Weapon
 @onready var _knockback: Knockback = %Knockback
+## Luce portata dal player (atmosfera cupa, M7): colore/energia/raggio li imposta la scena che lo ospita.
+@onready var light: PointLight2D = %Light
 
 
 func _ready() -> void:

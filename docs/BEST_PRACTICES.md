@@ -66,6 +66,8 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - Filtro texture lineare (default di progetto). Non mischiare più pixel art e vettoriale nella stessa scena.
 - Stessa dimensione a schermo = stesso fattore: se un asset cambia dimensione si rigenera il PNG, non si cambia la scala del nodo.
 
+- Luci (M7): solo poche `PointLight2D` (player, torce, candele); mai una luce per proiettile o per nemico. Ciò che deve restare leggibile al buio (proiettili, pickup, UI di gioco) usa un `CanvasItemMaterial` con `light_mode = unshaded`.
+
 ## 3.1.1 Audio
 
 - Suoni sempre per id tramite `SfxPlayer.play(&"id")` e `SoundBank` (`.tres`): mai `AudioStreamPlayer` sparsi con stream hardcoded. Un id nuovo va aggiunto al banco e alla lista del test `tests/audio/test_sound_bank.gd`.
