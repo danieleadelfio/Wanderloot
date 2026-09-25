@@ -113,6 +113,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Barriera arcana: un colpo assorbito lasciava il player apparentemente invulnerabile per secondi se un nemico restava a contatto (mai più `area_entered`); ora l'assorbimento avvia gli stessi i-frame/rescan del danno reale (#86).
 - Inventario di run: il corpo del pannello (manichino + loot) scorre se non entra nello schermo, non viene più tagliato (#86).
 - Finestra Inventario/Statistiche dell'hub: stessa dimensione su entrambe le schede, `use_hidden_tabs_for_min_size` (#86).
 - Texture del pavimento dell'hub: griglia fissa 48px, niente più cucitura visibile ogni 384px (#86).

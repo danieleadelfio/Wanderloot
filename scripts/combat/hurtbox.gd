@@ -43,6 +43,15 @@ func _try_hit(area: Area2D) -> void:
 		# (livello > 1) assorbe piu' colpi prima di rompersi, non solo il primo.
 		if shield_charges == 0:
 			shield_broken.emit()
+		# Stessi i-frame del danno reale (M12, #86): senza, un nemico gia' a contatto quando la
+		# barriera assorbe il colpo non fa mai piu' scattare area_entered (resta "sovrapposto" senza
+		# ri-entrare) e quindi non colpisce mai piu' finche' non si allontana e rientra - sembra
+		# invulnerabilita' prolungata quando piu' nemici circondano il player alla rottura. Il timeout
+		# di _on_iframe_timeout() ri-scansiona le aree sovrapposte e riprende il normale ciclo di danno.
+		if invulnerability_time > 0.0:
+			_invulnerable = true
+			invulnerable_changed.emit(true)
+			_iframe_timer.start(invulnerability_time)
 		return
 	health.take_damage(hitbox.damage)
 	hitbox.notify_hit(self)
