@@ -195,9 +195,6 @@ func _get_aim_direction() -> Vector2:
 	return Vector2.ZERO
 
 
-## Direzione verso il mouse, con l'asse orizzontale invertito se attiva l'opzione mancini (M12, #86).
+## Direzione verso il mouse (l'opzione mancini, M12 #86, scambia i tasti di sparo/scatto: non tocca la mira).
 func _mouse_aim_direction() -> Vector2:
-	var dir := global_position.direction_to(get_global_mouse_position())
-	if InputSettings.mouse_invert_x:
-		dir.x = -dir.x
-	return dir
+	return global_position.direction_to(get_global_mouse_position())

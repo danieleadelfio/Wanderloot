@@ -9,7 +9,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Barriera arcana: ricarica ridotta da Lv5 (12 → 10 → 8 → 6 s), dato per-livello riusabile su qualunque abilità (`WandAbility.cooldown_by_level`); test (#86, #18).
 - Ascensione: scheda nel fabbro per alzare il cap sbloccato di un'abilità (default Lv1) fino al tetto assoluto Lv8, a costo di materiali crescente; senza sblocco l'eccedenza di livello diventa un Bag of Resources invece di andare persa o superare il cap; test (#86, #16, #20).
 - Reroll delle scelte al level-up: una scelta in meno a ogni reroll (minimo 1), max 5 per run (#86).
-- Opzione Inverti mouse (mancini): inverte l'asse orizzontale della mira col mouse, in Opzioni (#86).
+- Opzione per mancini: scambia i tasti mouse di sparo/scatto (non l'asse di mira, correzione dopo feedback), checkbox evidenziata con contorno bianco, in Opzioni (#86).
 - Indicatore di rage: due fulmini rossi sopra la testa del nemico, colore e texture non cambiano più (#86).
 - Risorse possedute sempre visibili nel pannello del fabbro, sopra le schede (#86).
 - Salvataggio automatico a ogni fine run (successo o game over), con scritta "Salvataggio automatico..." nell'hub (#86).

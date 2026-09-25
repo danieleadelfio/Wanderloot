@@ -27,7 +27,7 @@ var _delete_armed: bool = false
 @onready var _back_button: Button = %BackButton
 @onready var _language_option: OptionButton = %LanguageOption
 @onready var _language_hint: Label = %LanguageHint
-@onready var _mouse_invert_check: CheckBox = %MouseInvertCheck
+@onready var _left_handed_check: CheckBox = %LeftHandedCheck
 
 
 func _ready() -> void:
@@ -45,8 +45,8 @@ func _ready() -> void:
 	_language_hint.visible = show_language_hint
 	_delete_button.visible = allow_delete
 	_delete_separator.visible = allow_delete
-	_mouse_invert_check.button_pressed = InputSettings.mouse_invert_x
-	_mouse_invert_check.toggled.connect(_on_mouse_invert_toggled)
+	_left_handed_check.button_pressed = InputSettings.left_handed
+	_left_handed_check.toggled.connect(_on_left_handed_toggled)
 	_update_value_labels()
 
 
@@ -88,8 +88,8 @@ func _on_language_item_selected(index: int) -> void:
 		language_selected.emit(locale)
 
 
-## Inversione dell'asse orizzontale della mira col mouse (M12, #86), pensata per mancini. Applicata subito.
-func _on_mouse_invert_toggled(pressed: bool) -> void:
+## Scambia i tasti mouse di sparo/scatto per chi usa il mouse con la sinistra (M12, #86). Applicata subito.
+func _on_left_handed_toggled(pressed: bool) -> void:
 	InputSettings.save(pressed)
 
 
