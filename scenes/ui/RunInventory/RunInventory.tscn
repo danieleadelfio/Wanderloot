@@ -7,14 +7,21 @@
 [ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m2"]
 [ext_resource type="PackedScene" path="res://scenes/hub/LoadoutPanel/LoadoutPanel.tscn" id="lp"]
 
-[sub_resource type="StyleBoxFlat" id="panel_bg"]
-bg_color = Color(0.1, 0.11, 0.17, 0.96)
-content_margin_left = 28.0
-content_margin_top = 20.0
-content_margin_right = 28.0
-content_margin_bottom = 20.0
-
-[sub_resource type="StyleBoxEmpty" id="empty"]
+[sub_resource type="StyleBoxFlat" id="window_style"]
+content_margin_left = 20.0
+content_margin_top = 18.0
+content_margin_right = 20.0
+content_margin_bottom = 14.0
+bg_color = Color(0.1, 0.09, 0.14, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.62, 0.36, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="RunInventory" type="CanvasLayer"]
 process_mode = 3
@@ -22,100 +29,95 @@ layer = 14
 script = ExtResource("1")
 materials = Array[Resource]([ExtResource("2"), ExtResource("3"), ExtResource("m1"), ExtResource("m2")])
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Window" type="CenterContainer" parent="."]
 unique_name_in_owner = true
-anchors_preset = 11
-anchor_left = 0.5
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("panel_bg")
 
-[node name="VBox" type="VBoxContainer" parent="Panel"]
+[node name="Panel" type="PanelContainer" parent="Window"]
+custom_minimum_size = Vector2(1080, 0)
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_styles/panel = SubResource("window_style")
 
-[node name="Title" type="Label" parent="Panel/VBox"]
+[node name="VBox" type="VBoxContainer" parent="Window/Panel"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "TAB_INVENTORY"
+theme_override_constants/separation = 16
 
-[node name="Hint" type="Label" parent="Panel/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.5)
-theme_override_font_sizes/font_size = 13
-text = "RUNINV_HINT"
-
-[node name="BodyScroll" type="ScrollContainer" parent="Panel/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 2
-
-[node name="Body" type="HBoxContainer" parent="Panel/VBox/BodyScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 20
-
-[node name="Mannequin" parent="Panel/VBox/BodyScroll/Body" instance=ExtResource("lp")]
+[node name="Tabs" type="TabContainer" parent="Window/Panel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_styles/panel = SubResource("empty")
-show_stash = false
-read_only = true
-figure_scale = 0.5
+size_flags_vertical = 3
+current_tab = 0
+use_hidden_tabs_for_min_size = true
 
-[node name="Stats" type="VBoxContainer" parent="Panel/VBox/BodyScroll/Body"]
+[node name="Inventario" type="HBoxContainer" parent="Window/Panel/VBox/Tabs"]
 layout_mode = 2
-theme_override_constants/separation = 8
+size_flags_vertical = 3
+theme_override_constants/separation = 24
 
-[node name="StatsTitle" type="Label" parent="Panel/VBox/BodyScroll/Body/Stats"]
+[node name="LootPanel" type="PanelContainer" parent="Window/Panel/VBox/Tabs/Inventario"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "TAB_STATS"
 
-[node name="StatsGrid" type="GridContainer" parent="Panel/VBox/BodyScroll/Body/Stats"]
-unique_name_in_owner = true
+[node name="VBox" type="VBoxContainer" parent="Window/Panel/VBox/Tabs/Inventario/LootPanel"]
 layout_mode = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 2
-columns = 4
 
-[node name="Loot" type="VBoxContainer" parent="Panel/VBox/BodyScroll/Body"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="LootTitle" type="Label" parent="Panel/VBox/BodyScroll/Body/Loot"]
+[node name="LootTitle" type="Label" parent="Window/Panel/VBox/Tabs/Inventario/LootPanel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "RUNINV_TITLE"
 
-[node name="Scroll" type="ScrollContainer" parent="Panel/VBox/BodyScroll/Body/Loot"]
+[node name="LootEmpty" type="Label" parent="Window/Panel/VBox/Tabs/Inventario/LootPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.35, 1)
+text = "RUNINV_NOTHING"
+
+[node name="LootScroll" type="ScrollContainer" parent="Window/Panel/VBox/Tabs/Inventario/LootPanel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="LootGrid" type="GridContainer" parent="Panel/VBox/BodyScroll/Body/Loot/Scroll"]
+[node name="LootGrid" type="GridContainer" parent="Window/Panel/VBox/Tabs/Inventario/LootPanel/VBox/LootScroll"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
-columns = 6
+columns = 3
 
-[node name="LootEmpty" type="Label" parent="Panel/VBox/BodyScroll/Body/Loot"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.5)
-text = "RUNINV_NOTHING"
-
-[node name="LootTotal" type="Label" parent="Panel/VBox/BodyScroll/Body/Loot"]
+[node name="LootTotal" type="Label" parent="Window/Panel/VBox/Tabs/Inventario/LootPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 0.8)
 theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
+
+[node name="Mannequin" parent="Window/Panel/VBox/Tabs/Inventario" instance=ExtResource("lp")]
+unique_name_in_owner = true
+layout_mode = 2
+show_stash = false
+read_only = true
+
+[node name="Statistiche" type="MarginContainer" parent="Window/Panel/VBox/Tabs"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 24
+
+[node name="StatsGrid" type="GridContainer" parent="Window/Panel/VBox/Tabs/Statistiche"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="CloseHint" type="Label" parent="Window/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.8)
+text = "RUNINV_HINT"
+horizontal_alignment = 1
