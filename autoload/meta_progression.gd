@@ -169,9 +169,12 @@ func make_item(base: EquipmentData, tier: int = 0) -> ItemInstance:
 	return ItemRoller.roll(base, tier, rarity_table, affix_table, ability_catalog, _rng)
 
 
-## Fusione dal fabbro (regole in Forge): ritorna il nuovo oggetto o null.
-func fuse(first_uid: int, second_uid: int) -> ItemInstance:
-	var fused := Forge.fuse(loadout.get_item(first_uid), loadout.get_item(second_uid), loadout, rarity_table, make_item)
+## Fusione dal fabbro (regole in Forge, ora Forge.FUSION_COUNT oggetti): ritorna il nuovo oggetto o null.
+func fuse(uids: Array[int]) -> ItemInstance:
+	var items: Array[ItemInstance] = []
+	for uid in uids:
+		items.append(loadout.get_item(uid))
+	var fused := Forge.fuse(items, loadout, rarity_table, make_item)
 	if fused:
 		fused.is_new = true
 		_mark_changed()

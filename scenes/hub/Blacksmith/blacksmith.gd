@@ -5,7 +5,7 @@ extends PanelContainer
 
 signal craft_requested(recipe: RecipeData)
 ## Fonde i due oggetti (uid) indicati.
-signal fuse_requested(first_uid: int, second_uid: int)
+signal fuse_requested(uids: Array[int])
 signal salvage_requested(uid: int)
 ## Ascensione (M12, #86, #16): alza il cap sbloccato dell'abilita' indicata (id).
 signal ascend_requested(id: StringName)
@@ -72,12 +72,15 @@ func _refresh_fusion(loadout: EquipmentLoadout) -> void:
 	var groups := Forge.fusion_groups(loadout, RARITIES)
 	for group in groups:
 		var first: ItemInstance = group[0]
-		var second: ItemInstance = group[1]
 		var next := RARITIES.tier(first.rarity + 1)
 		var text := "%s  ×%d  →  %s" % [ItemText.title(first), group.size(), tr(next.display_name)]
-		var button := _button(first.base.icon, text, ItemText.tooltip(first) + "\n\n" + ItemText.tooltip(second))
+		var tooltip := ItemText.tooltip(first)
+		var uids: Array[int] = []
+		for item: ItemInstance in group:
+			uids.append(item.uid)
+		var button := _button(first.base.icon, text, tooltip)
 		button.add_theme_color_override("font_color", next.color)
-		button.pressed.connect(fuse_requested.emit.bind(first.uid, second.uid))
+		button.pressed.connect(fuse_requested.emit.bind(uids))
 		_fusion_list.add_child(button)
 	if groups.is_empty():
 		_fusion_list.add_child(_hint(tr("BLACKSMITH_FUSION_EMPTY")))

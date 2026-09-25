@@ -7,6 +7,8 @@ extends RefCounted
 const SALVAGE_SHARE: float = 0.25
 ## Resa base per oggetti senza ricetta.
 const FALLBACK_SALVAGE: Dictionary[StringName, int] = {&"slime_gel": 3}
+## Oggetti identici richiesti per una fusione (M12, #86): prima erano 2, ora 3.
+const FUSION_COUNT: int = 3
 
 
 ## Rarita' massima ottenibile per fusione: la penultima (Leggendario); il Mitico solo da ricetta.
@@ -14,8 +16,8 @@ static func max_fusion_tier(rarities: RarityTable) -> int:
 	return rarities.highest() - 1
 
 
-## Coppie fondibili: oggetti del baule con stesso oggetto base e stessa rarita', almeno due, sotto il massimo.
-## Ogni gruppo e' ordinato per uid (si fondono i primi due).
+## Terzetti fondibili: oggetti del baule con stesso oggetto base e stessa rarita', almeno FUSION_COUNT,
+## sotto il massimo. Ogni gruppo e' ordinato per uid e tagliato ai primi FUSION_COUNT.
 static func fusion_groups(loadout: EquipmentLoadout, rarities: RarityTable) -> Array[Array]:
 	var by_key: Dictionary[String, Array] = {}
 	for item in loadout.stash_items():
@@ -28,30 +30,42 @@ static func fusion_groups(loadout: EquipmentLoadout, rarities: RarityTable) -> A
 	var groups: Array[Array] = []
 	for key in by_key:
 		var group: Array = by_key[key]
-		if group.size() >= 2:
+		if group.size() >= FUSION_COUNT:
 			group.sort_custom(func(a: ItemInstance, b: ItemInstance) -> bool: return a.uid < b.uid)
-			groups.append(group)
+			groups.append(group.slice(0, FUSION_COUNT))
 	return groups
 
 
-static func can_fuse(a: ItemInstance, b: ItemInstance, loadout: EquipmentLoadout, rarities: RarityTable) -> bool:
-	if a == null or b == null or a == b or not a.same_kind(b):
+## items: esattamente FUSION_COUNT oggetti identici (stesso oggetto base, stessa rarita'), distinti,
+## nel baule (non equipaggiati), sotto il tetto di fusione.
+static func can_fuse(items: Array[ItemInstance], loadout: EquipmentLoadout, rarities: RarityTable) -> bool:
+	if items.size() != FUSION_COUNT:
 		return false
-	if loadout.get_item(a.uid) != a or loadout.get_item(b.uid) != b:
+	var first: ItemInstance = items[0]
+	if first == null:
 		return false
-	if loadout.is_equipped(a.uid) or loadout.is_equipped(b.uid):
-		return false
-	return a.rarity < max_fusion_tier(rarities)
+	var seen_uids: Dictionary[int, bool] = {}
+	for item in items:
+		if item == null or not item.same_kind(first):
+			return false
+		if seen_uids.has(item.uid):
+			return false
+		seen_uids[item.uid] = true
+		if loadout.get_item(item.uid) != item or loadout.is_equipped(item.uid):
+			return false
+	return first.rarity < max_fusion_tier(rarities)
 
 
-## Due oggetti identici della stessa rarita' -> uno della rarita' successiva, bonus e abilita' ritirati.
-## make_item(base, tier) crea l'oggetto (MetaProgression.make_item). Ritorna il nuovo oggetto o null.
-static func fuse(a: ItemInstance, b: ItemInstance, loadout: EquipmentLoadout, rarities: RarityTable, make_item: Callable) -> ItemInstance:
-	if not can_fuse(a, b, loadout, rarities):
+## FUSION_COUNT oggetti identici della stessa rarita' -> uno della rarita' successiva, bonus e abilita'
+## ritirati. make_item(base, tier) crea l'oggetto (MetaProgression.make_item). Ritorna il nuovo oggetto o null.
+static func fuse(items: Array[ItemInstance], loadout: EquipmentLoadout, rarities: RarityTable, make_item: Callable) -> ItemInstance:
+	if not can_fuse(items, loadout, rarities):
 		return null
-	loadout.remove(a.uid)
-	loadout.remove(b.uid)
-	return loadout.add(make_item.call(a.base, a.rarity + 1))
+	var base := items[0].base
+	var rarity := items[0].rarity
+	for item in items:
+		loadout.remove(item.uid)
+	return loadout.add(make_item.call(base, rarity + 1))
 
 
 ## Materiali restituiti smontando: quota del costo della ricetta x moltiplicatore della rarita' (minimo 1).

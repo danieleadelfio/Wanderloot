@@ -245,8 +245,8 @@ func _on_craft_requested(recipe: RecipeData) -> void:
 		_sfx.play(&"craft")
 
 
-func _on_fuse_requested(first_uid: int, second_uid: int) -> void:
-	if MetaProgression.fuse(first_uid, second_uid):
+func _on_fuse_requested(uids: Array[int]) -> void:
+	if MetaProgression.fuse(uids):
 		_sfx.play(&"craft")
 
 
