@@ -28,6 +28,11 @@ var _dash_left: float = 0.0
 var _dash_direction: Vector2 = Vector2.ZERO
 ## Attrazione esterna di questo tick (buco nero), sommata al movimento e poi azzerata.
 var _pull: Vector2 = Vector2.ZERO
+## Tetto alla somma di piu' fonti di attrazione (M12, #86): con piu' Sfere del vuoto vicine la spinta
+## si sommava senza limite e diventava impossibile scappare. MAX_PULL_FORCE = la spinta massima di una
+## singola sfera a distanza zero (pull_strength di void_orb.tres); con una sola fonte il tetto non tocca
+## mai nulla, con piu' fonti impedisce che si sommino oltre quel livello.
+const MAX_PULL_FORCE: float = 100.0
 
 @onready var health: Health = %Health
 @onready var _hurtbox: Hurtbox = %Hurtbox
@@ -149,9 +154,10 @@ func _refresh_dash_ring() -> void:
 	_dash_ring.show_charges(dash_charges.charges, dash_charges.max_charges, dash_charges.partial())
 
 
-## Attrazione di un buco nero per questo tick (px/s), si somma tra piu' sorgenti.
+## Attrazione di un buco nero per questo tick (px/s): piu' sorgenti si sommano ma il totale non supera
+## mai MAX_PULL_FORCE, altrimenti tante Sfere del vuoto vicine renderebbero la fuga impossibile.
 func add_pull(force: Vector2) -> void:
-	_pull += force
+	_pull = (_pull + force).limit_length(MAX_PULL_FORCE)
 
 
 ## Arma della run (copia con equip e potenziamenti applicati): letta per le statistiche a schermo.
