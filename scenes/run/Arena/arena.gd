@@ -121,6 +121,9 @@ func _ready() -> void:
 	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player, _equip_modifiers)
+	if not MetaProgression.has_seen_tutorial(&"first_run"):
+		_hud.announce(tr("TUTORIAL_RUN_TITLE"), tr("TUTORIAL_RUN_BODY"), 7.0)
+		MetaProgression.mark_tutorial_seen(&"first_run")
 	_create_enemy_pools()
 	_wand.setup(_player, _projectile_pool, targetable_enemies)
 	_wand.changed.connect(func(abilities: Array[WandAbility]) -> void: _hud.set_abilities(abilities, _wand.levels))
@@ -190,6 +193,9 @@ func pentagram_zone() -> Vector3:
 func _on_event_started(event: RunEventData) -> void:
 	_hud.show_event(event.title, event.subtitle)
 	_sfx.play(&"event_start")
+	if not MetaProgression.has_seen_tutorial(&"first_event"):
+		_hud.announce(tr("TUTORIAL_EVENT_TITLE"), tr("TUTORIAL_EVENT_BODY"), 6.0)
+		MetaProgression.mark_tutorial_seen(&"first_event")
 
 
 ## Pentagramma: il player e' nel cerchio. Mostri +bonus subito, tetto dei vivi +bonus, nuovi mostri in rage.
@@ -511,7 +517,14 @@ func _on_overtime_level(level: int) -> void:
 	_wave_spawner.overtime_rate = overtime.spawn_rate_multiplier()
 	_hud.set_overtime(level)
 	var subtitle := tr("OVERTIME_SUB") % [overtime.bosses_per_wave, snappedf(overtime.boss_interval(), 0.1), snappedf(overtime.speed_multiplier(), 0.1), roundi((overtime.hp_multiplier() - 1.0) * 100.0)]
-	_hud.announce(tr("OVERTIME_TITLE") % level, subtitle, 3.5)
+	# Prima volta in assoluto (M12, #86): spiegazione estesa al posto del solo annuncio breve, dura di
+	# piu' per lasciare tempo di leggere. Dal secondo livello in poi (o nelle run successive) resta il
+	# solo annuncio normale.
+	if level == 1 and not MetaProgression.has_seen_tutorial(&"first_overtime"):
+		_hud.announce(tr("TUTORIAL_OVERTIME_TITLE"), tr("TUTORIAL_OVERTIME_BODY") + "\n\n" + subtitle, 8.0)
+		MetaProgression.mark_tutorial_seen(&"first_overtime")
+	else:
+		_hud.announce(tr("OVERTIME_TITLE") % level, subtitle, 3.5)
 	_sfx.play(&"overtime_start")
 
 

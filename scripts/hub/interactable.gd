@@ -7,6 +7,10 @@ extends Area2D
 @export var prompt: String = ""
 ## Finestra dell'hub aperta dall'interazione.
 @export var window: Control
+## Chiavi di traduzione del tutorial della piazza (M12, #86): tutorial_title vuoto = la camera non si
+## ferma qui (es. lampioni o altri Interactable futuri senza tutorial dedicato).
+@export var tutorial_title: String = ""
+@export var tutorial_description: String = ""
 
 var player_in_range: bool = false
 

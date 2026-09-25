@@ -28,6 +28,7 @@ var _autosave_tween: Tween
 @onready var _hub_stats_grid: GridContainer = %HubStatsGrid
 @onready var _player: Player = %Player
 @onready var _autosave_toast: Label = %AutosaveToast
+@onready var _hub_tutorial: HubTutorial = %HubTutorial
 
 
 func _ready() -> void:
@@ -67,6 +68,8 @@ func _ready() -> void:
 	_restore_saved_position()
 	if MetaProgression.take_pending_autosave_notice():
 		_show_autosave_toast()
+	if not MetaProgression.has_seen_tutorial(&"hub_intro"):
+		_start_hub_tutorial()
 
 
 ## Dopo Carica/Continua il player riappare dove aveva salvato nella piazza.
@@ -77,6 +80,37 @@ func _restore_saved_position() -> void:
 	player.global_position = MetaProgression.take_pending_hub_position()
 	player.reset_physics_interpolation()
 	(player.get_node("Camera2D") as Camera2D).reset_smoothing()
+
+
+## Tour guidato della piazza alla prima nuova partita (M12, #86): la camera si stacca dal player e
+## visita fabbro, baule e portale con una breve descrizione, skippabile in ogni momento.
+func _start_hub_tutorial() -> void:
+	var player: Node2D = %Player
+	var camera := player.get_node("Camera2D") as Camera2D
+	var steps: Array[Dictionary] = [{
+		"title": tr("TUTORIAL_HUB_TITLE"),
+		"body": tr("TUTORIAL_HUB_INTRO_BODY"),
+		"position": player.global_position,
+	}]
+	for spot in _interactables:
+		if spot.tutorial_title == "":
+			continue
+		steps.append({
+			"title": tr(spot.tutorial_title),
+			"body": tr(spot.tutorial_description),
+			"position": spot.global_position,
+		})
+	steps.append({
+		"title": tr("TUTORIAL_HUB_END_TITLE"),
+		"body": tr("TUTORIAL_HUB_END_BODY"),
+		"position": player.global_position,
+	})
+	_hub_tutorial.finished.connect(_on_hub_tutorial_finished, CONNECT_ONE_SHOT)
+	_hub_tutorial.start(camera, player, steps)
+
+
+func _on_hub_tutorial_finished() -> void:
+	MetaProgression.mark_tutorial_seen(&"hub_intro")
 
 
 ## Toast "Salvataggio automatico..." a fine run, successo o game over (M12, #86).

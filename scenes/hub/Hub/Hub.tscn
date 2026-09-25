@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/icon_bag.png" id="icon_bag"]
 [ext_resource type="Texture2D" path="res://assets/sprites/icon_stats.png" id="icon_stats"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu/PauseMenu.tscn" id="pause_menu"]
+[ext_resource type="PackedScene" path="res://scenes/hub/HubTutorial/HubTutorial.tscn" id="hub_tutorial"]
 [ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="m_core"]
 [ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m_bone"]
@@ -500,6 +501,8 @@ monitorable = false
 script = ExtResource("interactable")
 prompt = "PROMPT_FORGE"
 window = NodePath("../../UI/BlacksmithWindow")
+tutorial_title = "TUTORIAL_FORGE_TITLE"
+tutorial_description = "TUTORIAL_FORGE_DESC"
 
 [node name="Shape" type="CollisionShape2D" parent="World/ForgeSpot"]
 shape = SubResource("spot_big")
@@ -512,6 +515,8 @@ monitorable = false
 script = ExtResource("interactable")
 prompt = "PROMPT_CHEST"
 window = NodePath("../../UI/InventoryWindow")
+tutorial_title = "TUTORIAL_CHEST_TITLE"
+tutorial_description = "TUTORIAL_CHEST_DESC"
 
 [node name="Shape" type="CollisionShape2D" parent="World/ChestSpot"]
 shape = SubResource("spot_small")
@@ -524,6 +529,8 @@ monitorable = false
 script = ExtResource("interactable")
 prompt = "PROMPT_PORTAL"
 window = NodePath("../../UI/PortalWindow")
+tutorial_title = "TUTORIAL_PORTAL_TITLE"
+tutorial_description = "TUTORIAL_PORTAL_DESC"
 
 [node name="Shape" type="CollisionShape2D" parent="World/PortalSpot"]
 shape = SubResource("spot_big")
@@ -770,4 +777,7 @@ text = "UI_CLOSE_HINT"
 horizontal_alignment = 1
 
 [node name="PauseMenu" parent="." instance=ExtResource("pause_menu")]
+unique_name_in_owner = true
+
+[node name="HubTutorial" parent="." instance=ExtResource("hub_tutorial")]
 unique_name_in_owner = true
