@@ -42,7 +42,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
   - **Stato M3 (#14)**: pannello "Equipaggiamento" nell'hub (un pezzo per slot, click per equipaggiare/togliere). A inizio run `Arena` passa `MetaProgression.equipped_items()` a `Player.begin_run()`, che riparte da copie fresche di `PlayerStats`/`WeaponData` e applica i modificatori (`StatApplier`, stessa logica degli upgrade di run, che si sommano sopra). L'equip è letto una sola volta: cambiarlo vale dalla run successiva.
 - Sblocco progressivo di strutture/NPC nell'hub in base a milestone (es. numero di estrazioni riuscite, materiali totali raccolti, boss sconfitti).
 
-- **Stato M10.1 (#51, Contatore)**: nuovo potenziamento (14 totali). **+1 a ogni conteggio di proiettili**: sparo (1 → 2), Anello arcano (10 → 11), Fulmine errante (1 → 2 fulmini su nemici diversi); nessun effetto sulla Barriera arcana. In combo con **Ventaglio**: ogni Ventaglio preso *dopo* aggiunge 1 + Contatori presi (1 → Ventaglio 2 → Contatore 3 → Ventaglio 5 → Contatore 6 → Ventaglio 9). Riga Contatore nelle statistiche.
+- **Stato M10.1 (#51, Contatore)**: nuovo potenziamento (14 totali). **+1 a ogni conteggio di proiettili**: sparo (1 → 2), Anello arcano (6 → 7), Fulmine errante (1 → 2 fulmini su nemici diversi); nessun effetto sulla Barriera arcana. In combo con **Ventaglio**: ogni Ventaglio preso *dopo* aggiunge 1 + Contatori presi (1 → Ventaglio 2 → Contatore 3 → Ventaglio 5 → Contatore 6 → Ventaglio 9). Riga Contatore nelle statistiche.
 
 ### 3.2b Consumabili (M10.1, #50)
 
@@ -54,7 +54,7 @@ La bacchetta ha **3 slot** di abilità per la run; l'ordine non conta e le abili
 
 | Abilità | Attivazione | Effetto | Colore |
 |---|---|---|---|
-| Anello arcano | ogni 8 colpi | anello di 10 proiettili con l'arma della run | viola |
+| Anello arcano | ogni 12 colpi | anello di 6 proiettili con l'arma della run | viola |
 | Fulmine errante | ogni 350 px percorsi | fulmine sul nemico più vicino entro 420 px: danno dell'arma + 2 in raggio 70 | azzurro |
 | Barriera arcana | ricarica 12 s dopo la rottura (10/8/6 s da Lv5, M12 #86 #18) | annulla N colpi = livello (attiva subito alla presa); alla rottura, onda d'urto che respinge i nemici entro 100px (M12 #86) | oro |
 

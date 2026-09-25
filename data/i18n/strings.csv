@@ -132,7 +132,7 @@ ARENA_OSSUARY,Ossario,Ossuary,Ossuaire,Osario
 ARENA_OSSUARY_DESC,"Catacombe dimenticate, quasi al buio. Ghoul affamati e scheletri arcieri. Qui si trova l'Essenza d'ombra.","Forgotten catacombs, almost pitch dark. Hungry ghouls and skeleton archers. Shadow essence is found here.","Catacombes oubliées, presque dans le noir. Goules affamées et squelettes archers. C'est ici qu'on trouve l'Essence d'ombre.","Catacumbas olvidadas, casi a oscuras. Ghouls hambrientos y esqueletos arqueros. Aquí se encuentra la Esencia de sombra."
 BOSS_KING_SLIME,Re Slime,King Slime,Roi Slime,Rey Slime
 ABILITY_ARCANE_RING,Anello arcano,Arcane ring,Anneau arcanique,Anillo arcano
-ABILITY_ARCANE_RING_DESC,Libera un anello di 10 proiettili attorno a te.,Releases a ring of 10 projectiles around you.,Libère un anneau de 10 projectiles autour de vous.,Libera un anillo de 10 proyectiles a tu alrededor.
+ABILITY_ARCANE_RING_DESC,Libera un anello di 6 proiettili attorno a te.,Releases a ring of 6 projectiles around you.,Libère un anneau de 6 projectiles autour de vous.,Libera un anillo de 6 proyectiles a tu alrededor.
 ABILITY_WANDERING_LIGHTNING,Fulmine errante,Wandering lightning,Foudre errante,Rayo errante
 ABILITY_WANDERING_LIGHTNING_DESC,Un fulmine colpisce il nemico più vicino e chi gli sta attorno.,Lightning strikes the nearest enemy and those around it.,La foudre frappe l'ennemi le plus proche et ceux qui l'entourent.,Un rayo golpea al enemigo más cercano y a los que lo rodean.
 ABILITY_ARCANE_BARRIER,Barriera arcana,Arcane barrier,Barrière arcanique,Barrera arcana

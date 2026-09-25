@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Anello arcano: la descrizione diceva "anello di 10 proiettili" ma il valore configurato è 6 (`arcane_ring.tres`); corretta la descrizione (4 lingue) e la tabella del GDD, nessun cambio di bilanciamento, solo il testo era sbagliato (#86).
 - Stillicidio dal soffitto: rimosso l'effetto a gocce cadenti (`GPUParticles2D`/`Drip`) sia in Cripta che in Ossario, l'effetto non convinceva; resta solo la pozzanghera/pozza a crescita animata (`growing_stain.gdshader`) (#86).
 - Statistiche in tempo reale (HUD di run e scheda Statistiche): il bonus del Contatore (count_bonus, base 0) mostrava doppio segno "++N" invece di "+N", perche' `StatSheet._bonus_text` anteponeva un altro "+" al valore gia' formattato col segno; ora il segno duplicato viene rimosso (#86).
 - Inventario di run: il pannello a meta' schermo con manichino/statistiche/loot affiancati si sovrapponeva; ridisegnato come pagina a tutto schermo identica alla finestra Inventario dell'hub (Panel 1080px, tab Inventario/Statistiche), col loot di run al posto del baule (#86).
