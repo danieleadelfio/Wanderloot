@@ -12,6 +12,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="Figure" type="Control" parent="HBox"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 440)
 layout_mode = 2
 

@@ -66,6 +66,7 @@ size_flags_vertical = 0
 theme_override_styles/panel = SubResource("empty")
 show_stash = false
 read_only = true
+figure_scale = 0.5
 
 [node name="Loot" type="VBoxContainer" parent="Panel/VBox/BodyScroll/Body"]
 layout_mode = 2

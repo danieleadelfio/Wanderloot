@@ -44,6 +44,9 @@ const SLOT_NAMES: Dictionary[int, String] = {
 ## Falso nell'inventario di run: solo il manichino (niente baule), in sola lettura (M11.4, #80).
 @export var show_stash: bool = true
 @export var read_only: bool = false
+## Ridimensiona il manichino (area 360x440 e slot compresi): usato dall'inventario di run (M12, #86)
+## per non eccedere lo schermo quando il baule e' nascosto e resta solo il manichino.
+@export var figure_scale: float = 1.0
 
 ## Ordine del baule scelto: resta finche' il gioco e' aperto.
 static var sort_mode: StashSort.Mode = StashSort.Mode.ARRIVAL
@@ -53,6 +56,7 @@ var _filter_keys: Array[String] = []
 
 var _loadout: EquipmentLoadout
 
+@onready var _figure: Control = %Figure
 @onready var _slots: Control = %Slots
 @onready var _grid: GridContainer = %ItemGrid
 @onready var _empty_hint: Label = %EmptyHint
@@ -60,6 +64,9 @@ var _loadout: EquipmentLoadout
 
 func _ready() -> void:
 	%Stash.visible = show_stash
+	if figure_scale != 1.0:
+		_figure.custom_minimum_size *= figure_scale
+		_figure.scale = Vector2(figure_scale, figure_scale)
 	_fill_filter()
 	var group := ButtonGroup.new()
 	for pair in [[%SortArrival, StashSort.Mode.ARRIVAL], [%SortRarity, StashSort.Mode.RARITY], [%SortCategory, StashSort.Mode.CATEGORY]]:
