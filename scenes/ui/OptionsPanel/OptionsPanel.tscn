@@ -93,6 +93,19 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(260, 36)
 layout_mode = 2
 
+[node name="MouseInvertRow" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="VBox/MouseInvertRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "OPT_MOUSE_INVERT"
+
+[node name="MouseInvertCheck" type="CheckBox" parent="VBox/MouseInvertRow"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="LanguageHint" type="Label" parent="VBox"]
 unique_name_in_owner = true
 visible = false

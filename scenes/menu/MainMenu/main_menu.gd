@@ -17,6 +17,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	LocaleSettings.load_and_apply()
 	AudioSettings.load_and_apply()
+	InputSettings.load_and_apply()
 	_continue_button.pressed.connect(_on_continue_pressed)
 	_new_game_button.pressed.connect(_on_new_game_pressed)
 	_options_button.pressed.connect(_show_options.bind(true))

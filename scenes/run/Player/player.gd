@@ -99,7 +99,7 @@ func try_dash(direction: Vector2) -> bool:
 	if not dash_mode or is_dashing() or not dash_charges.try_use():
 		return false
 	if direction == Vector2.ZERO:
-		direction = global_position.direction_to(get_global_mouse_position())
+		direction = _mouse_aim_direction()
 	_dash_direction = direction.normalized() if direction != Vector2.ZERO else Vector2.RIGHT
 	_dash_left = _dash_duration
 	_hurtbox.set_immune(true)
@@ -191,5 +191,13 @@ func _get_aim_direction() -> Vector2:
 	if stick != Vector2.ZERO:
 		return stick.normalized()
 	if Input.is_action_pressed("shoot"):
-		return global_position.direction_to(get_global_mouse_position())
+		return _mouse_aim_direction()
 	return Vector2.ZERO
+
+
+## Direzione verso il mouse, con l'asse orizzontale invertito se attiva l'opzione mancini (M12, #86).
+func _mouse_aim_direction() -> Vector2:
+	var dir := global_position.direction_to(get_global_mouse_position())
+	if InputSettings.mouse_invert_x:
+		dir.x = -dir.x
+	return dir

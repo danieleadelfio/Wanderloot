@@ -36,6 +36,7 @@ MENU_QUIT,Esci,Quit,Quitter,Salir
 OPT_MUSIC,Musica,Music,Musique,Música
 OPT_SFX,Effetti,Effects,Effets,Efectos
 OPT_LANGUAGE,Lingua,Language,Langue,Idioma
+OPT_MOUSE_INVERT,Inverti mouse,Invert mouse,Inverser la souris,Invertir ratón
 OPT_LANGUAGE_HINT,Cambiando lingua la partita viene salvata e si torna al menu principale.,Changing language saves the game and returns to the main menu.,Changer de langue sauvegarde la partie et revient au menu principal.,Cambiar el idioma guarda la partida y vuelve al menú principal.
 OPT_DELETE,Cancella dati salvati,Delete saved data,Supprimer les données,Borrar datos guardados
 OPT_DELETE_CONFIRM,Conferma: cancella tutto,Confirm: delete everything,Confirmer : tout supprimer,Confirmar: borrar todo
