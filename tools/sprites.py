@@ -406,19 +406,24 @@ def svg_rect(body, defs, vw, vh):
 
 
 def plaza_floor_svg():
+    # Griglia fissa (48px, divide 384 esattamente sia in x sia in y) cosi' il tile e' seamless
+    # su entrambi gli assi quando ripetuto (M12, #86: le lastre a larghezza casuale non tornavano
+    # al bordo destro e creavano una cucitura visibile ogni 384px).
+    # RNG locale e non quello globale: non deve spostare la sequenza usata dagli sprite generati dopo.
+    local_rng = random.Random(4)
     parts = ['<rect width="384" height="384" fill="#2c2932"/>']
+    cell = 48
     y = 0
     row = 0
     while y < 384:
-        h = 48
-        x = -24 if row % 2 else 0
+        x = -cell // 2 if row % 2 else 0
         while x < 384:
-            w = RNG.randint(40, 64)
-            v = RNG.randint(-8, 8)
-            parts.append('<rect x="%d" y="%d" width="%d" height="%d" rx="12" fill="rgb(%d,%d,%d)"/>' % (x + 3, y + 3, w - 6, h - 6, 94 + v, 88 + v, 96 + v))
+            w = cell
+            v = local_rng.randint(-8, 8)
+            parts.append('<rect x="%d" y="%d" width="%d" height="%d" rx="12" fill="rgb(%d,%d,%d)"/>' % (x + 3, y + 3, w - 6, cell - 6, 94 + v, 88 + v, 96 + v))
             parts.append('<rect x="%d" y="%d" width="%d" height="5" rx="3" fill="#ffffff" opacity="0.08"/>' % (x + 6, y + 6, w - 12))
             x += w
-        y += h
+        y += cell
         row += 1
     return svg("".join(parts), "", 384)
 

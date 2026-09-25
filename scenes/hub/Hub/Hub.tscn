@@ -609,6 +609,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
+use_hidden_tabs_for_min_size = true
 
 [node name="Inventario" type="HBoxContainer" parent="UI/InventoryWindow/Panel/VBox/Tabs"]
 layout_mode = 2
