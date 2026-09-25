@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Cadenza di fuoco (potenziamento "Raffica"): dal 13% al 10% per scelta, era percepito troppo forte (#86).
 - Sfera del vuoto (Slime del vuoto, Cripta): l'attrazione di più sfere vicine si sommava senza limite, rendendo impossibile scappare da un gruppo di slime viola; ora il totale non supera mai quella di una singola sfera a distanza zero (`Player.MAX_PULL_FORCE`) (#86).
 - Scelta abilità al cap: verificata con test dedicati (nessun bug trovato, la carta mostra già Bag of Resources quando l'abilità offerta è già al livello massimo sbloccato) (#86).
 - Evento "Scheletri nell'armadio": cerchio e conteggio scheletri triplicati (raggio 260→780px clampato ai bordi dell'arena, 10→30 scheletri), scheletri resi invulnerabili (evento di sola schivata, non c'era motivo per poterli uccidere) e velocità di avvicinamento al centro ridotta a 1/3 (#86).

@@ -7,6 +7,6 @@ script = ExtResource("1")
 display_name = "UPG_FIRE_RATE_UP"
 description = "UPG_FIRE_RATE_UP_DESC"
 stat = 1
-amount = 1.133
+amount = 1.1
 is_multiplier = true
 weight = 1.0

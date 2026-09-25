@@ -91,7 +91,7 @@ UPG_DAMAGE_UP_DESC,+1 danno per proiettile,+1 damage per projectile,+1 dégât p
 UPG_EXP_UP,Saggezza,Wisdom,Sagesse,Sabiduría
 UPG_EXP_UP_DESC,+15% exp raccolta,+15% exp collected,+15 % d'exp récoltée,+15% de exp recogida
 UPG_FIRE_RATE_UP,Raffica,Barrage,Rafale,Ráfaga
-UPG_FIRE_RATE_UP_DESC,+13% cadenza di fuoco,+13% fire rate,+13 % de cadence de tir,+13% de cadencia de disparo
+UPG_FIRE_RATE_UP_DESC,+10% cadenza di fuoco,+10% fire rate,+10 % de cadence de tir,+10% de cadencia de disparo
 UPG_GUARD_UP,Guardia,Guard,Garde,Guardia
 UPG_GUARD_UP_DESC,"+0,2 s di invulnerabilità dopo un colpo",+0.2s invulnerability after a hit,"+0,2 s d'invulnérabilité après un coup","+0,2 s de invulnerabilidad tras un golpe"
 UPG_IMPACT_UP,Impatto,Impact,Impact,Impacto
