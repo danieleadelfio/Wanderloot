@@ -72,6 +72,13 @@ func pick_boss_scene(rng: RandomNumberGenerator) -> PackedScene:
 ## Evento in piu' questi secondi dopo aver sconfitto tutti i boss (una volta per run, M11.2). Negativo = nessuno.
 @export var boss_event_delay: float = 10.0
 
+@export_group("Ambientazione dinamica")
+## Punti in cui compare uno stillicidio dal soffitto (gocce + pozzanghera/pozza che cresce sul
+## pavimento, M12 #86): vuoto = nessuno. Stessa scena per ogni arena, colore diverso per ambientazione
+## (acqua nella Cripta, sangue nell'Ossario).
+@export var drip_spots: Array[Vector2] = []
+@export var drip_color: Color = Color(0.3, 0.42, 0.5, 0.55)
+
 @export_group("Sblocco")
 ## Arena in cui servono estrazioni riuscite per sbloccare questa (vuoto = sempre disponibile).
 @export var unlock_arena: StringName = &""

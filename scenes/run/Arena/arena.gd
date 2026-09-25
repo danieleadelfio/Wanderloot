@@ -10,6 +10,8 @@ extends Node2D
 @export var extraction_spawn_rect: Rect2 = Rect2(-700.0, -400.0, 1400.0, 800.0)
 @export var torch_scene: PackedScene = preload("res://scenes/run/Torch/Torch.tscn")
 @export var candle_scene: PackedScene = preload("res://scenes/run/Candle/Candle.tscn")
+## Stillicidio dal soffitto + pozzanghera/pozza che cresce (M12, #86): vedi ArenaData.drip_spots.
+@export var drip_scene: PackedScene = preload("res://scenes/run/EnvironmentDrip/EnvironmentDrip.tscn")
 ## Zona in cui spargere decorazioni e candele (lontano dal centro, dove parte il player).
 @export var decoration_rect: Rect2 = Rect2(-740.0, -440.0, 1480.0, 880.0)
 ## Torce per lato lungo (muro alto e basso), distribuite in modo uniforme.
@@ -315,6 +317,7 @@ func _apply_arena_look() -> void:
 	_player.light.texture_scale = arena.player_light_scale
 	_place_torches(arena.torches_per_wall, arena.torch_color)
 	_place_decorations()
+	_place_drips()
 	if arena.fog_color.a > 0.0 and arena.fog_count > 0:
 		_fog.setup(arena.fog_color, arena.fog_count, _rng)
 	if arena.music:
@@ -339,6 +342,17 @@ func _place_decorations() -> void:
 		candle.position = _random_away_from_center(rng)
 		(candle.get_node("Light") as PointLight2D).color = arena.candle_color
 		_decorations.add_child(candle)
+
+
+## Stillicidio dal soffitto (Cripta: pozzanghera d'acqua; Ossario: pozza di sangue), M12 #86: punti
+## fissi dell'arena, colore da ArenaData.drip_color. Vuoto = nessuno.
+func _place_drips() -> void:
+	for spot in arena.drip_spots:
+		var drip := drip_scene.instantiate() as Node2D
+		drip.position = spot
+		var stain := drip.get_node("Stain") as GrowingStain
+		stain.set_stain_color(arena.drip_color)
+		_decorations.add_child(drip)
 
 
 func _random_away_from_center(rng: RandomNumberGenerator) -> Vector2:

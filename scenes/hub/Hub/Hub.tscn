@@ -30,6 +30,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/portal_swirl.png" id="portal_swirl"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tree.png" id="tree"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tree_b.png" id="tree_b"]
+[ext_resource type="Shader" path="res://assets/shaders/tree_sway.gdshader" id="tree_sway_shader"]
 
 [sub_resource type="Gradient" id="light_grad"]
 offsets = PackedFloat32Array(0, 0.5, 1)
@@ -86,6 +87,9 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="ShaderMaterial" id="tree_sway_mat"]
+shader = ExtResource("tree_sway_shader")
 
 [node name="Hub" type="Node2D"]
 process_mode = 3
@@ -241,6 +245,7 @@ texture_scale = 2.0
 position = Vector2(-150, -470)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree0"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)
@@ -250,6 +255,7 @@ flip_h = true
 position = Vector2(150, -470)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree1"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -258,6 +264,7 @@ offset = Vector2(0, -140)
 position = Vector2(-820, -470)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree2"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -267,6 +274,7 @@ flip_h = true
 position = Vector2(820, -470)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree3"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)
@@ -275,6 +283,7 @@ offset = Vector2(0, -140)
 position = Vector2(-850, -300)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree4"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -284,6 +293,7 @@ flip_h = true
 position = Vector2(-850, -120)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree5"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -292,6 +302,7 @@ offset = Vector2(0, -140)
 position = Vector2(-850, 60)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree6"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)
@@ -301,6 +312,7 @@ flip_h = true
 position = Vector2(-850, 240)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree7"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -309,6 +321,7 @@ offset = Vector2(0, -140)
 position = Vector2(-850, 420)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree8"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -318,6 +331,7 @@ flip_h = true
 position = Vector2(850, -300)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree9"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)
@@ -326,6 +340,7 @@ offset = Vector2(0, -140)
 position = Vector2(850, -120)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree10"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -335,6 +350,7 @@ flip_h = true
 position = Vector2(850, 60)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree11"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -343,6 +359,7 @@ offset = Vector2(0, -140)
 position = Vector2(850, 240)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree12"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)
@@ -352,6 +369,7 @@ flip_h = true
 position = Vector2(850, 420)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree13"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -360,6 +378,7 @@ offset = Vector2(0, -140)
 position = Vector2(-760, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree14"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -369,6 +388,7 @@ flip_h = true
 position = Vector2(-560, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree15"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)
@@ -377,6 +397,7 @@ offset = Vector2(0, -140)
 position = Vector2(-360, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree16"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -386,6 +407,7 @@ flip_h = true
 position = Vector2(-180, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree17"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -394,6 +416,7 @@ offset = Vector2(0, -140)
 position = Vector2(180, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree18"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)
@@ -403,6 +426,7 @@ flip_h = true
 position = Vector2(360, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree19"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -411,6 +435,7 @@ offset = Vector2(0, -140)
 position = Vector2(560, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree20"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree")
 offset = Vector2(0, -140)
@@ -420,6 +445,7 @@ flip_h = true
 position = Vector2(760, 640)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree21"]
+material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("tree_b")
 offset = Vector2(0, -140)

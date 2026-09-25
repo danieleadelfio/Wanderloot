@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" path="res://assets/sprites/candle.png" id="1"]
 [ext_resource type="Script" path="res://scripts/combat/light_flicker.gd" id="2"]
+[ext_resource type="Shader" path="res://assets/shaders/flame_flicker.gdshader" id="3"]
 
 [sub_resource type="Gradient" id="light_grad"]
 offsets = PackedFloat32Array(0, 0.5, 1)
@@ -15,13 +16,13 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[sub_resource type="CanvasItemMaterial" id="unshaded"]
-light_mode = 1
+[sub_resource type="ShaderMaterial" id="flame_mat"]
+shader = ExtResource("3")
 
 [node name="Candle" type="Node2D"]
 
 [node name="Sprite" type="Sprite2D" parent="."]
-material = SubResource("unshaded")
+material = SubResource("flame_mat")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1")
 
