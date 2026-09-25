@@ -6,11 +6,15 @@ extends CanvasLayer
 signal resolved(ability: WandAbility, replace_index: int)
 
 const BUTTON_SIZE: Vector2 = Vector2(250.0, 150.0)
+const BAG_ICON: Texture2D = preload("res://assets/sprites/icon_bag.png")
 
 var _chosen: WandAbility
 var _current: Array[WandAbility] = []
 var _full: bool = false
 var _levels: Dictionary = {}
+## Cap sbloccato per abilita' (#16, #20): se gia' al cap, la scelta mostra un Bag of Resources
+## al posto della carta (WandAbilities.equip()/level_up() la convertono comunque in materiali).
+var _caps: Dictionary = {}
 
 @onready var _title: Label = %Title
 @onready var _choices: HBoxContainer = %Choices
@@ -22,10 +26,11 @@ func _ready() -> void:
 	_keep_button.pressed.connect(_finish.bind(null, -1))
 
 
-func present(options: Array[WandAbility], current: Array[WandAbility], full: bool, levels: Dictionary = {}) -> void:
+func present(options: Array[WandAbility], current: Array[WandAbility], full: bool, levels: Dictionary = {}, caps: Dictionary = {}) -> void:
 	_current = current
 	_full = full
 	_levels = levels
+	_caps = caps
 	_title.text = tr("ABILITY_CHOICE_TITLE")
 	_keep_button.visible = false
 	_fill(options, _on_option_pressed)
@@ -57,11 +62,15 @@ func _fill(abilities: Array[WandAbility], on_pressed: Callable) -> void:
 		child.queue_free()
 	for ability in abilities:
 		var button := Button.new()
-		var name := tr(ability.display_name)
-		if _levels.has(ability.id):
-			name += "  " + tr("ABILITY_LEVEL_UP") % [_levels[ability.id], _levels[ability.id] + 1]
-		button.text = "%s\n%s\n%s" % [name, ability.trigger_text(), tr(ability.description)]
-		button.icon = ability.icon
+		if _is_capped(ability):
+			button.text = "%s\n%s" % [tr("ABILITY_CHOICE_BAG_TITLE") % tr(ability.display_name), tr("ABILITY_CHOICE_BAG_DESC")]
+			button.icon = BAG_ICON
+		else:
+			var name := tr(ability.display_name)
+			if _levels.has(ability.id):
+				name += "  " + tr("ABILITY_LEVEL_UP") % [_levels[ability.id], _levels[ability.id] + 1]
+			button.text = "%s\n%s\n%s" % [name, ability.trigger_text(), tr(ability.description)]
+			button.icon = ability.icon
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 		button.expand_icon = false
@@ -71,3 +80,9 @@ func _fill(abilities: Array[WandAbility], on_pressed: Callable) -> void:
 		_choices.add_child(button)
 	if _choices.get_child_count() > 0:
 		(_choices.get_child(0) as Button).grab_focus()
+
+
+## true se l'abilita' e' gia' posseduta ed e' gia' al cap sbloccato: la scelta non la fa salire di
+## livello, da' un Bag of Resources (WandAbilities.equip()/level_up(), M12 #86 #16/#20).
+func _is_capped(ability: WandAbility) -> bool:
+	return _levels.has(ability.id) and int(_levels[ability.id]) >= int(_caps.get(ability.id, 1))

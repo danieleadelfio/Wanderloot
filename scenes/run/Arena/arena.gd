@@ -219,7 +219,7 @@ func offer_abilities(count: int = 3) -> void:
 	_choosing_ability = true
 	_pause.enabled = false
 	_refresh_pause()
-	_ability_choice.present(options, _wand.slots.abilities, _wand.slots.is_full(), _wand.levels)
+	_ability_choice.present(options, _wand.slots.abilities, _wand.slots.is_full(), _wand.levels, _wand.caps)
 
 
 func _on_ability_resolved(ability: WandAbility, replace_index: int) -> void:

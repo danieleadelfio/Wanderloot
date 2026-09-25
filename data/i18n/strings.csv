@@ -218,6 +218,8 @@ SORT_RARITY,Rarità,Rarity,Rareté,Rareza
 SORT_CATEGORY,Categoria,Category,Catégorie,Categoría
 TOOLTIP_EQUIPPED,Equipaggiato,Equipped,Équipé,Equipado
 ABILITY_LEVEL_UP,Lv%d → Lv%d,Lv%d → Lv%d,Nv%d → Nv%d,Nv%d → Nv%d
+ABILITY_CHOICE_BAG_TITLE,%s (già al massimo),%s (already maxed),%s (déjà au maximum),%s (ya al máximo)
+ABILITY_CHOICE_BAG_DESC,Bag of Resources: dà materiali invece di un livello.,Bag of Resources: gives materials instead of a level.,Sac de ressources : donne des matériaux au lieu d'un niveau.,Bolsa de recursos: da materiales en vez de un nivel.
 BOSS_NECROMANCER,Negromante,Necromancer,Nécromancien,Nigromante
 BOSS_BONE_COLOSSUS,Colosso d'ossa,Bone Colossus,Colosse d'os,Coloso de huesos
 BOSS_GHOUL_QUEEN,Regina dei Ghoul,Ghoul Queen,Reine des goules,Reina de los necrófagos

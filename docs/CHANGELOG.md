@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Scelta abilità al level-up: se già al cap sbloccato, la carta mostra Bag of Resources invece della carta normale (prima si vedeva solo a run finita, senza capire perché) (#86, #20).
 - Colore dei proiettili: l'ultima abilità presa/salita di livello vince, non più la media (si sbiadiva con 2+ abilità); test (#86, #15).
 - Livello massimo assoluto delle abilità della bacchetta: LV8, invalicabile da qualunque fonte (#86, #19).
 - Barriera arcana: ricarica ridotta da Lv5 (12 → 10 → 8 → 6 s), dato per-livello riusabile su qualunque abilità (`WandAbility.cooldown_by_level`); test (#86, #18).
