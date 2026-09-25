@@ -31,6 +31,10 @@ var _extra_bosses: int = 0
 var _bosses_spawned: bool = false
 ## Abilita' che gli eventi possono offrire (M10).
 @export var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
+## Materiali del Bag of Resources (#20): livelli oltre il cap sbloccato di un'abilita' diventano
+## una quantita' fissa di un materiale a caso, invece di andare persi o superare il cap.
+@export var over_cap_materials: Array[MaterialData] = []
+const OVER_CAP_MATERIAL_AMOUNT: int = 10
 var _choosing_ability: bool = false
 ## Effetti a tempo dei consumabili attivi: chiave di traduzione -> secondi rimasti (solo per l'HUD).
 var _buffs: Dictionary = {}
@@ -100,6 +104,9 @@ func _ready() -> void:
 	_create_enemy_pools()
 	_wand.setup(_player, _projectile_pool, targetable_enemies)
 	_wand.changed.connect(func(abilities: Array[WandAbility]) -> void: _hud.set_abilities(abilities, _wand.levels))
+	_wand.over_cap.connect(_on_ability_over_cap)
+	for ability in ability_catalog.abilities:
+		_wand.caps[ability.id] = MetaProgression.ascension_cap(ability.id)
 	for entry: Array in MetaProgression.equipped_ability_levels().values():
 		_wand.equip_bonus(entry[0], entry[1])
 	_ability_choice.resolved.connect(_on_ability_resolved)
@@ -374,6 +381,15 @@ func _on_consumable_collected(consumable: ConsumableData) -> void:
 func _on_material_collected(material: MaterialData, amount: int) -> void:
 	_sfx.play(&"pickup_item")
 	RunManager.add_loot(material, amount)
+
+
+## Livelli oltre il cap sbloccato dell'abilita' (#20, Ascensione #16): Bag of Resources invece del
+## livello, cosi' non si perde ne' si aggira il cap. Quantita' fissa per livello in eccesso.
+func _on_ability_over_cap(_ability: WandAbility, overflow: int) -> void:
+	if over_cap_materials.is_empty():
+		return
+	var material: MaterialData = over_cap_materials[_rng.randi_range(0, over_cap_materials.size() - 1)]
+	RunManager.add_loot(material, overflow * OVER_CAP_MATERIAL_AMOUNT)
 
 
 func _open_extraction() -> void:

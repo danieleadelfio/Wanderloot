@@ -49,6 +49,34 @@ func test_cooldown_by_level() -> void:
 	assert_int(trigger.tick(0.2, false, 5)).is_equal(1)
 
 
+func test_level_up_respects_unlocked_cap_and_signals_overflow() -> void:
+	# M12 #86 #20: senza Ascensione il cap sbloccato e' Lv1, l'eccedenza va in over_cap.
+	var player: Player = auto_free(load("res://scenes/run/Player/Player.tscn").instantiate())
+	add_child(player)
+	var slots := AbilitySlots.new(2)
+	var a := _ability(&"a", WandAbility.Trigger.SHOTS)
+	slots.add(a)
+	var wand: WandAbilities = auto_free(WandAbilities.new())
+	add_child(wand)
+	wand.player = player
+	wand.slots = slots
+	wand.levels[&"a"] = 1
+	var overflow_events: Array = []
+	wand.over_cap.connect(func(ability: WandAbility, overflow: int) -> void: overflow_events.append([ability, overflow]))
+	wand.level_up(&"a", 3)
+	assert_int(wand.levels[&"a"]).is_equal(1)
+	assert_int(overflow_events.size()).is_equal(1)
+	assert_int(overflow_events[0][1]).is_equal(3)
+	wand.caps[&"a"] = 5
+	overflow_events.clear()
+	wand.level_up(&"a", 2)
+	assert_int(wand.levels[&"a"]).is_equal(3)
+	assert_int(overflow_events.size()).is_equal(0)
+	wand.level_up(&"a", 10)
+	assert_int(wand.levels[&"a"]).is_equal(5)
+	assert_int(overflow_events[0][1]).is_equal(8)
+
+
 func test_slots_add_replace_and_tint() -> void:
 	var slots := AbilitySlots.new(2)
 	var a := _ability(&"a", WandAbility.Trigger.SHOTS)
@@ -85,6 +113,9 @@ func test_same_ability_levels_up_instead_of_duplicating() -> void:
 	wand.player = player
 	var lightning: WandAbility = load("res://data/abilities/wandering_lightning.tres")
 	var ring: WandAbility = load("res://data/abilities/arcane_ring.tres")
+	# Cap sbloccato alto: qui si testa l'accumulo dei livelli, non il cap (#20, vedi test dedicato sopra).
+	wand.caps[lightning.id] = WandAbility.MAX_LEVEL
+	wand.caps[ring.id] = WandAbility.MAX_LEVEL
 	wand.equip_bonus(lightning, 2)
 	wand.equip_bonus(lightning, 1)
 	assert_int(wand.level_of(lightning)).is_equal(3)

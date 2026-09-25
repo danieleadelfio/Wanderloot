@@ -45,6 +45,7 @@ func _ready() -> void:
 	_blacksmith.craft_requested.connect(_on_craft_requested)
 	_blacksmith.fuse_requested.connect(_on_fuse_requested)
 	_blacksmith.salvage_requested.connect(_on_salvage_requested)
+	_blacksmith.ascend_requested.connect(_on_ascend_requested)
 	_loadout_panel.equip_requested.connect(MetaProgression.equip)
 	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
 	_loadout_panel.seen_requested.connect(MetaProgression.mark_seen)
@@ -196,7 +197,7 @@ func _close_window() -> void:
 
 func _refresh() -> void:
 	_refresh_stash(MetaProgression.inventory.to_dictionary())
-	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names)
+	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names, MetaProgression.ascension_caps)
 	_loadout_panel.refresh(MetaProgression.loadout)
 	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id)
 	# Statistiche con l'equipaggiamento attuale: lo stesso calcolo di inizio run, sul player della piazza.
@@ -252,6 +253,11 @@ func _on_fuse_requested(first_uid: int, second_uid: int) -> void:
 func _on_salvage_requested(uid: int) -> void:
 	if MetaProgression.salvage(uid):
 		_sfx.play(&"pickup_item")
+
+
+func _on_ascend_requested(id: StringName) -> void:
+	if MetaProgression.ascend(id):
+		_sfx.play(&"craft")
 
 
 func _on_arena_selected(id: StringName) -> void:

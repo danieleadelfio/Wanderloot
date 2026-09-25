@@ -22,6 +22,7 @@ const SECTION_EQUIPPED: String = "equipped"
 const SECTION_EXTRACTIONS: String = "extractions"
 const SECTION_HUB: String = "hub"
 const SECTION_ITEMS: String = "items"
+const SECTION_ASCENSION: String = "ascension"
 
 var inventory: MetaInventory = MetaInventory.new()
 var loadout: EquipmentLoadout = EquipmentLoadout.new()
@@ -50,6 +51,9 @@ var _pending_hub_position: Vector2 = Vector2.ZERO
 var _has_pending_hub_position: bool = false
 ## Autosave a fine run (M12, #86), consumato dall'hub alla sua apertura per mostrare il toast.
 var _pending_autosave_notice: bool = false
+## Cap sbloccato per abilita' (id -> livello, M12 #86 #16/#20): solo le voci > 1 (default implicito Lv1).
+## Alzato dall'Ascensione (fabbro), consumato dalla run per il cap di WandAbilities.
+var ascension_caps: Dictionary[StringName, int] = {}
 
 
 func _ready() -> void:
@@ -67,6 +71,7 @@ func new_game() -> void:
 	loadout.clear()
 	extractions.clear()
 	selected_arena = &""
+	ascension_caps.clear()
 	has_unsaved_changes = false
 	_has_hub_position = false
 	_has_pending_hub_position = false
@@ -241,6 +246,31 @@ func equipped_ability_levels() -> Dictionary:
 	return result
 
 
+## Cap sbloccato per l'abilita' (#20): default Lv1, alzabile con ascend() fino a WandAbility.MAX_LEVEL.
+func ascension_cap(id: StringName) -> int:
+	return ascension_caps.get(id, 1)
+
+
+## Costo per alzare di un livello il cap dell'abilita'; vuoto se gia' al tetto assoluto.
+func ascension_cost(id: StringName) -> Dictionary[StringName, int]:
+	return Ascension.cost_for(ascension_cap(id) + 1)
+
+
+func can_ascend(id: StringName) -> bool:
+	var cost := ascension_cost(id)
+	return not cost.is_empty() and inventory.can_afford(cost)
+
+
+## Spende i materiali e alza il cap sbloccato dell'abilita' di 1 (fabbro, scheda Ascensione).
+func ascend(id: StringName) -> bool:
+	if not can_ascend(id):
+		return false
+	inventory.spend(ascension_cost(id))
+	ascension_caps[id] = ascension_cap(id) + 1
+	_mark_changed()
+	return true
+
+
 func register_extraction(arena_id: StringName) -> void:
 	extractions[arena_id] = extractions.get(arena_id, 0) + 1
 	_mark_changed()
@@ -277,6 +307,8 @@ func save_to_disk() -> Error:
 		config.set_value(SECTION_EQUIPPED, EquipmentLoadout.slot_key(slot), equipped[slot])
 	for arena_id in extractions:
 		config.set_value(SECTION_EXTRACTIONS, String(arena_id), extractions[arena_id])
+	for ability_id in ascension_caps:
+		config.set_value(SECTION_ASCENSION, String(ability_id), ascension_caps[ability_id])
 	config.set_value(SECTION_META, "selected_arena", String(selected_arena))
 	if _has_hub_position:
 		config.set_value(SECTION_HUB, "player_position", _hub_position)
@@ -295,10 +327,14 @@ func load_from_disk() -> Error:
 	loadout.clear()
 	extractions.clear()
 	selected_arena = &""
+	ascension_caps.clear()
 	if error == OK:
 		if config.has_section(SECTION_EXTRACTIONS):
 			for key in config.get_section_keys(SECTION_EXTRACTIONS):
 				extractions[StringName(key)] = int(config.get_value(SECTION_EXTRACTIONS, key, 0))
+		if config.has_section(SECTION_ASCENSION):
+			for key in config.get_section_keys(SECTION_ASCENSION):
+				ascension_caps[StringName(key)] = int(config.get_value(SECTION_ASCENSION, key, 1))
 		selected_arena = StringName(config.get_value(SECTION_META, "selected_arena", ""))
 		_has_pending_hub_position = config.has_section_key(SECTION_HUB, "player_position")
 		if _has_pending_hub_position:

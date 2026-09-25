@@ -8,6 +8,10 @@
 [ext_resource type="Script" path="res://scripts/run/wave_spawner.gd" id="8"]
 [ext_resource type="Resource" path="res://data/run/level_curve.tres" id="10"]
 [ext_resource type="Resource" path="res://data/upgrades/upgrade_table.tres" id="11"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="m_core"]
+[ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m_bone"]
+[ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m_ess"]
 [ext_resource type="PackedScene" path="res://scenes/ui/LevelUpChoice/LevelUpChoice.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://scenes/run/ExtractionPoint/ExtractionPoint.tscn" id="13"]
 [ext_resource type="PackedScene" path="res://scenes/ui/RunEndScreen/RunEndScreen.tscn" id="15"]
@@ -56,6 +60,7 @@ size = Vector2(40, 1080)
 script = ExtResource("1")
 level_curve = ExtResource("10")
 upgrade_table = ExtResource("11")
+over_cap_materials = Array[Resource]([ExtResource("m_gel"), ExtResource("m_core"), ExtResource("m_bone"), ExtResource("m_ess")])
 
 [node name="Ambient" type="CanvasModulate" parent="."]
 unique_name_in_owner = true

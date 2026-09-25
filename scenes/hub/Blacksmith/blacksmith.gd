@@ -7,10 +7,13 @@ signal craft_requested(recipe: RecipeData)
 ## Fonde i due oggetti (uid) indicati.
 signal fuse_requested(first_uid: int, second_uid: int)
 signal salvage_requested(uid: int)
+## Ascensione (M12, #86, #16): alza il cap sbloccato dell'abilita' indicata (id).
+signal ascend_requested(id: StringName)
 
 const RARITIES: RarityTable = ItemText.RARITIES
 
 @export var recipe_book: RecipeBook
+@export var ability_catalog: AbilityCatalog
 ## Smontaggio in lavorazione (#60): la resa futura sono materiali ottenibili solo smontando, ancora da definire.
 ## Da falso l'elenco resta visibile ma non si puo' smontare.
 @export var salvage_enabled: bool = false
@@ -23,19 +26,24 @@ var _pending_salvage: int = 0
 @onready var _fusion_list: VBoxContainer = %FusionList
 @onready var _salvage_list: VBoxContainer = %SalvageList
 @onready var _resources_label: Label = %ResourcesLabel
+@onready var _ascension_list: VBoxContainer = %AscensionList
 
 
 func _ready() -> void:
 	_tabs.set_tab_title(0, tr("BLACKSMITH_TAB_CRAFT"))
 	_tabs.set_tab_title(1, tr("BLACKSMITH_TAB_FUSION"))
 	_tabs.set_tab_title(2, tr("BLACKSMITH_TAB_SALVAGE"))
+	_tabs.set_tab_title(3, tr("BLACKSMITH_TAB_ASCENSION"))
 
 
-func refresh(inventory: MetaInventory, loadout: EquipmentLoadout, material_names: Dictionary[StringName, String]) -> void:
+## caps: id abilita' -> cap sbloccato attuale (MetaProgression.ascension_caps); il costo del +1
+## (Ascension.cost_for, logica pura) si calcola qui.
+func refresh(inventory: MetaInventory, loadout: EquipmentLoadout, material_names: Dictionary[StringName, String], caps: Dictionary[StringName, int] = {}) -> void:
 	_refresh_resources(inventory, material_names)
 	_refresh_recipes(inventory, loadout, material_names)
 	_refresh_fusion(loadout)
 	_refresh_salvage(loadout, material_names)
+	_refresh_ascension(inventory, material_names, caps)
 
 
 ## Risorse (materiali) attualmente possedute, sempre visibili sopra le schede (M12, #86):
@@ -99,6 +107,25 @@ func _on_salvage_pressed(uid: int, button: Button) -> void:
 		return
 	_pending_salvage = uid
 	button.text = tr("BLACKSMITH_SALVAGE_CONFIRM") % button.text
+
+
+## Scheda Ascensione (#16): una riga per abilita' del catalogo, con cap attuale e costo del +1.
+func _refresh_ascension(inventory: MetaInventory, material_names: Dictionary[StringName, String], caps: Dictionary[StringName, int]) -> void:
+	_clear(_ascension_list)
+	for ability in ability_catalog.abilities:
+		var cap: int = caps.get(ability.id, 1)
+		var cost: Dictionary[StringName, int] = Ascension.cost_for(cap + 1)
+		var text: String
+		var button := _button(ability.icon, "", tr(ability.description))
+		if cost.is_empty():
+			text = tr("ASCENSION_ROW_MAXED") % [tr(ability.display_name), cap]
+			button.disabled = true
+		else:
+			text = tr("ASCENSION_ROW") % [tr(ability.display_name), cap, _amounts_text(cost, material_names)]
+			button.disabled = not inventory.can_afford(cost)
+			button.pressed.connect(ascend_requested.emit.bind(ability.id))
+		button.text = text
+		_ascension_list.add_child(button)
 
 
 func _button(icon: Texture2D, text: String, tooltip: String) -> Button:

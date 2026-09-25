@@ -193,10 +193,14 @@ RUNEND_ITEMS_LOST,Oggetti persi: %s,Items lost: %s,Objets perdus : %s,Objetos pe
 BLACKSMITH_TAB_CRAFT,Crafting,Crafting,Fabrication,Fabricación
 BLACKSMITH_TAB_FUSION,Fusione,Fusion,Fusion,Fusión
 BLACKSMITH_TAB_SALVAGE,Smontaggio,Salvage,Démontage,Desguace
+BLACKSMITH_TAB_ASCENSION,Ascensione,Ascension,Ascension,Ascensión
 BLACKSMITH_FUSION_HINT,"Due oggetti identici della stessa rarità diventano uno della rarità successiva, con bonus ritirati (fino a Leggendario). Solo oggetti nel baule.","Two identical items of the same rarity become one of the next rarity, with rerolled bonuses (up to Legendary). Stash items only.","Deux objets identiques de même rareté deviennent un objet de la rareté suivante, bonus retirés (jusqu'à Légendaire). Objets du coffre uniquement.","Dos objetos idénticos de la misma rareza se convierten en uno de la rareza siguiente, con bonificaciones nuevas (hasta Legendario). Solo objetos del cofre."
 BLACKSMITH_FUSION_EMPTY,Nessuna coppia da fondere.,No pairs to fuse.,Aucune paire à fusionner.,No hay parejas para fusionar.
 BLACKSMITH_SALVAGE_HINT,"Work in progress: lo smontaggio darà materiali che si ottengono solo così, da usare in nuove ricette. Per ora non è disponibile.","Work in progress: salvaging will give materials you can only get this way, used in new recipes. Not available yet.","Work in progress : le démontage donnera des matériaux obtenus uniquement ainsi, pour de nouvelles recettes. Pas encore disponible.","Work in progress: el desguace dará materiales que solo se obtienen así, para nuevas recetas. Aún no disponible."
 BLACKSMITH_SALVAGE_EMPTY,Nessun oggetto nel baule.,No items in the stash.,Aucun objet dans le coffre.,No hay objetos en el cofre.
+BLACKSMITH_ASCENSION_HINT,"Alza il livello massimo sbloccato di un'abilità oltre Lv1: in run, i livelli oltre il cap sbloccato diventano risorse invece di salire di livello.","Raises an ability's unlocked level cap past Lv1: in a run, levels beyond the unlocked cap become resources instead of leveling up.","Augmente le niveau maximal débloqué d'une capacité au-delà du Niv1 : en run, les niveaux au-delà du cap débloqué deviennent des ressources au lieu de monter de niveau.","Sube el nivel máximo desbloqueado de una habilidad más allá de Nv1: en la run, los niveles por encima del cap desbloqueado se convierten en recursos en vez de subir de nivel."
+ASCENSION_ROW,%s (Lv%d) — prossimo: %s,%s (Lv%d) — next: %s,%s (Niv%d) — suivant : %s,%s (Nv%d) — siguiente: %s
+ASCENSION_ROW_MAXED,%s (Lv%d) — al massimo,%s (Lv%d) — maxed out,%s (Niv%d) — au maximum,%s (Nv%d) — al máximo
 BLACKSMITH_SALVAGE_CONFIRM,Clic di nuovo per smontare: %s,Click again to salvage: %s,Cliquez à nouveau pour démonter : %s,Pulsa otra vez para desguazar: %s
 OVERTIME_TITLE,OVERTIME x%d,OVERTIME x%d,PROLONGATION x%d,PRÓRROGA x%d
 OVERTIME_WARNING,Overtime x%d tra %d s,Overtime x%d in %d s,Prolongation x%d dans %d s,Prórroga x%d en %d s

@@ -5,12 +5,19 @@ extends Node2D
 
 signal changed(abilities: Array[WandAbility])
 signal activated(ability: WandAbility)
+## Emesso quando un aumento di livello supera il cap sbloccato (M12, #86, #20): overflow = livelli
+## non applicati, da convertire in un Bag of Resources (arena.gd, non e' compito di questa classe).
+signal over_cap(ability: WandAbility, overflow: int)
 
 const TELEGRAPH := preload("res://scenes/run/Telegraph/Telegraph.tscn")
 const STRIKE_COLOR := Color(0.55, 0.85, 1.0)
 const STRIKE_POOL_SIZE := 8
 
 @export var slot_count: int = 3
+
+## Cap sbloccato per abilita' (id -> livello, #20): assente = default Lv1 (Ascensione, #16).
+## Impostato dalla composition root (Arena) prima di equip_bonus/equip, da MetaProgression.
+var caps: Dictionary[StringName, int] = {}
 
 var player: Player
 var slots: AbilitySlots
@@ -77,12 +84,22 @@ func level_of(ability: WandAbility) -> int:
 	return levels.get(ability.id, 1)
 
 
-## +amount livelli a un'abilita' gia' posseduta, senza superare WandAbility.MAX_LEVEL (M12, #86, #19).
+## Cap effettivo per l'abilita' (#20): cap sbloccato (Ascensione, #16), mai oltre il tetto assoluto.
+func _cap_for(id: StringName) -> int:
+	return mini(caps.get(id, 1), WandAbility.MAX_LEVEL)
+
+
+## +amount livelli a un'abilita' gia' posseduta, senza superare il cap sbloccato (M12, #86, #19, #20).
+## L'eccedenza (oltre il cap) e' segnalata con over_cap, non applicata: diventa loot altrove.
 func level_up(id: StringName, amount: int = 1) -> void:
-	levels[id] = mini(levels.get(id, 0) + amount, WandAbility.MAX_LEVEL)
-	for ability in all_abilities():
-		if ability.id == id and ability.effect and ability.trigger == WandAbility.Trigger.PERMANENT:
-			ability.effect.activate(self, levels[id])
+	var cap := _cap_for(id)
+	var wanted: int = levels.get(id, 0) + amount
+	levels[id] = mini(wanted, cap)
+	var ability := _find(id)
+	if wanted > cap and ability:
+		over_cap.emit(ability, wanted - cap)
+	if ability and ability.effect and ability.trigger == WandAbility.Trigger.PERMANENT:
+		ability.effect.activate(self, levels[id])
 	_after_change()
 
 
@@ -93,12 +110,23 @@ func equip_bonus(ability: WandAbility, level: int = 1) -> void:
 	if levels.has(ability.id):
 		level_up(ability.id, level)
 		return
+	var cap := _cap_for(ability.id)
 	bonus.append(ability)
-	levels[ability.id] = mini(level, WandAbility.MAX_LEVEL)
+	levels[ability.id] = mini(level, cap)
+	if level > cap:
+		over_cap.emit(ability, level - cap)
 	_rebuild_triggers()
 	if ability.effect and (ability.trigger == WandAbility.Trigger.PERMANENT or ability.trigger == WandAbility.Trigger.COOLDOWN):
 		ability.effect.activate(self, level)
 	_after_change()
+
+
+## Abilita' posseduta per id, o null (slot o bonus dell'equipaggiamento).
+func _find(id: StringName) -> WandAbility:
+	for ability in all_abilities():
+		if ability.id == id:
+			return ability
+	return null
 
 
 ## Slot della bacchetta + abilita' dell'equipaggiamento (per HUD, colore, scelta degli eventi).
