@@ -49,6 +49,10 @@ const SHIELD_BREAK_KNOCKBACK: float = 260.0
 var _choosing_ability: bool = false
 ## Finestra dell'armadio aperta (evento Scheletri nell'armadio, M12 #86): stessa pausa di _choosing_ability.
 var _choosing_closet: bool = false
+## Spiegazione a schermo intero in pausa alla prima volta in assoluto (M12, #86): primo evento, primo
+## avviso di overtime. A differenza degli altri _choosing_*, non blocca altro (niente scelte da fare),
+## solo la run finche' non si preme Continua.
+var _showing_first_time_notice: bool = false
 ## Effetti a tempo dei consumabili attivi: chiave di traduzione -> secondi rimasti (solo per l'HUD).
 var _buffs: Dictionary = {}
 var boss_defeated: bool = false
@@ -84,6 +88,7 @@ var overtime := OvertimeState.new()
 @onready var _wand: WandAbilities = %WandAbilities
 @onready var _ability_choice: AbilityChoice = %AbilityChoice
 @onready var _events: RunEventDirector = %EventDirector
+@onready var _first_time_notice: FirstTimeNotice = %FirstTimeNotice
 
 
 func _ready() -> void:
@@ -104,6 +109,7 @@ func _ready() -> void:
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
 	_pause_menu.abandon_requested.connect(_on_abandon_requested)
 	_pause_menu.language_requested.connect(_on_language_requested)
+	_first_time_notice.dismissed.connect(_on_first_time_notice_dismissed)
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
 	_level_up_choice.reroll_requested.connect(_on_reroll_requested)
 	_player.shot_requested.connect(_projectile_pool.spawn)
@@ -193,9 +199,10 @@ func pentagram_zone() -> Vector3:
 func _on_event_started(event: RunEventData) -> void:
 	_hud.show_event(event.title, event.subtitle)
 	_sfx.play(&"event_start")
+	# Primo evento in assoluto (M12, #86): pausa con spiegazione a schermo intero invece del solo
+	# annuncio a scomparsa, per lasciare il tempo di leggere senza essere colpiti nel frattempo.
 	if not MetaProgression.has_seen_tutorial(&"first_event"):
-		_hud.announce(tr("TUTORIAL_EVENT_TITLE"), tr("TUTORIAL_EVENT_BODY"), 6.0)
-		MetaProgression.mark_tutorial_seen(&"first_event")
+		_show_first_time_notice(&"first_event", tr("TUTORIAL_EVENT_TITLE"), tr("TUTORIAL_EVENT_BODY"))
 
 
 ## Pentagramma: il player e' nel cerchio. Mostri +bonus subito, tetto dei vivi +bonus, nuovi mostri in rage.
@@ -504,7 +511,11 @@ func _refresh_overtime_bosses() -> void:
 
 
 func _on_overtime_warned(seconds: int, next_level: int) -> void:
-	_hud.announce(tr("OVERTIME_WARNING") % [next_level, seconds], tr("OVERTIME_WARNING_SUB"))
+	# Primo avviso di overtime in assoluto (M12, #86): pausa con spiegazione, come il primo evento.
+	if not MetaProgression.has_seen_tutorial(&"first_overtime_warning"):
+		_show_first_time_notice(&"first_overtime_warning", tr("TUTORIAL_OVERTIME_WARNING_TITLE"), tr("TUTORIAL_OVERTIME_WARNING_BODY") + "\n\n" + tr("OVERTIME_WARNING") % [next_level, seconds])
+	else:
+		_hud.announce(tr("OVERTIME_WARNING") % [next_level, seconds], tr("OVERTIME_WARNING_SUB"))
 	_sfx.play(&"overtime_warn")
 
 
@@ -714,7 +725,7 @@ func _on_save_requested() -> void:
 
 ## Due fonti di pausa: lo stato della run (level-up, fine run) e le pause del giocatore (ESC, P).
 func _refresh_pause() -> void:
-	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused() or _choosing_ability or _choosing_closet
+	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused() or _choosing_ability or _choosing_closet or _showing_first_time_notice
 	# Mirino mentre si gioca, freccia nei menu (pausa, level-up, scelte, fine run).
 	if get_tree().paused:
 		CursorStyle.use_arrow()
@@ -722,9 +733,26 @@ func _refresh_pause() -> void:
 		CursorStyle.use_crosshair()
 
 
+## Spiegazione a schermo intero, in pausa, finche' non si preme Continua (M12, #86): usata solo la prima
+## volta in assoluto per un dato tutorial_key, al posto del solo HUD.announce() che sparisce da solo
+## mentre la run continua (non lascia il tempo di leggere con calma).
+func _show_first_time_notice(tutorial_key: StringName, title: String, body: String) -> void:
+	_showing_first_time_notice = true
+	_first_time_notice.show_notice(title, body)
+	MetaProgression.mark_tutorial_seen(tutorial_key)
+	_refresh_pause()
+
+
+func _on_first_time_notice_dismissed() -> void:
+	_showing_first_time_notice = false
+	_refresh_pause()
+
+
 func _on_run_ended(result: RunManager.Result) -> void:
 	_pending_level_ups = 0
 	_level_up_choice.hide()
+	_showing_first_time_notice = false
+	_first_time_notice.hide()
 	var extracted := result == RunManager.Result.EXTRACTED
 	_sfx.play(&"extract" if extracted else &"player_death")
 	if extracted:

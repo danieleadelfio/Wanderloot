@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" path="res://scenes/run/Pickup/Pickup.tscn" id="28"]
 [ext_resource type="Texture2D" path="res://assets/sprites/exp_gem.png" id="29"]
 [ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="20"]
+[ext_resource type="PackedScene" path="res://scenes/ui/FirstTimeNotice/FirstTimeNotice.tscn" id="first_time_notice"]
 [ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="21"]
 [ext_resource type="AudioStream" path="res://assets/audio/music_arena.wav" id="22"]
 [ext_resource type="PackedScene" path="res://scenes/run/Torch/Torch.tscn" id="30"]
@@ -244,6 +245,9 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="ClosetReward" parent="." instance=ExtResource("33")]
+unique_name_in_owner = true
+
+[node name="FirstTimeNotice" parent="." instance=ExtResource("first_time_notice")]
 unique_name_in_owner = true
 
 [node name="WandAbilities" type="Node2D" parent="."]
