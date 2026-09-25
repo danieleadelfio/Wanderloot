@@ -47,6 +47,8 @@ TAB_INVENTORY,Inventario,Inventory,Inventaire,Inventario
 TAB_STATS,Statistiche,Stats,Statistiques,Estadísticas
 INV_CLOSE_HINT,I inventario · C statistiche · ESC per chiudere,I inventory · C stats · ESC to close,I inventaire · C statistiques · Échap pour fermer,I inventario · C estadísticas · ESC para cerrar
 BLACKSMITH_TITLE,Fabbro,Blacksmith,Forgeron,Herrero
+BLACKSMITH_RESOURCES,Risorse: %s,Resources: %s,Ressources : %s,Recursos: %s
+BLACKSMITH_RESOURCES_EMPTY,Nessuna risorsa,No resources,Aucune ressource,Sin recursos
 BLACKSMITH_OWNED,posseduto,owned,possédé,en posesión
 LOADOUT_TITLE,Equipaggiamento,Equipment,Équipement,Equipo
 LOADOUT_NO_ITEM,  nessun pezzo: craftalo dal fabbro,  no item: craft it at the blacksmith,  aucun objet : fabriquez-le chez le forgeron,  ningún objeto: fabrícalo en el herrero

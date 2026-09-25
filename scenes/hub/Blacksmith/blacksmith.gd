@@ -22,6 +22,7 @@ var _pending_salvage: int = 0
 @onready var _recipe_list: VBoxContainer = %RecipeList
 @onready var _fusion_list: VBoxContainer = %FusionList
 @onready var _salvage_list: VBoxContainer = %SalvageList
+@onready var _resources_label: Label = %ResourcesLabel
 
 
 func _ready() -> void:
@@ -31,9 +32,17 @@ func _ready() -> void:
 
 
 func refresh(inventory: MetaInventory, loadout: EquipmentLoadout, material_names: Dictionary[StringName, String]) -> void:
+	_refresh_resources(inventory, material_names)
 	_refresh_recipes(inventory, loadout, material_names)
 	_refresh_fusion(loadout)
 	_refresh_salvage(loadout, material_names)
+
+
+## Risorse (materiali) attualmente possedute, sempre visibili sopra le schede (M12, #86):
+## prima si dovevano controllare nel baule per sapere cosa si poteva craftare.
+func _refresh_resources(inventory: MetaInventory, material_names: Dictionary[StringName, String]) -> void:
+	var amounts := inventory.to_dictionary()
+	_resources_label.text = tr("BLACKSMITH_RESOURCES") % _amounts_text(amounts, material_names) if not amounts.is_empty() else tr("BLACKSMITH_RESOURCES_EMPTY")
 
 
 func _refresh_recipes(inventory: MetaInventory, loadout: EquipmentLoadout, material_names: Dictionary[StringName, String]) -> void:
