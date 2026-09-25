@@ -77,9 +77,9 @@ func level_of(ability: WandAbility) -> int:
 	return levels.get(ability.id, 1)
 
 
-## +amount livelli a un'abilita' gia' posseduta.
+## +amount livelli a un'abilita' gia' posseduta, senza superare WandAbility.MAX_LEVEL (M12, #86, #19).
 func level_up(id: StringName, amount: int = 1) -> void:
-	levels[id] = levels.get(id, 0) + amount
+	levels[id] = mini(levels.get(id, 0) + amount, WandAbility.MAX_LEVEL)
 	for ability in all_abilities():
 		if ability.id == id and ability.effect and ability.trigger == WandAbility.Trigger.PERMANENT:
 			ability.effect.activate(self, levels[id])
@@ -94,7 +94,7 @@ func equip_bonus(ability: WandAbility, level: int = 1) -> void:
 		level_up(ability.id, level)
 		return
 	bonus.append(ability)
-	levels[ability.id] = level
+	levels[ability.id] = mini(level, WandAbility.MAX_LEVEL)
 	_rebuild_triggers()
 	if ability.effect and (ability.trigger == WandAbility.Trigger.PERMANENT or ability.trigger == WandAbility.Trigger.COOLDOWN):
 		ability.effect.activate(self, level)

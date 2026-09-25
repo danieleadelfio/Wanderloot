@@ -5,6 +5,9 @@ extends Resource
 
 enum Trigger { COOLDOWN, SHOTS, DISTANCE, PERMANENT }
 
+## Livello massimo assoluto (M12, #86, #19): vale anche dopo aver sbloccato il cap con l'Ascensione.
+const MAX_LEVEL: int = 8
+
 @export var id: StringName = &""
 ## Chiavi di traduzione.
 @export var display_name: String = ""
