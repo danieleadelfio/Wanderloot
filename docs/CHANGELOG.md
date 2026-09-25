@@ -113,6 +113,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Selezione arena al portale: scegliendo una nuova arena l'evidenziazione/etichetta "selezionata" restava sulla prima scelta della sessione (Cripta) finche' l'hub non veniva ricreato; ora il pannello si aggiorna subito (#86).
 - Autosalvataggio di fine run: salvava i progressi ma lasciava la posizione nella piazza ferma all'ultimo salvataggio manuale; ora si aggiorna anche entrando in run (#86).
 - Barriera arcana: un colpo assorbito lasciava il player apparentemente invulnerabile per secondi se un nemico restava a contatto (mai più `area_entered`); ora l'assorbimento avvia gli stessi i-frame/rescan del danno reale (#86).
 - Inventario di run: il corpo del pannello (manichino + loot) scorre se non entra nello schermo, non viene più tagliato (#86).

@@ -262,9 +262,12 @@ func _on_ascend_requested(id: StringName) -> void:
 		_sfx.play(&"craft")
 
 
+## Ricostruisce il pannello con la nuova scelta evidenziata (M12, #86): senza, il testo/evidenziazione
+## di ARENA_SELECTED restava sull'arena di refresh() iniziale finche' l'hub non veniva ricreato.
 func _on_arena_selected(id: StringName) -> void:
 	if MetaProgression.select_arena(id):
 		_sfx.play(&"ui_select")
+		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id)
 
 
 ## Posizione aggiornata prima di entrare in run (M12, #86): senza, l'autosave a fine run
