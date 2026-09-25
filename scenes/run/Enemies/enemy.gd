@@ -1,7 +1,8 @@
 class_name Enemy
 extends CharacterBody2D
 ## Nemico base guidato da EnemyData. Insegue il target. API poolable: activate()/deactivate().
-## Dopo EnemyData.rage_after secondi in vita va in rage: piu' veloce, piu' dannoso, sprite rosso.
+## Dopo EnemyData.rage_after secondi in vita va in rage: piu' veloce, piu' dannoso; due fulmini rossi
+## sopra la testa (RageBody, M12, #86), colore e texture del nemico restano invariati.
 
 signal died(enemy: Enemy)
 signal hurt(enemy: Enemy)

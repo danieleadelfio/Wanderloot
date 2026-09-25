@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hit_flash.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/combat/knockback.gd" id="k1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/slime_green.png" id="s1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/slime_rage.png" id="s3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/rage_indicator.png" id="s3"]
 [ext_resource type="Script" path="res://scripts/combat/frame_cycler.gd" id="s2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/toxic_aura.png" id="au"]
 [ext_resource type="Script" path="res://scripts/combat/aura_pulse.gd" id="ap"]
@@ -43,13 +43,11 @@ frame_time = 0.3
 
 [node name="RageBody" type="Sprite2D" parent="."]
 unique_name_in_owner = true
+# Due fulmini rossi sopra la testa (M12, #86): il colore/texture del nemico non cambia piu' in rage.
 modulate = Color(1, 1, 1, 0)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("s3")
-offset = Vector2(0, -7)
-hframes = 2
-script = ExtResource("s2")
-frame_time = 0.3
+offset = Vector2(0, -34)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true

@@ -111,7 +111,6 @@ def exp_gem_svg():
 def build_characters():
     save("player", [player_svg(), player_svg(up=True)], 96)
     save("slime", [slime_svg(), slime_svg(squash=True)], 88)
-    save("slime_rage", [slime_svg(rage=True), slime_svg(squash=True, rage=True)], 88)
     save("projectile", [projectile_svg()], 32)
     save("exp_gem", [exp_gem_svg()], 32)
 
@@ -272,6 +271,20 @@ def enemy_bolt_svg():
                '<path d="M34 32 L54 32 M50 27 L56 32 L50 37" stroke="#f4eeff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>', defs, 64)
 
 
+## Indicatore di rage (M12, #86): due piccoli fulmini rossi sopra la testa, come il simbolo di
+## rabbia dei fumetti. Sostituisce lo sprite rosso a corpo intero: colore e texture del nemico non
+## cambiano piu' in rage, solo questa icona compare sopra la testa (vedi RageBody in enemy.gd/scene).
+def rage_indicator_svg():
+    bolt = 'M13 2 L4 18 L10 18 L6 30 L20 12 L13 12 Z'
+    left = '<path d="%s" fill="#ff3b30" stroke="#4a0d0a" stroke-width="2.5" stroke-linejoin="round"/>' % bolt
+    right = '<g transform="translate(48,0) scale(-1,1)"><path d="%s" fill="#ff3b30" stroke="#4a0d0a" stroke-width="2.5" stroke-linejoin="round"/></g>' % bolt
+    return svg(left + right, "", 48)
+
+
+def build_rage_indicator():
+    save("rage_indicator", [rage_indicator_svg()], 48)
+
+
 def icon_bone():
     return svg('<g transform="rotate(-35 32 32)"><rect x="14" y="27" width="36" height="10" rx="4" fill="#efe8d6" %s/>'
                '<circle cx="14" cy="26" r="7" fill="#efe8d6" %s/><circle cx="14" cy="38" r="7" fill="#efe8d6" %s/>'
@@ -289,9 +302,7 @@ def icon_essence():
 
 def build_ossuary_enemies():
     save("ghoul", [ghoul_svg(), ghoul_svg(up=True)], 96)
-    save("ghoul_rage", [ghoul_svg(rage=True), ghoul_svg(up=True, rage=True)], 96)
     save("skeleton", [skeleton_svg(), skeleton_svg(up=True)], 96)
-    save("skeleton_rage", [skeleton_svg(rage=True), skeleton_svg(up=True, rage=True)], 96)
     save("enemy_bolt", [enemy_bolt_svg()], 32)
     save("icon_bone_shard", [icon_bone()], 64)
     save("icon_shadow_essence", [icon_essence()], 64)
@@ -900,6 +911,7 @@ if __name__ == "__main__":
     build_arena_and_icons()
     build_props()
     build_ossuary_enemies()
+    build_rage_indicator()
     build_ossuary()
     build_hub()
     build_boss()

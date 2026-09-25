@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Indicatore di rage: due fulmini rossi sopra la testa del nemico, colore e texture non cambiano più (#86).
 - Risorse possedute sempre visibili nel pannello del fabbro, sopra le schede (#86).
 - Salvataggio automatico a ogni fine run (successo o game over), con scritta "Salvataggio automatico..." nell'hub (#86).
 - Overtime: a ogni livello anche il tetto dei nemici vivi e la frequenza delle ondate crescono (x1,5 per livello), tetto assoluto 320; test (#84).
