@@ -11,12 +11,24 @@ script = ExtResource("1")
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Figure" type="Control" parent="HBox"]
+[node name="FigureColumn" type="VBoxContainer" parent="HBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Figure" type="Control" parent="HBox/FigureColumn"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 440)
 layout_mode = 2
 
-[node name="Silhouette" type="TextureRect" parent="HBox/Figure"]
+[node name="AbilityLevels" type="Label" parent="HBox/FigureColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.85, 0.55, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+text = "LOADOUT_ABILITY_NONE"
+
+[node name="Silhouette" type="TextureRect" parent="HBox/FigureColumn/Figure"]
 layout_mode = 0
 offset_right = 360.0
 offset_bottom = 440.0
@@ -24,7 +36,7 @@ mouse_filter = 2
 texture = ExtResource("2")
 expand_mode = 1
 
-[node name="Slots" type="Control" parent="HBox/Figure"]
+[node name="Slots" type="Control" parent="HBox/FigureColumn/Figure"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 360.0

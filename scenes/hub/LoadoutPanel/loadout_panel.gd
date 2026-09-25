@@ -60,6 +60,7 @@ var _loadout: EquipmentLoadout
 @onready var _slots: Control = %Slots
 @onready var _grid: GridContainer = %ItemGrid
 @onready var _empty_hint: Label = %EmptyHint
+@onready var _ability_levels: Label = %AbilityLevels
 
 
 func _ready() -> void:
@@ -108,6 +109,7 @@ func _on_sort_pressed(mode: StashSort.Mode) -> void:
 
 func refresh(loadout: EquipmentLoadout) -> void:
 	_loadout = loadout
+	_refresh_ability_levels(loadout)
 	for child in _slots.get_children():
 		child.queue_free()
 	for slot: int in SLOT_POSITIONS:
@@ -136,6 +138,24 @@ func refresh(loadout: EquipmentLoadout) -> void:
 		tile.pressed.connect(equip_requested.emit.bind(item.uid))
 		tile.seen.connect(seen_requested.emit)
 		_grid.add_child(tile)
+
+
+## Livelli totali di ogni abilita' data dai pezzi indossati (M12, #86), sommati come in run.
+func _refresh_ability_levels(loadout: EquipmentLoadout) -> void:
+	var levels: Dictionary = {}
+	for item in loadout.equipped_items():
+		if item.ability:
+			var entry: Array = levels.get(item.ability.id, [item.ability, 0])
+			entry[1] += item.ability_level(ItemText.RARITIES)
+			levels[item.ability.id] = entry
+	if levels.is_empty():
+		_ability_levels.text = tr("LOADOUT_ABILITY_NONE")
+		return
+	var parts: Array[String] = []
+	for entry: Array in levels.values():
+		var ability: WandAbility = entry[0]
+		parts.append("%s Lv%d" % [TranslationServer.translate(ability.display_name), entry[1]])
+	_ability_levels.text = tr("LOADOUT_ABILITY_LEVELS") % ", ".join(parts)
 
 
 func _item_button(item: ItemInstance, empty_label: String) -> Button:

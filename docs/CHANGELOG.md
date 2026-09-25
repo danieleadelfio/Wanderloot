@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- `LoadoutPanel` (manichino, hub e inventario di run): sotto il manichino, i livelli totali di ogni abilità data dai pezzi indossati, sommati come in run (#86).
 - Nuovo documento `docs/EQUIP_INFO.md`: statistiche base, range dei bonus per rarità e tasso di drop per arena di ogni pezzo di equip; va aggiornato a ogni nuovo pezzo (#86).
 - Barriera arcana: onda d'urto (respinge i nemici entro 100px) quando si rompe, invece di lasciarli addosso durante l'invulnerabilità che segue; corretto anche un bug per cui la barriera multi-carica (Lv2+) si rompeva già al primo colpo invece che dopo N (#86).
 - Menu di pausa: etichetta di stato ("premi di nuovo per uscire") a size fissa, non fa più ridimensionare il menu quando compare (#86).
