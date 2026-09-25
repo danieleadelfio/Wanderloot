@@ -39,7 +39,10 @@ func _try_hit(area: Area2D) -> void:
 	if shield_charges > 0:
 		shield_charges -= 1
 		hitbox.notify_hit(self)
-		shield_broken.emit()
+		# Un solo shield_broken quando la barriera si esaurisce (M12, #86): con piu' cariche
+		# (livello > 1) assorbe piu' colpi prima di rompersi, non solo il primo.
+		if shield_charges == 0:
+			shield_broken.emit()
 		return
 	health.take_damage(hitbox.damage)
 	hitbox.notify_hit(self)

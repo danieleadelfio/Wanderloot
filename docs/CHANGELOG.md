@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Barriera arcana: onda d'urto (respinge i nemici entro 100px) quando si rompe, invece di lasciarli addosso durante l'invulnerabilità che segue; corretto anche un bug per cui la barriera multi-carica (Lv2+) si rompeva già al primo colpo invece che dopo N (#86).
 - Menu di pausa: etichetta di stato ("premi di nuovo per uscire") a size fissa, non fa più ridimensionare il menu quando compare (#86).
 - Inventario di run: manichino al 50% (`LoadoutPanel.figure_scale`), il contenuto non eccede più lo schermo (#86).
 - Scelta abilità al level-up: se già al cap sbloccato, la carta mostra Bag of Resources invece della carta normale (prima si vedeva solo a run finita, senza capire perché) (#86, #20).

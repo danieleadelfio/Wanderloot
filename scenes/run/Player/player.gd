@@ -6,6 +6,8 @@ signal shot_requested(origin: Vector2, direction: Vector2, data: WeaponData)
 signal died
 ## Scatto del Passo d'ombra (per il suono).
 signal dashed
+## Barriera arcana esaurita (M12, #86): la composition root ci aggancia lo shockwave che respinge i nemici.
+signal shield_broken
 
 const AIM_DEADZONE: float = 0.3
 
@@ -47,6 +49,7 @@ func _ready() -> void:
 	health.died.connect(died.emit)
 	_hurtbox.knocked.connect(_knockback.apply)
 	_hurtbox.shield_broken.connect(set_shield.bind(false))
+	_hurtbox.shield_broken.connect(shield_broken.emit)
 	_hurtbox.poisoned.connect(poison.apply)
 	begin_run([])
 

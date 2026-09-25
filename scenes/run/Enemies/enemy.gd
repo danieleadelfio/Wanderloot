@@ -41,6 +41,11 @@ func _ready() -> void:
 	_set_enabled(false)
 
 
+## Spinta esterna diretta (es. onda d'urto della Barriera arcana, M12 #86), non da un colpo del player.
+func apply_knockback(impulse: Vector2) -> void:
+	_knockback.apply(impulse)
+
+
 func _physics_process(delta: float) -> void:
 	_alive_time += delta
 	if not is_raged and data.rage_after > 0.0 and _alive_time >= data.rage_after:

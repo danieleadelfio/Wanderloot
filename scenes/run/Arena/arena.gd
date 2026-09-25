@@ -35,6 +35,9 @@ var _bosses_spawned: bool = false
 ## una quantita' fissa di un materiale a caso, invece di andare persi o superare il cap.
 @export var over_cap_materials: Array[MaterialData] = []
 const OVER_CAP_MATERIAL_AMOUNT: int = 10
+## Onda d'urto alla rottura della Barriera arcana (M12, #86): raggio ed entita' della spinta.
+const SHIELD_BREAK_RADIUS: float = 100.0
+const SHIELD_BREAK_KNOCKBACK: float = 260.0
 var _choosing_ability: bool = false
 ## Effetti a tempo dei consumabili attivi: chiave di traduzione -> secondi rimasti (solo per l'HUD).
 var _buffs: Dictionary = {}
@@ -97,6 +100,7 @@ func _ready() -> void:
 	_player.health.damaged.connect(_hit_stop.trigger)
 	_player.health.damaged.connect(_sfx.play.bind(&"player_hurt").unbind(1))
 	_player.shot_requested.connect(_sfx.play.bind(&"shoot").unbind(3))
+	_player.shield_broken.connect(_on_shield_broken)
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
 	_player.begin_run(MetaProgression.equipped_modifiers())
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
@@ -376,6 +380,19 @@ func _on_consumable_collected(consumable: ConsumableData) -> void:
 			_player.boost_fire_rate(consumable.amount, consumable.duration)
 	if consumable.duration > 0.0:
 		_buffs[consumable.display_name] = consumable.duration
+
+
+## Onda d'urto quando la Barriera arcana si esaurisce (M12, #86): respinge i nemici vicini, cosi'
+## non si accumulano addosso al player nel breve momento di invulnerabilita' che segue la rottura.
+func _on_shield_broken() -> void:
+	for enemy in active_enemies():
+		var offset := _player.global_position.direction_to(enemy.global_position)
+		var distance := _player.global_position.distance_to(enemy.global_position)
+		if distance > SHIELD_BREAK_RADIUS:
+			continue
+		if offset == Vector2.ZERO:
+			offset = Vector2.RIGHT
+		enemy.apply_knockback(offset * SHIELD_BREAK_KNOCKBACK)
 
 
 func _on_material_collected(material: MaterialData, amount: int) -> void:
