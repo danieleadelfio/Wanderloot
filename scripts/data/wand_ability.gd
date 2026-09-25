@@ -16,6 +16,9 @@ const MAX_LEVEL: int = 8
 @export var trigger: Trigger = Trigger.COOLDOWN
 ## Secondi tra un'attivazione e l'altra (COOLDOWN).
 @export var cooldown: float = 10.0
+## Cooldown per livello (COOLDOWN, M12 #86 #18): indice 0 = Lv1, ... Vuoto = usa sempre `cooldown`.
+## Oltre l'ultimo indice si usa l'ultimo valore. Es. Barriera arcana: piatto fino a Lv4, poi scende.
+@export var cooldown_by_level: Array[float] = []
 ## Colpi sparati per attivarsi (SHOTS).
 @export var every_shots: int = 8
 ## Pixel percorsi per attivarsi (DISTANCE).
@@ -26,6 +29,13 @@ const MAX_LEVEL: int = 8
 
 
 ## Testo del criterio di attivazione (tradotto), per la scelta e l'HUD.
+## Cooldown effettivo al livello dato: `cooldown_by_level[level - 1]` (clampato), o `cooldown` se vuoto.
+func cooldown_for_level(level: int) -> float:
+	if cooldown_by_level.is_empty():
+		return cooldown
+	return cooldown_by_level[clampi(level, 1, cooldown_by_level.size()) - 1]
+
+
 func trigger_text() -> String:
 	match trigger:
 		Trigger.SHOTS:

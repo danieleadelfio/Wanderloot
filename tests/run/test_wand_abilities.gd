@@ -34,6 +34,21 @@ func test_cooldown_trigger_and_hold() -> void:
 	assert_int(trigger.tick(0.1)).is_equal(0)
 
 
+func test_cooldown_by_level() -> void:
+	# M12 #86 #18: cooldown per-livello (es. Barriera arcana, piatto poi in calo).
+	var ability := _ability(&"a", WandAbility.Trigger.COOLDOWN)
+	ability.cooldown_by_level = [12.0, 12.0, 12.0, 12.0, 10.0, 8.0, 6.0, 6.0]
+	assert_float(ability.cooldown_for_level(1)).is_equal_approx(12.0, 0.001)
+	assert_float(ability.cooldown_for_level(5)).is_equal_approx(10.0, 0.001)
+	assert_float(ability.cooldown_for_level(8)).is_equal_approx(6.0, 0.001)
+	assert_float(ability.cooldown_for_level(99)).is_equal_approx(6.0, 0.001)
+	# Vuoto: usa sempre il cooldown piatto.
+	assert_float(_ability(&"b", WandAbility.Trigger.COOLDOWN).cooldown_for_level(5)).is_equal_approx(2.0, 0.001)
+	var trigger := AbilityTrigger.new(ability)
+	assert_int(trigger.tick(9.9, false, 5)).is_equal(0)
+	assert_int(trigger.tick(0.2, false, 5)).is_equal(1)
+
+
 func test_slots_add_replace_and_tint() -> void:
 	var slots := AbilitySlots.new(2)
 	var a := _ability(&"a", WandAbility.Trigger.SHOTS)

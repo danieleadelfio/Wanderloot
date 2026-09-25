@@ -6,6 +6,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 
 ### Added
 - Livello massimo assoluto delle abilità della bacchetta: LV8, invalicabile da qualunque fonte (#86, #19).
+- Barriera arcana: ricarica ridotta da Lv5 (12 → 10 → 8 → 6 s), dato per-livello riusabile su qualunque abilità (`WandAbility.cooldown_by_level`); test (#86, #18).
 - Reroll delle scelte al level-up: una scelta in meno a ogni reroll (minimo 1), max 5 per run (#86).
 - Opzione Inverti mouse (mancini): inverte l'asse orizzontale della mira col mouse, in Opzioni (#86).
 - Indicatore di rage: due fulmini rossi sopra la testa del nemico, colore e texture non cambiano più (#86).

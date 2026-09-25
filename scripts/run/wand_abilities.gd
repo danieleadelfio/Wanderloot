@@ -47,7 +47,7 @@ func setup(for_player: Player, projectile_pool: ProjectilePool, targets: Callabl
 
 
 func progress_of(index: int) -> float:
-	return _triggers[index].progress() if index < _triggers.size() else 0.0
+	return _triggers[index].progress(level_of(_triggers[index].ability)) if index < _triggers.size() else 0.0
 
 
 ## Aggiunge o, con index >= 0, sostituisce lo slot index. False se non e' cambiato nulla.
@@ -136,7 +136,7 @@ func _physics_process(delta: float) -> void:
 	_last_position = player.global_position
 	for trigger in _triggers:
 		var held := trigger.ability.effect != null and trigger.ability.effect.holds_cooldown(self)
-		_fire(trigger, trigger.on_moved(moved) + trigger.tick(delta, held))
+		_fire(trigger, trigger.on_moved(moved) + trigger.tick(delta, held, level_of(trigger.ability)))
 
 
 func _on_player_shot() -> void:

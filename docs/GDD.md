@@ -56,7 +56,7 @@ La bacchetta ha **3 slot** di abilità per la run; l'ordine non conta e le abili
 |---|---|---|---|
 | Anello arcano | ogni 8 colpi | anello di 10 proiettili con l'arma della run | viola |
 | Fulmine errante | ogni 350 px percorsi | fulmine sul nemico più vicino entro 420 px: danno dell'arma + 2 in raggio 70 | azzurro |
-| Barriera arcana | ricarica 12 s dopo la rottura | annulla il prossimo colpo (attiva subito alla presa) | oro |
+| Barriera arcana | ricarica 12 s dopo la rottura (10/8/6 s da Lv5, M12 #86 #18) | annulla N colpi = livello (attiva subito alla presa) | oro |
 
 Il catalogo completo (abilità di Magicraft riadattate e originali) è in `docs/catalog/` (§13).
 
@@ -137,7 +137,7 @@ Gli oggetti arrivati nel baule (estratti, craftati, fusi) hanno una **N gialla**
 
 **Tooltip (M11.3, #70; M11.4 #79: intervalli in bianco, sfondo quasi opaco dal tema `data/ui/wanderloot_theme.tres`)**: passando su un oggetto del baule compare accanto il pezzo equipaggiato nello stesso slot (per gli anelli entrambi), per il confronto. Ogni bonus tirato mostra l'**intervallo possibile per la sua rarità**, es. *+13% Vel. proiettile (+10% – +20%)*: si vede subito se il tiro è vicino al minimo o al massimo. L'intervallo è quello del bonus in `affix_table.tres` letto tra `roll_min` e `roll_max` della rarità.
 
-**Livelli delle abilità (M11.3, #72)**: ogni abilità della bacchetta ha un livello. Gli oggetti la portano a **Lv1 (Super raro), Lv2 (Leggendario), Lv3 (Mitico)** (`ability_level` in `rarity_table.tres`). La stessa abilità da più pezzi o da un evento **si somma**: non si duplica e non sparisce dalle scelte; gli eventi propongono tutte le abilità, e per quelle già possedute la scelta mostra *Lv2 → Lv3* e non occupa uno slot. Effetto del livello: Fulmine errante = un fulmine per livello; Anello arcano = +5 proiettili per livello; Barriera arcana = un colpo assorbito per livello. Nell'HUD il numero del livello compare sull'icona (da Lv2). **Livello massimo assoluto: LV8** (M12, #86, #19; `WandAbility.MAX_LEVEL`), invalicabile da qualunque fonte (evento, equip, in futuro l'Ascensione, §3.3.1) — `WandAbilities.level_up()`/`equip_bonus()` clampano sempre. **Futuro (M12)**: Leggendari e Mitici avranno anche abilità **uniche**, che non si trovano in run.
+**Livelli delle abilità (M11.3, #72)**: ogni abilità della bacchetta ha un livello. Gli oggetti la portano a **Lv1 (Super raro), Lv2 (Leggendario), Lv3 (Mitico)** (`ability_level` in `rarity_table.tres`). La stessa abilità da più pezzi o da un evento **si somma**: non si duplica e non sparisce dalle scelte; gli eventi propongono tutte le abilità, e per quelle già possedute la scelta mostra *Lv2 → Lv3* e non occupa uno slot. Effetto del livello: Fulmine errante = un fulmine per livello; Anello arcano = +5 proiettili per livello; Barriera arcana = un colpo assorbito per livello, e da Lv5 anche ricarica ridotta (12 → 10 → 8 → 6 s, M12 #86 #18; `WandAbility.cooldown_by_level`). Nell'HUD il numero del livello compare sull'icona (da Lv2). **Livello massimo assoluto: LV8** (M12, #86, #19; `WandAbility.MAX_LEVEL`), invalicabile da qualunque fonte (evento, equip, in futuro l'Ascensione, §3.3.1) — `WandAbilities.level_up()`/`equip_bonus()` clampano sempre. **Futuro (M12)**: Leggendari e Mitici avranno anche abilità **uniche**, che non si trovano in run.
 
 ### 6.2 Rarità (M11, #57)
 

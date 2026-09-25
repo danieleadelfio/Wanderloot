@@ -16,5 +16,6 @@ description = "ABILITY_ARCANE_BARRIER_DESC"
 icon = ExtResource("3")
 trigger = 0
 cooldown = 12.0
+cooldown_by_level = Array[float]([12.0, 12.0, 12.0, 12.0, 10.0, 8.0, 6.0, 6.0])
 effect = SubResource("effect")
 projectile_tint = Color(1, 0.88, 0.5, 1)

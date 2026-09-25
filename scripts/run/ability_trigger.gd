@@ -32,23 +32,24 @@ func on_moved(distance: float) -> int:
 
 
 ## held = la ricarica e' ferma (l'effetto e' ancora attivo): il tempo non scorre.
-func tick(delta: float, held: bool = false) -> int:
+## level: livello attuale dell'abilita' (M12, #86, #18), per il cooldown per-livello (es. Barriera arcana).
+func tick(delta: float, held: bool = false, level: int = 1) -> int:
 	if ability.trigger != WandAbility.Trigger.COOLDOWN or held:
 		return 0
 	_elapsed += delta
-	if _elapsed >= ability.cooldown:
+	if _elapsed >= ability.cooldown_for_level(level):
 		_elapsed = 0.0
 		return 1
 	return 0
 
 
 ## Avanzamento verso la prossima attivazione (0..1), per l'HUD.
-func progress() -> float:
+func progress(level: int = 1) -> float:
 	match ability.trigger:
 		WandAbility.Trigger.SHOTS:
 			return float(_shots) / maxi(ability.every_shots, 1)
 		WandAbility.Trigger.DISTANCE:
 			return _distance / maxf(ability.every_distance, 1.0)
 		WandAbility.Trigger.COOLDOWN:
-			return _elapsed / maxf(ability.cooldown, 0.01)
+			return _elapsed / maxf(ability.cooldown_for_level(level), 0.01)
 	return 1.0
