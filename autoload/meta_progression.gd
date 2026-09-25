@@ -23,6 +23,7 @@ const SECTION_EXTRACTIONS: String = "extractions"
 const SECTION_HUB: String = "hub"
 const SECTION_ITEMS: String = "items"
 const SECTION_ASCENSION: String = "ascension"
+const SECTION_DISCOVERED: String = "discovered"
 
 var inventory: MetaInventory = MetaInventory.new()
 var loadout: EquipmentLoadout = EquipmentLoadout.new()
@@ -54,6 +55,10 @@ var _pending_autosave_notice: bool = false
 ## Cap sbloccato per abilita' (id -> livello, M12 #86 #16/#20): solo le voci > 1 (default implicito Lv1).
 ## Alzato dall'Ascensione (fabbro), consumato dalla run per il cap di WandAbilities.
 var ascension_caps: Dictionary[StringName, int] = {}
+## Id (EquipmentData.id) dei pezzi base mai estratti almeno una volta (M12, #86): usato dall'evento
+## Scheletri nell'armadio per proporre solo pezzi mai visti. Non si svuota mai, nemmeno se il pezzo
+## poi si smonta o fonde: conta l'averlo trovato, non il possederlo ora.
+var discovered_equipment: Dictionary[StringName, bool] = {}
 
 
 func _ready() -> void:
@@ -72,6 +77,7 @@ func new_game() -> void:
 	extractions.clear()
 	selected_arena = &""
 	ascension_caps.clear()
+	discovered_equipment.clear()
 	has_unsaved_changes = false
 	_has_hub_position = false
 	_has_pending_hub_position = false
@@ -150,7 +156,17 @@ func deposit_run_items(items: Array[ItemInstance]) -> void:
 	for item in items:
 		item.is_new = true
 		loadout.add(item)
+		discovered_equipment[item.base.id] = true
 	_mark_changed()
+
+
+func is_discovered(id: StringName) -> bool:
+	return discovered_equipment.has(id)
+
+
+## Pezzi del catalogo mai estratti (per l'evento Scheletri nell'armadio, M12 #86).
+func undiscovered_equipment() -> Array[EquipmentData]:
+	return catalog.items.filter(func(item: EquipmentData) -> bool: return not is_discovered(item.id))
 
 
 ## Unico punto di crafting: regole in Crafting (logica pura), qui solo stato e notifica.
@@ -313,6 +329,8 @@ func save_to_disk() -> Error:
 	for ability_id in ascension_caps:
 		config.set_value(SECTION_ASCENSION, String(ability_id), ascension_caps[ability_id])
 	config.set_value(SECTION_META, "selected_arena", String(selected_arena))
+	for equip_id in discovered_equipment:
+		config.set_value(SECTION_DISCOVERED, String(equip_id), true)
 	if _has_hub_position:
 		config.set_value(SECTION_HUB, "player_position", _hub_position)
 	var error := config.save(save_path)
@@ -331,6 +349,7 @@ func load_from_disk() -> Error:
 	extractions.clear()
 	selected_arena = &""
 	ascension_caps.clear()
+	discovered_equipment.clear()
 	if error == OK:
 		if config.has_section(SECTION_EXTRACTIONS):
 			for key in config.get_section_keys(SECTION_EXTRACTIONS):
@@ -338,6 +357,9 @@ func load_from_disk() -> Error:
 		if config.has_section(SECTION_ASCENSION):
 			for key in config.get_section_keys(SECTION_ASCENSION):
 				ascension_caps[StringName(key)] = int(config.get_value(SECTION_ASCENSION, key, 1))
+		if config.has_section(SECTION_DISCOVERED):
+			for key in config.get_section_keys(SECTION_DISCOVERED):
+				discovered_equipment[StringName(key)] = true
 		selected_arena = StringName(config.get_value(SECTION_META, "selected_arena", ""))
 		_has_pending_hub_position = config.has_section_key(SECTION_HUB, "player_position")
 		if _has_pending_hub_position:

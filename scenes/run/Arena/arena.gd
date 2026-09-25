@@ -42,6 +42,8 @@ const OVER_CAP_MATERIAL_AMOUNT: int = 10
 const SHIELD_BREAK_RADIUS: float = 100.0
 const SHIELD_BREAK_KNOCKBACK: float = 260.0
 var _choosing_ability: bool = false
+## Finestra dell'armadio aperta (evento Scheletri nell'armadio, M12 #86): stessa pausa di _choosing_ability.
+var _choosing_closet: bool = false
 ## Effetti a tempo dei consumabili attivi: chiave di traduzione -> secondi rimasti (solo per l'HUD).
 var _buffs: Dictionary = {}
 var boss_defeated: bool = false
@@ -73,6 +75,7 @@ var overtime := OvertimeState.new()
 @onready var _pause: PauseController = %PauseController
 @onready var _pause_menu: PauseMenu = %PauseMenu
 @onready var _run_inventory: RunInventory = %RunInventory
+@onready var _closet_reward: ClosetReward = %ClosetReward
 @onready var _wand: WandAbilities = %WandAbilities
 @onready var _ability_choice: AbilityChoice = %AbilityChoice
 @onready var _events: RunEventDirector = %EventDirector
@@ -128,6 +131,7 @@ func _ready() -> void:
 	_events.event_failed.connect(_on_event_failed)
 	_events.event_activated.connect(_on_event_activated)
 	_events.candle_out.connect(_sfx.play.bind(&"candle_out"))
+	_closet_reward.item_chosen.connect(_on_closet_item_chosen)
 	_events.strike_landed.connect(_sfx.play.bind(&"lightning"))
 	_pickup_pool.target = _player
 	_enemy_projectile_pool.pull_target = _player
@@ -205,6 +209,42 @@ func _on_event_completed(event: RunEventData) -> void:
 			_spawn_bosses(event.bonus_bosses)
 	if event.reward_choices > 0:
 		offer_abilities(event.reward_choices)
+	if event.kind == RunEventData.Kind.SKELETONS_CLOSET:
+		_open_closet_reward(event)
+
+
+## Armadio dell'evento Scheletri nell'armadio (M12, #86): pezzi mai estratti, a caso tra quelli
+## disponibili (closet_choices, o meno se ne restano meno nel catalogo).
+func _open_closet_reward(event: RunEventData) -> void:
+	var pool := MetaProgression.undiscovered_equipment()
+	if pool.is_empty():
+		return
+	var candidates: Array[ItemInstance] = []
+	for i in mini(event.closet_choices, pool.size()):
+		var index := _rng.randi_range(0, pool.size() - 1)
+		candidates.append(MetaProgression.make_item(pool[index], 0))
+		pool.remove_at(index)
+	_choosing_closet = true
+	_pause.enabled = false
+	_refresh_pause()
+	_closet_reward.present(MetaProgression.loadout, candidates)
+
+
+## Il pezzo scelto si equipaggia subito per il resto della run (a rischio come ogni loot: si perde
+## se si muore senza estrarre). Stesso trattamento dell'equip preso in hub: modificatori sulle stats
+## correnti e, se l'oggetto ha un'abilita', alla bacchetta.
+func _on_closet_item_chosen(item: ItemInstance) -> void:
+	_choosing_closet = false
+	_pause.enabled = RunManager.state == RunManager.State.RUNNING
+	_refresh_pause()
+	RunManager.add_loot_item(item)
+	var modifiers := item.modifiers()
+	_equip_modifiers.append_array(modifiers)
+	_player.apply_equipment(modifiers)
+	if item.ability:
+		_wand.equip_bonus(item.ability, item.ability_level(MetaProgression.rarity_table))
+	_hud.set_stats(_player, _equip_modifiers)
+	_sfx.play(&"pickup_item")
 
 
 func _on_event_failed(event: RunEventData) -> void:
@@ -607,7 +647,7 @@ func _on_player_died() -> void:
 
 
 func _on_run_state_changed(state: RunManager.State) -> void:
-	_pause.enabled = state == RunManager.State.RUNNING and not _choosing_ability
+	_pause.enabled = state == RunManager.State.RUNNING and not _choosing_ability and not _choosing_closet
 	_refresh_pause()
 
 
@@ -640,7 +680,7 @@ func _on_save_requested() -> void:
 
 ## Due fonti di pausa: lo stato della run (level-up, fine run) e le pause del giocatore (ESC, P).
 func _refresh_pause() -> void:
-	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused() or _choosing_ability
+	get_tree().paused = RunManager.state != RunManager.State.RUNNING or _pause.state.is_paused() or _choosing_ability or _choosing_closet
 	# Mirino mentre si gioca, freccia nei menu (pausa, level-up, scelte, fine run).
 	if get_tree().paused:
 		CursorStyle.use_arrow()

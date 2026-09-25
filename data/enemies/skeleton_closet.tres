@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://dj6e0fe8px7k5" path="res://scripts/data/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Scheletro dell'armadio"
+max_hp = 4
+move_speed = 70.0
+contact_damage = 1
+contact_knockback = 260.0
+exp_reward = 0
+rage_after = 0.0
+drops = Array[Resource]([])

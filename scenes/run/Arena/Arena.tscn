@@ -23,6 +23,7 @@
 [ext_resource type="Script" path="res://scripts/run/pause_controller.gd" id="24"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu/PauseMenu.tscn" id="25"]
 [ext_resource type="PackedScene" path="res://scenes/ui/RunInventory/RunInventory.tscn" id="26"]
+[ext_resource type="PackedScene" path="res://scenes/run/ClosetReward/ClosetReward.tscn" id="33"]
 [ext_resource type="Script" path="res://scripts/run/pickup_pool.gd" id="27"]
 [ext_resource type="PackedScene" path="res://scenes/run/Pickup/Pickup.tscn" id="28"]
 [ext_resource type="Texture2D" path="res://assets/sprites/exp_gem.png" id="29"]
@@ -240,6 +241,9 @@ script = ExtResource("24")
 unique_name_in_owner = true
 
 [node name="RunInventory" parent="." instance=ExtResource("26")]
+unique_name_in_owner = true
+
+[node name="ClosetReward" parent="." instance=ExtResource("33")]
 unique_name_in_owner = true
 
 [node name="WandAbilities" type="Node2D" parent="."]

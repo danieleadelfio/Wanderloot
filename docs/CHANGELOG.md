@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Evento "Scheletri nell'armadio": 10 scheletri sul perimetro attorno al player camminano verso il centro (non lo inseguono), 10s, fallisce a qualunque colpo subito; superato apre un armadio (manichino di run + fino a 3 scelte) con pezzi mai estratti prima, il pezzo scelto si equipaggia subito per la run e segue le normali regole di rischio/estrazione; nuovo tracciamento `MetaProgression.discovered_equipment` (marcato solo all'estrazione riuscita); test (#86).
 - Statistiche HUD in tempo reale: `StatSheet.run_rows` mostra bonus/finale con anche i potenziamenti di run (non solo equip), suffisso "*" su bonus e finale quando una statistica ne beneficia; font ridotto a 11px; a run finita l'hub resta equip-only senza asterischi (#86).
 - Menu di pausa in run: voce **Abbandona Run** (tra Carica e Opzioni) per tornare alla piazza abbandonando la run in corso, senza dover passare da Torna al menu (nascosta nel menu di pausa della piazza) (#86).
 - Statistiche a tre numeri (base giallo fisso, bonus equip verde, finale bianco) in HUD, scheda Statistiche dell'hub e inventario di run (nuovo, prima non c'era); `StatSheet.equip_rows`/`fill_with_equip`, `Player.base_stats()`/`base_weapon_data()`; test (#86).

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RunEventData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/run_event_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/skeleton_closet.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"skeletons_closet"
+title = "EVENT_CLOSET_TITLE"
+subtitle = "EVENT_CLOSET_SUBTITLE"
+kind = 3
+duration = 10.0
+reward_choices = 0
+skeleton_enemy = ExtResource("2")
+skeleton_count = 10
+skeleton_spawn_radius = 260.0
+closet_choices = 3

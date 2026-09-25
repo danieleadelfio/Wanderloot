@@ -199,6 +199,15 @@ func apply_upgrade(upgrade: UpgradeData) -> void:
 			_hurtbox.invulnerability_time = stats.invulnerability_time
 
 
+## Pezzo raccolto dall'armadio (evento Scheletri nell'armadio, M12 #86): applica i suoi modificatori
+## alle stats correnti di run, come un potenziamento (non resetta begin_run). Chi chiama aggiorna anche
+## gli equip_modifiers per l'overlay statistiche e, se l'oggetto ha un'abilita', la bacchetta.
+func apply_equipment(modifiers: Array[StatModifier]) -> void:
+	StatApplier.apply_modifiers(modifiers, stats, _weapon.data)
+	health.set_max_hp(stats.max_hp)
+	_hurtbox.invulnerability_time = stats.invulnerability_time
+
+
 func _get_aim_direction() -> Vector2:
 	var stick := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down", AIM_DEADZONE)
 	if stick != Vector2.ZERO:

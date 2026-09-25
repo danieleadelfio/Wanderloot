@@ -3,7 +3,7 @@ extends Resource
 ## Evento a tempo della run (M10): titolo e sottotitolo a schermo, durata, regole, ricompensa.
 ## Nuovi tipi solo in coda all'enum (valore salvato nei .tres).
 
-enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP }
+enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP, SKELETONS_CLOSET }
 
 @export var id: StringName = &""
 ## Chiavi di traduzione: titolo grande e obiettivo in poche parole.
@@ -50,3 +50,15 @@ enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP }
 ## Velocita' e durata dello scatto: il player e' invulnerabile per tutta la durata.
 @export var dash_speed: float = 850.0
 @export var dash_duration: float = 0.2
+
+@export_group("Scheletri nell'armadio")
+## Dati del nemico spawnato (velocita'/vita/danno da contatto vengono da qui). Non attirato dal
+## player: target fisso sul centro del cerchio (M12, #86).
+@export var skeleton_enemy: EnemyData
+## Quanti scheletri compaiono sul cerchio.
+@export var skeleton_count: int = 10
+## Raggio del cerchio attorno al player su cui compaiono (M12, #86: "ampio cerchio attorno al player").
+@export var skeleton_spawn_radius: float = 260.0
+## Pezzi proposti dall'armadio a evento superato (mai estratti prima; se ne restano meno, si propone
+## quel che c'e'). Ruolo equivalente a reward_choices, ma per equipaggiamento invece di abilita'.
+@export var closet_choices: int = 3

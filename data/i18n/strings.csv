@@ -211,6 +211,13 @@ OVERTIME_WARNING_SUB,Estrai prima che l'arena diventi impossibile,Extract before
 OVERTIME_SUB,Boss: %d ogni %s s · nemici in rage · velocità x%s · vita +%d%%,Bosses: %d every %s s · raged enemies · speed x%s · health +%d%%,Boss : %d toutes les %s s · ennemis enragés · vitesse x%s · vie +%d %%,Jefes: %d cada %s s · enemigos furiosos · velocidad x%s · vida +%d%%
 EVENT_DASH_TITLE,Passo d'ombra,Shadow Step,Pas de l'ombre,Paso de sombra
 EVENT_DASH_SUBTITLE,"Non puoi sparare: scatta per schivare (clic, Spazio o tasto destro)","You can't shoot: dash to dodge (click, Space or right button)","Impossible de tirer : faites un bond pour esquiver (clic, Espace ou bouton droit)","No puedes disparar: esquiva con el impulso (clic, Espacio o botón derecho)"
+EVENT_CLOSET_TITLE,Scheletri nell'armadio,Skeletons in the Closet,Squelettes dans le placard,Esqueletos en el armario
+EVENT_CLOSET_SUBTITLE,"Non farti toccare dagli scheletri per 10s: verso il centro, non ti inseguono","Don't let the skeletons touch you for 10s: they head to the center, not you","Ne laissez pas les squelettes vous toucher pendant 10s : ils vont vers le centre, pas vers vous","No dejes que los esqueletos te toquen durante 10s: van al centro, no a ti"
+CLOSET_TITLE,Un armadio nascosto,A hidden closet,Un placard caché,Un armario escondido
+CLOSET_SUBTITLE,"Scegli un pezzo mai trovato prima: ti serve per questa run, si perde se muori senza estrarlo","Pick a piece you've never found: it's yours for this run, lost if you die without extracting it","Choisissez une pièce jamais trouvée : elle est à vous pour cette run, perdue si vous mourez sans l'extraire","Elige una pieza nunca encontrada: es tuya para esta expedición, se pierde si mueres sin extraerla"
+CLOSET_CHOICES_TITLE,Pezzi trovati,Pieces found,Pièces trouvées,Piezas encontradas
+CLOSET_EMPTY,Hai gia' trovato tutto: niente da offrire stavolta.,You've already found everything: nothing to offer this time.,Vous avez déjà tout trouvé : rien à offrir cette fois.,Ya lo has encontrado todo: nada que ofrecer esta vez.
+CLOSET_HINT,Clic su un pezzo per equipaggiarlo subito,Click a piece to equip it right away,Cliquez sur une pièce pour l'équiper aussitôt,Haz clic en una pieza para equipártela ya
 RUNEND_VIEW_LOOT,Guarda il loot,View loot,Voir le butin,Ver botín
 LOOT_VIEW_EXTRACTED,Estratto con successo,Extracted successfully,Extrait avec succès,Extraído con éxito
 LOOT_VIEW_LOST,Perso: non sei riuscito a estrarre,Lost: you did not extract,Perdu : vous ne vous êtes pas extrait,Perdido: no has extraído

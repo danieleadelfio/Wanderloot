@@ -15,6 +15,7 @@ signal candle_out
 
 const TELEGRAPH := preload("res://scenes/run/Telegraph/Telegraph.tscn")
 const PENTAGRAM := preload("res://scenes/run/Pentagram/Pentagram.tscn")
+const SKELETON_CLOSET := preload("res://scenes/run/Enemies/SkeletonCloset/SkeletonCloset.tscn")
 ## Giallo: si distingue dai fulmini azzurri del Fulmine errante (M11.4, #82).
 const STRIKE_COLOR := Color(1.0, 0.85, 0.25)
 const POOL_SIZE := 8
@@ -36,6 +37,10 @@ var _strikes: Array[Telegraph] = []
 var _pentagram: Pentagram
 var _lit: int = 0
 var _rng := RandomNumberGenerator.new()
+## Scheletri nell'armadio (M12, #86): bersaglio fisso (centro del cerchio, non il player) e gli
+## scheletri attivi, ripuliti a fine evento (successo o fallimento).
+var _skeleton_target: Node2D
+var _skeletons: Array[Enemy] = []
 
 
 func _ready() -> void:
@@ -51,6 +56,8 @@ func _ready() -> void:
 	_pentagram = PENTAGRAM.instantiate()
 	_pentagram.top_level = true
 	add_child(_pentagram)
+	_skeleton_target = Node2D.new()
+	add_child(_skeleton_target)
 
 
 func setup(arena: ArenaData, for_player: Player) -> void:
@@ -102,6 +109,8 @@ func _physics_process(delta: float) -> void:
 			_tick_pentagram(delta)
 		RunEventData.Kind.SHADOW_STEP:
 			_tick_timed(delta)
+		RunEventData.Kind.SKELETONS_CLOSET:
+			_tick_timed(delta)
 
 
 ## A caso tra gli eventi dell'arena, evitando di ripetere l'ultimo se ce n'e' piu' d'uno.
@@ -135,6 +144,8 @@ func _start(event: RunEventData, timed: bool = true) -> void:
 		_strike_timer = 0.6
 		if event.kind == RunEventData.Kind.SHADOW_STEP:
 			player.start_dash_mode(event)
+		elif event.kind == RunEventData.Kind.SKELETONS_CLOSET:
+			_spawn_skeletons(event)
 	event_started.emit(event)
 
 
@@ -174,6 +185,28 @@ func _tick_pentagram(delta: float) -> void:
 		_finish(false)
 
 
+## Scheletri sul cerchio attorno al player: puntano al centro fisso (posizione del player ora),
+## non lo inseguono (M12, #86).
+func _spawn_skeletons(event: RunEventData) -> void:
+	_skeleton_target.global_position = player.global_position
+	for i in event.skeleton_count:
+		var angle := TAU * i / float(maxi(event.skeleton_count, 1))
+		var pos := player.global_position + Vector2.RIGHT.rotated(angle) * event.skeleton_spawn_radius
+		var skeleton: Enemy = SKELETON_CLOSET.instantiate()
+		skeleton.data = event.skeleton_enemy
+		add_child(skeleton)
+		skeleton.target = _skeleton_target
+		skeleton.activate(pos)
+		_skeletons.append(skeleton)
+
+
+func _clear_skeletons() -> void:
+	for skeleton in _skeletons:
+		if is_instance_valid(skeleton):
+			skeleton.queue_free()
+	_skeletons.clear()
+
+
 func _spawn_strike() -> void:
 	var target := player.global_position
 	if _rng.randf() > current.aimed_chance:
@@ -205,6 +238,8 @@ func _finish(success: bool) -> void:
 	_pentagram.hide()
 	if event.kind == RunEventData.Kind.SHADOW_STEP:
 		player.stop_dash_mode()
+	elif event.kind == RunEventData.Kind.SKELETONS_CLOSET:
+		_clear_skeletons()
 	if success:
 		event_completed.emit(event)
 	else:
