@@ -5,6 +5,7 @@ UI_TOOLTIP_STATS,Statistiche (C),Stats (C),Statistiques (C),Estadísticas (C)
 UI_TOOLTIP_INVENTORY,Inventario (I),Inventory (I),Inventaire (I),Inventario (I)
 UI_BACK,Indietro,Back,Retour,Atrás
 HUB_HINT,WASD muoviti · E interagisci · I inventario · C statistiche · ESC menu,WASD move · E interact · I inventory · C stats · ESC menu,WASD se déplacer · E interagir · I inventaire · C statistiques · Échap menu,WASD moverse · E interactuar · I inventario · C estadísticas · ESC menú
+HUB_AUTOSAVE,Salvataggio automatico...,Autosaving...,Sauvegarde automatique...,Guardado automático...
 HUB_TITLE,Piazza di Wanderloot,Wanderloot Square,Place de Wanderloot,Plaza de Wanderloot
 RUN_BACK_TO_HUB,Torna all'hub,Back to the hub,Retour au hub,Volver al hub
 PAUSE_BACK_TO_MENU,Torna al menu,Back to menu,Retour au menu,Volver al menú

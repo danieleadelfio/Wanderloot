@@ -48,6 +48,8 @@ var _has_hub_position: bool = false
 ## Posizione letta dall'ultimo caricamento, consumata dall'hub alla sua apertura.
 var _pending_hub_position: Vector2 = Vector2.ZERO
 var _has_pending_hub_position: bool = false
+## Autosave a fine run (M12, #86), consumato dall'hub alla sua apertura per mostrare il toast.
+var _pending_autosave_notice: bool = false
 
 
 func _ready() -> void:
@@ -91,7 +93,7 @@ func take_pending_hub_position() -> Vector2:
 	return _pending_hub_position
 
 
-## Unico punto di scrittura su disco richiesto dal giocatore (Salva nel menu di pausa).
+## Unico punto di scrittura su disco: chiamato dal giocatore (Salva nel menu di pausa) o in autonomia da autosave().
 func save_game() -> Error:
 	var error := save_to_disk()
 	if error == OK:
@@ -104,6 +106,22 @@ func load_game() -> Error:
 	var error := load_from_disk()
 	has_unsaved_changes = false
 	return error
+
+
+## Salvataggio automatico a fine run, successo o game over (M12, #86). Stessa scrittura di save_game();
+## imposta solo il flag per il toast "Salvataggio automatico..." mostrato dall'hub al ritorno.
+func autosave() -> bool:
+	var ok := save_game() == OK
+	if ok:
+		_pending_autosave_notice = true
+	return ok
+
+
+func take_pending_autosave_notice() -> bool:
+	if not _pending_autosave_notice:
+		return false
+	_pending_autosave_notice = false
+	return true
 
 
 func delete_save() -> Error:

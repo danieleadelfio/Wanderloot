@@ -616,6 +616,8 @@ func _on_run_ended(result: RunManager.Result) -> void:
 
 func _on_restart_requested() -> void:
 	# Si torna all'hub; la prossima run ricrea la scena Arena da zero (RunManager riparte da start_run()).
+	# Autosave a ogni fine run, successo o game over (M12, #86): l'hub mostra il toast al suo _ready().
+	MetaProgression.autosave()
 	get_tree().paused = false
 	get_tree().change_scene_to_file.call_deferred(SceneRoutes.HUB)
 

@@ -11,6 +11,7 @@ var _material_icons: Dictionary[StringName, Texture2D] = {}
 var _interactables: Array[Interactable] = []
 var _open_window: Control = null
 var _pause_open: bool = false
+var _autosave_tween: Tween
 
 @onready var _stash_label: Label = %StashLabel
 @onready var _stash_list: VBoxContainer = %StashList
@@ -26,6 +27,7 @@ var _pause_open: bool = false
 @onready var _tabs: TabContainer = %Tabs
 @onready var _hub_stats_grid: GridContainer = %HubStatsGrid
 @onready var _player: Player = %Player
+@onready var _autosave_toast: Label = %AutosaveToast
 
 
 func _ready() -> void:
@@ -61,6 +63,8 @@ func _ready() -> void:
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
 	_refresh()
 	_restore_saved_position()
+	if MetaProgression.take_pending_autosave_notice():
+		_show_autosave_toast()
 
 
 ## Dopo Carica/Continua il player riappare dove aveva salvato nella piazza.
@@ -71,6 +75,19 @@ func _restore_saved_position() -> void:
 	player.global_position = MetaProgression.take_pending_hub_position()
 	player.reset_physics_interpolation()
 	(player.get_node("Camera2D") as Camera2D).reset_smoothing()
+
+
+## Toast "Salvataggio automatico..." a fine run, successo o game over (M12, #86).
+func _show_autosave_toast() -> void:
+	_autosave_toast.text = tr("HUB_AUTOSAVE")
+	_autosave_toast.modulate.a = 1.0
+	_autosave_toast.visible = true
+	if _autosave_tween:
+		_autosave_tween.kill()
+	_autosave_tween = create_tween()
+	_autosave_tween.tween_interval(1.8)
+	_autosave_tween.tween_property(_autosave_toast, "modulate:a", 0.0, 0.5)
+	_autosave_tween.tween_callback(_autosave_toast.hide)
 
 
 func _process(_delta: float) -> void:
