@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Shader" path="res://assets/shaders/growing_stain.gdshader" id="1"]
 [ext_resource type="Script" path="res://scripts/run/growing_stain.gd" id="2"]
@@ -14,16 +14,6 @@ height = 64
 [sub_resource type="ShaderMaterial" id="stain_mat"]
 shader = ExtResource("1")
 
-[sub_resource type="ParticleProcessMaterial" id="drip_mat"]
-direction = Vector3(0, 1, 0)
-spread = 4.0
-gravity = Vector3(0, 500, 0)
-initial_velocity_min = 90.0
-initial_velocity_max = 130.0
-scale_min = 0.15
-scale_max = 0.25
-color = Color(0.85, 0.9, 1, 0.9)
-
 [node name="EnvironmentDrip" type="Node2D"]
 
 [node name="Stain" type="Sprite2D" parent="."]
@@ -31,10 +21,3 @@ material = SubResource("stain_mat")
 scale = Vector2(0.85, 0.85)
 texture = SubResource("dot_tex")
 script = ExtResource("2")
-
-[node name="Drip" type="GPUParticles2D" parent="."]
-position = Vector2(0, -210)
-amount = 3
-lifetime = 1.6
-process_material = SubResource("drip_mat")
-texture = SubResource("dot_tex")

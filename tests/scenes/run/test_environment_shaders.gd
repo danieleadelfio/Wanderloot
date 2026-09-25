@@ -23,8 +23,6 @@ func test_environment_drip_loads_and_exposes_growing_stain() -> void:
 	stain.set_stain_color(Color(0.35, 0.03, 0.03, 0.6))
 	var applied: Color = (stain.material as ShaderMaterial).get_shader_parameter(&"stain_color")
 	assert_that(applied.is_equal_approx(Color(0.35, 0.03, 0.03, 0.6))).is_true()
-	var drip := instance.get_node("Drip") as GPUParticles2D
-	assert_object(drip).is_not_null()
 
 
 func test_growing_stain_progress_starts_at_zero_and_grows() -> void:
