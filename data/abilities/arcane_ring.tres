@@ -6,8 +6,8 @@
 
 [sub_resource type="Resource" id="effect"]
 script = ExtResource("2")
-count = 10
-damage_multiplier = 1.0
+count = 6
+damage_multiplier = 0.333
 
 [resource]
 script = ExtResource("1")
@@ -16,6 +16,6 @@ display_name = "ABILITY_ARCANE_RING"
 description = "ABILITY_ARCANE_RING_DESC"
 icon = ExtResource("3")
 trigger = 1
-every_shots = 8
+every_shots = 12
 effect = SubResource("effect")
 projectile_tint = Color(0.85, 0.6, 1, 1)

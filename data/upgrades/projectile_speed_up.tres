@@ -9,4 +9,4 @@ description = "UPG_PROJECTILE_SPEED_UP_DESC"
 stat = 2
 amount = 1.2
 is_multiplier = true
-weight = 1.0
+weight = 0.0

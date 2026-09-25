@@ -15,6 +15,6 @@ grow_after = 200.0
 grow_scale = 2.6
 grown_speed_multiplier = 0.3
 pull_radius = 360.0
-pull_strength = 130.0
+pull_strength = 100.0
 projectile_texture = ExtResource("t")
 projectile_scale = 0.7

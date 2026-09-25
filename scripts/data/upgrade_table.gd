@@ -6,7 +6,8 @@ extends Resource
 
 
 func pick(count: int, rng: RandomNumberGenerator) -> Array[UpgradeData]:
-	var candidates: Array[UpgradeData] = upgrades.duplicate()
+	# weight <= 0 = disattivato (M12, #86: Gittata e Persistenza fuori dal pool), mai estraibile.
+	var candidates: Array[UpgradeData] = upgrades.filter(func(u: UpgradeData) -> bool: return u.weight > 0.0)
 	var result: Array[UpgradeData] = []
 	while result.size() < count and not candidates.is_empty():
 		var total := 0.0

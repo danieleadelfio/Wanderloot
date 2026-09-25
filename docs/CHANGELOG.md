@@ -106,10 +106,6 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
-- Anello arcano riequilibrato: 1/3 del danno del proiettile dell'arma (era 1x), trigger ogni 12 colpi (era 8), 6 proiettili nell'anello (era 10) (#86).
-- Gittata e Persistenza disattivate da equip e power up (peso 0, escluse esplicitamente dai due picker); restano nel modello dati e nei test (#86).
-- Cadenza di fuoco: bonus ridotto di 1/3 sia da power up (+20% -> +13%) sia da equipaggiamento (4-25% -> 1,3-8,3%) (#86).
-- Potenza di attrazione della Sfera dello Slime del vuoto ridotta (`pull_strength` 130 -> 100, via di mezzo tra prima e dopo il #83); raggio invariato a 360px (#86).
 - Gioco rinominato **Wanderloot** (GDD, BEST_PRACTICES, `project.godot`). Repo GitHub collegato, task tracking su GitHub Issues attivo.
 - Knockback e hitstop spostati definitivamente a M4.
 - `CHANGELOG.md` spostato in `docs/` (coerente con i riferimenti in GDD e BEST_PRACTICES).

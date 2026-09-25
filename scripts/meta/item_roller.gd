@@ -17,7 +17,8 @@ static func roll(base: EquipmentData, tier_index: int, rarities: RarityTable, af
 	var fixed: Array[int] = []
 	for modifier in base.modifiers:
 		fixed.append(int(modifier.stat))
-	var pool: Array[AffixRoll] = affixes.rolls.filter(func(r: AffixRoll) -> bool: return r.allows(base.slot) and not fixed.has(int(r.stat)))
+	# weight <= 0 = disattivato (M12, #86: Gittata e Persistenza fuori dal pool), mai estraibile.
+	var pool: Array[AffixRoll] = affixes.rolls.filter(func(r: AffixRoll) -> bool: return r.allows(base.slot) and not fixed.has(int(r.stat)) and r.weight > 0.0)
 	for i in mini(tier.affix_count, pool.size()):
 		var chosen := _pick(pool, rng)
 		pool.erase(chosen)
