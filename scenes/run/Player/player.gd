@@ -159,6 +159,16 @@ func weapon_data() -> WeaponData:
 	return _weapon.data
 
 
+## Stats/arma di partenza (M12, #86), mai equip ne' potenziamenti: per isolare il bonus dell'equip
+## nella schermata statistiche a tre numeri (base / bonus equip / finale). Sola lettura, mai modificarli.
+func base_stats() -> PlayerStats:
+	return _base_stats
+
+
+func base_weapon_data() -> WeaponData:
+	return _base_weapon
+
+
 ## Barriera (abilita' Barriera arcana): annulla il prossimo colpo.
 func set_shield(active: bool, charges: int = 1) -> void:
 	_hurtbox.shield_charges = maxi(charges, 1) if active else 0

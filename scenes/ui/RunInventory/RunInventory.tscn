@@ -68,6 +68,22 @@ show_stash = false
 read_only = true
 figure_scale = 0.5
 
+[node name="Stats" type="VBoxContainer" parent="Panel/VBox/BodyScroll/Body"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StatsTitle" type="Label" parent="Panel/VBox/BodyScroll/Body/Stats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "TAB_STATS"
+
+[node name="StatsGrid" type="GridContainer" parent="Panel/VBox/BodyScroll/Body/Stats"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 2
+columns = 4
+
 [node name="Loot" type="VBoxContainer" parent="Panel/VBox/BodyScroll/Body"]
 layout_mode = 2
 size_flags_horizontal = 3

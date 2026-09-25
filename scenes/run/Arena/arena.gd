@@ -18,6 +18,9 @@ var arena: ArenaData
 var extraction_data: ExtractionData
 var _enemy_pools: Array[EnemyPool] = []
 var _pending_level_ups: int = 0
+## Modificatori dell'equip indossato, letti una volta a inizio run (M12, #86): per isolare il bonus
+## dell'equip nella schermata statistiche a tre numeri (HUD e inventario di run).
+var _equip_modifiers: Array[StatModifier] = []
 var _current_choice_count: int = 0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Exp frazionaria dovuta al moltiplicatore "Saggezza", accumulata fino all'unità successiva.
@@ -102,9 +105,10 @@ func _ready() -> void:
 	_player.shot_requested.connect(_sfx.play.bind(&"shoot").unbind(3))
 	_player.shield_broken.connect(_on_shield_broken)
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
-	_player.begin_run(MetaProgression.equipped_modifiers())
+	_equip_modifiers = MetaProgression.equipped_modifiers()
+	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
-	_hud.set_stats(_player.stats, _player.weapon_data())
+	_hud.set_stats(_player, _equip_modifiers)
 	_create_enemy_pools()
 	_wand.setup(_player, _projectile_pool, targetable_enemies)
 	_wand.changed.connect(func(abilities: Array[WandAbility]) -> void: _hud.set_abilities(abilities, _wand.levels))
@@ -587,7 +591,7 @@ func _on_reroll_requested() -> void:
 
 func _on_upgrade_chosen(upgrade: UpgradeData) -> void:
 	_player.apply_upgrade(upgrade)
-	_hud.set_stats(_player.stats, _player.weapon_data())
+	_hud.set_stats(_player, _equip_modifiers)
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pending_level_ups -= 1
 	if _pending_level_ups > 0:
@@ -611,7 +615,7 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_pause_menu.show_mode(mode)
 	if mode == PauseState.Mode.INVENTORY:
-		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items())
+		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items(), _player, _equip_modifiers)
 	else:
 		_run_inventory.close()
 	_refresh_pause()

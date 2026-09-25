@@ -11,6 +11,7 @@ const LOOT_COLOR: Color = Color(1, 0.8, 0.35)
 
 @onready var _panel: Control = %Panel
 @onready var _mannequin: LoadoutPanel = %Mannequin
+@onready var _stats_grid: GridContainer = %StatsGrid
 @onready var _loot_grid: GridContainer = %LootGrid
 @onready var _empty: Label = %LootEmpty
 @onready var _loot_total: Label = %LootTotal
@@ -24,8 +25,11 @@ func close() -> void:
 	_panel.hide()
 
 
-func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items: Array[ItemInstance] = []) -> void:
+func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items: Array[ItemInstance] = [], player: Player = null, equip_modifiers: Array[StatModifier] = []) -> void:
 	_mannequin.refresh(loadout)
+	if player:
+		var rows := StatSheet.equip_rows(player.base_stats(), player.base_weapon_data(), player.stats, player.weapon_data(), equip_modifiers)
+		StatSheet.fill_with_equip(_stats_grid, rows, 14)
 	for child in _loot_grid.get_children():
 		_loot_grid.remove_child(child)
 		child.queue_free()

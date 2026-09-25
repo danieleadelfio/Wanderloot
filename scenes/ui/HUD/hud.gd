@@ -56,9 +56,11 @@ func set_loot(total: int) -> void:
 	_loot_label.text = tr("HUD_LOOT") % total
 
 
-## Statistiche del personaggio sotto le barre (solo in run), aggiornate a ogni potenziamento.
-func set_stats(stats: PlayerStats, weapon: WeaponData) -> void:
-	StatSheet.fill(_stats_grid, StatSheet.rows(stats, weapon), 13)
+## Statistiche del personaggio sotto le barre (solo in run), aggiornate a ogni potenziamento. A 3 numeri
+## (M12, #86): base di partenza (giallo, fisso), bonus dell'equip indossato (verde), valore finale (bianco).
+func set_stats(player: Player, equip_modifiers: Array[StatModifier]) -> void:
+	var rows := StatSheet.equip_rows(player.base_stats(), player.base_weapon_data(), player.stats, player.weapon_data(), equip_modifiers)
+	StatSheet.fill_with_equip(_stats_grid, rows, 13)
 
 
 ## Icone delle abilita' della bacchetta (M10); il riempimento mostra l'avanzamento verso l'attivazione.
