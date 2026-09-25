@@ -88,7 +88,10 @@ static func _bonus_text(base_v: float, equip_v: float, format: Callable) -> Stri
 		return ""
 	if not is_zero_approx(base_v):
 		return "%+d%%" % roundi((equip_v / base_v - 1.0) * 100.0)
-	return "%s%s" % ["+" if delta > 0.0 else "-", format.call(absf(delta))]
+	var magnitude: String = format.call(absf(delta))
+	if magnitude.begins_with("+"):
+		magnitude = magnitude.substr(1)
+	return "%s%s" % ["+" if delta > 0.0 else "-", magnitude]
 
 
 static func _percent(multiplier: float) -> String:

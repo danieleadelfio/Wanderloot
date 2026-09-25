@@ -119,6 +119,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Statistiche in tempo reale (HUD di run e scheda Statistiche): il bonus del Contatore (count_bonus, base 0) mostrava doppio segno "++N" invece di "+N", perche' `StatSheet._bonus_text` anteponeva un altro "+" al valore gia' formattato col segno; ora il segno duplicato viene rimosso (#86).
 - Inventario di run: il pannello a meta' schermo con manichino/statistiche/loot affiancati si sovrapponeva; ridisegnato come pagina a tutto schermo identica alla finestra Inventario dell'hub (Panel 1080px, tab Inventario/Statistiche), col loot di run al posto del baule (#86).
 - Selezione arena al portale: scegliendo una nuova arena l'evidenziazione/etichetta "selezionata" restava sulla prima scelta della sessione (Cripta) finche' l'hub non veniva ricreato; ora il pannello si aggiorna subito (#86).
 - Autosalvataggio di fine run: salvava i progressi ma lasciava la posizione nella piazza ferma all'ultimo salvataggio manuale; ora si aggiorna anche entrando in run (#86).

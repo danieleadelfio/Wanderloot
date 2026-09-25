@@ -142,3 +142,18 @@ func test_run_rows_unaffected_stat_has_no_star() -> void:
 	var hp_row: PackedStringArray = by_label["STAT_MAX_HP"]
 	assert_str(hp_row[2]).is_equal("")
 	assert_str(hp_row[3]).is_equal("5")
+
+
+func test_run_rows_count_bonus_zero_base_has_single_plus() -> void:
+	var base_stats := PlayerStats.new()
+	var base_weapon := WeaponData.new()
+	var stats := base_stats.duplicate()
+	var weapon := base_weapon.duplicate()
+	StatApplier.apply(UpgradeData.Stat.COUNT_BONUS, 1.0, false, stats, weapon)
+	var rows := StatSheet.run_rows(base_stats, base_weapon, [] as Array[StatModifier], stats, weapon)
+	var by_label := {}
+	for row in rows:
+		by_label[row[0]] = row
+	var count_row: PackedStringArray = by_label["STAT_COUNT_BONUS"]
+	assert_str(count_row[2]).is_equal("+1*")
+	assert_str(count_row[3]).is_equal("+1*")
