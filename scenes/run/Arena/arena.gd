@@ -18,6 +18,7 @@ var arena: ArenaData
 var extraction_data: ExtractionData
 var _enemy_pools: Array[EnemyPool] = []
 var _pending_level_ups: int = 0
+var _current_choice_count: int = 0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Exp frazionaria dovuta al moltiplicatore "Saggezza", accumulata fino all'unità successiva.
 var _exp_remainder: float = 0.0
@@ -85,6 +86,7 @@ func _ready() -> void:
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
 	_pause_menu.language_requested.connect(_on_language_requested)
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
+	_level_up_choice.reroll_requested.connect(_on_reroll_requested)
 	_player.shot_requested.connect(_projectile_pool.spawn)
 	_player.health.changed.connect(_hud.set_hp)
 	_player.died.connect(_on_player_died)
@@ -533,11 +535,21 @@ func _on_leveled_up(_level: int) -> void:
 	_pending_level_ups += 1
 	if RunManager.state == RunManager.State.RUNNING:
 		RunManager.begin_level_up()
+		_current_choice_count = choices_per_level
 		_present_level_up()
 
 
 func _present_level_up() -> void:
-	_level_up_choice.present(upgrade_table.pick(choices_per_level, _rng))
+	_level_up_choice.present(upgrade_table.pick(_current_choice_count, _rng), RunManager.rerolls_left())
+
+
+## Reroll (M12, #86): una scelta in meno (minimo 1), consuma un reroll della run.
+func _on_reroll_requested() -> void:
+	if not RunManager.use_reroll():
+		return
+	_current_choice_count = maxi(_current_choice_count - 1, 1)
+	_sfx.play(&"ui_select")
+	_present_level_up()
 
 
 func _on_upgrade_chosen(upgrade: UpgradeData) -> void:
@@ -546,6 +558,7 @@ func _on_upgrade_chosen(upgrade: UpgradeData) -> void:
 	_pickup_pool.attract_radius = _player.stats.pickup_radius
 	_pending_level_ups -= 1
 	if _pending_level_ups > 0:
+		_current_choice_count = choices_per_level
 		_present_level_up()
 	else:
 		RunManager.end_level_up()

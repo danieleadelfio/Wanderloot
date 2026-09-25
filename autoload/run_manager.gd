@@ -11,8 +11,12 @@ signal run_ended(result: Result)
 enum State { IDLE, RUNNING, LEVEL_UP, ENDED }
 enum Result { DEATH, EXTRACTED }
 
+## Reroll delle scelte al level-up (M12, #86): max per run, azzerato a ogni start_run().
+const MAX_REROLLS: int = 5
+
 var state: State = State.IDLE
 var level: int = 1
+var rerolls_used: int = 0
 ## Exp accumulata nel livello corrente (si azzera a ogni level-up, il resto passa oltre).
 var experience: int = 0
 ## Secondi di gioco effettivi (esclusi pausa/level-up).
@@ -35,6 +39,7 @@ func start_run(curve: LevelCurve) -> void:
 	experience = 0
 	elapsed = 0.0
 	kills = 0
+	rerolls_used = 0
 	loot.clear()
 	exp_changed.emit(experience, exp_to_next())
 	_set_state(State.RUNNING)
@@ -42,6 +47,18 @@ func start_run(curve: LevelCurve) -> void:
 
 func is_running() -> bool:
 	return state == State.RUNNING or state == State.LEVEL_UP
+
+
+func rerolls_left() -> int:
+	return maxi(MAX_REROLLS - rerolls_used, 0)
+
+
+## True se il reroll e' stato usato; false se gia' esauriti (chiamante non ripresenta le scelte).
+func use_reroll() -> bool:
+	if rerolls_used >= MAX_REROLLS:
+		return false
+	rerolls_used += 1
+	return true
 
 
 func exp_to_next() -> int:

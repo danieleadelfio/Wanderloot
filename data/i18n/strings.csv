@@ -44,6 +44,7 @@ OPT_DELETE_WARNING,Il salvataggio verrà eliminato definitivamente.,The save wil
 DATA_DELETED,Dati cancellati.,Data deleted.,Données supprimées.,Datos borrados.
 DATA_DELETE_FAIL,Cancellazione non riuscita.,Deletion failed.,Échec de la suppression.,Error al borrar.
 LEVELUP_TITLE,Level up! Scegli un potenziamento,Level up! Choose an upgrade,Niveau supérieur ! Choisissez une amélioration,¡Subes de nivel! Elige una mejora
+LEVELUP_REROLL,Reroll (una scelta in meno) · %d rimasti,Reroll (one fewer choice) · %d left,Relancer (un choix en moins) · %d restants,Rerollear (una opción menos) · %d restantes
 TAB_INVENTORY,Inventario,Inventory,Inventaire,Inventario
 TAB_STATS,Statistiche,Stats,Statistiques,Estadísticas
 INV_CLOSE_HINT,I inventario · C statistiche · ESC per chiudere,I inventory · C stats · ESC to close,I inventaire · C statistiques · Échap pour fermer,I inventario · C estadísticas · ESC para cerrar
