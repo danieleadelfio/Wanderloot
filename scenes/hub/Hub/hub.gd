@@ -267,6 +267,9 @@ func _on_arena_selected(id: StringName) -> void:
 		_sfx.play(&"ui_select")
 
 
+## Posizione aggiornata prima di entrare in run (M12, #86): senza, l'autosave a fine run
+## salvava la posizione della piazza rimasta ferma all'ultimo salvataggio manuale.
 func _on_start_pressed() -> void:
+	MetaProgression.set_hub_position(%Player.global_position)
 	get_tree().paused = false
 	get_tree().change_scene_to_file(SceneRoutes.ARENA)
