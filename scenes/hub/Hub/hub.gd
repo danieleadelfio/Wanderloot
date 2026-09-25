@@ -29,6 +29,7 @@ var _autosave_tween: Tween
 @onready var _player: Player = %Player
 @onready var _autosave_toast: Label = %AutosaveToast
 @onready var _hub_tutorial: HubTutorial = %HubTutorial
+@onready var _codex_window: Control = %CodexWindow
 
 
 func _ready() -> void:
@@ -56,6 +57,7 @@ func _ready() -> void:
 	_pause_menu.action_requested.connect(_on_pause_action)
 	%InventoryIcon.pressed.connect(_toggle_inventory.bind(0))
 	%StatsIcon.pressed.connect(_toggle_inventory.bind(1))
+	%CodexIcon.pressed.connect(_toggle_codex)
 	_tabs.set_tab_title(0, tr("TAB_INVENTORY"))
 	_tabs.set_tab_title(1, tr("TAB_STATS"))
 	_pause_menu.language_requested.connect(_on_language_requested)
@@ -184,6 +186,18 @@ func _toggle_inventory(tab: int) -> void:
 		_close_window()
 	_tabs.current_tab = tab
 	_open(_inventory_window)
+
+
+## Codex (M12, #86): manuale consultabile in ogni momento, non l'onboarding una tantum di HubTutorial.
+func _toggle_codex() -> void:
+	if _pause_open:
+		return
+	if _open_window == _codex_window:
+		_close_window()
+		return
+	if _open_window:
+		_close_window()
+	_open(_codex_window)
 
 
 func _set_pause_open(open: bool) -> void:

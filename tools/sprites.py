@@ -600,9 +600,18 @@ def icon_stats():
                '<path d="M18 52 L46 52" stroke="#3a2e1a" stroke-width="2.5"/>' % OUTLINE, defs, 64)
 
 
+def icon_codex():
+    defs = '<linearGradient id="c" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8d9b0"/><stop offset="1" stop-color="#f6ecd0"/></linearGradient>'
+    return svg('<path d="M32 16 Q20 10 10 14 L10 48 Q20 44 32 50 Q44 44 54 48 L54 14 Q44 10 32 16 Z" fill="url(#c)" %s/>'
+               '<path d="M32 16 L32 50" stroke="#3a2e1a" stroke-width="2.5"/>'
+               '<path d="M15 21 L27 24 M15 29 L27 31 M15 37 L27 39" stroke="#7a5a2e" stroke-width="2" stroke-linecap="round"/>'
+               '<path d="M37 24 L49 21 M37 31 L49 29 M37 39 L49 37" stroke="#7a5a2e" stroke-width="2" stroke-linecap="round"/>' % OUTLINE, defs, 64)
+
+
 def build_hub_icons():
     save("icon_bag", [icon_bag()], 64)
     save("icon_stats", [icon_stats()], 64)
+    save("icon_codex", [icon_codex()], 64)
 
 
 # --- Icone delle abilita' della bacchetta (M10) ----------------------------------------------------
