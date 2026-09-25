@@ -6,9 +6,10 @@
 script = ExtResource("1")
 display_name = "Scheletro dell'armadio"
 max_hp = 4
-move_speed = 70.0
+move_speed = 23.33
 contact_damage = 1
 contact_knockback = 260.0
 exp_reward = 0
 rage_after = 0.0
+invulnerable = true
 drops = Array[Resource]([])

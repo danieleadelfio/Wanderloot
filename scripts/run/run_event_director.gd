@@ -192,6 +192,9 @@ func _spawn_skeletons(event: RunEventData) -> void:
 	for i in event.skeleton_count:
 		var angle := TAU * i / float(maxi(event.skeleton_count, 1))
 		var pos := player.global_position + Vector2.RIGHT.rotated(angle) * event.skeleton_spawn_radius
+		# Raggio grande (M12, #86): puo' uscire dall'arena, come i fulmini della Tempesta lo teniamo
+		# dentro i confini (bounds) invece di farlo comparire fuori muro o nel vuoto.
+		pos = pos.clamp(bounds.position, bounds.end)
 		var skeleton: Enemy = SKELETON_CLOSET.instantiate()
 		skeleton.data = event.skeleton_enemy
 		add_child(skeleton)

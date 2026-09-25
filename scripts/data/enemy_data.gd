@@ -13,6 +13,9 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var knockback_resistance: float = 0.0
 ## Freeze locale quando colpito (hitstop del solo nemico), in secondi.
 @export var hit_freeze: float = 0.05
+## Non subisce mai danno dal player (Scheletri nell'armadio, M12 #86): l'evento e' di sola schivata,
+## non un bersaglio da eliminare. I proiettili lo attraversano senza consumare perforazione.
+@export var invulnerable: bool = false
 
 enum Behavior { CHASE, KEEP_DISTANCE }
 

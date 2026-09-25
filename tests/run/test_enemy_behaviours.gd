@@ -49,3 +49,19 @@ func test_ghoul_chases_fast() -> void:
 	ghoul._physics_process(TICK)
 	assert_float(ghoul.velocity.x).is_equal_approx(ghoul.data.move_speed, 0.5)
 	assert_float(ghoul.data.move_speed).is_greater(load("res://data/enemies/enemy_basic.tres").move_speed)
+
+
+func test_skeleton_closet_is_invulnerable_to_player_damage() -> void:
+	# Evento di sola schivata (M12, #86): non deve poter essere ucciso dal player, i proiettili lo
+	# attraversano (Hurtbox.immune, gia' usato per l'invulnerabilita' dello scatto del Passo d'ombra).
+	var skeleton := _spawn("res://scenes/run/Enemies/SkeletonCloset/SkeletonCloset.tscn", Vector2(300, 0))
+	assert_bool(skeleton.data.invulnerable).is_true()
+	var hurtbox := skeleton.get_node("%Hurtbox") as Hurtbox
+	assert_bool(hurtbox.immune).is_true()
+	var hitbox := Hitbox.new()
+	hitbox.damage = 99
+	hitbox.active = true
+	var hp_before := skeleton.health.current
+	hurtbox._try_hit(hitbox)
+	assert_int(skeleton.health.current).is_equal(hp_before)
+	hitbox.free()

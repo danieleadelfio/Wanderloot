@@ -71,6 +71,7 @@ func activate(spawn_position: Vector2) -> void:
 	_freeze_left = 0.0
 	_reset_rage()
 	_attack_cooldown = data.attack_interval * randf_range(0.5, 1.0)
+	_hurtbox.immune = data.invulnerable
 	_set_enabled(true)
 	# Arriva dal pool: niente interpolazione dalla posizione precedente (dopo averlo reso visibile,
 	# altrimenti il reset viene ignorato e il nemico scivola per un attimo).

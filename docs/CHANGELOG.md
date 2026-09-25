@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Evento "Scheletri nell'armadio": cerchio e conteggio scheletri triplicati (raggio 260→780px clampato ai bordi dell'arena, 10→30 scheletri), scheletri resi invulnerabili (evento di sola schivata, non c'era motivo per poterli uccidere) e velocità di avvicinamento al centro ridotta a 1/3 (#86).
 - Anello arcano: la descrizione diceva "anello di 10 proiettili" ma il valore configurato è 6 (`arcane_ring.tres`); corretta la descrizione (4 lingue) e la tabella del GDD, nessun cambio di bilanciamento, solo il testo era sbagliato (#86).
 - Stillicidio dal soffitto: rimosso l'effetto a gocce cadenti (`GPUParticles2D`/`Drip`) sia in Cripta che in Ossario, l'effetto non convinceva; resta solo la pozzanghera/pozza a crescita animata (`growing_stain.gdshader`) (#86).
 - Statistiche in tempo reale (HUD di run e scheda Statistiche): il bonus del Contatore (count_bonus, base 0) mostrava doppio segno "++N" invece di "+N", perche' `StatSheet._bonus_text` anteponeva un altro "+" al valore gia' formattato col segno; ora il segno duplicato viene rimosso (#86).
