@@ -25,6 +25,9 @@ var slots: AbilitySlots
 var bonus: Array[WandAbility] = []
 ## Livello di ogni abilita' posseduta (id -> livello): la stessa abilita' da equip o eventi si somma (M11.3, #72).
 var levels: Dictionary[StringName, int] = {}
+## Ultima abilita' presa o salita di livello (#15): decide il colore dei proiettili, niente piu' media
+## (che con 2+ abilita' sbiadiva verso il centro). Null finche' non si possiede nulla (proiettili bianchi).
+var last_taken: WandAbility = null
 var _projectile_pool: ProjectilePool
 var _targets: Callable
 var _triggers: Array[AbilityTrigger] = []
@@ -73,6 +76,7 @@ func equip(ability: WandAbility, index: int = -1) -> bool:
 	elif not slots.add(ability):
 		return false
 	levels[ability.id] = 1
+	last_taken = ability
 	_rebuild_triggers()
 	if ability.trigger == WandAbility.Trigger.PERMANENT and ability.effect:
 		ability.effect.activate(self, level_of(ability))
@@ -96,6 +100,8 @@ func level_up(id: StringName, amount: int = 1) -> void:
 	var wanted: int = levels.get(id, 0) + amount
 	levels[id] = mini(wanted, cap)
 	var ability := _find(id)
+	if ability:
+		last_taken = ability
 	if wanted > cap and ability:
 		over_cap.emit(ability, wanted - cap)
 	if ability and ability.effect and ability.trigger == WandAbility.Trigger.PERMANENT:
@@ -113,6 +119,7 @@ func equip_bonus(ability: WandAbility, level: int = 1) -> void:
 	var cap := _cap_for(ability.id)
 	bonus.append(ability)
 	levels[ability.id] = mini(level, cap)
+	last_taken = ability
 	if level > cap:
 		over_cap.emit(ability, level - cap)
 	_rebuild_triggers()
@@ -144,10 +151,9 @@ func owned_ids() -> Array[StringName]:
 	return result
 
 
+## Colore dei proiettili (#15): quello dell'ultima abilita' presa/salita di livello, bianco senza abilita'.
 func _after_change() -> void:
-	var mixed := AbilitySlots.new(99)
-	mixed.abilities = all_abilities()
-	player.weapon_data().projectile_tint = mixed.tint()
+	player.weapon_data().projectile_tint = last_taken.projectile_tint if last_taken else Color.WHITE
 	changed.emit(all_abilities())
 
 

@@ -60,6 +60,8 @@ La bacchetta ha **3 slot** di abilità per la run; l'ordine non conta e le abili
 
 Il catalogo completo (abilità di Magicraft riadattate e originali) è in `docs/catalog/` (§13).
 
+**Colore dei proiettili**: quello dell'**ultima abilità presa o salita di livello** (M12, #86, #15), non più la media di tutte le abilità possedute — con 2+ abilità la media sbiadiva il colore verso il centro invece di restare vivido.
+
 #### 3.3.1 Ascensione (meta, M12, #86, #16)
 
 Scheda **Ascensione** nel fabbro (quarta scheda, insieme a Crafting/Fusione/Smontaggio): per ogni abilità del catalogo mostra il **cap sbloccato** attuale (default Lv1) e il costo per alzarlo di 1, fino al tetto assoluto Lv8. Costo in materiali esistenti, crescente col livello target (`Ascension.cost_for()`, logica pura, 7 gradini Lv2→Lv8). Il cap sbloccato è per-abilità e persiste nel salvataggio (`MetaProgression.ascension_caps`); letto a inizio run per impostare `WandAbilities.caps`.

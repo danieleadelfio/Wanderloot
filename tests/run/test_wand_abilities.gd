@@ -77,6 +77,28 @@ func test_level_up_respects_unlocked_cap_and_signals_overflow() -> void:
 	assert_int(overflow_events[0][1]).is_equal(8)
 
 
+func test_projectile_tint_follows_last_taken_ability() -> void:
+	# M12 #86 #15: colore dell'ultima abilita' presa/salita, non piu' la media (si sbiadiva con 2+).
+	var player: Player = auto_free(load("res://scenes/run/Player/Player.tscn").instantiate())
+	add_child(player)
+	var wand: WandAbilities = auto_free(WandAbilities.new())
+	add_child(wand)
+	wand.player = player
+	var red := _ability(&"red", WandAbility.Trigger.SHOTS)
+	red.projectile_tint = Color(1, 0, 0)
+	var blue := _ability(&"blue", WandAbility.Trigger.SHOTS)
+	blue.projectile_tint = Color(0, 0, 1)
+	wand.caps[&"red"] = WandAbility.MAX_LEVEL
+	wand.caps[&"blue"] = WandAbility.MAX_LEVEL
+	assert_bool(wand.equip(red)).is_true()
+	assert_object(player.weapon_data().projectile_tint).is_equal(Color(1, 0, 0))
+	assert_bool(wand.equip(blue)).is_true()
+	assert_object(player.weapon_data().projectile_tint).is_equal(Color(0, 0, 1))
+	# Ri-prendere red (sale di livello) lo rende di nuovo l'ultima presa.
+	assert_bool(wand.equip(red)).is_true()
+	assert_object(player.weapon_data().projectile_tint).is_equal(Color(1, 0, 0))
+
+
 func test_slots_add_replace_and_tint() -> void:
 	var slots := AbilitySlots.new(2)
 	var a := _ability(&"a", WandAbility.Trigger.SHOTS)
