@@ -42,3 +42,113 @@ func test_equipment_applies_to_copies_and_leaves_base_resources_untouched() -> v
 	assert_int(stats.max_hp).is_equal(base_hp + 2)
 	assert_int(base_weapon.damage).is_equal(base_damage)
 	assert_int(base_stats.max_hp).is_equal(base_hp)
+
+
+func test_projectile_speed_and_lifetime_modifiers() -> void:
+	# Gittata (PROJECTILE_SPEED) e Persistenza (PROJECTILE_LIFETIME): non piu' ottenibili in game
+	# (M12, #86 - weight=0 nei pool), ma il branch di StatApplier resta e va testato.
+	var stats := PlayerStats.new()
+	var weapon := WeaponData.new()
+	weapon.projectile_speed = 400.0
+	weapon.projectile_lifetime = 1.5
+
+	StatApplier.apply(UpgradeData.Stat.PROJECTILE_SPEED, 50.0, false, stats, weapon)
+	StatApplier.apply(UpgradeData.Stat.PROJECTILE_LIFETIME, 1.2, true, stats, weapon)
+
+	assert_float(weapon.projectile_speed).is_equal_approx(450.0, 0.001)
+	assert_float(weapon.projectile_lifetime).is_equal_approx(1.8, 0.001)
+
+
+func test_pickup_radius_modifier() -> void:
+	var stats := PlayerStats.new()
+	stats.pickup_radius = 90.0
+	StatApplier.apply(UpgradeData.Stat.PICKUP_RADIUS, 20.0, false, stats, WeaponData.new())
+	assert_float(stats.pickup_radius).is_equal_approx(110.0, 0.001)
+
+
+func test_exp_gain_modifier() -> void:
+	# L'exp_multiplier e' cio' che moltiplica l'exp della singola gemma in Arena._on_exp_collected.
+	var stats := PlayerStats.new()
+	assert_float(stats.exp_multiplier).is_equal_approx(1.0, 0.001)
+	StatApplier.apply(UpgradeData.Stat.EXP_GAIN, 1.3, true, stats, WeaponData.new())
+	assert_float(stats.exp_multiplier).is_equal_approx(1.3, 0.001)
+
+	# Formula di applicazione alla singola gemma (Arena._on_exp_collected): amount * exp_multiplier.
+	var gem_amount := 5
+	var gained := floori(gem_amount * stats.exp_multiplier)
+	assert_int(gained).is_equal(6)
+
+
+func test_drop_chance_modifier() -> void:
+	var stats := PlayerStats.new()
+	stats.drop_chance_multiplier = 1.0
+	StatApplier.apply(UpgradeData.Stat.DROP_CHANCE, 1.25, true, stats, WeaponData.new())
+	assert_float(stats.drop_chance_multiplier).is_equal_approx(1.25, 0.001)
+
+
+func test_invulnerability_modifier_never_below_zero() -> void:
+	var stats := PlayerStats.new()
+	stats.invulnerability_time = 0.8
+	StatApplier.apply(UpgradeData.Stat.INVULNERABILITY, 0.2, false, stats, WeaponData.new())
+	assert_float(stats.invulnerability_time).is_equal_approx(1.0, 0.001)
+
+	StatApplier.apply(UpgradeData.Stat.INVULNERABILITY, -5.0, false, stats, WeaponData.new())
+	assert_float(stats.invulnerability_time).is_equal_approx(0.0, 0.001)
+
+
+func test_knockback_modifier() -> void:
+	var weapon := WeaponData.new()
+	weapon.knockback = 100.0
+	StatApplier.apply(UpgradeData.Stat.KNOCKBACK, 50.0, false, PlayerStats.new(), weapon)
+	assert_float(weapon.knockback).is_equal_approx(150.0, 0.001)
+
+
+func test_projectile_count_modifier() -> void:
+	var stats := PlayerStats.new()
+	var weapon := WeaponData.new()
+	weapon.projectile_count = 1
+	StatApplier.apply(UpgradeData.Stat.PROJECTILE_COUNT, 1.0, false, stats, weapon)
+	assert_int(weapon.projectile_count).is_equal(2)
+
+
+func test_projectile_count_scales_with_count_bonus() -> void:
+	# Il Contatore (COUNT_BONUS) potenzia i Ventagli (PROJECTILE_COUNT) presi dopo:
+	# +1 diventa +(1 + count_bonus).
+	var stats := PlayerStats.new()
+	var weapon := WeaponData.new()
+	weapon.projectile_count = 1
+	stats.count_bonus = 2
+
+	StatApplier.apply(UpgradeData.Stat.PROJECTILE_COUNT, 1.0, false, stats, weapon)
+
+	assert_int(weapon.projectile_count).is_equal(4)
+
+
+func test_projectile_count_never_below_one() -> void:
+	var stats := PlayerStats.new()
+	var weapon := WeaponData.new()
+	weapon.projectile_count = 1
+	StatApplier.apply(UpgradeData.Stat.PROJECTILE_COUNT, -5.0, false, stats, weapon)
+	assert_int(weapon.projectile_count).is_equal(1)
+
+
+func test_count_bonus_modifier_updates_stats_and_current_projectile_count() -> void:
+	var stats := PlayerStats.new()
+	var weapon := WeaponData.new()
+	weapon.projectile_count = 3
+	stats.count_bonus = 0
+
+	StatApplier.apply(UpgradeData.Stat.COUNT_BONUS, 1.0, false, stats, weapon)
+
+	assert_int(stats.count_bonus).is_equal(1)
+	assert_int(weapon.projectile_count).is_equal(4)
+
+
+func test_pierce_modifier_never_below_zero() -> void:
+	var weapon := WeaponData.new()
+	weapon.pierce = 1
+	StatApplier.apply(UpgradeData.Stat.PIERCE, 2.0, false, PlayerStats.new(), weapon)
+	assert_int(weapon.pierce).is_equal(3)
+
+	StatApplier.apply(UpgradeData.Stat.PIERCE, -10.0, false, PlayerStats.new(), weapon)
+	assert_int(weapon.pierce).is_equal(0)
