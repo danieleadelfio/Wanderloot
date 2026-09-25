@@ -162,6 +162,8 @@ Le rarità sono in `data/equipment/rarity_table.tres` (colore, numero di bonus, 
 
 ### 6.3 Drop in run (M11, #58), fusione e smontaggio (M11, #59)
 
+Statistiche base, range dei bonus per rarità e tasso di drop per arena di ogni pezzo: `docs/EQUIP_INFO.md` (M12, #86), aggiornato a ogni nuovo pezzo introdotto.
+
 - In run i nemici possono lasciare oggetti da Comune a **Leggendario** (probabilità bassa per uccisione, più alta per il boss). Sono **loot a rischio** come i materiali: si tengono solo estraendo.
 - Tabella per arena in `ArenaData.item_drops` (`data/equipment/drops_<arena>.tres`, `ItemDropTable`): oggetti possibili, `drop_chance` per uccisione (Cripta 0,4 %, Ossario 0,6 %, × bonus drop), `max_tier` (4 = Leggendario), `boss_drops` (1 per boss) con `boss_min_tier` (2 = Raro). La rarità si tira coi pesi `drop_weight` di `rarity_table.tres`; bonus e abilità si tirano quando l'oggetto cade.
 - A terra l'oggetto ha la sua icona tinta col colore della rarità e un **alone pulsante** dello stesso colore, più grande per le rarità alte (`glow_scale` 1 → 2,3); quando cade parte un **suono per rarità** (`drop_sound`), sempre più epico: rintocco (Comune), due note, arpeggio (Raro), arpeggio con scintillio (Super raro), fanfara con colpo di basso (Leggendario), fanfara con coro e doppio colpo (Mitico). Si raccoglie col magnete; nell'inventario di run (I) compare tra il loot a rischio con tooltip; a fine run la schermata elenca gli oggetti portati in salvo o persi. Estraendo entrano nel baule dell'hub come istanze nuove.

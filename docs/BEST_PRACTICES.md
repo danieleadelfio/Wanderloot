@@ -19,6 +19,7 @@ docs/
   CHANGELOG.md
   BEST_PRACTICES.md
   GUIDA_CONTENUTI.md             # procedure operative: nuovi nemici, arene, personaggi, equip, suoni
+  EQUIP_INFO.md                   # statistiche/range/drop rate di ogni pezzo di equip, aggiornato a ogni nuovo pezzo
 ```
 
 Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa cartella della scena. Se sono condivisi da più scene, vanno in `scripts/`/`assets/` generici.
