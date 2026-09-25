@@ -173,6 +173,19 @@ Statistiche base, range dei bonus per rarità e tasso di drop per arena di ogni 
 - **Smontaggio** di un oggetto in materiali (quantità crescente con la rarità), per gestire il baule. **In lavorazione (#60):** non deve restituire i materiali che si trovano in run (se ne raccolgono centinaia); darà materiali **ottenibili solo smontando**, ingredienti di altre ricette (quali, da definire). Per ora la scheda mostra gli oggetti con la scritta *Work in progress* e i pulsanti disattivati (`Blacksmith.salvage_enabled = false`); la logica in `Forge` resta, con la resa provvisoria descritta sotto.
 - Il fabbro ha tre schede: **Crafting**, **Fusione**, **Smontaggio**. Fusione e smontaggio valgono solo per oggetti nel baule (non equipaggiati). La fusione elenca i terzetti disponibili (stesso oggetto, stessa rarità, sotto Leggendario, `Forge.FUSION_COUNT = 3`) e fonde i primi tre; il risultato è un oggetto nuovo tirato alla rarità successiva. Lo smontaggio rende `max(1, floor(costo ricetta × 25 % × salvage_multiplier))` per ogni materiale della ricetta (Comune ×1, Non comune ×2, Raro ×3, Super raro ×5, Leggendario ×8, Mitico ×12); es. Bacchetta di gelatina (25 Gelatina): Comune 6, Leggendario 50. Lo smontaggio chiede conferma (secondo clic). Logica in `scripts/meta/forge.gd`.
 
+### 6.3b Livello arena da potenza dell'equip (M12, #86)
+
+L'equip indossato all'**inizio della run** (hub, non cambia con l'armadio degli Scheletri: non e' equip permanente) determina un **livello arena da 1 a 5**, letto una volta come i modificatori dell'equip. Formula: **livello = tier piu' alto T (1=Comune...6=Mitico) per cui si hanno almeno 4 pezzi equipaggiati di tier >= T**, il massimo T soddisfatto (livello 1 se nessuna soglia e' raggiunta). In pratica: **4 Comuni -> livello 2**, **4 Non comuni -> livello 3**, **4 Rari -> livello 4**, **4 Super rari -> livello 5**; con 4 Leggendari o 4 Mitici la formula darebbe 6/7 ma il gioco definisce effetti solo fino al **livello 5** (tetto, `ArenaLevel.MAX_LEVEL`). Logica pura in `scripts/meta/arena_level.gd`, testata.
+
+Effetti, tutti ereditati da ogni arena (nessun codice per arena):
+
+- **Vita dei nemici nuovi**: ×1,5 per ogni livello sopra il primo (livello 5 = ×5,0625). Si moltiplica con l'hp_multiplier() dell'overtime, indipendenti tra loro.
+- **Ritmo di spawn**: +10% per ogni livello sopra il primo (livello 5 = +40%). Si moltiplica con lo spawn_rate_multiplier() dell'overtime.
+- **Boss**: +1 per ogni livello sopra il primo, sommato a `ArenaData.boss_count` e ai boss guadagnati dal Pentagramma di sangue (nessuno dei tre sostituisce gli altri).
+- **Rarita' massima dei drop**: livello 1 = solo Comune; livello 2 = +Non comune; livello 3 = +Raro; livello 4 = +Super raro; livello 5 = +Leggendario (il Mitico non droppa mai in run, invariato). Il tetto naturale di `ItemDropTable.max_tier` dell'arena resta un limite ulteriore: un'arena puo' scegliere di non arrivare mai a Leggendario anche a livello 5. Le probabilita' relative tra le rarita' sbloccate restano quelle di `rarity_table.tres` (`drop_weight`): la rarita' piu' alta sbloccata resta comunque la meno probabile, senza tabelle separate per livello.
+
+Non ha ancora un'indicazione a schermo (open question): il player non vede il livello raggiunto durante la run.
+
 ### 6.4 Mitici (progetto M12)
 
 - Si craftano solo da una **ricetta mitica**, che si sblocca dai **boss** (drop raro della ricetta; una volta sbloccata resta per sempre e si può usare più volte).
@@ -426,7 +439,8 @@ Lettura: con la vita dei boss x2 l'overtime (50 s dopo l'estrazione, 30 s dopo l
 - **Potenza con le abilità**: con le abilità della bacchetta il bot estrae nel 100% delle run (§10.7); la difficoltà va rivista insieme alle rarità.
 
 - **Controlli touch mobile** (M13, da fare): pianificato ma non ancora iniziato. Resta in coda finche' non si decide di riprenderlo.
-- **Backlog M12/M13 richiesto dal proprietario (#86, non ancora progettato in dettaglio)**: ~~evento "Scheletri nell'armadio"~~ → implementato, vedi §3.4; sistema di **potenza dell'equipaggiamento → livello arena** (1-5, livello = tier più alto T per cui si hanno ≥4 pezzi equipaggiati di tier ≥ T, con drop, vita nemici, velocita' di spawn e numero boss scalati per livello, ereditato da tutte le arene); shader di movimento ambientale (torce, candele, gocce/pozzanghere nella Cripta, sangue nell'Ossario, alberi nell'hub); tutorial contestuale strutturato (hub alla prima nuova partita, primi eventi, prima estrazione, primo overtime, tutti skippabili). Ognuno merita una progettazione propria (parametri esatti, issue dedicata) prima dell'implementazione.
+- **Livello arena, indicazione a schermo** (M12, #86): il sistema (§6.3b) non mostra ancora il livello raggiunto al player durante la run; da decidere dove (HUD? solo a fine run?) col proprietario.
+- **Backlog M12/M13 richiesto dal proprietario (#86, non ancora progettato in dettaglio)**: ~~evento "Scheletri nell'armadio"~~ → implementato, vedi §3.4; ~~sistema di potenza dell'equipaggiamento → livello arena~~ → implementato, vedi §6.3b; shader di movimento ambientale (torce, candele, gocce/pozzanghere nella Cripta, sangue nell'Ossario, alberi nell'hub); tutorial contestuale strutturato (hub alla prima nuova partita, primi eventi, prima estrazione, primo overtime, tutti skippabili). Ognuno merita una progettazione propria (parametri esatti, issue dedicata) prima dell'implementazione.
 
 ## 12. Processo e versionamento
 

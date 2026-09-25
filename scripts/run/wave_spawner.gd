@@ -26,6 +26,10 @@ var overtime_hp: float = 1.0
 ## Overtime (M11.4): tetto dei vivi e frequenza delle ondate moltiplicati; mai oltre MAX_ALIVE.
 var overtime_alive: float = 1.0
 var overtime_rate: float = 1.0
+## Livello arena (M12, #86): vita e ritmo di spawn scalati dalla potenza dell'equip indossato a inizio
+## run. Indipendente da overtime: si moltiplicano tra loro (ArenaLevel non cambia in run).
+var level_hp: float = 1.0
+var level_rate: float = 1.0
 
 
 func _ready() -> void:
@@ -51,7 +55,7 @@ func _physics_process(delta: float) -> void:
 	_cooldown -= delta
 	if _cooldown > 0.0 or _pools.is_empty():
 		return
-	_cooldown = wave_data.interval_at(_elapsed) / maxf(overtime_rate, 0.01)
+	_cooldown = wave_data.interval_at(_elapsed) / maxf(overtime_rate * level_rate, 0.01)
 	var cap := mini(roundi(wave_data.max_alive_at(_elapsed) * surge_multiplier * overtime_alive), MAX_ALIVE)
 	var free_slots := cap - active_count()
 	_spawn_batch(mini(wave_data.batch_at(_elapsed), free_slots))
@@ -73,8 +77,8 @@ func _spawn_batch(count: int) -> void:
 			continue
 		if spawn_raged or overtime_raged:
 			enemy.force_rage()
-		if overtime_speed != 1.0 or overtime_hp != 1.0:
-			enemy.boost(overtime_speed, overtime_hp)
+		if overtime_speed != 1.0 or overtime_hp != 1.0 or level_hp != 1.0:
+			enemy.boost(overtime_speed, overtime_hp * level_hp)
 
 
 func start(target: Node2D) -> void:

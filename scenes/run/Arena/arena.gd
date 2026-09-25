@@ -21,6 +21,9 @@ var _pending_level_ups: int = 0
 ## Modificatori dell'equip indossato, letti una volta a inizio run (M12, #86): per isolare il bonus
 ## dell'equip nella schermata statistiche a tre numeri (HUD e inventario di run).
 var _equip_modifiers: Array[StatModifier] = []
+## Livello arena da potenza dell'equip (M12, #86): letto una volta a inizio run come _equip_modifiers,
+## l'armadio non lo cambia (non e' equip permanente). Scala vita nemici, ritmo di spawn, boss e drop.
+var arena_level: int = 1
 var _current_choice_count: int = 0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Exp frazionaria dovuta al moltiplicatore "Saggezza", accumulata fino all'unità successiva.
@@ -110,6 +113,9 @@ func _ready() -> void:
 	_player.shield_broken.connect(_on_shield_broken)
 	# Equip letto una volta a inizio run: cambiarlo nell'hub vale solo dalla run successiva.
 	_equip_modifiers = MetaProgression.equipped_modifiers()
+	arena_level = ArenaLevel.level_for(MetaProgression.loadout.equipped_items())
+	_wave_spawner.level_hp = ArenaLevel.enemy_hp_multiplier(arena_level)
+	_wave_spawner.level_rate = ArenaLevel.spawn_rate_multiplier(arena_level)
 	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player, _equip_modifiers)
@@ -386,7 +392,8 @@ func _on_enemy_died(enemy: Enemy) -> void:
 
 ## Oggetto trovato: rarita' tirata dalla tabella dell'arena, bonus tirati subito (resta a rischio fino all'estrazione).
 func _drop_item(at: Vector2, base: EquipmentData, from_boss: bool) -> void:
-	var tier := arena.item_drops.roll_tier(MetaProgression.rarity_table, _rng, from_boss)
+	var level_max := ArenaLevel.max_drop_tier(arena_level, arena.item_drops.max_tier)
+	var tier := arena.item_drops.roll_tier(MetaProgression.rarity_table, _rng, from_boss, level_max)
 	var item := MetaProgression.make_item(base, tier)
 	var rarity := MetaProgression.rarity_table.tier(tier)
 	_pickup_pool.spawn_item(at, item, rarity.color, rarity.glow_scale)
@@ -473,7 +480,7 @@ func _physics_process(delta: float) -> void:
 
 ## Ondate di boss dell'overtime = boss della run (arena + guadagnati col Pentagramma, anche in overtime).
 func _refresh_overtime_bosses() -> void:
-	overtime.bosses_per_wave = maxi(arena.boss_count + _extra_bosses, 1)
+	overtime.bosses_per_wave = maxi(arena.boss_count + _extra_bosses + ArenaLevel.boss_bonus(arena_level), 1)
 
 
 func _on_overtime_warned(seconds: int, next_level: int) -> void:
@@ -498,7 +505,7 @@ func _on_overtime_level(level: int) -> void:
 ## e in punti diversi tra loro (boss_count + quelli guadagnati dagli eventi).
 func _spawn_boss() -> void:
 	_bosses_spawned = true
-	_spawn_bosses(arena.boss_count + _extra_bosses)
+	_spawn_bosses(arena.boss_count + _extra_bosses + ArenaLevel.boss_bonus(arena_level))
 
 
 func _spawn_bosses(count: int) -> void:

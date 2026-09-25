@@ -35,6 +35,26 @@ func test_tiers_stay_within_limits() -> void:
 		assert_int(boss_tier).is_between(table.boss_min_tier, table.max_tier)
 
 
+func test_level_max_tier_override_caps_tier() -> void:
+	var table := _table()
+	for i in 300:
+		var tier := table.roll_tier(RARITIES, _rng, false, 0)
+		assert_int(tier).is_equal(0)
+
+
+func test_level_max_tier_override_never_exceeds_table_max_tier() -> void:
+	var table := _table()
+	table.max_tier = 2
+	for i in 300:
+		var tier := table.roll_tier(RARITIES, _rng, false, 99)
+		assert_int(tier).is_between(0, 2)
+
+
+func test_negative_override_means_no_extra_cap() -> void:
+	var table := _table()
+	assert_int(table.roll_tier(RARITIES, _rng, false, -1)).is_between(0, table.max_tier)
+
+
 func _table() -> ItemDropTable:
 	var table := ItemDropTable.new()
 	table.items = [load("res://data/equipment/gel_wand.tres") as EquipmentData]

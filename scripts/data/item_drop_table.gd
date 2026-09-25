@@ -28,7 +28,9 @@ func roll(rng: RandomNumberGenerator, chance_multiplier: float = 1.0) -> Equipme
 	return pick(rng)
 
 
-## Rarita' di un oggetto trovato (boss: almeno boss_min_tier).
-func roll_tier(rarities: RarityTable, rng: RandomNumberGenerator, from_boss: bool = false) -> int:
+## Rarita' di un oggetto trovato (boss: almeno boss_min_tier). level_max_tier_override (M12, #86):
+## tetto ulteriore dal livello arena (ArenaLevel.max_drop_tier); -1 = nessun tetto oltre max_tier.
+func roll_tier(rarities: RarityTable, rng: RandomNumberGenerator, from_boss: bool = false, level_max_tier_override: int = -1) -> int:
+	var high := max_tier if level_max_tier_override < 0 else mini(max_tier, level_max_tier_override)
 	var low := boss_min_tier if from_boss else 0
-	return rarities.pick_drop(rng, mini(low, max_tier), max_tier)
+	return rarities.pick_drop(rng, mini(low, high), high)
