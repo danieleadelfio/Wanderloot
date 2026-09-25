@@ -6,6 +6,9 @@ extends CanvasLayer
 signal action_requested(action: PauseState.Action)
 signal save_requested
 signal load_requested
+## Abbandona Run (M12, #86): torna all'hub abbandonando la run in corso (loot non estratto perso).
+## Nascosto nell'hub (set_can_abandon), dove non c'e' una run da abbandonare.
+signal abandon_requested
 signal menu_requested
 ## Lingua scelta nelle Opzioni: la composition root salva e torna al menu iniziale.
 signal language_requested(locale: String)
@@ -19,6 +22,7 @@ var _menu_armed: bool = false
 @onready var _resume_button: Button = %ResumeButton
 @onready var _save_button: Button = %SaveButton
 @onready var _load_button: Button = %LoadButton
+@onready var _abandon_button: Button = %AbandonButton
 @onready var _menu_button: Button = %MenuButton
 @onready var _options_button: Button = %OptionsButton
 @onready var _buttons: Control = %VBox
@@ -32,6 +36,7 @@ func _ready() -> void:
 	_resume_button.pressed.connect(action_requested.emit.bind(PauseState.Action.RESUME))
 	_save_button.pressed.connect(save_requested.emit)
 	_load_button.pressed.connect(load_requested.emit)
+	_abandon_button.pressed.connect(abandon_requested.emit)
 	_menu_button.pressed.connect(_on_menu_pressed)
 	_options_button.pressed.connect(_show_options.bind(true))
 	_options_panel.back_requested.connect(_show_options.bind(false))
@@ -52,6 +57,11 @@ func show_mode(mode: PauseState.Mode) -> void:
 ## Carica e' disattivato se non esiste un salvataggio.
 func set_can_load(can_load: bool) -> void:
 	_load_button.disabled = not can_load
+
+
+## Abbandona Run visibile solo in run (M12, #86): l'hub lo nasconde, non c'e' nulla da abbandonare.
+func set_can_abandon(can_abandon: bool) -> void:
+	_abandon_button.visible = can_abandon
 
 
 func show_status(text: String) -> void:

@@ -63,6 +63,12 @@ custom_minimum_size = Vector2(220, 44)
 layout_mode = 2
 text = "PAUSE_LOAD"
 
+[node name="AbandonButton" type="Button" parent="Menu/Center/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+text = "PAUSE_ABANDON"
+
 [node name="OptionsButton" type="Button" parent="Menu/Center/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(220, 44)

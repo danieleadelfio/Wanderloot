@@ -94,6 +94,7 @@ func _ready() -> void:
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
+	_pause_menu.abandon_requested.connect(_on_abandon_requested)
 	_pause_menu.language_requested.connect(_on_language_requested)
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
 	_level_up_choice.reroll_requested.connect(_on_reroll_requested)
@@ -662,6 +663,14 @@ func _on_run_ended(result: RunManager.Result) -> void:
 		extracted, RunManager.level, RunManager.elapsed, RunManager.kills,
 		loot_amount, MetaProgression.inventory.total(), items, amounts
 	)
+
+
+## Abbandona Run (ESC, M12, #86): come Carica/Torna al menu ma resta in gioco, verso l'hub invece
+## del menu iniziale. Nessun esito: RunManager.abort_run() fa perdere il loot non estratto.
+func _on_abandon_requested() -> void:
+	RunManager.abort_run()
+	get_tree().paused = false
+	get_tree().change_scene_to_file.call_deferred(SceneRoutes.HUB)
 
 
 func _on_restart_requested() -> void:

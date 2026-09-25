@@ -59,6 +59,7 @@ func _ready() -> void:
 	_tabs.set_tab_title(1, tr("TAB_STATS"))
 	_pause_menu.language_requested.connect(_on_language_requested)
 	_pause_menu.set_hint(tr("PAUSE_HINT_HUB"))
+	_pause_menu.set_can_abandon(false)  # Niente run da abbandonare nell'hub (M12, #86).
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))

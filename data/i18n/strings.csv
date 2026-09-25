@@ -12,6 +12,7 @@ PAUSE_BACK_TO_MENU,Torna al menu,Back to menu,Retour au menu,Volver al menú
 PAUSE_SAVE,Salva,Save,Sauvegarder,Guardar
 PAUSE_RESUME,Riprendi,Resume,Reprendre,Reanudar
 PAUSE_LOAD,Carica,Load,Charger,Cargar
+PAUSE_ABANDON,Abbandona Run,Abandon Run,Abandonner la run,Abandonar la run
 PAUSE_TITLE,Menu,Menu,Menu,Menú
 PAUSE_LABEL,PAUSA,PAUSED,PAUSE,PAUSA
 PAUSE_HINT,ESC per chiudere · P pausa diretta,ESC to close · P quick pause,Échap pour fermer · P pause directe,ESC para cerrar · P pausa directa

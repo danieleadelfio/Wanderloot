@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Menu di pausa in run: voce **Abbandona Run** (tra Carica e Opzioni) per tornare alla piazza abbandonando la run in corso, senza dover passare da Torna al menu (nascosta nel menu di pausa della piazza) (#86).
 - Statistiche a tre numeri (base giallo fisso, bonus equip verde, finale bianco) in HUD, scheda Statistiche dell'hub e inventario di run (nuovo, prima non c'era); `StatSheet.equip_rows`/`fill_with_equip`, `Player.base_stats()`/`base_weapon_data()`; test (#86).
 - `LoadoutPanel` (manichino, hub e inventario di run): sotto il manichino, i livelli totali di ogni abilità data dai pezzi indossati, sommati come in run (#86).
 - Nuovo documento `docs/EQUIP_INFO.md`: statistiche base, range dei bonus per rarità e tasso di drop per arena di ogni pezzo di equip; va aggiornato a ogni nuovo pezzo (#86).
