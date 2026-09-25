@@ -58,9 +58,11 @@ func set_loot(total: int) -> void:
 
 ## Statistiche del personaggio sotto le barre (solo in run), aggiornate a ogni potenziamento. A 3 numeri
 ## (M12, #86): base di partenza (giallo, fisso), bonus dell'equip indossato (verde), valore finale (bianco).
+## Statistiche live in run (M12, #86): bonus/finale includono anche i potenziamenti di run, con "*"
+## quando superano l'equip da solo (StatSheet.run_rows); chiamata a inizio run e a ogni level-up.
 func set_stats(player: Player, equip_modifiers: Array[StatModifier]) -> void:
-	var rows := StatSheet.equip_rows(player.base_stats(), player.base_weapon_data(), player.stats, player.weapon_data(), equip_modifiers)
-	StatSheet.fill_with_equip(_stats_grid, rows, 13)
+	var rows := StatSheet.run_rows(player.base_stats(), player.base_weapon_data(), equip_modifiers, player.stats, player.weapon_data())
+	StatSheet.fill_with_equip(_stats_grid, rows, 11)
 
 
 ## Icone delle abilita' della bacchetta (M10); il riempimento mostra l'avanzamento verso l'attivazione.

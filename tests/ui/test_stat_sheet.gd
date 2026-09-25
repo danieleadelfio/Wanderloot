@@ -1,6 +1,7 @@
 extends GdUnitTestSuite
 ## Righe delle statistiche (M9): valori letti da stats e arma, percentuali dei moltiplicatori.
 ## equip_rows() (M12, #86): base/bonus equip/finale a 3 numeri.
+## run_rows() (M12, #86): come equip_rows ma bonus/finale includono i potenziamenti di run, con "*".
 
 
 func test_rows_reflect_stats_and_weapon() -> void:
@@ -81,3 +82,63 @@ func test_equip_rows_zero_base_shows_absolute_delta() -> void:
 	assert_str(invuln_row[1]).is_equal("0.00s")
 	assert_str(invuln_row[2]).is_equal("+0.10s")
 	assert_str(invuln_row[3]).is_equal("0.10s")
+func test_run_rows_no_run_upgrade_has_no_star() -> void:
+	var base_stats := PlayerStats.new()
+	var base_weapon := WeaponData.new()
+	base_weapon.fire_rate = 4.0
+	var bonus := StatModifier.new()
+	bonus.stat = UpgradeData.Stat.FIRE_RATE
+	bonus.amount = 1.25
+	bonus.is_multiplier = true
+	var modifiers: Array[StatModifier] = [bonus]
+	var stats := base_stats.duplicate()
+	var weapon := base_weapon.duplicate()
+	StatApplier.apply_modifiers(modifiers, stats, weapon)
+	# Nessun potenziamento di run: stats/weapon = solo equip, come in equip_rows.
+	var rows := StatSheet.run_rows(base_stats, base_weapon, modifiers, stats, weapon)
+	var by_label := {}
+	for row in rows:
+		by_label[row[0]] = row
+	var fire_rate_row: PackedStringArray = by_label["STAT_FIRE_RATE"]
+	assert_str(fire_rate_row[2]).is_equal("+25%")
+	assert_str(fire_rate_row[3]).is_equal("5.0/s")
+
+
+func test_run_rows_run_upgrade_adds_star() -> void:
+	var base_stats := PlayerStats.new()
+	var base_weapon := WeaponData.new()
+	base_weapon.fire_rate = 4.0
+	var bonus := StatModifier.new()
+	bonus.stat = UpgradeData.Stat.FIRE_RATE
+	bonus.amount = 1.25
+	bonus.is_multiplier = true
+	var modifiers: Array[StatModifier] = [bonus]
+	var equip_stats := base_stats.duplicate()
+	var equip_weapon := base_weapon.duplicate()
+	StatApplier.apply_modifiers(modifiers, equip_stats, equip_weapon)
+	# stats/weapon vanno oltre l'equip: simula una scelta di potenziamento in run.
+	var stats := equip_stats.duplicate()
+	var weapon := equip_weapon.duplicate()
+	StatApplier.apply(UpgradeData.Stat.FIRE_RATE, 1.1, true, stats, weapon)
+	var rows := StatSheet.run_rows(base_stats, base_weapon, modifiers, stats, weapon)
+	var by_label := {}
+	for row in rows:
+		by_label[row[0]] = row
+	var fire_rate_row: PackedStringArray = by_label["STAT_FIRE_RATE"]
+	assert_str(fire_rate_row[2]).is_equal("+38%*")
+	assert_str(fire_rate_row[3]).is_equal("5.5/s*")
+
+
+func test_run_rows_unaffected_stat_has_no_star() -> void:
+	var base_stats := PlayerStats.new()
+	var base_weapon := WeaponData.new()
+	var stats := base_stats.duplicate()
+	var weapon := base_weapon.duplicate()
+	StatApplier.apply(UpgradeData.Stat.FIRE_RATE, 1.1, true, stats, weapon)
+	var rows := StatSheet.run_rows(base_stats, base_weapon, [] as Array[StatModifier], stats, weapon)
+	var by_label := {}
+	for row in rows:
+		by_label[row[0]] = row
+	var hp_row: PackedStringArray = by_label["STAT_MAX_HP"]
+	assert_str(hp_row[2]).is_equal("")
+	assert_str(hp_row[3]).is_equal("5")

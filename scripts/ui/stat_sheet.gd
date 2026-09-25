@@ -56,6 +56,30 @@ static func equip_rows(base_stats: PlayerStats, base_weapon: WeaponData, stats: 
 	return result
 
 
+## Righe a 4 colonne per l'overlay in run (M12, #86): come equip_rows, ma bonus e finale includono
+## anche i potenziamenti di run scelti a level-up, non solo l'equip (stats/weapon sono gia' base+equip+
+## potenziamenti, calcolati da Player). Entrambi ricevono un suffisso "*" quando il valore finale di
+## quella statistica include un contributo dei potenziamenti oltre a quello dell'equip, per distinguerlo
+## dalla vista post-run dell'hub (equip_rows), dove equip e finale coincidono sempre.
+static func run_rows(base_stats: PlayerStats, base_weapon: WeaponData, equip_modifiers: Array[StatModifier], stats: PlayerStats, weapon: WeaponData) -> Array[PackedStringArray]:
+	var equip_stats: PlayerStats = base_stats.duplicate()
+	var equip_weapon: WeaponData = base_weapon.duplicate()
+	StatApplier.apply_modifiers(equip_modifiers, equip_stats, equip_weapon)
+	var result: Array[PackedStringArray] = []
+	for row in _row_defs():
+		var getter: Callable = row["getter"]
+		var format: Callable = row["format"]
+		var base_v: float = getter.call(base_stats, base_weapon)
+		var equip_v: float = getter.call(equip_stats, equip_weapon)
+		var final_v: float = getter.call(stats, weapon)
+		var star := "" if is_equal_approx(equip_v, final_v) else "*"
+		var bonus_text := _bonus_text(base_v, final_v, format)
+		if bonus_text != "":
+			bonus_text += star
+		result.append(PackedStringArray([row.label, format.call(base_v), bonus_text, format.call(final_v) + star]))
+	return result
+
+
 ## Percentuale del contributo dell'equip rispetto alla base; "" se nullo. Con base zero (es.
 ## Invulnerabilita' di partenza) mostra il delta assoluto nel formato della statistica invece della %.
 static func _bonus_text(base_v: float, equip_v: float, format: Callable) -> String:

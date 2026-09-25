@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Statistiche HUD in tempo reale: `StatSheet.run_rows` mostra bonus/finale con anche i potenziamenti di run (non solo equip), suffisso "*" su bonus e finale quando una statistica ne beneficia; font ridotto a 11px; a run finita l'hub resta equip-only senza asterischi (#86).
 - Menu di pausa in run: voce **Abbandona Run** (tra Carica e Opzioni) per tornare alla piazza abbandonando la run in corso, senza dover passare da Torna al menu (nascosta nel menu di pausa della piazza) (#86).
 - Statistiche a tre numeri (base giallo fisso, bonus equip verde, finale bianco) in HUD, scheda Statistiche dell'hub e inventario di run (nuovo, prima non c'era); `StatSheet.equip_rows`/`fill_with_equip`, `Player.base_stats()`/`base_weapon_data()`; test (#86).
 - `LoadoutPanel` (manichino, hub e inventario di run): sotto il manichino, i livelli totali di ogni abilità data dai pezzi indossati, sommati come in run (#86).
