@@ -131,3 +131,8 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 - Rigenerazione del mana aumentata del 35%.
 - Vita base del personaggio aumentata del 20%.
 - Riserva di mana massima aumentata del 20%.
+
+## In lavorazione (14) — 27/09/2026
+
+### Correzioni
+- La finestra Inventario della piazza non cambia più dimensione quando si equipaggia o si toglie un oggetto (prima bastava equipaggiare la bacchetta e poi un anello per vederla ridimensionarsi o allungarsi).

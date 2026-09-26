@@ -20,6 +20,9 @@ func _ready() -> void:
 
 func _build_list() -> void:
 	for child in _list.get_children():
+		# Staccato subito (M13, #86): con il solo queue_free() vecchi e nuovi figli convivono fino a
+		# fine frame, il contenitore raddoppia la dimensione minima e la finestra resta gonfia.
+		_list.remove_child(child)
 		child.queue_free()
 	_buttons_by_entry.clear()
 	var group := ButtonGroup.new()

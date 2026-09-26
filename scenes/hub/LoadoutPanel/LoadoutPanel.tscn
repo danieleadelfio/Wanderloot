@@ -22,10 +22,13 @@ layout_mode = 2
 
 [node name="AbilityLevels" type="Label" parent="HBox/FigureColumn"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
+mouse_filter = 1
 theme_override_colors/font_color = Color(0.55, 0.85, 0.55, 1)
 theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
+max_lines_visible = 3
 text = "LOADOUT_ABILITY_NONE"
 
 [node name="Silhouette" type="TextureRect" parent="HBox/FigureColumn/Figure"]

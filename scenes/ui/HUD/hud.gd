@@ -112,6 +112,9 @@ func _refresh_stats_toggle() -> void:
 ## Icone delle abilita' della bacchetta (M10); il riempimento mostra l'avanzamento verso l'attivazione.
 func set_abilities(abilities: Array[WandAbility], levels: Dictionary = {}) -> void:
 	for child in _ability_bar.get_children():
+		# Staccato subito (M13, #86): con il solo queue_free() vecchi e nuovi figli convivono fino a
+		# fine frame, il contenitore raddoppia la dimensione minima e la finestra resta gonfia.
+		_ability_bar.remove_child(child)
 		child.queue_free()
 	for ability in abilities:
 		var icon := TextureProgressBar.new()

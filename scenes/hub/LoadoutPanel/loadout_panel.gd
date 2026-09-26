@@ -148,7 +148,9 @@ func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = [])
 		_grid.remove_child(child)
 		child.queue_free()
 	var stash := StashSort.sorted(StashSort.filtered(loadout.stash_items(), filter_key), sort_mode)
-	_empty_hint.visible = stash.is_empty()
+	# Sempre nel layout, solo trasparente (M13, #86): visible cambiava l'altezza del baule e con lei la
+	# dimensione della finestra (baule che si svuota/riempie equipaggiando).
+	_empty_hint.modulate.a = 1.0 if stash.is_empty() else 0.0
 	for item in stash:
 		var tile := ItemTile.for_item(item)
 		tile.focus_mode = Control.FOCUS_ALL
@@ -185,12 +187,15 @@ func _refresh_ability_levels(loadout: EquipmentLoadout) -> void:
 			levels[item.ability.id] = entry
 	if levels.is_empty():
 		_ability_levels.text = tr("LOADOUT_ABILITY_NONE")
+		_ability_levels.tooltip_text = ""
 		return
 	var parts: Array[String] = []
 	for entry: Array in levels.values():
 		var ability: WandAbility = entry[0]
 		parts.append("%s Lv%d" % [TranslationServer.translate(ability.display_name), entry[1]])
 	_ability_levels.text = tr("LOADOUT_ABILITY_LEVELS") % ", ".join(parts)
+	# Riga ad altezza fissa (max_lines_visible nella scena, M13 #86): il testo intero resta nel tooltip.
+	_ability_levels.tooltip_text = _ability_levels.text
 
 
 func _item_button(item: ItemInstance, empty_label: String) -> Button:

@@ -104,6 +104,9 @@ static func _percent(multiplier: float) -> String:
 ## Riempie una GridContainer a 2 colonne con le righe di rows() (ricreate a ogni chiamata).
 static func fill(grid: GridContainer, sheet: Array[PackedStringArray], font_size: int = 14) -> void:
 	for child in grid.get_children():
+		# Staccato subito (M13, #86): con il solo queue_free() vecchi e nuovi figli convivono fino a
+		# fine frame, il contenitore raddoppia la dimensione minima e la finestra resta gonfia.
+		grid.remove_child(child)
 		child.queue_free()
 	for row in sheet:
 		for i in 2:
@@ -122,6 +125,9 @@ static func fill(grid: GridContainer, sheet: Array[PackedStringArray], font_size
 ## bonus equip (verde, vuoto se nullo), finale (bianco).
 static func fill_with_equip(grid: GridContainer, sheet: Array[PackedStringArray], font_size: int = 14) -> void:
 	for child in grid.get_children():
+		# Staccato subito (M13, #86): con il solo queue_free() vecchi e nuovi figli convivono fino a
+		# fine frame, il contenitore raddoppia la dimensione minima e la finestra resta gonfia.
+		grid.remove_child(child)
 		child.queue_free()
 	var colors := [Color(0.85, 0.85, 0.95), Color(1, 0.9, 0.6), Color(0.5, 0.9, 0.5), Color(1, 1, 1)]
 	var alignments := [HORIZONTAL_ALIGNMENT_LEFT, HORIZONTAL_ALIGNMENT_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT]

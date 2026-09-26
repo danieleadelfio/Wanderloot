@@ -63,20 +63,20 @@ func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items
 		if amount > 0:
 			_loot_grid.add_child(ItemTile.for_material(material, amount))
 			total += amount
-	_empty.visible = _loot_grid.get_child_count() == 0
+	# Nel layout sempre, solo trasparente: mostrarlo/nasconderlo cambiava l'altezza della finestra (M13, #86).
+	_empty.modulate.a = 1.0 if _loot_grid.get_child_count() == 0 else 0.0
 	_loot_total.text = tr("RUNINV_TOTAL") % total
 	_window.show()
-	_panel.scale = Vector2.ONE
+	_window.queue_sort()
 	await get_tree().process_frame
-	_fit_to_viewport()
+	if is_inside_tree():
+		_fit_to_viewport()
 
 
 ## Rimpicciolisce il pannello (attorno al proprio centro, il CenterContainer lo ricentra da solo)
-## se il suo contenuto naturale eccede max_viewport_fraction dello schermo (M13, #86).
+## se il suo contenuto eccede max_viewport_fraction dello schermo (M13, #86). Logica condivisa con la
+## finestra Inventario dell'hub (UiFit).
 func _fit_to_viewport() -> void:
-	if not _window.visible or _panel.size.x <= 0.0 or _panel.size.y <= 0.0:
+	if not _window.visible:
 		return
-	var available := get_viewport().get_visible_rect().size * max_viewport_fraction
-	var factor := minf(1.0, minf(available.x / _panel.size.x, available.y / _panel.size.y))
-	_panel.pivot_offset = _panel.size * 0.5
-	_panel.scale = Vector2.ONE * factor
+	UiFit.fit(_window, _panel, get_viewport().get_visible_rect().size, max_viewport_fraction)

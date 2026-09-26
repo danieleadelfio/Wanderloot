@@ -245,7 +245,6 @@ func _open(window: Control) -> void:
 	if window == _portal_window:
 		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, ArenaLevel.level_for(MetaProgression.loadout.equipped_items()))
 	elif window == _inventory_window:
-		_inventory_panel.scale = Vector2.ONE
 		_fit_inventory_after_frame()
 	_dim.show()
 	get_tree().paused = true
@@ -260,23 +259,26 @@ func _close_window() -> void:
 	get_tree().paused = false
 
 
-## Come RunInventory._fit_to_viewport (M13, #86): equipaggiare/disequipaggiare o cambiare filtro
-## puo' far crescere il baule/manichino oltre lo schermo. La finestra Inventario dell'hub condivide
-## lo stesso LoadoutPanel ma, a differenza di RunInventory, non si ridimensionava mai: bug generico
-## (qualunque oggetto del baule, non solo quelli dell'armadio degli Scheletri), non solo all'apertura
-## ma anche da gia' aperta (equip -> MetaProgression.changed -> _refresh(), tutto sincrono).
+## Finestra Inventario entro max_inventory_viewport_fraction dello schermo (M13, #86), stessa logica
+## dell'inventario di run (UiFit). La dimensione del pannello e' fissa per costruzione (LoadoutPanel:
+## riga abilita' ad altezza fissa, avviso "baule vuoto" che non esce dal layout), quindi equip/unequip
+## non la cambiano piu'; qui si ricalcola solo la scala, mai resettata a 1 prima (dava un frame a
+## grandezza piena a ogni refresh, visibile come un "salto" della finestra).
 func _fit_inventory_to_viewport() -> void:
-	if not _inventory_window.visible or _inventory_panel.size.x <= 0.0 or _inventory_panel.size.y <= 0.0:
+	if not _inventory_window.visible:
 		return
-	var available := get_viewport().get_visible_rect().size * max_inventory_viewport_fraction
-	var factor := minf(1.0, minf(available.x / _inventory_panel.size.x, available.y / _inventory_panel.size.y))
-	_inventory_panel.pivot_offset = _inventory_panel.size * 0.5
-	_inventory_panel.scale = Vector2.ONE * factor
+	UiFit.fit(_inventory_window, _inventory_panel, get_viewport().get_visible_rect().size, max_inventory_viewport_fraction)
 
 
-## La dimensione naturale del pannello e' nota solo al frame successivo al ricalcolo del layout.
+## Al frame successivo (vecchi tile/righe gia' liberati) rimette il pannello alla sua dimensione minima e
+## lo ricentra: un contenuto cresciuto per un frame nella scheda nascosta (Statistiche) non notifica il
+## CenterContainer quando torna piccolo, e la finestra restava alta il doppio finche' non la si riapriva.
 func _fit_inventory_after_frame() -> void:
 	await get_tree().process_frame
+	if not is_inside_tree() or not _inventory_window.visible:
+		return
+	_inventory_panel.reset_size()
+	_inventory_window.queue_sort()
 	_fit_inventory_to_viewport()
 
 
@@ -291,7 +293,6 @@ func _refresh() -> void:
 	var rows := StatSheet.equip_rows(_player.base_stats(), _player.base_weapon_data(), _player.stats, _player.weapon_data(), equip_modifiers)
 	StatSheet.fill_with_equip(_hub_stats_grid, rows, 18)
 	if _inventory_window.visible:
-		_inventory_panel.scale = Vector2.ONE
 		_fit_inventory_after_frame()
 	_ensure_focus.call_deferred()
 
@@ -313,6 +314,9 @@ func _ensure_focus() -> void:
 
 func _refresh_stash(amounts: Dictionary[StringName, int]) -> void:
 	for child in _stash_list.get_children():
+		# Staccato subito (M13, #86): con il solo queue_free() vecchi e nuovi figli convivono fino a
+		# fine frame, il contenitore raddoppia la dimensione minima e la finestra resta gonfia.
+		_stash_list.remove_child(child)
 		child.queue_free()
 	_stash_label.visible = amounts.is_empty()
 	for id in amounts:
