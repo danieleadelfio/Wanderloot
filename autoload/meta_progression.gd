@@ -227,6 +227,15 @@ func salvage(uid: int) -> bool:
 	return true
 
 
+## Smontaggio in blocco di tutta la spazzatura taggata nel baule (M12, #86): ritorna il totale
+## materiali ottenuti (vuoto se non c'era nulla).
+func salvage_all_trash() -> Dictionary[StringName, int]:
+	var total := Forge.salvage_trash(loadout, inventory, recipe_book, rarity_table)
+	if not total.is_empty():
+		_mark_changed()
+	return total
+
+
 func equip(uid: int) -> void:
 	var item := loadout.get_item(uid)
 	if item:
@@ -240,6 +249,13 @@ func mark_seen(uid: int) -> void:
 	var item := loadout.get_item(uid)
 	if item and item.is_new:
 		item.is_new = false
+		has_unsaved_changes = true
+
+
+## Tasto destro sull'icona: segna/dissegna come spazzatura (M12, #86). Il tile ha gia' aggiornato
+## item.is_trash (stessa istanza): qui solo il salvataggio.
+func toggle_trash(uid: int) -> void:
+	if loadout.get_item(uid):
 		has_unsaved_changes = true
 
 

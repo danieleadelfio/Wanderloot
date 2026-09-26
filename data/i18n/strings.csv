@@ -171,7 +171,7 @@ SLOT_ARMOR,Armatura,Armor,Armure,Armadura
 SLOT_PANTS,Pantaloni,Pants,Pantalon,Pantalones
 SLOT_BOOTS,Stivali,Boots,Bottes,Botas
 SLOT_RING,Anello,Ring,Anneau,Anillo
-LOADOUT_CLICK_HINT,"Clic su un oggetto per indossarlo, clic su uno slot per toglierlo.","Click an item to wear it, click a slot to take it off.","Cliquez sur un objet pour le porter, sur un emplacement pour le retirer.",Haz clic en un objeto para ponértelo y en una ranura para quitártelo.
+LOADOUT_CLICK_HINT,Clic sinistro su un oggetto per indossarlo/toglierlo. Clic destro: segna/dissegna come spazzatura.,Left click an item to wear/unwear it. Right click: mark/unmark as trash.,Clic gauche sur un objet pour le porter/l'enlever. Clic droit : marquer/démarquer comme rebut.,Clic izquierdo en un objeto para ponértelo/quitártelo. Clic derecho: marcar/desmarcar como basura.
 LOADOUT_ABILITY_LEVELS,Abilità dall'equip: %s,Abilities from gear: %s,Compétences de l'équipement : %s,Habilidades del equipo: %s
 LOADOUT_ABILITY_NONE,Nessuna abilità dall'equip,No abilities from gear,Aucune compétence de l'équipement,Sin habilidades del equipo
 EQ_WANDERER_HOOD,Cappuccio del viandante,Wanderer's hood,Capuche du vagabond,Capucha del errante
@@ -287,3 +287,5 @@ TUTORIAL_OVERTIME_WARNING_TITLE,Overtime in arrivo,Overtime incoming,Prolongatio
 TUTORIAL_OVERTIME_WARNING_BODY,"Tra poco l'arena entra in overtime: da quel momento diventa via via piu' dura (nemici piu' veloci e forti, boss piu' frequenti). Se il punto di estrazione e' gia' aperto, questo e' un buon momento per andarci.","Overtime is about to start: from then on the arena keeps getting harder (faster, tougher enemies, more frequent bosses). If the extraction point is already open, this is a good time to head there.","La prolongation va bientôt commencer : à partir de là, l'arène devient de plus en plus dure (ennemis plus rapides et plus forts, boss plus fréquents). Si le point d'extraction est déjà ouvert, c'est un bon moment pour y aller.","La prórroga esta a punto de empezar: a partir de ahi la arena se vuelve cada vez mas dura (enemigos mas rapidos y fuertes, jefes mas frecuentes). Si el punto de extraccion ya esta abierto, es un buen momento para ir."
 EXTRACTION_OPEN_TITLE,Estrazione aperta,Extraction open,Extraction ouverte,Extracción abierta
 EXTRACTION_OPEN_SUB,Il punto di estrazione è comparso: raggiungilo per estrarre,The extraction point has appeared: reach it to extract,Le point d'extraction est apparu : rejoignez-le pour extraire,El punto de extracción ha aparecido: llega hasta él para extraer
+BLACKSMITH_SALVAGE_ALL_TRASH,Smonta tutta la spazzatura (%d),Salvage all trash (%d),Démonter toute la camelote (%d),Desguazar toda la chatarra (%d)
+BLACKSMITH_SALVAGE_ALL_TRASH_EMPTY,Smonta tutta la spazzatura,Salvage all trash,Démonter toute la camelote,Desguazar toda la chatarra

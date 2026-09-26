@@ -14,6 +14,9 @@ var affixes: Array[StatModifier] = []
 var ability: WandAbility
 ## Arrivato da poco nel baule (N gialla) finche' non lo si guarda o equipaggia (M11.4, #81).
 var is_new: bool = false
+## Segnato come spazzatura dal giocatore (tasto destro sull'icona, M12 #86): niente di automatico, solo
+## per raggrupparlo e smontarlo tutto insieme dal fabbro senza cliccare N volte.
+var is_trash: bool = false
 
 
 func _init(from_base: EquipmentData = null, tier: int = 0) -> void:
@@ -47,7 +50,7 @@ func to_dict() -> Dictionary:
 	var rolled: Array = []
 	for affix in affixes:
 		rolled.append([int(affix.stat), affix.amount, affix.is_multiplier])
-	return {"base": String(base.id), "rarity": rarity, "affixes": rolled, "ability": String(ability.id) if ability else "", "new": is_new}
+	return {"base": String(base.id), "rarity": rarity, "affixes": rolled, "ability": String(ability.id) if ability else "", "new": is_new, "trash": is_trash}
 
 
 ## null se l'oggetto base non esiste piu' nel catalogo (salvataggio di una versione vecchia).
@@ -57,6 +60,7 @@ static func from_dict(data: Dictionary, catalog: EquipmentCatalog, abilities: Ab
 		return null
 	var item := ItemInstance.new(found, int(data.get("rarity", 0)))
 	item.is_new = bool(data.get("new", false))
+	item.is_trash = bool(data.get("trash", false))
 	for entry in data.get("affixes", []):
 		var affix := StatModifier.new()
 		affix.stat = int(entry[0])

@@ -90,3 +90,44 @@ func _add(base: EquipmentData, tier: int) -> ItemInstance:
 
 func _make(base: EquipmentData, tier: int) -> ItemInstance:
 	return ItemInstance.new(base, tier)
+
+func test_trash_items_returns_only_tagged_stash_items() -> void:
+	var inventory := MetaInventory.new()
+	var a := _add(_wand, 0)
+	var b := _add(_boots, 0)
+	a.is_trash = true
+	assert_array(Forge.trash_items(_loadout)).contains([a])
+	assert_bool(Forge.trash_items(_loadout).has(b)).is_false()
+
+
+func test_salvage_trash_removes_all_tagged_and_sums_yield() -> void:
+	var inventory := MetaInventory.new()
+	var a := _add(_wand, 0)
+	var b := _add(_wand, 1)
+	var c := _add(_boots, 0)
+	a.is_trash = true
+	b.is_trash = true
+	var expected := Forge.salvage_yield(a, RECIPES, RARITIES)[&"slime_gel"] + Forge.salvage_yield(b, RECIPES, RARITIES)[&"slime_gel"]
+	var total := Forge.salvage_trash(_loadout, inventory, RECIPES, RARITIES)
+	assert_int(total[&"slime_gel"]).is_equal(expected)
+	assert_object(_loadout.get_item(a.uid)).is_null()
+	assert_object(_loadout.get_item(b.uid)).is_null()
+	assert_object(_loadout.get_item(c.uid)).is_not_null()
+	assert_int(inventory.amount_of(&"slime_gel")).is_equal(expected)
+
+
+func test_salvage_trash_ignores_equipped_items() -> void:
+	var inventory := MetaInventory.new()
+	var a := _add(_wand, 0)
+	a.is_trash = true
+	_loadout.equip(a.uid)
+	var total := Forge.salvage_trash(_loadout, inventory, RECIPES, RARITIES)
+	assert_bool(total.is_empty()).is_true()
+	assert_object(_loadout.get_item(a.uid)).is_not_null()
+
+
+func test_salvage_trash_is_empty_when_nothing_tagged() -> void:
+	var inventory := MetaInventory.new()
+	_add(_wand, 0)
+	assert_bool(Forge.salvage_trash(_loadout, inventory, RECIPES, RARITIES).is_empty()).is_true()
+

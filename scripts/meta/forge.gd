@@ -84,6 +84,23 @@ static func salvage_yield(item: ItemInstance, recipes: RecipeBook, rarities: Rar
 	return result
 
 
+## Oggetti del baule taggati spazzatura dal giocatore (tasto destro sull'icona, M12 #86).
+static func trash_items(loadout: EquipmentLoadout) -> Array[ItemInstance]:
+	return loadout.stash_items().filter(func(item: ItemInstance) -> bool: return item.is_trash)
+
+
+## Smonta in blocco tutta la spazzatura del baule: somma la resa totale e rimuove tutti gli oggetti
+## in un colpo solo, evitando N click uno per uno (M12, #86). Vuoto se non c'e' nulla da smontare.
+static func salvage_trash(loadout: EquipmentLoadout, inventory: MetaInventory, recipes: RecipeBook, rarities: RarityTable) -> Dictionary[StringName, int]:
+	var total: Dictionary[StringName, int] = {}
+	for item in trash_items(loadout):
+		var amounts := salvage_yield(item, recipes, rarities)
+		for id in amounts:
+			total[id] = total.get(id, 0) + amounts[id]
+		salvage(item, loadout, inventory, amounts)
+	return total
+
+
 ## Smonta un oggetto del baule: lo rimuove e deposita la resa. false se equipaggiato o sconosciuto.
 static func salvage(item: ItemInstance, loadout: EquipmentLoadout, inventory: MetaInventory, amounts: Dictionary[StringName, int]) -> bool:
 	if item == null or loadout.get_item(item.uid) != item or loadout.is_equipped(item.uid):

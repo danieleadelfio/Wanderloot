@@ -47,10 +47,12 @@ func _ready() -> void:
 	_blacksmith.craft_requested.connect(_on_craft_requested)
 	_blacksmith.fuse_requested.connect(_on_fuse_requested)
 	_blacksmith.salvage_requested.connect(_on_salvage_requested)
+	_blacksmith.salvage_all_trash_requested.connect(_on_salvage_all_trash_requested)
 	_blacksmith.ascend_requested.connect(_on_ascend_requested)
 	_loadout_panel.equip_requested.connect(MetaProgression.equip)
 	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
 	_loadout_panel.seen_requested.connect(MetaProgression.mark_seen)
+	_loadout_panel.trash_toggled.connect(MetaProgression.toggle_trash)
 	_loadout_panel.equip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_arena_select.arena_selected.connect(_on_arena_selected)
@@ -303,6 +305,11 @@ func _on_fuse_requested(uids: Array[int]) -> void:
 
 func _on_salvage_requested(uid: int) -> void:
 	if MetaProgression.salvage(uid):
+		_sfx.play(&"pickup_item")
+
+
+func _on_salvage_all_trash_requested() -> void:
+	if not MetaProgression.salvage_all_trash().is_empty():
 		_sfx.play(&"pickup_item")
 
 

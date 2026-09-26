@@ -87,6 +87,11 @@ theme_override_colors/font_color = Color(0.85, 0.85, 0.95, 0.75)
 text = "BLACKSMITH_SALVAGE_HINT"
 autowrap_mode = 3
 
+[node name="SalvageAllButton" type="Button" parent="VBox/Tabs/Salvage/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "BLACKSMITH_SALVAGE_ALL_TRASH_EMPTY"
+
 [node name="SalvageList" type="VBoxContainer" parent="VBox/Tabs/Salvage/VBox"]
 unique_name_in_owner = true
 layout_mode = 2

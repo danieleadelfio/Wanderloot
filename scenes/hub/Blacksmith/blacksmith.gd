@@ -7,6 +7,8 @@ signal craft_requested(recipe: RecipeData)
 ## Fonde i due oggetti (uid) indicati.
 signal fuse_requested(uids: Array[int])
 signal salvage_requested(uid: int)
+## Smonta tutta la spazzatura taggata nel baule in un colpo solo (M12, #86).
+signal salvage_all_trash_requested
 ## Ascensione (M12, #86, #16): alza il cap sbloccato dell'abilita' indicata (id).
 signal ascend_requested(id: StringName)
 
@@ -25,6 +27,7 @@ var _pending_salvage: int = 0
 @onready var _recipe_list: VBoxContainer = %RecipeList
 @onready var _fusion_list: VBoxContainer = %FusionList
 @onready var _salvage_list: VBoxContainer = %SalvageList
+@onready var _salvage_all_button: Button = %SalvageAllButton
 @onready var _resources_label: Label = %ResourcesLabel
 @onready var _ascension_list: VBoxContainer = %AscensionList
 
@@ -34,6 +37,8 @@ func _ready() -> void:
 	_tabs.set_tab_title(1, tr("BLACKSMITH_TAB_FUSION"))
 	_tabs.set_tab_title(2, tr("BLACKSMITH_TAB_SALVAGE"))
 	_tabs.set_tab_title(3, tr("BLACKSMITH_TAB_ASCENSION"))
+	_salvage_all_button.text = tr("BLACKSMITH_SALVAGE_ALL_TRASH")
+	_salvage_all_button.pressed.connect(salvage_all_trash_requested.emit)
 
 
 ## caps: id abilita' -> cap sbloccato attuale (MetaProgression.ascension_caps); il costo del +1
@@ -101,6 +106,10 @@ func _refresh_salvage(loadout: EquipmentLoadout, material_names: Dictionary[Stri
 		_salvage_list.add_child(button)
 	if items.is_empty():
 		_salvage_list.add_child(_hint(tr("BLACKSMITH_SALVAGE_EMPTY")))
+	# Smonta tutta la spazzatura (M12, #86): un solo click invece di N, uno per oggetto taggato.
+	var trash_count := Forge.trash_items(loadout).size()
+	_salvage_all_button.disabled = not salvage_enabled or trash_count == 0
+	_salvage_all_button.text = tr("BLACKSMITH_SALVAGE_ALL_TRASH") % trash_count if trash_count > 0 else tr("BLACKSMITH_SALVAGE_ALL_TRASH_EMPTY")
 
 
 func _on_salvage_pressed(uid: int, button: Button) -> void:

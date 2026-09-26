@@ -8,6 +8,8 @@ signal equip_requested(uid: int)
 signal unequip_requested(slot: int)
 ## Oggetto nuovo guardato (perde la N).
 signal seen_requested(uid: int)
+## Tasto destro su un'icona del baule: segna/dissegna come spazzatura (M12, #86).
+signal trash_toggled(uid: int)
 
 const SLOT_SIZE := Vector2(60, 60)
 ## Posizione di ogni slot sul manichino (area 360x440).
@@ -144,6 +146,7 @@ func refresh(loadout: EquipmentLoadout) -> void:
 				tile.compare.append(worn)
 		tile.pressed.connect(equip_requested.emit.bind(item.uid))
 		tile.seen.connect(seen_requested.emit)
+		tile.trash_toggled.connect(trash_toggled.emit)
 		_grid.add_child(tile)
 
 
