@@ -22,6 +22,16 @@ func test_rows_reflect_stats_and_weapon() -> void:
 	assert_str(by_label["STAT_DROP_BONUS"]).is_equal("+0%")
 
 
+func test_mana_row_shows_absolute_max_mana() -> void:
+	var stats := PlayerStats.new()
+	stats.max_mana = 42.0
+	var rows := StatSheet.rows(stats, WeaponData.new())
+	var by_label := {}
+	for row in rows:
+		by_label[row[0]] = row[1]
+	assert_str(by_label["STAT_MANA"]).is_equal("42")
+
+
 func test_upgrade_changes_rows() -> void:
 	var stats := PlayerStats.new()
 	var weapon := WeaponData.new()

@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Nuovo upgrade di run **Riserva**: +10% mana massimo (`UpgradeData.Stat.MAX_MANA`), stesso schema percentuale di Meditazione/Vigore; l'aumento del massimo si accredita subito al pool corrente (`Mana.set_max_value()`, come `Health.set_max_hp()`), senza rabbocco completo gratuito. Il mana massimo e' anche una nuova riga nella scheda Statistiche (hub, inventario di run, HUD), valore assoluto (#86).
 - Mana per lo sparo base: pool (30, +6/s base) consumato dalla Bacchetta (1,5/colpo), non dalle abilita'; a corto di mana il colpo resta in credito invece di scaricarsi gratis o perdersi; nuovo upgrade di run Meditazione (+2 rigen/s, `Stat.MANA_REGEN`); barra dedicata in HUD; logica pura in `Mana` (`scripts/combat/mana.gd`) e gating in `Weapon.try_fire()`, entrambi testati (#86).
 - Tutorial "Obiettivo della run" (`first_run`) fermo in pausa finche' non si preme Continua, come gli eventi e l'avviso di overtime (`FirstTimeNotice`), invece del solo annuncio HUD a scomparsa dopo 7s che a volte spariva prima ancora di essersi mossi (#86).
 - Visibilita' del livello arena (§6.3b): pannello Portale mostra il livello attuale e i suoi effetti (vita nemici, ritmo spawn, boss, drop max) sopra la lista arene, con promemoria al Codex la prima volta; in run, etichetta fissa in HUD sotto il livello del personaggio (`Hud.set_arena_level()`) (#86).
@@ -124,6 +125,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Testi ancora fermi a "tre oggetti" per la fusione (suggerimento del fabbro, tutorial, Codex): ora dicono sei, coerenti con `Forge.FUSION_COUNT` (#86).
 - Tutorial contestuale degli eventi si fermava solo alla primissima run: ora si ferma la prima volta per OGNI tipo di evento mai incontrato (chiave per-evento invece di un flag unico), testo ripreso dal Codex (obiettivo + ricompensa).
 - Nessun avviso quando l'estrazione si apre: aggiunto un annuncio non bloccante ("Estrazione aperta") come per gli eventi.
 - Tooltip di confronto equip: "Equipaggiato" era grigio scuro e poco leggibile, ora bianco e in grassetto; ordine invertito, il pezzo non equipaggiato (sotto il mouse) ora e' vicino al cursore invece di quello equipaggiato.

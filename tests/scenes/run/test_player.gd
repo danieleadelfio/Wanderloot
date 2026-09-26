@@ -46,3 +46,20 @@ func test_begin_run_resets_mana_and_wires_weapon() -> void:
 	player.begin_run([])
 	assert_float(player.mana.current).is_equal_approx(player.stats.max_mana, 0.001)
 	assert_float(player.mana.regen_per_second).is_equal_approx(player.stats.mana_regen, 0.001)
+
+
+func test_max_mana_upgrade_grows_the_pool_without_a_full_refill() -> void:
+	# Riserva (M13, #86): +10% mana massimo si applica sia a stats.max_mana sia al pool live,
+	# accreditando solo la differenza guadagnata (come Vigore fa per la vita).
+	var player: Player = auto_free(load("res://scenes/run/Player/Player.tscn").instantiate())
+	add_child(player)
+	player.begin_run([])
+	var base_max := player.mana.max_value
+	player.mana.spend(base_max * 0.5)
+	var before_spend := player.mana.current
+
+	player.apply_upgrade(load("res://data/upgrades/max_mana_up.tres"))
+
+	assert_float(player.stats.max_mana).is_equal_approx(base_max * 1.1, 0.01)
+	assert_float(player.mana.max_value).is_equal_approx(base_max * 1.1, 0.01)
+	assert_float(player.mana.current).is_equal_approx(before_spend + base_max * 0.1, 0.01)

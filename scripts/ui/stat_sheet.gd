@@ -23,6 +23,7 @@ static func _row_defs() -> Array[Dictionary]:
 		{"label": "STAT_EXP_BONUS", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.exp_multiplier, "format": func(v: float) -> String: return _percent(v)},
 		{"label": "STAT_DROP_BONUS", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.drop_chance_multiplier, "format": func(v: float) -> String: return _percent(v)},
 		{"label": "STAT_MANA_REGEN", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.mana_regen, "format": func(v: float) -> String: return "%.1f/s" % v},
+		{"label": "STAT_MANA", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.max_mana, "format": func(v: float) -> String: return str(int(round(v)))},
 	]
 
 

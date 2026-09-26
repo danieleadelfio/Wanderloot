@@ -16,6 +16,13 @@ func reset(new_max: float, new_regen: float) -> void:
 
 
 ## cost <= 0 (arma senza costo di mana) e' sempre permesso, anche a pool vuoto.
+## Cambia il massimo; se aumenta, la differenza si aggiunge subito al pool corrente (come Health.set_max_hp).
+func set_max_value(new_max: float) -> void:
+	var gained := new_max - max_value
+	max_value = maxf(new_max, 0.0)
+	current = clampf(current + maxf(gained, 0.0), 0.0, max_value)
+
+
 func can_afford(cost: float) -> bool:
 	return cost <= 0.0 or current >= cost
 

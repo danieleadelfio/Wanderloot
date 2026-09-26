@@ -25,6 +25,13 @@ func test_max_hp_never_below_one() -> void:
 	assert_int(stats.max_hp).is_equal(1)
 
 
+func test_max_mana_modifier() -> void:
+	var stats := PlayerStats.new()
+	stats.max_mana = 30.0
+	StatApplier.apply(UpgradeData.Stat.MAX_MANA, 1.1, true, stats, WeaponData.new())
+	assert_float(stats.max_mana).is_equal_approx(33.0, 0.001)
+
+
 func test_equipment_applies_to_copies_and_leaves_base_resources_untouched() -> void:
 	var base_stats: PlayerStats = load("res://data/player/player_default.tres")
 	var base_weapon: WeaponData = load("res://data/weapons/starter_wand.tres")

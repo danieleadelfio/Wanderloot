@@ -38,6 +38,8 @@ static func apply(stat: UpgradeData.Stat, amount: float, is_multiplier: bool, st
 			weapon.pierce = maxi(roundi(_modify(weapon.pierce, amount, is_multiplier)), 0)
 		UpgradeData.Stat.MANA_REGEN:
 			stats.mana_regen = maxf(_modify(stats.mana_regen, amount, is_multiplier), 0.0)
+		UpgradeData.Stat.MAX_MANA:
+			stats.max_mana = maxf(_modify(stats.max_mana, amount, is_multiplier), 0.0)
 
 
 ## Modificatori dell'equipaggiamento indossato (oggetto base + bonus tirati), applicati a inizio run.

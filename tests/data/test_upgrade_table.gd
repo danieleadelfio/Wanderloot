@@ -57,6 +57,12 @@ func test_damage_and_max_hp_upgrades_are_percentage_not_flat() -> void:
 	assert_bool(max_hp_up.is_multiplier).is_true()
 
 
+func test_max_mana_upgrade_resource_has_correct_stat() -> void:
+	var upgrade: UpgradeData = load("res://data/upgrades/max_mana_up.tres")
+	assert_int(upgrade.stat).is_equal(UpgradeData.Stat.MAX_MANA)
+	assert_bool(upgrade.is_multiplier).is_true()
+
+
 func _table(size: int) -> UpgradeTable:
 	var table := UpgradeTable.new()
 	for i in size:

@@ -39,3 +39,22 @@ func test_regenerate_clamps_to_max() -> void:
 	assert_float(mana.current).is_equal_approx(3.0, 0.001)
 	mana.regenerate(100.0)
 	assert_float(mana.current).is_equal_approx(10.0, 0.001)
+
+
+## Riserva (M13, #86): +10% mana massimo come potenziamento. L'aumento del massimo si aggiunge
+## subito al pool corrente (come Health.set_max_hp), non lo riempie del tutto.
+func test_set_max_value_grants_the_gained_amount_immediately() -> void:
+	var mana := Mana.new()
+	mana.reset(10.0, 0.0)
+	mana.spend(7.0)
+	mana.set_max_value(13.0)
+	assert_float(mana.max_value).is_equal_approx(13.0, 0.001)
+	assert_float(mana.current).is_equal_approx(6.0, 0.001)
+
+
+func test_set_max_value_lowering_clamps_current() -> void:
+	var mana := Mana.new()
+	mana.reset(10.0, 0.0)
+	mana.set_max_value(4.0)
+	assert_float(mana.max_value).is_equal_approx(4.0, 0.001)
+	assert_float(mana.current).is_equal_approx(4.0, 0.001)

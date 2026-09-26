@@ -206,6 +206,8 @@ func apply_upgrade(upgrade: UpgradeData) -> void:
 	match upgrade.stat:
 		UpgradeData.Stat.MAX_HP:
 			health.set_max_hp(stats.max_hp)
+		UpgradeData.Stat.MAX_MANA:
+			mana.set_max_value(stats.max_mana)
 		UpgradeData.Stat.INVULNERABILITY:
 			_hurtbox.invulnerability_time = stats.invulnerability_time
 
@@ -216,6 +218,7 @@ func apply_upgrade(upgrade: UpgradeData) -> void:
 func apply_equipment(modifiers: Array[StatModifier]) -> void:
 	StatApplier.apply_modifiers(modifiers, stats, _weapon.data)
 	health.set_max_hp(stats.max_hp)
+	mana.set_max_value(stats.max_mana)
 	_hurtbox.invulnerability_time = stats.invulnerability_time
 
 
