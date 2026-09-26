@@ -114,3 +114,12 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Bilanciamento
 - Cadenza di fuoco base rialzata da 2 a 3 colpi al secondo.
+
+## In lavorazione (12) — 27/09/2026
+
+### Correzioni
+- Corretto un errore che poteva far diventare la finestra Inventario della piazza più grande dello schermo dopo aver equipaggiato o disequipaggiato un oggetto.
+
+### Bilanciamento
+- Ricochet: confermato che rimbalza già anche sui proiettili del Ventaglio e dell'Anello arcano, non solo sullo sparo base.
+- Cadenza di fuoco base riportata da 3 a 4 colpi al secondo.

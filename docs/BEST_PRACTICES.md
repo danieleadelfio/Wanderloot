@@ -88,6 +88,11 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - Collegamento via segnali nella composition root (`Arena`, `Hub`), mai chiamate audio dalle entità.
 - Bus: `Music`, `SFX` (Master sopra). Asset sorgente riproducibili: `tools/audio.py`.
 
+## 3.1.2 Sinergie tra abilita' e potenziamenti
+
+- Perforazione e Ricochet (`WeaponData.pierce`/`ricochet_bounces`) sono proprieta' della `WeaponData` passata a `Projectile.activate()`: qualunque sistema che spara tramite `ProjectilePool.spawn(origin, direction, weapon)` le eredita automaticamente, incluse abilita' a proiettili come Anello arcano (`WandAbilities.spawn_ring`, duplica `player.weapon_data()`) e il Ventaglio (`Weapon.try_fire`, stesso `data` per tutti i proiettili del ventaglio). Un nuovo effetto a proiettili sinergizza da solo con pierce/ricochet se: (1) passa dal `ProjectilePool` esistente invece di crearne uno suo, (2) usa `player.weapon_data()` o una sua `duplicate()`, mai una `WeaponData.new()` scollegata, (3) il pool ha `targets` impostato (richiesto solo per il ricochet). Verificato con test (`tests/run/test_ricochet_synergy.gd`, M13, #86).
+- **Regola di processo (M13, #86)**: prima di implementare un nuovo power-up/abilita', chiedere sempre all'utente se deve sinergizzare con qualcosa di gia' esistente (ricochet, perforazione, altre abilita', consumabili...), proponendo gli abbinamenti presi in considerazione. Non decidere/implementare la sinergia di propria iniziativa senza conferma.
+
 ## 3.2 Collision layers (vincolanti)
 
 | Layer | Nome | Chi ci sta |

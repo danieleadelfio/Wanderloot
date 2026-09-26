@@ -5,6 +5,10 @@ extends Node2D
 
 ## Solo per mostrare i nomi nel baule; id sconosciuti vengono mostrati grezzi.
 @export var materials: Array[MaterialData] = []
+## Frazione dello schermo entro cui la finestra Inventario deve stare (stesso fix di
+## RunInventory._fit_to_viewport, M13, #86: equipaggiare un pezzo puo' far crescere il baule/
+## manichino oltre lo schermo - qui non c'era ancora, la finestra dell'hub non si ridimensionava mai).
+@export_range(0.5, 1.0, 0.01) var max_inventory_viewport_fraction: float = 0.92
 
 var _material_names: Dictionary[StringName, String] = {}
 var _material_icons: Dictionary[StringName, Texture2D] = {}
@@ -31,6 +35,7 @@ var _autosave_tween: Tween
 @onready var _autosave_toast: Label = %AutosaveToast
 @onready var _hub_tutorial: HubTutorial = %HubTutorial
 @onready var _codex_window: Control = %CodexWindow
+@onready var _inventory_panel: PanelContainer = %Panel
 
 
 func _ready() -> void:
@@ -69,6 +74,7 @@ func _ready() -> void:
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
+	get_viewport().size_changed.connect(_fit_inventory_to_viewport)
 	_refresh()
 	_restore_saved_position()
 	if MetaProgression.take_pending_autosave_notice():
@@ -238,6 +244,9 @@ func _open(window: Control) -> void:
 	# "prima volta" si segna visto solo quando il pannello e' davvero visibile, non in background.
 	if window == _portal_window:
 		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, ArenaLevel.level_for(MetaProgression.loadout.equipped_items()))
+	elif window == _inventory_window:
+		_inventory_panel.scale = Vector2.ONE
+		_fit_inventory_after_frame()
 	_dim.show()
 	get_tree().paused = true
 	_sfx.play(&"ui_select")
@@ -251,6 +260,26 @@ func _close_window() -> void:
 	get_tree().paused = false
 
 
+## Come RunInventory._fit_to_viewport (M13, #86): equipaggiare/disequipaggiare o cambiare filtro
+## puo' far crescere il baule/manichino oltre lo schermo. La finestra Inventario dell'hub condivide
+## lo stesso LoadoutPanel ma, a differenza di RunInventory, non si ridimensionava mai: bug generico
+## (qualunque oggetto del baule, non solo quelli dell'armadio degli Scheletri), non solo all'apertura
+## ma anche da gia' aperta (equip -> MetaProgression.changed -> _refresh(), tutto sincrono).
+func _fit_inventory_to_viewport() -> void:
+	if not _inventory_window.visible or _inventory_panel.size.x <= 0.0 or _inventory_panel.size.y <= 0.0:
+		return
+	var available := get_viewport().get_visible_rect().size * max_inventory_viewport_fraction
+	var factor := minf(1.0, minf(available.x / _inventory_panel.size.x, available.y / _inventory_panel.size.y))
+	_inventory_panel.pivot_offset = _inventory_panel.size * 0.5
+	_inventory_panel.scale = Vector2.ONE * factor
+
+
+## La dimensione naturale del pannello e' nota solo al frame successivo al ricalcolo del layout.
+func _fit_inventory_after_frame() -> void:
+	await get_tree().process_frame
+	_fit_inventory_to_viewport()
+
+
 func _refresh() -> void:
 	_refresh_stash(MetaProgression.inventory.to_dictionary())
 	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names, MetaProgression.ascension_caps)
@@ -261,6 +290,9 @@ func _refresh() -> void:
 	_player.begin_run(equip_modifiers)
 	var rows := StatSheet.equip_rows(_player.base_stats(), _player.base_weapon_data(), _player.stats, _player.weapon_data(), equip_modifiers)
 	StatSheet.fill_with_equip(_hub_stats_grid, rows, 18)
+	if _inventory_window.visible:
+		_inventory_panel.scale = Vector2.ONE
+		_fit_inventory_after_frame()
 	_ensure_focus.call_deferred()
 
 
