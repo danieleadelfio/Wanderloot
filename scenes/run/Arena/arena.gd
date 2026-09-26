@@ -497,6 +497,9 @@ func _open_extraction() -> void:
 	)
 	_extraction_point.activate(spawn_position)
 	_sfx.play(&"ui_select")
+	# Scritta come quella degli eventi, per far notare che si puo' estrarre (M12, #86): prima non c'era
+	# alcun avviso e capitava di non accorgersi che l'estrazione era gia' aperta.
+	_hud.announce(tr("EXTRACTION_OPEN_TITLE"), tr("EXTRACTION_OPEN_SUB"))
 	if arena.has_boss():
 		_boss_timer.start(arena.boss_delay)
 	_refresh_overtime_bosses()
