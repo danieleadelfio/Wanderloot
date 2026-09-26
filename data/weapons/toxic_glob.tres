@@ -16,3 +16,6 @@ poison_interval = 1.5
 poison_damage = 1
 projectile_texture = ExtResource("t")
 projectile_scale = 0.4
+# Sprite uguale al materiale raccoglibile Gelatina di slime (icon_slime_gel.png, M12, #86): confondibile,
+# difficile capire se e' un proiettile da schivare o loot a terra. Tinta viola/veleno per distinguerlo.
+projectile_tint = Color(0.55, 0.15, 0.85, 1)

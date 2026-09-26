@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Dardi degli Scheletri arcieri (Ossario) troppo piccoli e poco leggibili: ingranditi (`projectile_scale` 0.9). Gocce di veleno delle slime tossiche confondibili col materiale raccoglibile Gelatina di slime: ora tinte di viola.
 - Ossario poco leggibile con più boss e nemici base assieme: i boss comparsi prima dell'overtime ora bloccano nuovi spawn di nemici base finche' non muoiono (l'overtime resta invariato, boss e nemici mescolati come prima).
 - Oggetti nel baule a volte si spostavano in cima alla griglia e diventavano non selezionabili dopo un equip/unequip: i tile venivano rimossi con queue_free() e restavano sovrapposti a quelli nuovi fino a fine frame; ora la rimozione e' immediata.
 - Livello della run precedente restava scritto in HUD dopo la morte finche' non si arrivava al livello 2 (HUD non si riallineava al restart): ora si aggiorna appena la run torna RUNNING.
