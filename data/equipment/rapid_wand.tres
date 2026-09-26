@@ -7,7 +7,9 @@
 [sub_resource type="Resource" id="mod_1"]
 script = ExtResource("2")
 stat = 1
-amount = 1.25
+# Statistica fissa troppo alta rispetto ai roll della stessa statistica (max 1.083 anche a Leggendario,
+# affix_table.tres a1, M12 #86): ridotta per restare in linea.
+amount = 1.08
 is_multiplier = true
 
 [resource]

@@ -123,7 +123,7 @@ EQ_CORE_AMULET_DESC,+2 HP massimi,+2 max HP,+2 PV max,+2 PV máx.
 EQ_GEL_WAND,Bacchetta di gelatina,Gel wand,Baguette de gelée,Varita de gelatina
 EQ_GEL_WAND_DESC,+1 danno per proiettile,+1 damage per projectile,+1 dégât par projectile,+1 de daño por proyectil
 EQ_RAPID_WAND,Bacchetta rapida,Rapid wand,Baguette rapide,Varita rápida
-EQ_RAPID_WAND_DESC,+25% cadenza di fuoco,+25% fire rate,+25 % de cadence de tir,+25% de cadencia de disparo
+EQ_RAPID_WAND_DESC,+8% cadenza di fuoco,+8% fire rate,+8 % de cadence de tir,+8% de cadencia de disparo
 EQ_SLIME_BOOTS,Stivali viscosi,Slimy boots,Bottes visqueuses,Botas viscosas
 EQ_SLIME_BOOTS_DESC,+10% velocità di movimento,+10% movement speed,+10 % de vitesse de déplacement,+10% de velocidad de movimiento
 ARENA_CRYPT,Cripta,Crypt,Crypte,Cripta
@@ -177,7 +177,7 @@ LOADOUT_ABILITY_NONE,Nessuna abilità dall'equip,No abilities from gear,Aucune c
 EQ_WANDERER_HOOD,Cappuccio del viandante,Wanderer's hood,Capuche du vagabond,Capucha del errante
 EQ_WANDERER_HOOD_DESC,"+20% raggio di raccolta, +10% exp","+20% pickup radius, +10% exp","+20 % de rayon de ramassage, +10 % d'exp","+20% de radio de recogida, +10% de exp"
 EQ_SMITH_GLOVES,Guanti del fabbro,Smith's gloves,Gants du forgeron,Guantes del herrero
-EQ_SMITH_GLOVES_DESC,"+10% cadenza di fuoco, +20% spinta","+10% fire rate, +20% knockback","+10 % de cadence de tir, +20 % de recul","+10% de cadencia de disparo, +20% de empuje"
+EQ_SMITH_GLOVES_DESC,"+4% cadenza di fuoco, +20% spinta","+4% fire rate, +20% knockback","+4 % de cadence de tir, +20 % de recul","+4% de cadencia de disparo, +20% de empuje"
 EQ_BONE_ARMOR,Corazza d'osso,Bone armor,Armure d'os,Coraza de hueso
 EQ_BONE_ARMOR_DESC,"+1 HP massimi, +0,1 s di invulnerabilità","+1 max HP, +0.1s invulnerability","+1 PV max, +0,1 s d'invulnérabilité","+1 PV máx., +0,1 s de invulnerabilidad"
 EQ_LEATHER_PANTS,Brache di cuoio,Leather breeches,Braies de cuir,Calzas de cuero

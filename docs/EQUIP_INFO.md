@@ -48,11 +48,11 @@ Per ogni pezzo: slot, statistiche base fisse (sempre presenti, escluse dal pool 
 | Pezzo | Slot | Statistiche base | Drop in |
 |---|---|---|---|
 | Bacchetta di gelatina (`gel_wand`) | Arma | +1 Danno | Cripta, Ossario |
-| Bacchetta rapida (`rapid_wand`) | Arma | +25% Cadenza di fuoco | Cripta, Ossario |
+| Bacchetta rapida (`rapid_wand`) | Arma | +8% Cadenza di fuoco | Cripta, Ossario |
 | Bacchetta d'osso (`bone_wand`) | Arma | +1 Danno, +1 Perforazione | Ossario |
 | Amuleto del nucleo (`core_amulet`) | Amuleto | +2 Vita max | Cripta, Ossario |
 | Cappuccio del vagabondo (`wanderer_hood`) | Testa | +20% Raggio magnete, +10% Bonus exp | Cripta, Ossario |
-| Guanti del fabbro (`smith_gloves`) | Guanti | +10% Cadenza di fuoco, +20% Spinta | Cripta, Ossario |
+| Guanti del fabbro (`smith_gloves`) | Guanti | +4% Cadenza di fuoco, +20% Spinta | Cripta, Ossario |
 | Armatura d'osso (`bone_armor`) | Armatura | +1 Vita max, +10% Invulnerabilità | Ossario |
 | Pantaloni di cuoio (`leather_pants`) | Pantaloni | +5% Velocità, +1 Vita max | Cripta, Ossario |
 | Stivali di gelatina (`slime_boots`) | Stivali | +10% Velocità | Cripta, Ossario |

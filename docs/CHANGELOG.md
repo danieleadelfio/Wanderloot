@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Statistiche fisse (bianche) di Bacchetta rapida e Guanti del fabbro su Cadenza di fuoco molto più alte del massimo ottenibile per roll sulla stessa statistica (+25%/+10% contro un tetto di +8,3% anche a Leggendario): ridimensionate a +8%/+4%. Aggiornati EQUIP_INFO.md e le descrizioni in-game.
 - Testi in-game non allineati alla logica reale: Codex/Tempesta di fulmini prometteva anche un boss in più (in realta' solo scelta di potenziamento), Codex/Pentagramma prometteva anche una scelta di potenziamento (in realta' solo boss in più); suggerimento Fusione e Codex/Fabbro dicevano "due" oggetti identici, la fusione ne richiede tre da #86.
 - Scheletri nell'armadio troppo facile: raggio del cerchio iniziale ridotto da 780 a 620 px.
 - Dardi degli Scheletri arcieri (Ossario) troppo piccoli e poco leggibili: ingranditi (`projectile_scale` 0.9). Gocce di veleno delle slime tossiche confondibili col materiale raccoglibile Gelatina di slime: ora tinte di viola.
