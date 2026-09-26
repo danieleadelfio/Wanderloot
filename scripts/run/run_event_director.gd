@@ -3,6 +3,9 @@ extends Node2D
 ## Fa partire gli eventi dell'arena ai tempi di ArenaData.event_times e ne applica le regole
 ## (Tempesta di fulmini, Pentagramma di sangue, Passo d'ombra). Comunica via segnali: la composition root (Arena)
 ## mostra i testi, gestisce i mostri in piu' e da' le ricompense.
+## Pentagramma di sangue (M13, #86): non piu' a tempo casuale. Statua e candele spente compaiono una
+## volta sola a inizio run in un punto fisso dell'arena (vedi setup()); interagendo con la statua
+## (PentagramStatue.interacted) l'evento parte subito.
 
 signal event_started(event: RunEventData)
 ## Pentagramma: il player e' entrato nel cerchio (parte l'ondata di mostri in rage).
@@ -15,11 +18,13 @@ signal candle_out
 
 const TELEGRAPH := preload("res://scenes/run/Telegraph/Telegraph.tscn")
 const PENTAGRAM := preload("res://scenes/run/Pentagram/Pentagram.tscn")
+const PENTAGRAM_STATUE := preload("res://scenes/run/PentagramStatue/PentagramStatue.tscn")
 const SKELETON_CLOSET := preload("res://scenes/run/Enemies/SkeletonCloset/SkeletonCloset.tscn")
 ## Giallo: si distingue dai fulmini azzurri del Fulmine errante (M11.4, #82).
 const STRIKE_COLOR := Color(1.0, 0.85, 0.25)
 const POOL_SIZE := 8
 
+## Eventi a tempo (esclude il Pentagramma: vedi pentagram_event).
 var events: Array[RunEventData] = []
 var times: PackedFloat32Array = []
 var player: Player
@@ -27,6 +32,9 @@ var bounds: Rect2 = Rect2(-760, -460, 1520, 920)
 var current: RunEventData
 var state := RunEventState.new()
 var pentagram_state := PentagramState.new()
+## Dati del Pentagramma, se l'arena ne ha uno (null altrimenti). Non fa parte di `events`/`times`:
+## parte dall'interazione con la statua, non da un tempo fisso.
+var pentagram_event: RunEventData
 var _elapsed: float = 0.0
 var _fired: int = 0
 ## Evento accodato (dopo il boss): secondi rimasti, -1 = nessuno. Non consuma i tempi fissi.
@@ -35,6 +43,7 @@ var _last: RunEventData
 var _strike_timer: float = 0.0
 var _strikes: Array[Telegraph] = []
 var _pentagram: Pentagram
+var _statue: PentagramStatue
 var _lit: int = 0
 var _rng := RandomNumberGenerator.new()
 ## Scheletri nell'armadio (M12, #86): bersaglio fisso (centro del cerchio, non il player) e gli
@@ -56,15 +65,29 @@ func _ready() -> void:
 	_pentagram = PENTAGRAM.instantiate()
 	_pentagram.top_level = true
 	add_child(_pentagram)
+	_statue = PENTAGRAM_STATUE.instantiate()
+	_statue.top_level = true
+	_statue.interacted.connect(_on_statue_interacted)
+	add_child(_statue)
 	_skeleton_target = Node2D.new()
 	add_child(_skeleton_target)
 
 
 func setup(arena: ArenaData, for_player: Player) -> void:
-	events = arena.events
+	events = arena.events.filter(func(e: RunEventData) -> bool: return e.kind != RunEventData.Kind.BLOOD_PENTAGRAM)
 	times = arena.event_times
 	player = for_player
 	player.health.damaged.connect(_on_player_damaged.unbind(1))
+	pentagram_event = null
+	for event in arena.events:
+		if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM:
+			pentagram_event = event
+			break
+	if pentagram_event != null:
+		var at := SpawnUtils.random_point_away(bounds.grow(-pentagram_event.circle_radius - 30.0), player.global_position, pentagram_event.min_player_distance, pentagram_event.max_player_distance)
+		_pentagram.setup(at, pentagram_event.circle_radius, pentagram_event.candle_count)
+		_pentagram.set_lit(0)
+		_statue.place(at)
 
 
 func is_running() -> bool:
@@ -87,30 +110,42 @@ func pentagram_zone() -> Vector3:
 	return Vector3.ZERO
 
 
+## Statua non ancora attivata (centro x,y e raggio z di interazione; z = 0 se gia' consumata o
+## se l'arena non ha il Pentagramma), per il bot di playtest e per l'icona su mappa/minimappa.
+func pentagram_statue_zone() -> Vector3:
+	if pentagram_event != null and not _statue.consumed:
+		return Vector3(_statue.global_position.x, _statue.global_position.y, PentagramStatue.INTERACT_RADIUS)
+	return Vector3.ZERO
+
+
 func _physics_process(delta: float) -> void:
-	if events.is_empty() or player == null:
+	if player == null:
+		return
+	# Il Pentagramma va avanti (o e' in corso) anche se non c'e' nessun evento a tempo nell'arena:
+	# parte dall'interazione con la statua, non dal ciclo qui sotto (M13, #86).
+	if current != null:
+		match current.kind:
+			RunEventData.Kind.LIGHTNING_STORM:
+				_tick_storm(delta)
+			RunEventData.Kind.BLOOD_PENTAGRAM:
+				_tick_pentagram(delta)
+			RunEventData.Kind.SHADOW_STEP:
+				_tick_timed(delta)
+			RunEventData.Kind.SKELETONS_CLOSET:
+				_tick_timed(delta)
+		return
+	if events.is_empty():
 		return
 	_elapsed += delta
-	if current == null:
-		if _queued_left >= 0.0:
-			_queued_left -= delta
-			if _queued_left <= 0.0:
-				_queued_left = -1.0
-				_start(_pick_event(), false)
-				return
-		var next := RunEventState.next_time(times, _fired)
-		if next >= 0.0 and _elapsed >= next:
-			_start(_pick_event())
-		return
-	match current.kind:
-		RunEventData.Kind.LIGHTNING_STORM:
-			_tick_storm(delta)
-		RunEventData.Kind.BLOOD_PENTAGRAM:
-			_tick_pentagram(delta)
-		RunEventData.Kind.SHADOW_STEP:
-			_tick_timed(delta)
-		RunEventData.Kind.SKELETONS_CLOSET:
-			_tick_timed(delta)
+	if _queued_left >= 0.0:
+		_queued_left -= delta
+		if _queued_left <= 0.0:
+			_queued_left = -1.0
+			_start(_pick_event(), false)
+			return
+	var next := RunEventState.next_time(times, _fired)
+	if next >= 0.0 and _elapsed >= next:
+		_start(_pick_event())
 
 
 ## A caso tra gli eventi dell'arena, evitando di ripetere l'ultimo se ce n'e' piu' d'uno.
@@ -128,17 +163,26 @@ func has_queued_event() -> bool:
 	return _queued_left >= 0.0
 
 
-## timed = uno dei tempi fissi di event_times (li conta); falso per gli eventi accodati.
+## Statua del Pentagramma interagita: parte subito, se non c'e' gia' un altro evento in corso
+## (la statua si e' gia' resa non interagibile da sola, vedi PentagramStatue.consume()).
+func _on_statue_interacted() -> void:
+	if current != null:
+		return
+	_start(pentagram_event, false)
+
+
+## timed = uno dei tempi fissi di event_times (li conta); falso per gli eventi accodati o per il Pentagramma
+## (parte dall'interazione con la statua, non consuma un tempo fisso).
 func _start(event: RunEventData, timed: bool = true) -> void:
 	if timed:
 		_fired += 1
 	current = event
 	_last = event
 	if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM:
-		var at := SpawnUtils.random_point_away(bounds.grow(-event.circle_radius - 30.0), player.global_position, event.min_player_distance)
-		pentagram_state.start(event.activation_timeout, event.duration, event.candle_count)
+		pentagram_state.start(event.candle_count, event.candles_start_extinguish_after)
 		_lit = event.candle_count
-		_pentagram.setup(at, event.circle_radius, event.candle_count)
+		_pentagram.active = true
+		_pentagram.set_lit(_lit)
 	else:
 		state.start(event.duration)
 		_strike_timer = 0.6
@@ -147,6 +191,9 @@ func _start(event: RunEventData, timed: bool = true) -> void:
 		elif event.kind == RunEventData.Kind.SKELETONS_CLOSET:
 			_spawn_skeletons(event)
 	event_started.emit(event)
+	if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM:
+		# Niente attesa di ingresso (M13, #86): l'interazione con la statua e' gia' l'attivazione.
+		event_activated.emit(event)
 
 
 func _tick_storm(delta: float) -> void:
@@ -168,11 +215,7 @@ func _tick_timed(delta: float) -> void:
 
 func _tick_pentagram(delta: float) -> void:
 	var inside := player.global_position.distance_to(_pentagram.global_position) <= current.circle_radius
-	var before := pentagram_state.status
 	var status := pentagram_state.tick(delta, inside)
-	if before == PentagramState.Status.WAITING and status == PentagramState.Status.ACTIVE:
-		_pentagram.active = true
-		event_activated.emit(current)
 	var lit := pentagram_state.candles_lit()
 	if status == PentagramState.Status.ACTIVE and lit < _lit:
 		candle_out.emit()
@@ -232,13 +275,16 @@ func _on_strike_finished(_strike: Telegraph) -> void:
 	strike_landed.emit()
 
 
-## Fine evento: fulmini gia' annunciati spenti senza colpire, pentagramma nascosto.
+## Fine evento: fulmini gia' annunciati spenti senza colpire. Il Pentagramma resta un monumento fisso
+## dell'arena (mai nascosto): solo le candele si spengono, come al termine naturale del completamento.
 func _finish(success: bool) -> void:
 	var event := current
 	current = null
 	for strike in _strikes:
 		strike.stop()
-	_pentagram.hide()
+	if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM:
+		_pentagram.active = false
+		_pentagram.set_lit(0)
 	if event.kind == RunEventData.Kind.SHADOW_STEP:
 		player.stop_dash_mode()
 	elif event.kind == RunEventData.Kind.SKELETONS_CLOSET:

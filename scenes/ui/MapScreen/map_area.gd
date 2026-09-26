@@ -17,16 +17,21 @@ var arena_rect: Rect2
 var player: Node2D
 var indicators: MapIndicators
 var pickup_pool: PickupPool
+## Per l'icona della statua del Pentagramma non ancora attivata (M13, #86).
+var events: RunEventDirector
 
-## Dimensione dell'icona dei consumabili sulla mappa (M13, #86).
+## Dimensione dell'icona dei consumabili e della statua sulla mappa (M13, #86).
 const CONSUMABLE_ICON_SIZE: float = 20.0
+const STATUE_ICON_SIZE: float = 30.0
+const STATUE_ICON: Texture2D = preload("res://assets/sprites/demon_statue.png")
 
 
-func setup(rect: Rect2, p: Node2D, ind: MapIndicators, pool: PickupPool = null) -> void:
+func setup(rect: Rect2, p: Node2D, ind: MapIndicators, pool: PickupPool = null, event_director: RunEventDirector = null) -> void:
 	arena_rect = rect
 	player = p
 	indicators = ind
 	pickup_pool = pool
+	events = event_director
 	queue_redraw()
 
 
@@ -67,6 +72,12 @@ func _draw() -> void:
 			var center := _world_to_local(pickup.global_position)
 			var half := CONSUMABLE_ICON_SIZE * 0.5
 			draw_texture_rect(icon, Rect2(center - Vector2(half, half), Vector2.ONE * CONSUMABLE_ICON_SIZE), false)
+	if events:
+		var statue := events.pentagram_statue_zone()
+		if statue.z > 0.0:
+			var center := _world_to_local(Vector2(statue.x, statue.y))
+			var half := STATUE_ICON_SIZE * 0.5
+			draw_texture_rect(STATUE_ICON, Rect2(center - Vector2(half, half), Vector2.ONE * STATUE_ICON_SIZE), false)
 	for label in COMPASS:
 		var pos: Vector2 = COMPASS[label] * size
 		draw_string(ThemeDB.fallback_font, pos, label, HORIZONTAL_ALIGNMENT_CENTER, -1, 16, Color.WHITE)

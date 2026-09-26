@@ -14,20 +14,26 @@ var player: Node2D
 var indicators: MapIndicators
 var extraction_point: Node2D
 var pickup_pool: PickupPool
+## Per l'icona della statua del Pentagramma non ancora attivata (M13, #86).
+var events: RunEventDirector
 
-## Dimensione dell'icona dei consumabili in minimappa (M13, #86): piu' piccola che sulla mappa intera.
+## Dimensione dell'icona dei consumabili e della statua in minimappa (M13, #86): piu' piccole che
+## sulla mappa intera.
 const CONSUMABLE_ICON_SIZE: float = 12.0
+const STATUE_ICON_SIZE: float = 16.0
+const STATUE_ICON: Texture2D = preload("res://assets/sprites/demon_statue.png")
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-func setup(p: Node2D, ind: MapIndicators, extraction: Node2D, pool: PickupPool = null) -> void:
+func setup(p: Node2D, ind: MapIndicators, extraction: Node2D, pool: PickupPool = null, event_director: RunEventDirector = null) -> void:
 	player = p
 	indicators = ind
 	extraction_point = extraction
 	pickup_pool = pool
+	events = event_director
 
 
 func _process(_delta: float) -> void:
@@ -69,3 +75,9 @@ func _draw() -> void:
 			var pos := _relative(pickup.global_position, radius - 6.0)
 			var half := CONSUMABLE_ICON_SIZE * 0.5
 			draw_texture_rect(icon, Rect2(pos - Vector2(half, half), Vector2.ONE * CONSUMABLE_ICON_SIZE), false)
+	if events:
+		var statue := events.pentagram_statue_zone()
+		if statue.z > 0.0:
+			var pos := _relative(Vector2(statue.x, statue.y), radius - 6.0)
+			var half := STATUE_ICON_SIZE * 0.5
+			draw_texture_rect(STATUE_ICON, Rect2(pos - Vector2(half, half), Vector2.ONE * STATUE_ICON_SIZE), false)

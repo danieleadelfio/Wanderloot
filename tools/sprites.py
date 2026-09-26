@@ -910,6 +910,27 @@ def claw_svg():
                '<path d="M18 60 Q42 42 62 20" stroke="#ff6a4a" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>', "", 64)
 
 
+def demon_statue_svg():
+    defs = ('<linearGradient id="ds" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d8d94"/><stop offset="1" stop-color="#3a3a42"/></linearGradient>'
+            '<radialGradient id="de" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#ff5a3a"/><stop offset="1" stop-color="#7a0f0a" stop-opacity="0"/></radialGradient>')
+    O = 'stroke="#17161c" stroke-width="6" stroke-linejoin="round"'
+    body = ('<ellipse cx="128" cy="238" rx="78" ry="14" fill="#000" opacity="0.45"/>'
+            '<path d="M62 238 L66 198 L190 198 L194 238 Z" fill="url(#ds)" ' + O + '/>'
+            '<path d="M78 198 C70 140 92 96 128 92 C164 96 186 140 178 198 Z" fill="url(#ds)" ' + O + '/>'
+            '<path d="M84 150 Q128 178 172 150 L166 168 Q128 194 90 168 Z" fill="#2c2c34" ' + O + '/>'
+            '<circle cx="128" cy="70" r="34" fill="url(#ds)" ' + O + '/>'
+            '<path d="M104 62 C92 42 92 22 104 10" stroke="#26262c" stroke-width="10" fill="none" stroke-linecap="round"/>'
+            '<path d="M152 62 C164 42 164 22 152 10" stroke="#26262c" stroke-width="10" fill="none" stroke-linecap="round"/>'
+            '<circle cx="116" cy="70" r="14" fill="url(#de)"/><circle cx="140" cy="70" r="14" fill="url(#de)"/>'
+            '<circle cx="116" cy="70" r="5" fill="#ffdca8"/><circle cx="140" cy="70" r="5" fill="#ffdca8"/>'
+            '<path d="M100 120 L112 140 L102 156 M158 116 L148 136 L160 150" stroke="#26262c" stroke-width="4" fill="none"/>')
+    return svg(body, defs, 256)
+
+
+def build_pentagram_statue():
+    save("demon_statue", [demon_statue_svg()], 256)
+
+
 def build_ghoul_queen():
     save("ghoul_queen", [ghoul_queen_svg(), ghoul_queen_svg(squash=True)], 256)
     save("ghoul_claw", [claw_svg()], 48)
@@ -932,4 +953,5 @@ if __name__ == "__main__":
     build_app_icon()
     build_crypt_slimes()
     build_necromancer()
+    build_pentagram_statue()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

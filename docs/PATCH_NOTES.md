@@ -70,3 +70,8 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Novità
 - Le icone di Magnete, Cuore e Furia, quando droppati a terra, compaiono anche su mappa e minimappa finché non li raccogli.
+
+## In lavorazione (7) — 26/09/2026
+
+### Novità
+- Evento Pentagramma di sangue ripensato: niente più comparsa a caso durante la run. Ora, fin dall'inizio, da qualche parte nell'arena trovi un pentagramma con le candele spente e una statua di demone al centro — visibile anche su mappa e minimappa, così sai dove andare. Avvicinati e premi E: la statua sparisce e le candele si accendono. Restano accese per un po', poi iniziano a spegnersi una al secondo mentre i mostri si fanno più numerosi e aggressivi: resta nel cerchio finché non si spegne l'ultima, uscire fa fallire l'evento. Il cerchio è anche più grande di prima.

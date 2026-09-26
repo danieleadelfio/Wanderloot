@@ -10,7 +10,8 @@ enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP, SKELETONS_CLOSET }
 @export var title: String = ""
 @export var subtitle: String = ""
 @export var kind: Kind = Kind.LIGHTNING_STORM
-## Durata (Tempesta) o secondi da resistere nel cerchio (Pentagramma).
+## Durata (Tempesta, Passo d'ombra, Scheletri nell'armadio). Non usata dal Pentagramma, che deriva
+## la propria durata da candle_count e candles_start_extinguish_after.
 @export var duration: float = 10.0
 ## Abilita' proposte a evento superato (0 = nessuna).
 @export var reward_choices: int = 3
@@ -31,17 +32,23 @@ enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP, SKELETONS_CLOSET }
 
 
 @export_group("Pentagramma")
-## Secondi in cui il pentagramma aspetta che il player entri; poi l'evento fallisce.
-@export var activation_timeout: float = 20.0
-@export var circle_radius: float = 110.0
-## Candele attorno al cerchio: se ne spegne una ogni duration / candle_count secondi.
+## Raggio del cerchio (M13, #86: raddoppiato, le arene sono 10x). Statua e candele spente sono gia'
+## presenti in mappa dall'inizio della run (posizione fissa, vedi min/max_player_distance): interagendo
+## con la statua (tasto interact) parte l'evento, la statua sparisce e le candele si accendono.
+@export var circle_radius: float = 220.0
+## Candele attorno al cerchio: tutte accese finche' non passano candles_start_extinguish_after secondi,
+## poi se ne spegne una ogni secondo. Il completamento richiede candles_start_extinguish_after + candle_count
+## secondi di permanenza nel cerchio dall'attivazione.
 @export var candle_count: int = 15
+@export var candles_start_extinguish_after: float = 10.0
 ## Mostri in piu' mentre si e' nel cerchio (0.3 = +30% subito e tetto dei vivi +30%).
 @export var monster_bonus: float = 0.3
 ## I mostri che compaiono durante l'evento sono gia' in rage.
 @export var spawn_raged: bool = true
-## Distanza minima dal player del punto in cui compare il pentagramma.
-@export var min_player_distance: float = 320.0
+## Distanza minima e massima dal player (posizione di partenza) del punto in cui compaiono statua e
+## pentagramma, scelto una volta all'inizio della run.
+@export var min_player_distance: float = 900.0
+@export var max_player_distance: float = 2800.0
 
 @export_group("Passo d'ombra")
 ## Niente sparo: il tasto di sparo (o Spazio / tasto destro) scatta. Cariche e secondi per ricaricarne una.

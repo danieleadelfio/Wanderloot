@@ -54,6 +54,21 @@ static func drive(a: Node) -> void:
 		goal = pos.direction_to(pc) * (2.5 if d_in > penta.z * 0.5 else 1.2 * d_in / penta.z)
 		flee = flee.limit_length(0.5 if d_in < penta.z * 0.7 else 0.1)
 		hold = true
+	# Statua del pentagramma non ancora attivata (M13, #86): ci si avvicina e si preme interact,
+	# cosi' il bot fa partire l'evento da solo invece di aspettare che scatti a tempo.
+	var statue: Vector3 = a.pentagram_statue_zone() if a.has_method("pentagram_statue_zone") else Vector3.ZERO
+	if statue.z > 0.0 and not hold:
+		var sc := Vector2(statue.x, statue.y)
+		var d_s: float = pos.distance_to(sc)
+		goal = pos.direction_to(sc) * (2.5 if d_s > statue.z * 0.6 else 0.3)
+		flee = flee.limit_length(0.3)
+		hold = true
+		if d_s <= statue.z:
+			Input.action_press("interact")
+		else:
+			Input.action_release("interact")
+	else:
+		Input.action_release("interact")
 	if stay:
 		hold = true
 	if ep.visible and not hold:
