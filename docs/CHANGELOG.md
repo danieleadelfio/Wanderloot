@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Drop rate equip ridotto di 1/3 (Cripta 0,4% -> 0,267%, Ossario 0,6% -> 0,4%). Aggiornati GDD.md ed EQUIP_INFO.md.
 - Ventaglio prendibile senza limite in una run (troppo forte in combo con Perforazione/danno ad area): tetto di 2 scelte per run (`UpgradeData.max_picks`).
 - Contatore (potenziamento COUNT_BONUS) sommava anche allo sparo base e al Ventaglio, non solo alle abilità: ora tocca solo le abilità (Anello arcano, Fulmine errante, ...). La statistica equip "N. proiettili" (Arma/Anello, stessa scala su attacco base) è stata unificata col Contatore: ora è "Contatore", disponibile solo sull'Amuleto.
 - Statistiche fisse (bianche) di Bacchetta rapida e Guanti del fabbro su Cadenza di fuoco molto più alte del massimo ottenibile per roll sulla stessa statistica (+25%/+10% contro un tetto di +8,3% anche a Leggendario): ridimensionate a +8%/+4%. Aggiornati EQUIP_INFO.md e le descrizioni in-game.

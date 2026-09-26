@@ -60,11 +60,11 @@ Per ogni pezzo: slot, statistiche base fisse (sempre presenti, escluse dal pool 
 
 ## 4. Tasso di drop per arena
 
-Il tasso è per **uccisione** (moltiplicato dal Bonus drop del player), oggetto base scelto a caso tra quelli della tabella; la rarità si tira separatamente coi pesi di §1 (min. Raro dai boss). Tetto rarità in run: Leggendario (il Mitico non si trova mai, solo da ricetta).
+Tasso ridotto di 1/3 in M12 (#86: era 0,4%/0,6%). Il tasso è per **uccisione** (moltiplicato dal Bonus drop del player), oggetto base scelto a caso tra quelli della tabella; la rarità si tira separatamente coi pesi di §1 (min. Raro dai boss). Tetto rarità in run: Leggendario (il Mitico non si trova mai, solo da ricetta).
 
 | Arena | Drop chance/uccisione | Pezzi in tabella | Chance per pezzo specifico | Boss |
 |---|---|---|---|---|
-| Cripta | 0,4% | 8 (tutti tranne i due d'osso) | ≈0,05% | 1 garantito, rarità ≥ Raro |
-| Ossario | 0,6% | 10 (tutti) | ≈0,06% | 1 garantito, rarità ≥ Raro |
+| Cripta | 0,267% | 8 (tutti tranne i due d'osso) | ≈0,033% | 1 garantito, rarità ≥ Raro |
+| Ossario | 0,4% | 10 (tutti) | ≈0,04% | 1 garantito, rarità ≥ Raro |
 
 I due pezzi "d'osso" (Bacchetta d'osso, Armatura d'osso) cadono solo nell'Ossario.
