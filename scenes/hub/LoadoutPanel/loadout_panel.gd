@@ -116,14 +116,16 @@ func _on_sort_pressed(mode: StashSort.Mode) -> void:
 func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = []) -> void:
 	_loadout = loadout
 	_refresh_ability_levels(loadout)
-	# Bug (M12, #86): queue_free() lascia il nodo nell'albero fino a fine frame. Se refresh() viene
-	# richiamato nello stesso frame (equip/unequip -> segnale -> refresh), i tile vecchi restavano
-	# sovrapposti a quelli nuovi finche' non venivano liberati: un oggetto poteva apparire spostato in
-	# cima alla griglia e non piu' cliccabile (il tile sopra era quello vecchio, gia' disconnesso).
-	# Rimozione immediata invece che differita, cosi' la griglia non contiene mai doppioni.
+	# Bug (M12, #86): queue_free() SENZA prima staccare il nodo lascia il tile nell'albero fino a fine
+	# frame - se refresh() viene richiamato nello stesso frame (equip/unequip -> segnale -> refresh) i
+	# tile vecchi restavano sovrapposti a quelli nuovi. Fix: remove_child() subito (via Control, nessun
+	# doppione visibile), poi queue_free() e non free() - M13, #86: refresh() puo' scattare nello stesso
+	# frame di un clic sul tile stesso (equip_requested -> ... -> refresh, tutto sincrono), e free()
+	# su un nodo che sta ancora emettendo il proprio segnale "pressed" da' "Attempted to free a locked
+	# object"; queue_free() rimanda la distruzione vera e propria a quando il nodo non e' piu' in uso.
 	for child in _slots.get_children():
 		_slots.remove_child(child)
-		child.free()
+		child.queue_free()
 	var overlay_by_slot := _assign_overlay_slots(overlay_items)
 	for slot: int in SLOT_POSITIONS:
 		var overlaid: bool = overlay_by_slot.has(slot)
@@ -141,9 +143,10 @@ func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = [])
 		else:
 			button.disabled = true
 		_slots.add_child(button)
+	# Stesso motivo di sopra (M13, #86): queue_free(), mai free(), dopo il remove_child().
 	for child in _grid.get_children():
 		_grid.remove_child(child)
-		child.free()
+		child.queue_free()
 	var stash := StashSort.sorted(StashSort.filtered(loadout.stash_items(), filter_key), sort_mode)
 	_empty_hint.visible = stash.is_empty()
 	for item in stash:

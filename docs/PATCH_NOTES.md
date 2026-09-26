@@ -106,3 +106,11 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 ### Bilanciamento
 - Nelle arene di livello 1 i nemici non vanno più in rage da soli col passare del tempo: solo eventi specifici (es. il Pentagramma di sangue) li fanno infuriare. Dal livello 2 in su nessun cambiamento.
 - Forza di attrazione delle sfere dello Slime del vuoto ridotta di 1/3.
+
+## In lavorazione (11) — 26/09/2026
+
+### Correzioni
+- Corretto un errore che poteva comparire equipaggiando un oggetto dal baule della piazza (capitava soprattutto con i pezzi ottenuti dall'armadio degli Scheletri, ma poteva succedere con qualsiasi oggetto).
+
+### Bilanciamento
+- Cadenza di fuoco base rialzata da 2 a 3 colpi al secondo.

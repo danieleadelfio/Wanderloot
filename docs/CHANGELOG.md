@@ -135,6 +135,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Baule dell'hub (`LoadoutPanel`): equipaggiare/disequipaggiare un oggetto poteva stampare "Attempted to free a locked object (calling or emitting)" — `refresh()` liberava subito (`child.free()`) i vecchi tile del baule/manichino, incluso quello che stava ancora emettendo il proprio segnale "pressed" (equip_requested → ... → refresh, tutto sincrono nello stesso clic). Ora `child.queue_free()` dopo il `remove_child()` (gia' presente, invariato l'effetto anti-doppioni del fix #86 precedente). Riproducibile con qualunque oggetto nel baule, non solo quelli dell'armadio degli Scheletri; test su entrambe le origini e sul manichino (#86).
 - Inventario di run (tasto I): il pannello poteva risultare più grande dello schermo su finestre piccole; ora si ridimensiona da solo per stare entro il 92% del viewport (`RunInventory._fit_to_viewport`) (#86).
 - Pezzo scelto dall'armadio degli Scheletri: risultava equipaggiato ma l'inventario di run (I) lo mostrava tra il loot raccolto invece che indossato sul manichino, facendo sembrare che non fosse equipaggiato; ora compare indossato (overlay di sola visualizzazione in `LoadoutPanel`, nessun cambio alle regole di rischio/estrazione già corrette) (#86).
 - Tutorial e Codex del Passo d'ombra spiegano che durante lo scatto (i-frame) si attraversano i nemici senza subire danno (#86).
@@ -175,6 +176,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Cadenza di fuoco base della Bacchetta rialzata da 2 a 3 colpi/s (`starter_wand.tres`), dopo il playtest sull'abbassamento a 2 del changelog precedente (#86).
 - Rage "naturale" per scadenza (`rage_after`) disattivata nelle **arene di livello 1** (`Enemy.natural_rage_enabled`, propagato da `WaveSpawner`/`Arena` in base ad `ArenaLevel`): a livello 1 si va in rage solo per un evento specifico che la forza esplicitamente (`force_rage()`: Pentagramma, overtime, urlo di boss), mai per il solo tempo passato. Dal livello 2 in su invariato (#86).
 - Forza di attrazione delle sfere dello Slime del vuoto ridotta di 1/3 (`pull_strength`/`Player.MAX_PULL_FORCE` 100 → 66,67) (#86).
 - Cadenza di fuoco base della Bacchetta ridotta da 4 a 2 colpi/s (`starter_wand.tres`); costo mana per colpo ridotto di 1/3 (1,5 → 1,0); rigenerazione mana di base alzata di 1/3 (6 → 8/s, `PlayerStats.mana_regen`): con il Ventaglio preso il pool si svuotava troppo in fretta (#86).
