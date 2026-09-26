@@ -28,6 +28,6 @@ func test_bone_wand_recipe_needs_ossuary_materials() -> void:
 		if recipe.result.id == &"bone_wand":
 			found = recipe
 	assert_object(found).is_not_null()
-	assert_dict(found.cost_dictionary()).is_equal({&"bone_shard": 40, &"shadow_essence": 6})
+	assert_dict(found.cost_dictionary()).is_equal({&"bone_shard": 120, &"shadow_essence": 18})
 	var catalog: EquipmentCatalog = load("res://data/equipment/equipment_catalog.tres")
 	assert_object(catalog.find(&"bone_wand")).is_not_null()

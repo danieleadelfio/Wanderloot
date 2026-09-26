@@ -1,5 +1,6 @@
 extends GdUnitTestSuite
 ## Fusione (Forge.FUSION_COUNT identici -> rarita' successiva, fino a Leggendario) e smontaggio (resa per rarita').
+## FUSION_COUNT = 6 (M13, #86: prima 3): i test usano sempre sei oggetti identici (o cinque, sotto soglia).
 
 const RARITIES: RarityTable = preload("res://data/equipment/rarity_table.tres")
 const RECIPES: RecipeBook = preload("res://data/recipes/recipe_book.tres")
@@ -15,49 +16,58 @@ func before_test() -> void:
 	_boots = load("res://data/equipment/slime_boots.tres")
 
 
-func test_three_identical_items_fuse_into_next_rarity() -> void:
-	var a := _add(_wand, 0)
-	var b := _add(_wand, 0)
-	var c := _add(_wand, 0)
+func test_six_identical_items_fuse_into_next_rarity() -> void:
+	var items: Array[ItemInstance] = []
+	for i in Forge.FUSION_COUNT:
+		items.append(_add(_wand, 0))
 	assert_int(Forge.fusion_groups(_loadout, RARITIES).size()).is_equal(1)
-	var fused := Forge.fuse([a, b, c], _loadout, RARITIES, _make)
+	var fused := Forge.fuse(items, _loadout, RARITIES, _make)
 	assert_object(fused).is_not_null()
 	assert_int(fused.rarity).is_equal(1)
 	assert_int(_loadout.count_of(&"gel_wand")).is_equal(1)
-	assert_object(_loadout.get_item(a.uid)).is_null()
+	assert_object(_loadout.get_item(items[0].uid)).is_null()
 
 
-func test_two_identical_items_are_not_enough_to_fuse() -> void:
-	var a := _add(_wand, 0)
-	var b := _add(_wand, 0)
-	assert_bool(Forge.can_fuse([a, b], _loadout, RARITIES)).is_false()
+func test_one_below_fusion_count_is_not_enough_to_fuse() -> void:
+	var items: Array[ItemInstance] = []
+	for i in Forge.FUSION_COUNT - 1:
+		items.append(_add(_wand, 0))
+	assert_bool(Forge.can_fuse(items, _loadout, RARITIES)).is_false()
 	assert_bool(Forge.fusion_groups(_loadout, RARITIES).is_empty()).is_true()
-	assert_object(Forge.fuse([a, b], _loadout, RARITIES, _make)).is_null()
+	assert_object(Forge.fuse(items, _loadout, RARITIES, _make)).is_null()
 
 
 func test_different_rarity_or_base_does_not_fuse() -> void:
 	var a := _add(_wand, 0)
 	var b := _add(_wand, 1)
 	var c := _add(_boots, 0)
-	var d := _add(_wand, 0)
-	assert_bool(Forge.can_fuse([a, b, d], _loadout, RARITIES)).is_false()
-	assert_bool(Forge.can_fuse([a, c, d], _loadout, RARITIES)).is_false()
-	assert_bool(Forge.can_fuse([a, a, d], _loadout, RARITIES)).is_false()
+	var rest: Array[ItemInstance] = []
+	for i in Forge.FUSION_COUNT - 2:
+		rest.append(_add(_wand, 0))
+	var different_rarity: Array[ItemInstance] = [a, b]
+	different_rarity.append_array(rest)
+	var different_base: Array[ItemInstance] = [a, c]
+	different_base.append_array(rest)
+	var repeated_item: Array[ItemInstance] = [a, a]
+	repeated_item.append_array(rest)
+	assert_bool(Forge.can_fuse(different_rarity, _loadout, RARITIES)).is_false()
+	assert_bool(Forge.can_fuse(different_base, _loadout, RARITIES)).is_false()
+	assert_bool(Forge.can_fuse(repeated_item, _loadout, RARITIES)).is_false()
 	assert_bool(Forge.fusion_groups(_loadout, RARITIES).is_empty()).is_true()
 
 
 func test_legendary_and_equipped_items_do_not_fuse() -> void:
 	var top := Forge.max_fusion_tier(RARITIES)
-	var a := _add(_wand, top)
-	var b := _add(_wand, top)
-	var e := _add(_wand, top)
-	assert_bool(Forge.can_fuse([a, b, e], _loadout, RARITIES)).is_false()
-	var c := _add(_boots, 0)
-	var d := _add(_boots, 0)
-	var f := _add(_boots, 0)
-	_loadout.equip(c.uid)
-	assert_bool(Forge.can_fuse([c, d, f], _loadout, RARITIES)).is_false()
-	assert_object(Forge.fuse([c, d, f], _loadout, RARITIES, _make)).is_null()
+	var at_top: Array[ItemInstance] = []
+	for i in Forge.FUSION_COUNT:
+		at_top.append(_add(_wand, top))
+	assert_bool(Forge.can_fuse(at_top, _loadout, RARITIES)).is_false()
+	var equipped: Array[ItemInstance] = []
+	for i in Forge.FUSION_COUNT:
+		equipped.append(_add(_boots, 0))
+	_loadout.equip(equipped[0].uid)
+	assert_bool(Forge.can_fuse(equipped, _loadout, RARITIES)).is_false()
+	assert_object(Forge.fuse(equipped, _loadout, RARITIES, _make)).is_null()
 
 
 func test_salvage_yield_grows_with_rarity() -> void:

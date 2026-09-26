@@ -33,8 +33,9 @@ func test_deposit_run_items_marks_discovered() -> void:
 func test_crafting_without_extraction_does_not_discover() -> void:
 	# Il crafting aggiunge direttamente al loadout (loadout.add), non passa da deposit_run_items:
 	# solo l'estrazione riuscita marca come scoperto.
-	_meta.deposit_run_loot({&"slime_gel": 30} as Dictionary[StringName, int])
-	_meta.craft(load("res://data/recipes/gel_wand.tres"))
+	var recipe: RecipeData = load("res://data/recipes/gel_wand.tres")
+	_meta.deposit_run_loot(recipe.cost_dictionary())
+	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
 	assert_bool(_meta.is_discovered(&"gel_wand")).is_false()
 
 

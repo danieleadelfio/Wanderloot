@@ -9,12 +9,12 @@
 [sub_resource type="Resource" id="cost_gel"]
 script = ExtResource("2")
 material = ExtResource("m_gel")
-amount = 20
+amount = 60
 
 [sub_resource type="Resource" id="cost_core"]
 script = ExtResource("2")
 material = ExtResource("m_core")
-amount = 2
+amount = 6
 
 [resource]
 script = ExtResource("1")

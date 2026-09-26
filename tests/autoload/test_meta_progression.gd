@@ -33,8 +33,10 @@ func test_deposit_is_saved_and_reloaded() -> void:
 
 
 func test_craft_and_equip_are_saved_and_reloaded() -> void:
-	_meta.deposit_run_loot({&"slime_gel": 60} as Dictionary[StringName, int])
+	# M13, #86: costi di crafting triplicati; deposito abbastanza per due craft col nuovo costo.
 	var recipe: RecipeData = load("res://data/recipes/gel_wand.tres")
+	var deposit := 2 * recipe.cost_dictionary()[&"slime_gel"]
+	_meta.deposit_run_loot({&"slime_gel": deposit} as Dictionary[StringName, int])
 	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
 	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
 	var first: ItemInstance = _meta.loadout.all_items()[0]
@@ -43,7 +45,7 @@ func test_craft_and_equip_are_saved_and_reloaded() -> void:
 
 	var reloaded := _reload()
 
-	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(60 - 2 * recipe.cost_dictionary()[&"slime_gel"])
+	assert_int(reloaded.inventory.amount_of(&"slime_gel")).is_equal(deposit - 2 * recipe.cost_dictionary()[&"slime_gel"])
 	assert_int(reloaded.loadout.count_of(&"gel_wand")).is_equal(2)
 	assert_int(reloaded.loadout.equipped_in(EquipmentLoadout.EquipSlot.WEAPON).uid).is_equal(first.uid)
 	assert_int(reloaded.equipped_modifiers().size()).is_equal(recipe.result.modifiers.size() + 1)
@@ -151,8 +153,9 @@ func test_load_game_discards_unsaved_changes() -> void:
 
 
 func test_new_game_resets_memory_but_keeps_file() -> void:
-	_meta.deposit_run_loot({&"slime_gel": 30} as Dictionary[StringName, int])
-	_meta.craft(load("res://data/recipes/gel_wand.tres"))
+	var recipe: RecipeData = load("res://data/recipes/gel_wand.tres")
+	_meta.deposit_run_loot(recipe.cost_dictionary())
+	assert_int(_meta.craft(recipe)).is_equal(Crafting.Result.OK)
 	_meta.register_extraction(&"crypt")
 	_meta.save_game()
 	_meta.new_game()

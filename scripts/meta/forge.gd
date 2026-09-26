@@ -7,8 +7,8 @@ extends RefCounted
 const SALVAGE_SHARE: float = 0.25
 ## Resa base per oggetti senza ricetta.
 const FALLBACK_SALVAGE: Dictionary[StringName, int] = {&"slime_gel": 3}
-## Oggetti identici richiesti per una fusione (M12, #86): prima erano 2, ora 3.
-const FUSION_COUNT: int = 3
+## Oggetti identici richiesti per una fusione (prima 2 -> M12 #86 -> 3; ora 6, M13 #86).
+const FUSION_COUNT: int = 6
 
 
 ## Rarita' massima ottenibile per fusione: la penultima (Leggendario); il Mitico solo da ricetta.
