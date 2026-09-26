@@ -10,3 +10,4 @@ stat = 11
 amount = 1.0
 is_multiplier = false
 weight = 0.6
+max_picks = 2

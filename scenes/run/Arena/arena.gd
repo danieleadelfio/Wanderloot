@@ -27,6 +27,9 @@ var _equip_modifiers: Array[StatModifier] = []
 ## l'armadio non lo cambia (non e' equip permanente). Scala vita nemici, ritmo di spawn, boss e drop.
 var arena_level: int = 1
 var _current_choice_count: int = 0
+## Volte scelto ogni upgrade in questa run (Ventaglio, M12 #86: tetto max_picks). Chiave = risorsa
+## upgrade stessa (Resource, non copiata: quella in UpgradeTable.upgrades).
+var _upgrade_picks: Dictionary[UpgradeData, int] = {}
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Exp frazionaria dovuta al moltiplicatore "Saggezza", accumulata fino all'unità successiva.
 var _exp_remainder: float = 0.0
@@ -673,7 +676,7 @@ func _on_leveled_up(_level: int) -> void:
 
 
 func _present_level_up() -> void:
-	_level_up_choice.present(upgrade_table.pick(_current_choice_count, _rng), RunManager.rerolls_left())
+	_level_up_choice.present(upgrade_table.pick(_current_choice_count, _rng, _upgrade_picks), RunManager.rerolls_left())
 
 
 ## Reroll (M12, #86): una scelta in meno (minimo 1), consuma un reroll della run.
@@ -686,6 +689,7 @@ func _on_reroll_requested() -> void:
 
 
 func _on_upgrade_chosen(upgrade: UpgradeData) -> void:
+	_upgrade_picks[upgrade] = _upgrade_picks.get(upgrade, 0) + 1
 	_player.apply_upgrade(upgrade)
 	_hud.set_stats(_player, _equip_modifiers)
 	_pickup_pool.attract_radius = _player.stats.pickup_radius

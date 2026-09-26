@@ -42,7 +42,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
   - **Stato M3 (#14)**: pannello "Equipaggiamento" nell'hub (un pezzo per slot, click per equipaggiare/togliere). A inizio run `Arena` passa `MetaProgression.equipped_items()` a `Player.begin_run()`, che riparte da copie fresche di `PlayerStats`/`WeaponData` e applica i modificatori (`StatApplier`, stessa logica degli upgrade di run, che si sommano sopra). L'equip è letto una sola volta: cambiarlo vale dalla run successiva.
 - Sblocco progressivo di strutture/NPC nell'hub in base a milestone (es. numero di estrazioni riuscite, materiali totali raccolti, boss sconfitti).
 
-- **Stato M10.1 (#51, Contatore)**: nuovo potenziamento (14 totali). **+1 a ogni conteggio di proiettili delle abilità**: Anello arcano (6 → 7), Fulmine errante (1 → 2 fulmini su nemici diversi); nessun effetto sulla Barriera arcana. Riga Contatore nelle statistiche. **(M12, #86: rimossa la combo con lo sparo base e col Ventaglio — sommava anche lì e rendeva la coppia troppo forte; Contatore ora tocca solo le abilità.)**
+- **Stato M10.1 (#51, Contatore)**: nuovo potenziamento (14 totali). **+1 a ogni conteggio di proiettili delle abilità**: Anello arcano (6 → 7), Fulmine errante (1 → 2 fulmini su nemici diversi); nessun effetto sulla Barriera arcana. Riga Contatore nelle statistiche. **(M12, #86: rimossa la combo con lo sparo base e col Ventaglio — sommava anche lì e rendeva la coppia troppo forte; Contatore ora tocca solo le abilità.)** Ventaglio ha anche un **tetto di 2 scelte per run** (`UpgradeData.max_picks`, `UpgradeTable.pick()` lo esclude una volta raggiunto): oltre diventava troppo forte in combo con Perforazione e danno ad area.
 
 ### 3.2b Consumabili (M10.1, #50)
 

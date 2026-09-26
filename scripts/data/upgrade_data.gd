@@ -17,6 +17,9 @@ enum Stat {
 @export var is_multiplier: bool = false
 ## Peso relativo nell'estrazione casuale delle scelte.
 @export var weight: float = 1.0
+## Volte massime che si puo' scegliere in una run (0 = nessun tetto). Ventaglio, M12 #86: oltre 2 diventa
+## troppo forte in combo con Perforazione/danno ad area; una volta al tetto non compare piu' tra le scelte.
+@export var max_picks: int = 0
 
 
 func apply_to(value: float) -> float:

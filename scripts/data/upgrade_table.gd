@@ -5,9 +5,13 @@ extends Resource
 @export var upgrades: Array[UpgradeData] = []
 
 
-func pick(count: int, rng: RandomNumberGenerator) -> Array[UpgradeData]:
+## picks_used: quante volte ogni upgrade e' gia' stato scelto in questa run (chi chiama la aggiorna
+## a ogni scelta); un upgrade con max_picks > 0 non compare piu' una volta raggiunto il tetto (Ventaglio,
+## M12 #86).
+func pick(count: int, rng: RandomNumberGenerator, picks_used: Dictionary[UpgradeData, int] = {}) -> Array[UpgradeData]:
 	# weight <= 0 = disattivato (M12, #86: Gittata e Persistenza fuori dal pool), mai estraibile.
-	var candidates: Array[UpgradeData] = upgrades.filter(func(u: UpgradeData) -> bool: return u.weight > 0.0)
+	var candidates: Array[UpgradeData] = upgrades.filter(func(u: UpgradeData) -> bool:
+		return u.weight > 0.0 and (u.max_picks <= 0 or picks_used.get(u, 0) < u.max_picks))
 	var result: Array[UpgradeData] = []
 	while result.size() < count and not candidates.is_empty():
 		var total := 0.0
