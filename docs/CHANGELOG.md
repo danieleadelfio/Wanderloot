@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Oggetti nel baule a volte si spostavano in cima alla griglia e diventavano non selezionabili dopo un equip/unequip: i tile venivano rimossi con queue_free() e restavano sovrapposti a quelli nuovi fino a fine frame; ora la rimozione e' immediata.
 - Livello della run precedente restava scritto in HUD dopo la morte finche' non si arrivava al livello 2 (HUD non si riallineava al restart): ora si aggiorna appena la run torna RUNNING.
 - Primo evento e primo avviso di overtime (30s/10s prima): ora fermano davvero la run con una spiegazione a schermo intero da chiudere con Continua, invece del solo annuncio HUD a scomparsa mentre si continuava a giocare (`FirstTimeNotice`, stesso pattern di pausa di `LevelUpChoice`/`AbilityChoice`) (#86).
 - Cadenza di fuoco (potenziamento "Raffica"): dal 13% al 10% per scelta, era percepito troppo forte (#86).

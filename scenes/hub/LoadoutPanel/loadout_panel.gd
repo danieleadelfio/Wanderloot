@@ -110,8 +110,14 @@ func _on_sort_pressed(mode: StashSort.Mode) -> void:
 func refresh(loadout: EquipmentLoadout) -> void:
 	_loadout = loadout
 	_refresh_ability_levels(loadout)
+	# Bug (M12, #86): queue_free() lascia il nodo nell'albero fino a fine frame. Se refresh() viene
+	# richiamato nello stesso frame (equip/unequip -> segnale -> refresh), i tile vecchi restavano
+	# sovrapposti a quelli nuovi finche' non venivano liberati: un oggetto poteva apparire spostato in
+	# cima alla griglia e non piu' cliccabile (il tile sopra era quello vecchio, gia' disconnesso).
+	# Rimozione immediata invece che differita, cosi' la griglia non contiene mai doppioni.
 	for child in _slots.get_children():
-		child.queue_free()
+		_slots.remove_child(child)
+		child.free()
 	for slot: int in SLOT_POSITIONS:
 		var item := loadout.equipped_in(slot)
 		var button: Button = ItemTile.for_item(item) if item else _item_button(null, tr(SLOT_NAMES[slot]))
@@ -125,7 +131,8 @@ func refresh(loadout: EquipmentLoadout) -> void:
 			button.disabled = true
 		_slots.add_child(button)
 	for child in _grid.get_children():
-		child.queue_free()
+		_grid.remove_child(child)
+		child.free()
 	var stash := StashSort.sorted(StashSort.filtered(loadout.stash_items(), filter_key), sort_mode)
 	_empty_hint.visible = stash.is_empty()
 	for item in stash:
