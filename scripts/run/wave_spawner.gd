@@ -11,12 +11,12 @@ const MAX_ALIVE: int = 320
 ## Anello di spawn attorno al player (M13, #86: arene 10x, un rect uniforme faceva comparire i nemici
 ## a migliaia di px, in rage prima ancora di arrivare). min = appena fuori dallo schermo (viewport
 ## 1280x720, mezza diagonale ~734px), max = abbastanza vicino da arrivare in pochi secondi.
-@export var spawn_min_distance: float = 900.0
-@export var spawn_max_distance: float = 1500.0
+@export var spawn_min_distance: float = 700.0
+@export var spawn_max_distance: float = 1200.0
 ## Oltre questa distanza dal player un nemico vivo despawna (silenzioso, nessun drop) e viene
 ## rimpiazzato dal normale ciclo di ondate con uno spawn point aggiornato sulla posizione attuale
 ## (M13, #86: player che scappa lontano non deve trascinarsi dietro nemici dall'altra parte dell'arena).
-@export var despawn_distance: float = 2400.0
+@export var despawn_distance: float = 1600.0
 
 var _target: Node2D
 var _elapsed: float = 0.0
