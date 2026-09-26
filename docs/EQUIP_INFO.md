@@ -38,7 +38,7 @@ Formato valori: flat = si somma al valore base; % = moltiplicatore (es. 1.25 = +
 | Bonus drop | flat % | tutti | 0,8 | +5% – +12% | +9% – +16% | +13% – +20% | +16% – +23% | +20% – +25% | +23% – +25% |
 | Invulnerabilità | flat s | Armatura, Testa | 0,6 | +0,05 – +0,10s | +0,08 – +0,13s | +0,11 – +0,16s | +0,13 – +0,19s | +0,16 – +0,20s | +0,19 – +0,20s |
 | Spinta | % | Arma, Guanti | 0,6 | +10% – +20,5% | +16% – +26,5% | +22% – +32,5% | +26,5% – +37% | +32,5% – +40% | +37% – +40% |
-| N. proiettili | flat | Arma, Anello | 0,25 | +1 | +1 | +1 | +1 | +1 | +1 |
+| Contatore | flat | Amuleto | 0,25 | +1 | +1 | +1 | +1 | +1 | +1 |
 | Perforazione | flat | Arma | 0,3 | +1 | +1 | +1 | +1 | +1 | +1 |
 
 ## 3. Pezzi

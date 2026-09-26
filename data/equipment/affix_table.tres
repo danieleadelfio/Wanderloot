@@ -104,11 +104,11 @@ weight = 0.6
 
 [sub_resource type="Resource" id="a11"]
 script = ExtResource("2")
-stat = 11
+stat = 13
 min_value = 1
 max_value = 1
 is_multiplier = false
-slots = Array[int]([0, 7])
+slots = Array[int]([1])
 weight = 0.25
 
 [sub_resource type="Resource" id="a12"]

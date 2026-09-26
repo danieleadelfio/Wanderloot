@@ -111,9 +111,9 @@ func test_projectile_count_modifier() -> void:
 	assert_int(weapon.projectile_count).is_equal(2)
 
 
-func test_projectile_count_scales_with_count_bonus() -> void:
-	# Il Contatore (COUNT_BONUS) potenzia i Ventagli (PROJECTILE_COUNT) presi dopo:
-	# +1 diventa +(1 + count_bonus).
+func test_projectile_count_is_not_scaled_by_count_bonus() -> void:
+	# Il Contatore (COUNT_BONUS) tocca solo le abilita' (M12, #86): il Ventaglio (PROJECTILE_COUNT)
+	# sull'attacco base non ne beneficia piu'.
 	var stats := PlayerStats.new()
 	var weapon := WeaponData.new()
 	weapon.projectile_count = 1
@@ -121,7 +121,7 @@ func test_projectile_count_scales_with_count_bonus() -> void:
 
 	StatApplier.apply(UpgradeData.Stat.PROJECTILE_COUNT, 1.0, false, stats, weapon)
 
-	assert_int(weapon.projectile_count).is_equal(4)
+	assert_int(weapon.projectile_count).is_equal(2)
 
 
 func test_projectile_count_never_below_one() -> void:
@@ -132,7 +132,8 @@ func test_projectile_count_never_below_one() -> void:
 	assert_int(weapon.projectile_count).is_equal(1)
 
 
-func test_count_bonus_modifier_updates_stats_and_current_projectile_count() -> void:
+func test_count_bonus_modifier_updates_stats_but_not_weapon_projectile_count() -> void:
+	# M12, #86: Contatore non tocca piu' l'attacco base, solo stats.count_bonus (letto dalle abilita').
 	var stats := PlayerStats.new()
 	var weapon := WeaponData.new()
 	weapon.projectile_count = 3
@@ -141,7 +142,7 @@ func test_count_bonus_modifier_updates_stats_and_current_projectile_count() -> v
 	StatApplier.apply(UpgradeData.Stat.COUNT_BONUS, 1.0, false, stats, weapon)
 
 	assert_int(stats.count_bonus).is_equal(1)
-	assert_int(weapon.projectile_count).is_equal(4)
+	assert_int(weapon.projectile_count).is_equal(3)
 
 
 func test_pierce_modifier_never_below_zero() -> void:

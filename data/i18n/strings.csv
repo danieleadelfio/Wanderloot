@@ -157,7 +157,7 @@ CONS_FRENZY,Furia,Frenzy,Frénésie,Frenesí
 CONS_FRENZY_DESC,Cadenza di fuoco +50% per 6 s.,Fire rate +50% for 6 s.,Cadence de tir +50 % pendant 6 s.,Cadencia de disparo +50% durante 6 s.
 HUD_BUFF,%s %ds,%s %ds,%s %d s,%s %d s
 UPG_COUNTER_UP,Contatore,Counter,Compteur,Contador
-UPG_COUNTER_UP_DESC,+1 proiettile allo sparo e alle abilità (non alla barriera); ogni Ventaglio preso dopo vale 1 in più,+1 projectile to your shots and abilities (not the barrier); every Spread taken later gives 1 more,+1 projectile aux tirs et aux capacités (pas à la barrière) ; chaque Éventail pris ensuite en donne 1 de plus,+1 proyectil a los disparos y habilidades (no a la barrera); cada Abanico posterior da 1 más
+UPG_COUNTER_UP_DESC,"+1 proiettile alle abilità (non allo sparo, non alla barriera)","+1 projectile to your abilities (not your shots, not the barrier)","+1 projectile aux capacités (pas aux tirs, pas à la barrière)","+1 proyectil a las habilidades (no a los disparos, no a la barrera)"
 STAT_COUNT_BONUS,Contatore,Counter,Compteur,Contador
 EVENT_PENTAGRAM_TITLE,PENTAGRAMMA DI SANGUE,BLOOD PENTAGRAM,PENTAGRAMME DE SANG,PENTAGRAMA DE SANGRE
 EVENT_PENTAGRAM_SUBTITLE,Entra nel cerchio di candele,Step into the circle of candles,Entrez dans le cercle de bougies,Entra en el círculo de velas
