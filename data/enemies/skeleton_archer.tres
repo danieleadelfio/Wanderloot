@@ -19,11 +19,11 @@ chance = 0.012
 [resource]
 script = ExtResource("1")
 display_name = "Scheletro arciere"
-move_speed = 95.0
+move_speed = 85.5
 exp_reward = 200
 behavior = 1
 ranged_weapon = ExtResource("bow")
-attack_interval = 2.6
+attack_interval = 4.0
 attack_range = 420.0
 rage_speed_multiplier = 1.3
 drops = Array[ExtResource("2")]([SubResource("d0"), SubResource("d1")])

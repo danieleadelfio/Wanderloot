@@ -338,7 +338,7 @@ File in `data/enemies/` (`enemy_basic` = Slime, `ghoul`, `skeleton_archer`).
 |---|---|---|
 | `max_hp` | colpi necessari (con danno 1) | 3 / 2 / 3 |
 | `contact_damage` | danno a contatto | 1 / 1 / 1 |
-| `move_speed` | px/s (il player ne fa 220) | 110 / 175 / 95 |
+| `move_speed` | px/s (il player ne fa 220) | 99 / 157,5 / 85,5 |
 | `exp_reward` | exp della gemma | 1 / 1 / 2 |
 | `contact_knockback`, `knockback_resistance` | spinta data / resistenza a quella ricevuta (0–1) | |
 | `rage_after`, `rage_speed_multiplier`, `rage_damage_bonus` | dopo quanti secondi in vita vanno in rage, quanto accelerano, danno in più (0 = niente rage) | 5 s ×1,8 +1 / 4 s ×1,25 +1 / 5 s |
@@ -351,7 +351,7 @@ Regola: un nemico in rage non dovrebbe superare la velocità del player (`move_s
 
 | Cosa | File | Campi |
 |---|---|---|
-| Slime tossico / del vuoto / di pietra | `data/enemies/slime_toxic.tres`, `slime_void.tres`, `slime_stone.tres` | `max_hp` (6 / 6 / 12), `move_speed` (110 / 110 / 55), `attack_interval`, `attack_range` |
+| Slime tossico / del vuoto / di pietra | `data/enemies/slime_toxic.tres`, `slime_void.tres`, `slime_stone.tres` | `max_hp` (6 / 6 / 12), `move_speed` (99 / 99 / 49,5), `attack_interval`, `attack_range` |
 | Frequenza | `data/arenas/crypt.tres` → `enemies` | `weight` (celeste 1, tossico 0,18, vuoto 0,15, pietra 0,22), `min_time` (30 / 45 / 20 s) |
 | Veleno | `WeaponData` gruppo *Veleno* | `poison_duration`, `poison_interval`, `poison_damage` |
 | Buco nero | `WeaponData` gruppo *Buco nero* | `grow_after` (px), `grow_scale`, `grown_speed_multiplier`, `pull_radius` (Sfera del vuoto: 360), `pull_strength`; dimensione `projectile_scale` (0,7) |

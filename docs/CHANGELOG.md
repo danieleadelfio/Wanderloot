@@ -179,6 +179,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Blocco dei nemici base con boss pre-overtime vivi: documentato e testato come regola di tutte le arene (il codice valeva gia' anche per la Cripta, ma GDD/test lo descrivevano come solo Ossario) ed esteso a ogni fonte di boss prima dell'overtime — prima un boss del Pentagramma arrivato dopo la morte dei boss normali non bloccava lo spawn. Decisione centralizzata in `WaveSpawner.update_boss_block(boss vivi, livello overtime)`, chiamata a ogni comparsa/morte di boss e cambio di livello di overtime; test (#86).
+- Nemici: velocità di base -10% (`move_speed` di tutti i nemici comuni: celeste/tossico/vuoto 110 → 99, pietra 55 → 49,5, Ghoul 175 → 157,5, Scheletro arciere 95 → 85,5) e cadenza di tiro dei nemici a distanza -35% (`attack_interval` / 0,65: tossico 2,4 → 3,69 s, vuoto 3,2 → 4,92 s, arciere 2,6 → 4 s). Boss e scheletri dell'armadio (evento) invariati (#86).
 - Bilanciamento player base (`starter_wand.tres`, `player_default.tres`): danno 100 -> 135 (+35%), rigenerazione mana 8 -> 10,8/s (+35%), vita 1000 -> 1200 (+20%), mana massimo 30 -> 36 (+20%) (#86).
 - Cadenza di fuoco base della Bacchetta riportata da 3 a 4 colpi/s (`starter_wand.tres`): il playtest sul rialzo a 3 non ha convinto, si torna al valore originale (#86).
 - Cadenza di fuoco base della Bacchetta rialzata da 2 a 3 colpi/s (`starter_wand.tres`), dopo il playtest sull'abbassamento a 2 del changelog precedente (#86).

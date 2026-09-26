@@ -18,6 +18,6 @@ chance = 0.015
 [resource]
 script = ExtResource("1")
 display_name = "Slime"
-move_speed = 110.0
+move_speed = 99.0
 rage_speed_multiplier = 1.8
 drops = Array[ExtResource("2")]([SubResource("drop_gel"), SubResource("drop_core")])

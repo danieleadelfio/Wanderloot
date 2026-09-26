@@ -41,11 +41,20 @@ var level_rate: float = 1.0
 ## Rage "naturale" per scadenza (M13, #86): solo dal livello arena 2 in su. A livello 1 i nemici
 ## vanno in rage solo per un evento specifico (Pentagramma, overtime, urlo di boss), mai da soli.
 var natural_rage_enabled: bool = true
-## Blocca nuove ondate senza toccare i nemici gia' vivi (Ossario, boss pre-overtime, M12, #86): i nemici
+## Blocca nuove ondate senza toccare i nemici gia' vivi (boss pre-overtime, M12, #86): i nemici
 ## presenti quando il blocco scatta restano e vengono uccisi normalmente, ma non ne arrivano di nuovi
-## finche' il blocco non si toglie.
+## finche' il blocco non si toglie. Lo imposta update_boss_block().
 var spawning_blocked: bool = false
 
+
+
+## Regola dei boss pre-overtime (M13, #86: in tutte le arene, prima descritta come solo Ossario, e per
+## ogni fonte di boss - comparsa normale, bonus livello arena, Pentagramma arrivato dopo): finche' c'e'
+## almeno un boss vivo e l'overtime non e' iniziato, niente nuovi nemici base. In overtime boss e nemici
+## base si mescolano sempre. Chiamata dalla composition root a ogni comparsa/morte di boss e cambio di
+## livello di overtime.
+func update_boss_block(alive_bosses: int, overtime_level: int) -> void:
+	spawning_blocked = overtime_level == 0 and alive_bosses > 0
 
 func _ready() -> void:
 	set_physics_process(false)

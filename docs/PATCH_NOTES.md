@@ -136,3 +136,8 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Correzioni
 - La finestra Inventario della piazza non cambia più dimensione quando si equipaggia o si toglie un oggetto (prima bastava equipaggiare la bacchetta e poi un anello per vederla ridimensionarsi o allungarsi).
+
+### Bilanciamento
+- Nemici più lenti del 10%.
+- I nemici a distanza (Slime tossico, Slime del vuoto, Scheletro arciere) sparano il 35% più di rado.
+- In tutte le arene, finché un boss arrivato prima dell'overtime è vivo non compaiono nuovi nemici normali: ora vale anche per il boss extra del Pentagramma di sangue.
