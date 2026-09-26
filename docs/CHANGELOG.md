@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Tutorial contestuale degli eventi si fermava solo alla primissima run: ora si ferma la prima volta per OGNI tipo di evento mai incontrato (chiave per-evento invece di un flag unico), testo ripreso dal Codex (obiettivo + ricompensa).
 - Nessun avviso quando l'estrazione si apre: aggiunto un annuncio non bloccante ("Estrazione aperta") come per gli eventi.
 - Tooltip di confronto equip: "Equipaggiato" era grigio scuro e poco leggibile, ora bianco e in grassetto; ordine invertito, il pezzo non equipaggiato (sotto il mouse) ora e' vicino al cursore invece di quello equipaggiato.
 - Tabella statistiche in run troppo opaca/nitida, copriva la scena: opacita' ridotta (0,85 -> 0,55).

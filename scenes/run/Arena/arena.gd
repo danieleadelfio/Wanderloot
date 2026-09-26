@@ -199,13 +199,24 @@ func pentagram_zone() -> Vector3:
 	return _events.pentagram_zone()
 
 
+## Chiave Codex (obiettivo + ricompensa, gia' scritta e mantenuta li') per il tutorial di ogni evento.
+const EVENT_CODEX_BODY: Dictionary[StringName, StringName] = {
+	&"lightning_storm": &"CODEX_EVENT_LIGHTNING_BODY",
+	&"blood_pentagram": &"CODEX_EVENT_PENTAGRAM_BODY",
+	&"shadow_step": &"CODEX_EVENT_SHADOWSTEP_BODY",
+	&"skeletons_closet": &"CODEX_EVENT_CLOSET_BODY",
+}
+
+
 func _on_event_started(event: RunEventData) -> void:
 	_hud.show_event(event.title, event.subtitle)
 	_sfx.play(&"event_start")
-	# Primo evento in assoluto (M12, #86): pausa con spiegazione a schermo intero invece del solo
-	# annuncio a scomparsa, per lasciare il tempo di leggere senza essere colpiti nel frattempo.
-	if not MetaProgression.has_seen_tutorial(&"first_event"):
-		_show_first_time_notice(&"first_event", tr("TUTORIAL_EVENT_TITLE"), tr("TUTORIAL_EVENT_BODY"))
+	# Ogni evento mai incontrato prima, non solo il primo in assoluto (M12, #86): pausa con spiegazione
+	# a schermo intero (obiettivo + ricompensa, stesso testo del Codex) invece del solo annuncio a
+	# scomparsa, per lasciare il tempo di leggere senza essere colpiti nel frattempo.
+	var tutorial_key := StringName("event_%s" % event.id)
+	if not MetaProgression.has_seen_tutorial(tutorial_key) and EVENT_CODEX_BODY.has(event.id):
+		_show_first_time_notice(tutorial_key, tr(event.title), tr(EVENT_CODEX_BODY[event.id]))
 
 
 ## Pentagramma: il player e' nel cerchio. Mostri +bonus subito, tetto dei vivi +bonus, nuovi mostri in rage.
