@@ -30,3 +30,12 @@ func test_menu_pause_option_switches_to_direct_pause() -> void:
 	state.handle(PauseState.Action.MENU)
 	assert_int(state.handle(PauseState.Action.PAUSE)).is_equal(PauseState.Mode.PAUSED)
 	assert_int(state.handle(PauseState.Action.RESUME)).is_equal(PauseState.Mode.NONE)
+
+
+func test_map_toggles_and_escape_closes_it() -> void:
+	var state := PauseState.new()
+	assert_int(state.handle(PauseState.Action.MAP)).is_equal(PauseState.Mode.MAP)
+	assert_bool(state.is_paused()).is_true()
+	assert_int(state.handle(PauseState.Action.MAP)).is_equal(PauseState.Mode.NONE)
+	state.handle(PauseState.Action.MAP)
+	assert_int(state.handle(PauseState.Action.MENU)).is_equal(PauseState.Mode.NONE)

@@ -3,14 +3,14 @@ extends RefCounted
 ## Pause richieste dal giocatore (logica pura). Indipendenti da level-up e fine run, che restano
 ## guidati da RunManager: la composition root mette in pausa se una delle due fonti lo richiede.
 
-enum Mode { NONE, MENU, PAUSED, INVENTORY }
-enum Action { MENU, PAUSE, RESUME, INVENTORY }
+enum Mode { NONE, MENU, PAUSED, INVENTORY, MAP }
+enum Action { MENU, PAUSE, RESUME, INVENTORY, MAP }
 
 var mode: Mode = Mode.NONE
 
 
 ## ESC (MENU) apre il menu o chiude qualsiasi pausa aperta; P (PAUSE) alterna la pausa diretta;
-## I (INVENTORY) alterna l'inventario di run.
+## I (INVENTORY) alterna l'inventario di run; M (MAP, M13 #86) alterna la mappa dell'arena.
 func handle(action: Action) -> Mode:
 	match action:
 		Action.MENU:
@@ -19,6 +19,8 @@ func handle(action: Action) -> Mode:
 			mode = Mode.NONE if mode == Mode.PAUSED else Mode.PAUSED
 		Action.INVENTORY:
 			mode = Mode.NONE if mode == Mode.INVENTORY else Mode.INVENTORY
+		Action.MAP:
+			mode = Mode.NONE if mode == Mode.MAP else Mode.MAP
 		Action.RESUME:
 			mode = Mode.NONE
 	return mode

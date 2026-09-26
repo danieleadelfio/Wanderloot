@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/MapScreen/map_screen.gd" id="1"]
+[ext_resource type="Script" path="res://scenes/ui/MapScreen/map_area.gd" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="window_style"]
+content_margin_left = 20.0
+content_margin_top = 18.0
+content_margin_right = 20.0
+content_margin_bottom = 14.0
+bg_color = Color(0.1, 0.09, 0.14, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.62, 0.36, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MapScreen" type="CanvasLayer"]
+process_mode = 3
+layer = 16
+script = ExtResource("1")
+
+[node name="Window" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Window"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("window_style")
+
+[node name="VBox" type="VBoxContainer" parent="Window/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Window/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "MAP_TITLE"
+
+[node name="PoiLabel" type="Label" parent="Window/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+text = "MAP_NO_POI"
+
+[node name="MapArea" type="Control" parent="Window/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(700, 440)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("2")
+
+[node name="Hint" type="Label" parent="Window/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.6, 0.6, 0.65, 1)
+text = "MAP_HINT"

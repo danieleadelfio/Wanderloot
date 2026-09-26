@@ -33,3 +33,11 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 ### Novità
 - Arene **10 volte più grandi** (stessi rapporti di prima, tutto scalato x10: muri, decorazioni, zona di spawn).
 - La zona di estrazione non compare comunque mai a più di 1000px dal player, anche su un'arena così grande.
+
+## In lavorazione (2) — 26/09/2026
+
+### Novità
+- Mappa dell'arena: premi **M** per aprirla (o Esc per chiuderla). Mostra i confini dell'arena e la tua posizione; i punti di interesse arriveranno in futuro.
+- Sulla mappa puoi piazzare fino a **5 indicatori** con un clic: ognuno diventa una freccia colorata a bordo schermo per orientarti verso quel punto (il giallo è riservato al portale di estrazione).
+- Nuova **minimappa** in alto a destra durante la run: ti tiene sempre al centro, con una bussola N/S/E/O sul bordo, e mostra i tuoi indicatori e il portale quando è attivo.
+- Il tutorial dell'obiettivo di run ora ricorda anche il tasto M.

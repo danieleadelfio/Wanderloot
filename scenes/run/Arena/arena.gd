@@ -88,11 +88,18 @@ var overtime := OvertimeState.new()
 @onready var _pause: PauseController = %PauseController
 @onready var _pause_menu: PauseMenu = %PauseMenu
 @onready var _run_inventory: RunInventory = %RunInventory
+## Mappa dell'arena (tasto M, M13 #86).
+@onready var _map_screen: MapScreen = %MapScreen
+@onready var _indicator_layer: CanvasLayer = %IndicatorLayer
 @onready var _closet_reward: ClosetReward = %ClosetReward
 @onready var _wand: WandAbilities = %WandAbilities
 @onready var _ability_choice: AbilityChoice = %AbilityChoice
 @onready var _events: RunEventDirector = %EventDirector
 @onready var _first_time_notice: FirstTimeNotice = %FirstTimeNotice
+## Indicatori piazzati dalla mappa (M13, #86): logica pura in MapIndicators, frecce a bordo schermo
+## in MapIndicatorArrow (una per slot, come ExtractionIndicator ma verso una posizione fissa).
+var _map_indicators: MapIndicators = MapIndicators.new()
+var _map_indicator_arrows: Array[MapIndicatorArrow] = []
 
 
 func _ready() -> void:
@@ -107,6 +114,12 @@ func _ready() -> void:
 	RunManager.leveled_up.connect(_on_leveled_up)
 	_run_end_screen.restart_requested.connect(_on_restart_requested)
 	_pause.mode_changed.connect(_on_pause_mode_changed)
+	_map_screen.indicator_placed.connect(_on_map_indicator_placed)
+	for i in MapIndicators.MAX_INDICATORS:
+		var arrow := MapIndicatorArrow.new()
+		arrow.color = _map_indicators.color_for(i)
+		_indicator_layer.add_child(arrow)
+		_map_indicator_arrows.append(arrow)
 	_pause_menu.action_requested.connect(_pause.request)
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
@@ -129,6 +142,7 @@ func _ready() -> void:
 	_wave_spawner.level_hp = ArenaLevel.enemy_hp_multiplier(arena_level)
 	_wave_spawner.level_rate = ArenaLevel.spawn_rate_multiplier(arena_level)
 	_hud.set_arena_level(arena_level)
+	_hud.set_minimap_context(_player, _map_indicators, _extraction_point)
 	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player, _equip_modifiers)
@@ -737,7 +751,22 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items(), _player, _equip_modifiers)
 	else:
 		_run_inventory.close()
+	if mode == PauseState.Mode.MAP:
+		_map_screen.present(extraction_spawn_rect, _player, _map_indicators)
+	else:
+		_map_screen.close()
 	_refresh_pause()
+
+
+## Un indicatore e' stato piazzato dalla mappa (M13, #86): aggiorna la freccia a bordo schermo
+## corrispondente (le posizioni gia' piazzate non cambiano, basta rifare l'assegnazione dei slot).
+func _on_map_indicator_placed(_world_position: Vector2) -> void:
+	var pts := _map_indicators.points()
+	for i in _map_indicator_arrows.size():
+		var arrow := _map_indicator_arrows[i]
+		arrow.active = i < pts.size()
+		if arrow.active:
+			arrow.target_position = pts[i]
 
 
 ## Cambio lingua in run: salva i progressi permanenti (la run si perde) e torna al menu iniziale.

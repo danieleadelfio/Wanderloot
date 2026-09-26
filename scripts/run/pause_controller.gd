@@ -34,4 +34,6 @@ func _action_for(event: InputEvent) -> int:
 		return PauseState.Action.PAUSE
 	if event.is_action_pressed("inventory"):
 		return PauseState.Action.INVENTORY
+	if event.is_action_pressed("map"):
+		return PauseState.Action.MAP
 	return -1

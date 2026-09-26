@@ -27,6 +27,7 @@ var _banner_tween: Tween
 var _announce_tween: Tween
 @onready var _boss_name: Label = %BossName
 @onready var _boss_bar: ProgressBar = %BossBar
+@onready var _minimap: Minimap = %Minimap
 
 
 func _ready() -> void:
@@ -45,6 +46,11 @@ func _ready() -> void:
 func _on_state_changed(state: RunManager.State) -> void:
 	if state == RunManager.State.RUNNING:
 		set_level(RunManager.level)
+
+
+## Contesto della minimappa (M13, #86): una volta a inizio run, come set_arena_level.
+func set_minimap_context(player: Node2D, indicators: MapIndicators, extraction_point: Node2D) -> void:
+	_minimap.setup(player, indicators, extraction_point)
 
 
 func set_hp(current: int, maximum: int) -> void:
