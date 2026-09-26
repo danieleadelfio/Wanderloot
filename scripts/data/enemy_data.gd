@@ -30,7 +30,7 @@ enum Behavior { CHASE, KEEP_DISTANCE }
 
 @export_group("Rage")
 ## Secondi in vita dopo i quali il nemico va in rage. 0 = mai.
-@export var rage_after: float = 5.0
+@export var rage_after: float = 10.0
 @export var rage_speed_multiplier: float = 1.5
 ## Danno da contatto aggiunto in rage.
 @export var rage_damage_bonus: int = 100

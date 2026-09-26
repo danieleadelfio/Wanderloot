@@ -56,3 +56,8 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 ### Bilanciamento
 - I nemici ora compaiono in una fascia di distanza ragionevole dal player (appena fuori vista, ma abbastanza vicini da arrivare in fretta), non più ovunque nell'arena enorme: prima capitava che arrivassero già furiosi solo per la lunga camminata. (aggiustato: 700–1200px di spawn, despawn oltre 1600px)
 - Se ti allontani troppo, i nemici rimasti troppo indietro spariscono e vengono sostituiti da altri più vicini a te.
+
+## In lavorazione (5) — 26/09/2026
+
+### Bilanciamento
+- Tempo prima che un nemico vada in rage alzato da 5 a 10 secondi (in linea con le arene più grandi): prima molti arrivavano già furiosi solo per la camminata dal punto di spawn.
