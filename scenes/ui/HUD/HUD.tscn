@@ -16,6 +16,13 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
+[sub_resource type="StyleBoxFlat" id="mana_fill"]
+bg_color = Color(0.25, 0.75, 0.95, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [sub_resource type="StyleBoxFlat" id="exp_fill"]
 bg_color = Color(0.25, 0.55, 1, 1)
 corner_radius_top_left = 2
@@ -56,6 +63,16 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/background = SubResource("bar_bg")
 theme_override_styles/fill = SubResource("hp_fill")
+step = 1.0
+show_percentage = false
+
+[node name="MpBar" type="ProgressBar" parent="Margin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("bar_bg")
+theme_override_styles/fill = SubResource("mana_fill")
 step = 1.0
 show_percentage = false
 

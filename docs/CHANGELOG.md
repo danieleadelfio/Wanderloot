@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Mana per lo sparo base: pool (30, +6/s base) consumato dalla Bacchetta (1,5/colpo), non dalle abilita'; a corto di mana il colpo resta in credito invece di scaricarsi gratis o perdersi; nuovo upgrade di run Meditazione (+2 rigen/s, `Stat.MANA_REGEN`); barra dedicata in HUD; logica pura in `Mana` (`scripts/combat/mana.gd`) e gating in `Weapon.try_fire()`, entrambi testati (#86).
 - Tutorial "Obiettivo della run" (`first_run`) fermo in pausa finche' non si preme Continua, come gli eventi e l'avviso di overtime (`FirstTimeNotice`), invece del solo annuncio HUD a scomparsa dopo 7s che a volte spariva prima ancora di essersi mossi (#86).
 - Visibilita' del livello arena (§6.3b): pannello Portale mostra il livello attuale e i suoi effetti (vita nemici, ritmo spawn, boss, drop max) sopra la lista arene, con promemoria al Codex la prima volta; in run, etichetta fissa in HUD sotto il livello del personaggio (`Hud.set_arena_level()`) (#86).
 - Tag "spazzatura" sugli oggetti del baule: clic destro sull'icona (cestino semitrasparente in basso a sinistra), persistito (`ItemInstance.is_trash`); bottone "Smonta tutta la spazzatura" nella scheda Smontaggio del fabbro che smonta in blocco tutti gli oggetti taggati sommandone la resa (`Forge.trash_items()`/`salvage_trash()`, `MetaProgression.salvage_all_trash()`); suggerimento sinistro/destro aggiornato nell'inventario; test (#86).

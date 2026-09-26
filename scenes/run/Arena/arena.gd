@@ -404,6 +404,8 @@ func _place_torches(per_wall: int, color: Color) -> void:
 
 
 func _process(delta: float) -> void:
+	# Barra mana (M12, #86): niente segnale su Mana (RefCounted puro come Knockback), letta ogni frame.
+	_hud.set_mana(_player.mana.current, _player.mana.max_value)
 	if not get_tree().paused and not _buffs.is_empty():
 		for key in _buffs.keys():
 			_buffs[key] -= delta

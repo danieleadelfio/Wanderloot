@@ -22,6 +22,7 @@ static func _row_defs() -> Array[Dictionary]:
 		{"label": "STAT_INVULNERABILITY", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.invulnerability_time, "format": func(v: float) -> String: return "%.2fs" % v},
 		{"label": "STAT_EXP_BONUS", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.exp_multiplier, "format": func(v: float) -> String: return _percent(v)},
 		{"label": "STAT_DROP_BONUS", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.drop_chance_multiplier, "format": func(v: float) -> String: return _percent(v)},
+		{"label": "STAT_MANA_REGEN", "getter": func(s: PlayerStats, w: WeaponData) -> float: return s.mana_regen, "format": func(v: float) -> String: return "%.1f/s" % v},
 	]
 
 

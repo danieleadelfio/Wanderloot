@@ -11,6 +11,9 @@ signal fired(origin: Vector2, direction: Vector2, data: WeaponData)
 var _cooldown: float = 0.0
 ## Moltiplicatore temporaneo della cadenza (consumabile Furia, M10.1). Non tocca i dati dell'arma.
 var rate_multiplier: float = 1.0
+## Mana da cui attinge lo sparo base (M12, #86): null o data.mana_cost <= 0 = nessun costo, spara
+## sempre (retrocompatibile con le WeaponData senza costo e con chi non assegna mana, es. i test).
+var mana: Mana
 
 
 func _physics_process(delta: float) -> void:
@@ -27,6 +30,10 @@ func try_fire(direction: Vector2) -> int:
 	var aim := direction.normalized()
 	var shots := 0
 	while _cooldown <= 0.0:
+		# A corto di mana: il colpo resta "in credito" (cooldown non consumato), riprende non appena il
+		# pool rigenera abbastanza, invece di perderlo o sparare gratis.
+		if mana and data.mana_cost > 0.0 and not mana.spend(data.mana_cost):
+			break
 		_cooldown += interval
 		shots += 1
 	var count := maxi(data.projectile_count, 1)

@@ -37,3 +37,11 @@ func test_single_pull_source_is_unaffected_by_cap() -> void:
 	player.add_pull(Vector2.RIGHT * 60.0)
 	player._physics_process(0.0)
 	assert_float(player.velocity.length()).is_equal_approx(60.0, 0.01)
+
+func test_begin_run_resets_mana_and_wires_weapon() -> void:
+	var player: Player = auto_free(load("res://scenes/run/Player/Player.tscn").instantiate())
+	add_child(player)
+	player.mana.spend(player.mana.max_value)
+	player.begin_run([])
+	assert_float(player.mana.current).is_equal_approx(player.stats.max_mana, 0.001)
+	assert_float(player.mana.regen_per_second).is_equal_approx(player.stats.mana_regen, 0.001)

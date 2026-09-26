@@ -153,3 +153,16 @@ func test_pierce_modifier_never_below_zero() -> void:
 
 	StatApplier.apply(UpgradeData.Stat.PIERCE, -10.0, false, PlayerStats.new(), weapon)
 	assert_int(weapon.pierce).is_equal(0)
+
+func test_mana_regen_modifier_additive() -> void:
+	var stats := PlayerStats.new()
+	stats.mana_regen = 6.0
+	StatApplier.apply(UpgradeData.Stat.MANA_REGEN, 2.0, false, stats, WeaponData.new())
+	assert_float(stats.mana_regen).is_equal_approx(8.0, 0.001)
+
+
+func test_mana_regen_modifier_never_below_zero() -> void:
+	var stats := PlayerStats.new()
+	stats.mana_regen = 1.0
+	StatApplier.apply(UpgradeData.Stat.MANA_REGEN, -10.0, false, stats, WeaponData.new())
+	assert_float(stats.mana_regen).is_equal_approx(0.0, 0.001)

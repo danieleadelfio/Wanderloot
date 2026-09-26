@@ -4,6 +4,7 @@ extends CanvasLayer
 
 @onready var _hp_label: Label = %HpLabel
 @onready var _hp_bar: ProgressBar = %HpBar
+@onready var _mp_bar: ProgressBar = %MpBar
 @onready var _level_label: Label = %LevelLabel
 @onready var _arena_level_label: Label = %ArenaLevelLabel
 @onready var _exp_label: Label = %ExpLabel
@@ -50,6 +51,13 @@ func set_hp(current: int, maximum: int) -> void:
 	_hp_bar.max_value = maximum
 	_hp_bar.value = current
 	_hp_label.text = "HP %d/%d" % [current, maximum]
+
+
+## Barra mana (M12, #86): letta ogni frame da Arena._process (Mana e' RefCounted puro, nessun segnale).
+## Nessuna etichetta numerica: la barra basta, come per boss/evento.
+func set_mana(current: float, maximum: float) -> void:
+	_mp_bar.max_value = maxf(maximum, 0.0)
+	_mp_bar.value = current
 
 
 func set_level(level: int) -> void:

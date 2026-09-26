@@ -40,6 +40,13 @@ func test_upgrade_below_max_picks_can_still_be_picked() -> void:
 	assert_int(table.pick(1, rng, picks).size()).is_equal(1)
 
 
+## Guardia contro un indice numerico sbagliato nel .tres (gia' successo una volta con gli affix,
+## M12 #86): l'enum e' salvato come intero, un refuso non darebbe errori di caricamento.
+func test_mana_regen_upgrade_resource_has_correct_stat() -> void:
+	var upgrade: UpgradeData = load("res://data/upgrades/mana_regen_up.tres")
+	assert_int(upgrade.stat).is_equal(UpgradeData.Stat.MANA_REGEN)
+
+
 func _table(size: int) -> UpgradeTable:
 	var table := UpgradeTable.new()
 	for i in size:

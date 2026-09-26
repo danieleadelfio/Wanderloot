@@ -14,3 +14,7 @@ extends Resource
 @export var exp_multiplier: float = 1.0
 ## Moltiplicatore della probabilità di drop dei materiali (upgrade "Fortuna").
 @export var drop_chance_multiplier: float = 1.0
+## Mana massimo (M12, #86): consumato dallo sparo base (WeaponData.mana_cost), non dalle abilita'.
+@export var max_mana: float = 30.0
+## Mana rigenerato al secondo (upgrade "Meditazione").
+@export var mana_regen: float = 6.0

@@ -35,6 +35,8 @@ var _pull: Vector2 = Vector2.ZERO
 const MAX_PULL_FORCE: float = 100.0
 
 @onready var health: Health = %Health
+## Mana dello sparo base (M12, #86): RefCounted puro come Knockback, non un nodo della scena.
+var mana: Mana = Mana.new()
 @onready var _hurtbox: Hurtbox = %Hurtbox
 @onready var _weapon: Weapon = %Weapon
 @onready var _knockback: Knockback = %Knockback
@@ -66,6 +68,8 @@ func begin_run(equipment: Array[StatModifier]) -> void:
 	_weapon.data = _base_weapon.duplicate()
 	StatApplier.apply_modifiers(equipment, stats, _weapon.data)
 	health.reset(stats.max_hp)
+	mana.reset(stats.max_mana, stats.mana_regen)
+	_weapon.mana = mana
 	poison.clear()
 	_knockback.reset()
 	set_shield(false)
@@ -74,6 +78,7 @@ func begin_run(equipment: Array[StatModifier]) -> void:
 
 func _physics_process(delta: float) -> void:
 	var move_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	mana.regenerate(delta)
 	_knockback.step(delta)
 	if dash_mode:
 		_dash_step(delta, move_dir)

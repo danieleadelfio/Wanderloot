@@ -16,7 +16,8 @@
 [ext_resource type="Resource" path="res://data/upgrades/multishot_up.tres" id="13"]
 [ext_resource type="Resource" path="res://data/upgrades/pierce_up.tres" id="14"]
 [ext_resource type="Resource" path="res://data/upgrades/counter_up.tres" id="15"]
+[ext_resource type="Resource" path="res://data/upgrades/mana_regen_up.tres" id="16"]
 
 [resource]
 script = ExtResource("1")
-upgrades = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15")])
+upgrades = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15"), ExtResource("16")])
