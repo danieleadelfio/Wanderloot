@@ -5,6 +5,7 @@ extends CanvasLayer
 @onready var _hp_label: Label = %HpLabel
 @onready var _hp_bar: ProgressBar = %HpBar
 @onready var _level_label: Label = %LevelLabel
+@onready var _arena_level_label: Label = %ArenaLevelLabel
 @onready var _exp_label: Label = %ExpLabel
 @onready var _exp_bar: ProgressBar = %ExpBar
 @onready var _extraction_label: Label = %ExtractionLabel
@@ -53,6 +54,12 @@ func set_hp(current: int, maximum: int) -> void:
 
 func set_level(level: int) -> void:
 	_level_label.text = "LV %d" % level
+
+
+## Visibilita' del livello arena (§6.3b, M12 #86): prima non si vedeva da nessuna parte in run. Fisso
+## per tutta la run (calcolato una volta a inizio run dall'equip indossato), chiamato una sola volta.
+func set_arena_level(level: int) -> void:
+	_arena_level_label.text = tr("HUD_ARENA_LEVEL") % level
 
 
 func set_exp(current: int, required: int) -> void:

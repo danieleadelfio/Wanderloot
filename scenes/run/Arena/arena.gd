@@ -127,6 +127,7 @@ func _ready() -> void:
 	arena_level = ArenaLevel.level_for(MetaProgression.loadout.equipped_items())
 	_wave_spawner.level_hp = ArenaLevel.enemy_hp_multiplier(arena_level)
 	_wave_spawner.level_rate = ArenaLevel.spawn_rate_multiplier(arena_level)
+	_hud.set_arena_level(arena_level)
 	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player, _equip_modifiers)

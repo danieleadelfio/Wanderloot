@@ -4,10 +4,27 @@ extends PanelContainer
 
 signal arena_selected(id: StringName)
 
+const RARITIES: RarityTable = ItemText.RARITIES
+
 @onready var _list: VBoxContainer = %ArenaList
+@onready var _level_label: Label = %ArenaLevelLabel
+@onready var _level_effects_label: Label = %ArenaLevelEffects
+@onready var _level_hint: Label = %ArenaLevelHint
 
 
-func refresh(catalog: ArenaCatalog, extractions: Dictionary, selected: StringName) -> void:
+## level: livello arena (§6.3b) calcolato dall'equip indossato ora (non cambia scegliendo l'arena).
+## Visibilita' del sistema (M12, #86): prima non si vedeva da nessuna parte prima di entrare in run.
+func refresh(catalog: ArenaCatalog, extractions: Dictionary, selected: StringName, level: int = 1) -> void:
+	_level_label.text = tr("ARENA_LEVEL_CURRENT") % level
+	var drop_tier := ArenaLevel.max_drop_tier(level, RARITIES.highest())
+	_level_effects_label.text = tr("ARENA_LEVEL_EFFECTS") % [
+		ArenaLevel.enemy_hp_multiplier(level), roundi(100.0 * (ArenaLevel.spawn_rate_multiplier(level) - 1.0)),
+		ArenaLevel.boss_bonus(level), tr(RARITIES.tier(drop_tier).display_name)]
+	_level_hint.visible = not MetaProgression.has_seen_tutorial(&"portal_arena_level")
+	# Segnato visto solo quando il pannello e' davvero aperto (non ad ogni refresh in background,
+	# es. dopo un crafting): altrimenti sparirebbe prima che il giocatore lo veda mai.
+	if _level_hint.visible and is_visible_in_tree():
+		MetaProgression.mark_tutorial_seen(&"portal_arena_level")
 	for child in _list.get_children():
 		_list.remove_child(child)
 		child.queue_free()

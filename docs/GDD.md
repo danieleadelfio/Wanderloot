@@ -186,7 +186,7 @@ Statistiche base, range dei bonus per rarità e tasso di drop per arena di ogni 
 
 ### 6.3b Livello arena da potenza dell'equip (M12, #86)
 
-L'equip indossato all'**inizio della run** (hub, non cambia con l'armadio degli Scheletri: non e' equip permanente) determina un **livello arena da 1 a 5**, letto una volta come i modificatori dell'equip. Formula: **livello = tier piu' alto T (1=Comune...6=Mitico) per cui si hanno almeno 4 pezzi equipaggiati di tier >= T**, il massimo T soddisfatto (livello 1 se nessuna soglia e' raggiunta). In pratica: **4 Comuni -> livello 2**, **4 Non comuni -> livello 3**, **4 Rari -> livello 4**, **4 Super rari -> livello 5**; con 4 Leggendari o 4 Mitici la formula darebbe 6/7 ma il gioco definisce effetti solo fino al **livello 5** (tetto, `ArenaLevel.MAX_LEVEL`). Logica pura in `scripts/meta/arena_level.gd`, testata.
+L'equip indossato all'**inizio della run** (hub, non cambia con l'armadio degli Scheletri: non e' equip permanente) determina un **livello arena da 1 a 5**, letto una volta come i modificatori dell'equip. Formula: **livello = tier piu' alto T (1=Comune...6=Mitico) per cui si hanno almeno 4 pezzi equipaggiati di tier >= T**, il massimo T soddisfatto (livello 1 se nessuna soglia e' raggiunta). In pratica: **4 Comuni -> livello 2**, **4 Non comuni -> livello 3**, **4 Rari -> livello 4**, **4 Super rari -> livello 5**; con 4 Leggendari o 4 Mitici la formula darebbe 6/7 ma il gioco definisce effetti solo fino al **livello 5** (tetto, `ArenaLevel.MAX_LEVEL`). Logica pura in `scripts/meta/arena_level.gd`, testata. **Visibilita' (M12, #86)**: il livello attuale (calcolato dall'equip indossato ora, aggiorna a ogni apertura del portale) e i suoi effetti concreti (vita nemici, ritmo di spawn, boss in piu', rarita' massima drop) compaiono nel pannello **Portale** sopra la lista arene, con un promemoria ("il livello dipende dall'equip, dettagli nel Codex") mostrato solo la prima volta che si apre (`MetaProgression.tutorials_seen`, chiave `portal_arena_level`). In run, il livello raggiunto (fisso per tutta la run) e' un'etichetta permanente in HUD sotto il livello del personaggio (`Hud.set_arena_level()`). Spiegazione estesa sempre disponibile nel Codex (§ Equipaggiamento e potenza, `CODEX_ARENA_LEVEL_BODY`).
 
 Effetti, tutti ereditati da ogni arena (nessun codice per arena):
 
@@ -457,7 +457,6 @@ Lettura: con la vita dei boss x2 l'overtime (50 s dopo l'estrazione, 30 s dopo l
 - **Potenza con le abilità**: con le abilità della bacchetta il bot estrae nel 100% delle run (§10.7); la difficoltà va rivista insieme alle rarità.
 
 - **Controlli touch mobile** (M13, da fare): pianificato ma non ancora iniziato. Resta in coda finche' non si decide di riprenderlo.
-- **Livello arena, indicazione a schermo** (M12, #86): il sistema (§6.3b) non mostra ancora il livello raggiunto al player durante la run; da decidere dove (HUD? solo a fine run?) col proprietario.
 - ~~**Backlog M12/M13 richiesto dal proprietario (#86)**~~: tutti e quattro implementati — evento "Scheletri nell'armadio" (§3.4), livello arena da potenza dell'equip (§6.3b), shader di movimento ambientale (§8), tutorial contestuale (§3.5).
 
 ## 12. Processo e versionamento

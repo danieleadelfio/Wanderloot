@@ -18,6 +18,7 @@ var _autosave_tween: Tween
 @onready var _blacksmith: Blacksmith = %Blacksmith
 @onready var _loadout_panel: LoadoutPanel = %LoadoutPanel
 @onready var _arena_select: ArenaSelect = %ArenaSelect
+@onready var _portal_window: Control = %PortalWindow
 @onready var _sfx: SfxPlayer = %Sfx
 @onready var _start_button: Button = %StartButton
 @onready var _prompt: Label = %Prompt
@@ -233,6 +234,10 @@ func _on_language_requested(locale: String) -> void:
 func _open(window: Control) -> void:
 	_open_window = window
 	window.show()
+	# Livello arena (§6.3b, M12 #86): ricalcolato qui (non solo nel refresh reattivo) cosi' l'hint
+	# "prima volta" si segna visto solo quando il pannello e' davvero visibile, non in background.
+	if window == _portal_window:
+		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, ArenaLevel.level_for(MetaProgression.loadout.equipped_items()))
 	_dim.show()
 	get_tree().paused = true
 	_sfx.play(&"ui_select")
@@ -250,7 +255,7 @@ func _refresh() -> void:
 	_refresh_stash(MetaProgression.inventory.to_dictionary())
 	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names, MetaProgression.ascension_caps)
 	_loadout_panel.refresh(MetaProgression.loadout)
-	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id)
+	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, ArenaLevel.level_for(MetaProgression.loadout.equipped_items()))
 	# Statistiche con l'equipaggiamento attuale: lo stesso calcolo di inizio run, sul player della piazza.
 	var equip_modifiers := MetaProgression.equipped_modifiers()
 	_player.begin_run(equip_modifiers)
