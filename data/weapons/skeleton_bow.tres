@@ -10,6 +10,4 @@ fire_rate = 1.0
 projectile_speed = 240.0
 projectile_lifetime = 2.2
 knockback = 180.0
-# Frecce troppo piccole/poco leggibili nell'Ossario (M12, #86): ingrandite verso la grandezza
-# percepita dei proiettili velenosi delle slime tossiche (Goccia tossica, toxic_glob.tres).
 projectile_scale = 0.9
