@@ -178,7 +178,9 @@ func start_attack(attack: BossAttack) -> void:
 			var steps := mini(int(_attack.charge_distance / LANE_STEP), _extra.size())
 			for i in steps:
 				_extra[i].color = LANE_COLOR
-				_extra[i].start(global_position + _charge_direction * LANE_STEP * (i + 1), _attack.charge_lane_radius, _attack.telegraph_time)
+				# Striscia rettangolare unica invece di cerchi in fila (M13, #86): segmenti larghi
+				# LANE_STEP accostati esattamente, si fondono senza cuciture (Telegraph._draw_lane_segment).
+				_extra[i].start(global_position + _charge_direction * LANE_STEP * (i + 1), _attack.charge_lane_radius, _attack.telegraph_time, 0, 0.0, _charge_direction, LANE_STEP)
 		_:
 			if _attack.show_windup:
 				_windup.start(global_position, windup_radius, _attack.telegraph_time)

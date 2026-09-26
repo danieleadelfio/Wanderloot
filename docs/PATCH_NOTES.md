@@ -41,3 +41,12 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 - Sulla mappa puoi piazzare fino a **5 indicatori** con un clic: ognuno diventa una freccia colorata a bordo schermo per orientarti verso quel punto (il giallo è riservato al portale di estrazione).
 - Nuova **minimappa** in alto a destra durante la run: ti tiene sempre al centro, con una bussola N/S/E/O sul bordo, e mostra i tuoi indicatori e il portale quando è attivo.
 - Il tutorial dell'obiettivo di run ora ricorda anche il tasto M.
+
+## In lavorazione (3) — 26/09/2026
+
+### Novità
+- Le statistiche a sinistra in run si possono nascondere con un pulsante accanto al titolo, comodo nei combattimenti più affollati.
+- Il tutorial e il Codex del Passo d'ombra ora spiegano che durante lo scatto sei invulnerabile e attraversi i nemici senza subire danno.
+
+### Miglioramenti visivi
+- L'attacco a carica in linea di alcuni boss ora mostra una striscia rettangolare unica invece di una fila di cerchi separati.

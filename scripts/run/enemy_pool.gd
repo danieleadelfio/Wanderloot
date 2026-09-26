@@ -12,6 +12,9 @@ signal enemy_shot(origin: Vector2, direction: Vector2, weapon: WeaponData)
 
 var _free: Array[Enemy] = []
 var _active_count: int = 0
+## Nemici vivi (M13, #86): serve a WaveSpawner per despawnare quelli troppo lontani dal player quando
+## le arene sono molto piu' grandi dello schermo. Lista consultata solo quando serve iterare i nemici.
+var _active: Array[Enemy] = []
 
 
 func _ready() -> void:
@@ -28,7 +31,24 @@ func spawn(spawn_position: Vector2, target: Node2D) -> Enemy:
 	enemy.target = target
 	enemy.activate(spawn_position)
 	_active_count += 1
+	_active.append(enemy)
 	return enemy
+
+
+## Nemici attualmente vivi (M13, #86), per il controllo di distanza di WaveSpawner.
+func active_enemies() -> Array[Enemy]:
+	return _active
+
+
+## Rimozione silenziosa (M13, #86): il nemico e' troppo lontano dal player (arena enorme, player
+## scappato), non e' morto. Nessun drop, nessun enemy_died: torna semplicemente al pool.
+func despawn(enemy: Enemy) -> void:
+	if not _active.has(enemy):
+		return
+	_active.erase(enemy)
+	_active_count -= 1
+	enemy.deactivate()
+	_free.append(enemy)
 
 
 func active_count() -> int:
@@ -46,5 +66,6 @@ func _create() -> Enemy:
 
 func _on_enemy_died(enemy: Enemy) -> void:
 	_active_count -= 1
+	_active.erase(enemy)
 	_free.append(enemy)
 	enemy_died.emit(enemy)

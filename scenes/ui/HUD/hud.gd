@@ -13,6 +13,7 @@ extends CanvasLayer
 @onready var _loot_label: Label = %LootLabel
 @onready var _boss_panel: Control = %BossPanel
 @onready var _stats_grid: GridContainer = %StatsGrid
+@onready var _stats_toggle: Button = %StatsToggle
 @onready var _ability_bar: HBoxContainer = %AbilityBar
 @onready var _buff_label: Label = %BuffLabel
 @onready var _event_banner: Control = %EventBanner
@@ -31,6 +32,8 @@ var _announce_tween: Tween
 
 
 func _ready() -> void:
+	_stats_toggle.pressed.connect(_on_stats_toggle_pressed)
+	_refresh_stats_toggle()
 	RunManager.exp_changed.connect(set_exp)
 	RunManager.leveled_up.connect(set_level)
 	RunManager.loot.changed.connect(set_loot)
@@ -93,6 +96,17 @@ func set_loot(total: int) -> void:
 func set_stats(player: Player, equip_modifiers: Array[StatModifier]) -> void:
 	var rows := StatSheet.run_rows(player.base_stats(), player.base_weapon_data(), equip_modifiers, player.stats, player.weapon_data())
 	StatSheet.fill_with_equip(_stats_grid, rows, 11)
+
+
+## Nascondi/mostra le statistiche (M13, #86): utile durante i combattimenti piu' fitti, quando il
+## blocco di numeri a sinistra copre parte dell'arena. Solo visivo, non tocca i dati.
+func _on_stats_toggle_pressed() -> void:
+	_stats_grid.visible = not _stats_grid.visible
+	_refresh_stats_toggle()
+
+
+func _refresh_stats_toggle() -> void:
+	_stats_toggle.text = "+" if not _stats_grid.visible else "-"
 
 
 ## Icone delle abilita' della bacchetta (M10); il riempimento mostra l'avanzamento verso l'attivazione.

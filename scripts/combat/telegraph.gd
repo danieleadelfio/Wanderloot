@@ -15,6 +15,12 @@ const PULSE_TIME: float = 0.12
 @export var lightning: bool = false
 
 var radius: float = 100.0
+## Carica in linea (M13, #86): se diverso da zero, disegna una striscia rettangolare orientata lungo
+## questa direzione invece del cerchio (segmenti adiacenti della stessa carica si accostano esattamente,
+## LANE_STEP in boss.gd, formando visivamente un'unica striscia continua invece di cerchi in fila).
+## La hitbox resta circolare (raggio = charge_lane_radius): solo il preavviso cambia forma.
+var lane_direction: Vector2 = Vector2.ZERO
+var lane_length: float = 0.0
 var _duration: float = 1.0
 var _elapsed: float = 0.0
 var _pulse_left: float = 0.0
@@ -38,7 +44,7 @@ static func progress(elapsed: float, duration: float) -> float:
 	return clampf(elapsed / maxf(duration, 0.001), 0.0, 1.0)
 
 
-func start(center: Vector2, area_radius: float, duration: float, damage: int = 0, knockback: float = 0.0) -> void:
+func start(center: Vector2, area_radius: float, duration: float, damage: int = 0, knockback: float = 0.0, direction: Vector2 = Vector2.ZERO, segment_length: float = 0.0) -> void:
 	global_position = center
 	radius = area_radius
 	_shape.radius = area_radius
@@ -47,6 +53,8 @@ func start(center: Vector2, area_radius: float, duration: float, damage: int = 0
 	_pulse_left = 0.0
 	_hitbox.damage = damage
 	_hitbox.knockback = knockback
+	lane_direction = direction
+	lane_length = segment_length
 	_running = true
 	visible = true
 	reset_physics_interpolation()
@@ -87,6 +95,16 @@ func _finish() -> void:
 	finished.emit(self)
 
 
+## Segmento senza bordo (M13, #86): segmenti adiacenti con lo stesso colore si fondono senza cuciture
+## visibili, cosi' la carica in linea legge come un'unica striscia invece di cerchi separati.
+func _draw_lane_segment(p: float) -> void:
+	var rect := Rect2(Vector2(-lane_length * 0.5, -radius), Vector2(lane_length, radius * 2.0))
+	draw_set_transform(Vector2.ZERO, lane_direction.angle(), Vector2.ONE)
+	draw_rect(rect, Color(color, 0.18), true)
+	draw_rect(Rect2(rect.position, Vector2(rect.size.x * p, rect.size.y)), Color(color, 0.36), true)
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
 func _set_hitbox(enabled: bool) -> void:
 	_hitbox.active = enabled
 	_hitbox.set_deferred("monitorable", enabled)
@@ -94,6 +112,9 @@ func _set_hitbox(enabled: bool) -> void:
 
 func _draw() -> void:
 	var p := progress(_elapsed, _duration)
+	if lane_direction != Vector2.ZERO and lane_length > 0.0:
+		_draw_lane_segment(p)
+		return
 	draw_circle(Vector2.ZERO, radius, Color(color, 0.12))
 	draw_circle(Vector2.ZERO, radius * p, Color(color, 0.32))
 	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(color, 0.9), 3.0, true)

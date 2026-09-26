@@ -5,6 +5,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Toggle statistiche in HUD: pulsante accanto al titolo "Statistiche" per nascondere/mostrare il blocco a sinistra (solo visivo), utile nei combattimenti piu' fitti (#86).
+- Attacco **carica in linea** dei boss: preavviso ridisegnato come una striscia rettangolare unica (segmenti `Telegraph` adiacenti senza cuciture) invece di cerchi separati in fila, stessa hitbox circolare invariata (#86).
 - Mappa dell'arena (tasto **M**, `MapScreen`/`PauseState.Mode.MAP`): confini in scala, posizione del player, punti di interesse (vuoto per ora). Fino a **5 indicatori** piazzabili con clic (`MapIndicators`, logica pura, mai giallo: riservato al portale), ognuno diventa una freccia a bordo schermo (`MapIndicatorArrow`, stesso principio di `ExtractionIndicator`). Nuova **minimappa** in HUD in alto a destra (`Minimap`): player sempre al centro, contenuto che scorre con lui, bordo a bussola N/S/E/O, mostra indicatori e portale attivo. Tutorial "Obiettivo della run" esteso per ricordare il tasto M. Test su `PauseState.Mode.MAP` e su `MapIndicators` (max 5, colori, mai giallo) (#86).
 - Arene **10 volte più grandi** (stessi rapporti di prima: muri, decorazioni, zona di spawn scalati x10); la zona di estrazione non compare comunque a più di 1000px dal player (`ExtractionData.spawn_max_distance`, `SpawnUtils.random_point_away`), altrimenti sarebbe irraggiungibile su un'arena così grande. Test su min/max distanza (#86).
 - Nuovo upgrade di run **Riserva**: +10% mana massimo (`UpgradeData.Stat.MAX_MANA`), stesso schema percentuale di Meditazione/Vigore; l'aumento del massimo si accredita subito al pool corrente (`Mana.set_max_value()`, come `Health.set_max_hp()`), senza rabbocco completo gratuito. Il mana massimo e' anche una nuova riga nella scheda Statistiche (hub, inventario di run, HUD), valore assoluto (#86).
@@ -127,6 +129,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Tutorial e Codex del Passo d'ombra spiegano che durante lo scatto (i-frame) si attraversano i nemici senza subire danno (#86).
 - Testi ancora fermi a "tre oggetti" per la fusione (suggerimento del fabbro, tutorial, Codex): ora dicono sei, coerenti con `Forge.FUSION_COUNT` (#86).
 - Tutorial contestuale degli eventi si fermava solo alla primissima run: ora si ferma la prima volta per OGNI tipo di evento mai incontrato (chiave per-evento invece di un flag unico), testo ripreso dal Codex (obiettivo + ricompensa).
 - Nessun avviso quando l'estrazione si apre: aggiunto un annuncio non bloccante ("Estrazione aperta") come per gli eventi.
