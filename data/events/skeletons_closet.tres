@@ -13,5 +13,5 @@ duration = 10.0
 reward_choices = 0
 skeleton_enemy = ExtResource("2")
 skeleton_count = 30
-skeleton_spawn_radius = 780.0
+skeleton_spawn_radius = 620.0
 closet_choices = 3
