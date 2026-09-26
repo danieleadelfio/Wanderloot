@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Testi in-game non allineati alla logica reale: Codex/Tempesta di fulmini prometteva anche un boss in più (in realta' solo scelta di potenziamento), Codex/Pentagramma prometteva anche una scelta di potenziamento (in realta' solo boss in più); suggerimento Fusione e Codex/Fabbro dicevano "due" oggetti identici, la fusione ne richiede tre da #86.
 - Scheletri nell'armadio troppo facile: raggio del cerchio iniziale ridotto da 780 a 620 px.
 - Dardi degli Scheletri arcieri (Ossario) troppo piccoli e poco leggibili: ingranditi (`projectile_scale` 0.9). Gocce di veleno delle slime tossiche confondibili col materiale raccoglibile Gelatina di slime: ora tinte di viola.
 - Ossario poco leggibile con più boss e nemici base assieme: i boss comparsi prima dell'overtime ora bloccano nuovi spawn di nemici base finche' non muoiono (l'overtime resta invariato, boss e nemici mescolati come prima).
