@@ -120,6 +120,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Tabella statistiche in run troppo opaca/nitida, copriva la scena: opacita' ridotta (0,85 -> 0,55).
 - Drop rate equip ridotto di 1/3 (Cripta 0,4% -> 0,267%, Ossario 0,6% -> 0,4%). Aggiornati GDD.md ed EQUIP_INFO.md.
 - Ventaglio prendibile senza limite in una run (troppo forte in combo con Perforazione/danno ad area): tetto di 2 scelte per run (`UpgradeData.max_picks`).
 - Contatore (potenziamento COUNT_BONUS) sommava anche allo sparo base e al Ventaglio, non solo alle abilità: ora tocca solo le abilità (Anello arcano, Fulmine errante, ...). La statistica equip "N. proiettili" (Arma/Anello, stessa scala su attacco base) è stata unificata col Contatore: ora è "Contatore", disponibile solo sull'Amuleto.

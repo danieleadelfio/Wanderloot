@@ -101,7 +101,7 @@ text = "Loot a rischio: 0"
 
 [node name="StatsGrid" type="GridContainer" parent="Margin/VBox"]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0.85)
+modulate = Color(1, 1, 1, 0.55)
 custom_minimum_size = Vector2(310, 0)
 layout_mode = 2
 size_flags_horizontal = 0
