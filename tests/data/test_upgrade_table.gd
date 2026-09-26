@@ -47,6 +47,16 @@ func test_mana_regen_upgrade_resource_has_correct_stat() -> void:
 	assert_int(upgrade.stat).is_equal(UpgradeData.Stat.MANA_REGEN)
 
 
+## Danno e HP massimi non devono piu' avere upgrade flat (M12, #86): +1 raddoppiava/decuplicava
+## rispetto alla base, un flat resta sempre sproporzionato mano a mano che la base cambia. Sempre
+## percentuale, come Raffica.
+func test_damage_and_max_hp_upgrades_are_percentage_not_flat() -> void:
+	var damage_up: UpgradeData = load("res://data/upgrades/damage_up.tres")
+	var max_hp_up: UpgradeData = load("res://data/upgrades/max_hp_up.tres")
+	assert_bool(damage_up.is_multiplier).is_true()
+	assert_bool(max_hp_up.is_multiplier).is_true()
+
+
 func _table(size: int) -> UpgradeTable:
 	var table := UpgradeTable.new()
 	for i in size:

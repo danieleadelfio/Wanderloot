@@ -62,3 +62,28 @@ func test_affixes_respect_item_type() -> void:
 	for i in 30:
 		for affix in ItemRoller.roll(ring, 4, _rarities, _affixes, _abilities, rng).affixes:
 			assert_int(affix.stat).is_not_equal(UpgradeData.Stat.PIERCE)
+
+
+## Danno e HP massimi degli oggetti base e dei bonus tirati non devono piu' essere flat (M12, #86):
+## +1/+2 fisso era sproporzionato rispetto alla base (troppo su un'arma debole, trascurabile su una
+## forte) e cambiava peso a ogni rescale della base. Sempre percentuale, come Cadenza di fuoco.
+func test_gel_wand_and_bone_wand_damage_bonus_is_percentage() -> void:
+	var gel_wand: EquipmentData = load("res://data/equipment/gel_wand.tres")
+	var bone_wand: EquipmentData = load("res://data/equipment/bone_wand.tres")
+	for wand in [gel_wand, bone_wand]:
+		var damage_mod: StatModifier = wand.modifiers.filter(func(m: StatModifier) -> bool: return m.stat == UpgradeData.Stat.DAMAGE)[0]
+		assert_bool(damage_mod.is_multiplier).is_true()
+
+
+func test_max_hp_equip_bonus_is_percentage() -> void:
+	for path in ["res://data/equipment/core_amulet.tres", "res://data/equipment/bone_armor.tres", "res://data/equipment/leather_pants.tres"]:
+		var base: EquipmentData = load(path)
+		var hp_mod: StatModifier = base.modifiers.filter(func(m: StatModifier) -> bool: return m.stat == UpgradeData.Stat.MAX_HP)[0]
+		assert_bool(hp_mod.is_multiplier).is_true()
+
+
+func test_damage_and_max_hp_affix_rolls_are_percentage() -> void:
+	var damage_affix: AffixRoll = _affixes.rolls.filter(func(r: AffixRoll) -> bool: return r.stat == UpgradeData.Stat.DAMAGE)[0]
+	var max_hp_affix: AffixRoll = _affixes.rolls.filter(func(r: AffixRoll) -> bool: return r.stat == UpgradeData.Stat.MAX_HP)[0]
+	assert_bool(damage_affix.is_multiplier).is_true()
+	assert_bool(max_hp_affix.is_multiplier).is_true()

@@ -87,7 +87,7 @@ STAT_INVULNERABILITY,Invulnerabilità,Invulnerability,Invulnérabilité,Invulner
 STAT_EXP_BONUS,Bonus exp,Exp bonus,Bonus d'exp,Bonus de exp
 STAT_DROP_BONUS,Bonus drop,Drop bonus,Bonus de butin,Bonus de botín
 UPG_DAMAGE_UP,Potenza,Power,Puissance,Potencia
-UPG_DAMAGE_UP_DESC,+1 danno per proiettile,+1 damage per projectile,+1 dégât par projectile,+1 de daño por proyectil
+UPG_DAMAGE_UP_DESC,+10% danno,+10% damage,+10 % de dégâts,+10% de daño
 UPG_EXP_UP,Saggezza,Wisdom,Sagesse,Sabiduría
 UPG_EXP_UP_DESC,+15% exp raccolta,+15% exp collected,+15 % d'exp récoltée,+15% de exp recogida
 UPG_FIRE_RATE_UP,Raffica,Barrage,Rafale,Ráfaga
@@ -103,7 +103,7 @@ UPG_LUCK_UP_DESC,+15% probabilità di drop,+15% drop chance,+15 % de chance de b
 UPG_MAGNET_UP,Magnete,Magnet,Aimant,Imán
 UPG_MAGNET_UP_DESC,+30% raggio di raccolta,+30% pickup radius,+30 % de rayon de ramassage,+30% de radio de recogida
 UPG_MAX_HP_UP,Vigore,Vigor,Vigueur,Vigor
-UPG_MAX_HP_UP_DESC,+1 HP massimi (e cura 1),+1 max HP (and heals 1),+1 PV max (et soigne 1),+1 PV máx. (y cura 1)
+UPG_MAX_HP_UP_DESC,+10% HP massimi (e cura la stessa quantità),+10% max HP (and heals the same amount),+10 % de PV max (et soigne la même quantité),+10% de PV máx. (y cura la misma cantidad)
 UPG_MOVE_SPEED_UP,Agilità,Agility,Agilité,Agilidad
 UPG_MOVE_SPEED_UP_DESC,+10% velocità di movimento,+10% movement speed,+10 % de vitesse de déplacement,+10% de velocidad de movimiento
 UPG_MULTISHOT_UP,Ventaglio,Spread,Éventail,Abanico
@@ -117,11 +117,11 @@ MAT_SHADOW_ESSENCE,Essenza d'ombra,Shadow essence,Essence d'ombre,Esencia de som
 MAT_SLIME_CORE,Nucleo di slime,Slime core,Noyau de slime,Núcleo de slime
 MAT_SLIME_GEL,Gelatina,Slime gel,Gelée,Gelatina
 EQ_BONE_WAND,Bacchetta d'ossa,Bone wand,Baguette d'os,Varita de hueso
-EQ_BONE_WAND_DESC,+1 danno e i proiettili attraversano +1 nemico,+1 damage and projectiles pass through +1 enemy,+1 dégât et les projectiles traversent +1 ennemi,+1 de daño y los proyectiles atraviesan +1 enemigo
+EQ_BONE_WAND_DESC,+10% danno e i proiettili attraversano +1 nemico,+10% damage and projectiles pass through +1 enemy,+10 % de dégâts et les projectiles traversent +1 ennemi,+10% de daño y los proyectiles atraviesan +1 enemigo
 EQ_CORE_AMULET,Amuleto del nucleo,Core amulet,Amulette du noyau,Amuleto del núcleo
-EQ_CORE_AMULET_DESC,+2 HP massimi,+2 max HP,+2 PV max,+2 PV máx.
+EQ_CORE_AMULET_DESC,+20% HP massimi,+20% max HP,+20 % de PV max,+20% de PV máx.
 EQ_GEL_WAND,Bacchetta di gelatina,Gel wand,Baguette de gelée,Varita de gelatina
-EQ_GEL_WAND_DESC,+1 danno per proiettile,+1 damage per projectile,+1 dégât par projectile,+1 de daño por proyectil
+EQ_GEL_WAND_DESC,+10% danno,+10% damage,+10 % de dégâts,+10% de daño
 EQ_RAPID_WAND,Bacchetta rapida,Rapid wand,Baguette rapide,Varita rápida
 EQ_RAPID_WAND_DESC,+8% cadenza di fuoco,+8% fire rate,+8 % de cadence de tir,+8% de cadencia de disparo
 EQ_SLIME_BOOTS,Stivali viscosi,Slimy boots,Bottes visqueuses,Botas viscosas
@@ -179,9 +179,9 @@ EQ_WANDERER_HOOD_DESC,"+20% raggio di raccolta, +10% exp","+20% pickup radius, +
 EQ_SMITH_GLOVES,Guanti del fabbro,Smith's gloves,Gants du forgeron,Guantes del herrero
 EQ_SMITH_GLOVES_DESC,"+4% cadenza di fuoco, +20% spinta","+4% fire rate, +20% knockback","+4 % de cadence de tir, +20 % de recul","+4% de cadencia de disparo, +20% de empuje"
 EQ_BONE_ARMOR,Corazza d'osso,Bone armor,Armure d'os,Coraza de hueso
-EQ_BONE_ARMOR_DESC,"+1 HP massimi, +0,1 s di invulnerabilità","+1 max HP, +0.1s invulnerability","+1 PV max, +0,1 s d'invulnérabilité","+1 PV máx., +0,1 s de invulnerabilidad"
+EQ_BONE_ARMOR_DESC,"+10% HP massimi, +0,1 s di invulnerabilità","+10% max HP, +0.1s invulnerability","+10 % de PV max, +0,1 s d'invulnérabilité","+10% de PV máx., +0,1 s de invulnerabilidad"
 EQ_LEATHER_PANTS,Brache di cuoio,Leather breeches,Braies de cuir,Calzas de cuero
-EQ_LEATHER_PANTS_DESC,"+5% velocità, +1 HP massimi","+5% speed, +1 max HP","+5 % de vitesse, +1 PV max","+5% de velocidad, +1 PV máx."
+EQ_LEATHER_PANTS_DESC,"+5% velocità, +10% HP massimi","+5% speed, +10% max HP","+5 % de vitesse, +10 % de PV max","+5% de velocidad, +10% de PV máx."
 EQ_GEL_RING,Anello di gelatina,Gel ring,Anneau de gelée,Anillo de gelatina
 EQ_GEL_RING_DESC,+10% probabilità di drop,+10% drop chance,+10 % de chance de butin,+10% de probabilidad de botín
 RARITY_COMMON,Comune,Common,Commun,Común

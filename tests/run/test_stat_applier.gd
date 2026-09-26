@@ -38,8 +38,9 @@ func test_equipment_applies_to_copies_and_leaves_base_resources_untouched() -> v
 
 	StatApplier.apply_modifiers(modifiers, stats, weapon)
 
-	assert_int(weapon.damage).is_equal(base_damage + 1)
-	assert_int(stats.max_hp).is_equal(base_hp + 2)
+	# gel_wand: +10% danno; core_amulet: +20% HP (M12, #86: equip fisso in percentuale, non piu' flat).
+	assert_int(weapon.damage).is_equal(roundi(base_damage * 1.1))
+	assert_int(stats.max_hp).is_equal(roundi(base_hp * 1.2))
 	assert_int(base_weapon.damage).is_equal(base_damage)
 	assert_int(base_stats.max_hp).is_equal(base_hp)
 

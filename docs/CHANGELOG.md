@@ -160,6 +160,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Bonus di danno e HP massimi sempre in percentuale, mai più flat, sia per gli upgrade di run (Potenza, Vigore) sia per l'equip (bonus fissi dell'oggetto base e range tirati in `affix_table.tres`): un "+1"/"+2" fisso pesava in modo sproporzionato a seconda della base (trascurabile su un'arma forte, enorme su una debole) e cambiava peso a ogni rescale della base; ora +10% danno (Potenza, Bacchetta di gelatina/d'ossa), +10% HP (Vigore, Corazza d'osso, Brache di cuoio), +20% HP (Amuleto del nucleo, doppio delle altre come prima), range 1,3%–8,3% negli affix tirati — stesso schema di Raffica/cadenza di fuoco (#86).
 - Riscala baseline danno/HP/exp x100 in tutto il gioco (player, nemici, boss, veleno, cura del Cuore, curva livello); bonus flat di upgrade/equip/affix invariati, ora una percentuale più piccola e più bilanciabile della base — il vecchio "+1 danno" raddoppiava il danno base, ora è una frazione minima (#86).
 - Fusione dal fabbro: servono tre oggetti identici (stesso oggetto base, stessa rarità), non più due (`Forge.FUSION_COUNT`) (#86).
 - Gioco rinominato **Wanderloot** (GDD, BEST_PRACTICES, `project.godot`). Repo GitHub collegato, task tracking su GitHub Issues attivo.

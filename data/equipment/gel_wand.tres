@@ -6,7 +6,8 @@
 
 [sub_resource type="Resource" id="mod_1"]
 script = ExtResource("2")
-amount = 1.0
+amount = 1.1
+is_multiplier = true
 
 [resource]
 script = ExtResource("1")

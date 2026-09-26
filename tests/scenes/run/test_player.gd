@@ -9,7 +9,8 @@ func test_begin_run_rebuilds_stats_from_base_each_time() -> void:
 	var items: Array[StatModifier] = ItemInstance.new(load("res://data/equipment/core_amulet.tres")).modifiers()
 
 	player.begin_run(items)
-	assert_int(player.health.max_hp).is_equal(base_hp + 2)
+	# core_amulet: +20% HP (M12, #86: equip fisso in percentuale, non piu' flat).
+	assert_int(player.health.max_hp).is_equal(roundi(base_hp * 1.2))
 	player.apply_upgrade(load("res://data/upgrades/max_hp_up.tres"))
 
 	player.begin_run([])

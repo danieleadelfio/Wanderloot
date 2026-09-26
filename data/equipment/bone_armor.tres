@@ -7,8 +7,8 @@
 [sub_resource type="Resource" id="mod_0"]
 script = ExtResource("2")
 stat = 4
-amount = 1.0
-is_multiplier = false
+amount = 1.1
+is_multiplier = true
 
 [sub_resource type="Resource" id="mod_1"]
 script = ExtResource("2")
