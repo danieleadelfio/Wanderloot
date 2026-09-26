@@ -7,7 +7,7 @@ extends Node
 const MAX_ALIVE: int = 320
 
 @export var wave_data: WaveData
-@export var spawn_rect: Rect2 = Rect2(-740.0, -440.0, 1480.0, 880.0)
+@export var spawn_rect: Rect2 = Rect2(-7400.0, -4400.0, 14800.0, 8800.0)
 @export var spawn_min_distance: float = 300.0
 
 var _target: Node2D

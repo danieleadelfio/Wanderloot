@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Arene **10 volte più grandi** (stessi rapporti di prima: muri, decorazioni, zona di spawn scalati x10); la zona di estrazione non compare comunque a più di 1000px dal player (`ExtractionData.spawn_max_distance`, `SpawnUtils.random_point_away`), altrimenti sarebbe irraggiungibile su un'arena così grande. Test su min/max distanza (#86).
 - Nuovo upgrade di run **Riserva**: +10% mana massimo (`UpgradeData.Stat.MAX_MANA`), stesso schema percentuale di Meditazione/Vigore; l'aumento del massimo si accredita subito al pool corrente (`Mana.set_max_value()`, come `Health.set_max_hp()`), senza rabbocco completo gratuito. Il mana massimo e' anche una nuova riga nella scheda Statistiche (hub, inventario di run, HUD), valore assoluto (#86).
 - Mana per lo sparo base: pool (30, +6/s base) consumato dalla Bacchetta (1,5/colpo), non dalle abilita'; a corto di mana il colpo resta in credito invece di scaricarsi gratis o perdersi; nuovo upgrade di run Meditazione (+2 rigen/s, `Stat.MANA_REGEN`); barra dedicata in HUD; logica pura in `Mana` (`scripts/combat/mana.gd`) e gating in `Weapon.try_fire()`, entrambi testati (#86).
 - Tutorial "Obiettivo della run" (`first_run`) fermo in pausa finche' non si preme Continua, come gli eventi e l'avviso di overtime (`FirstTimeNotice`), invece del solo annuncio HUD a scomparsa dopo 7s che a volte spariva prima ancora di essersi mossi (#86).

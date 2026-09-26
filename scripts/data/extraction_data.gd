@@ -10,3 +10,5 @@ extends Resource
 @export var decay_rate: float = 0.5
 ## Distanza minima dal player quando il punto appare.
 @export var spawn_min_distance: float = 400.0
+## Distanza massima dal player quando il punto appare (arene 10x, M13): non deve mai spawnare troppo lontano.
+@export var spawn_max_distance: float = 1000.0

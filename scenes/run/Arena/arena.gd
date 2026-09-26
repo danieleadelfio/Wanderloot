@@ -7,13 +7,14 @@ extends Node2D
 @export var choices_per_level: int = 3
 ## Se vuoto si usa l'arena scelta in MetaProgression (portale).
 @export var arena_override: ArenaData
-@export var extraction_spawn_rect: Rect2 = Rect2(-700.0, -400.0, 1400.0, 800.0)
+## Arene 10x (M13): stessi rapporti, dimensioni x10.
+@export var extraction_spawn_rect: Rect2 = Rect2(-7000.0, -4000.0, 14000.0, 8000.0)
 @export var torch_scene: PackedScene = preload("res://scenes/run/Torch/Torch.tscn")
 @export var candle_scene: PackedScene = preload("res://scenes/run/Candle/Candle.tscn")
 ## Stillicidio dal soffitto + pozzanghera/pozza che cresce (M12, #86): vedi ArenaData.drip_spots.
 @export var drip_scene: PackedScene = preload("res://scenes/run/EnvironmentDrip/EnvironmentDrip.tscn")
 ## Zona in cui spargere decorazioni e candele (lontano dal centro, dove parte il player).
-@export var decoration_rect: Rect2 = Rect2(-740.0, -440.0, 1480.0, 880.0)
+@export var decoration_rect: Rect2 = Rect2(-7400.0, -4400.0, 14800.0, 8800.0)
 ## Torce per lato lungo (muro alto e basso), distribuite in modo uniforme.
 
 var arena: ArenaData
@@ -387,16 +388,16 @@ func _place_drips() -> void:
 func _random_away_from_center(rng: RandomNumberGenerator) -> Vector2:
 	for attempt in 20:
 		var point := Vector2(rng.randf_range(decoration_rect.position.x, decoration_rect.end.x), rng.randf_range(decoration_rect.position.y, decoration_rect.end.y))
-		if point.length() > 140.0:
+		if point.length() > 1400.0:
 			return point
 	return decoration_rect.end
 
 
-## Torce sui muri alto e basso (i muri visibili sono a y = ±484).
+## Torce sui muri alto e basso (i muri visibili sono a y = ±4840, arene 10x M13).
 func _place_torches(per_wall: int, color: Color) -> void:
 	for i in per_wall:
-		var x := lerpf(-640.0, 640.0, (i + 0.5) / per_wall)
-		for y in [-462.0, 462.0]:
+		var x := lerpf(-6400.0, 6400.0, (i + 0.5) / per_wall)
+		for y in [-4620.0, 4620.0]:
 			var torch := torch_scene.instantiate() as Node2D
 			torch.position = Vector2(x, y)
 			_torches.add_child(torch)
@@ -508,7 +509,7 @@ func _on_ability_over_cap(_ability: WandAbility, overflow: int) -> void:
 
 func _open_extraction() -> void:
 	var spawn_position := SpawnUtils.random_point_away(
-		extraction_spawn_rect, _player.global_position, extraction_data.spawn_min_distance
+		extraction_spawn_rect, _player.global_position, extraction_data.spawn_min_distance, extraction_data.spawn_max_distance
 	)
 	_extraction_point.activate(spawn_position)
 	_sfx.play(&"ui_select")

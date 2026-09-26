@@ -31,13 +31,22 @@ static func separated_points(rect: Rect2, origin: Vector2, min_origin: float, mi
 	return result
 
 
-static func random_point_away(rect: Rect2, origin: Vector2, min_distance: float) -> Vector2:
-	var candidate := Vector2.ZERO
-	for i in 10:
-		candidate = Vector2(
+## max_distance (M13, arene 10x): oltre a min_distance, il punto non deve superare questa distanza
+## dal player (es. portale di estrazione, mai a piu' di 1000px). INF = nessun limite (default).
+static func random_point_away(rect: Rect2, origin: Vector2, min_distance: float, max_distance: float = INF) -> Vector2:
+	for i in 20:
+		var candidate := Vector2(
 			randf_range(rect.position.x, rect.end.x),
 			randf_range(rect.position.y, rect.end.y)
 		)
-		if candidate.distance_to(origin) >= min_distance:
-			break
-	return candidate
+		var dist := candidate.distance_to(origin)
+		if dist >= min_distance and dist <= max_distance:
+			return candidate
+	# Nessun candidato valido nei tentativi (rect piccolo o max_distance stretto): forza un punto
+	# sull'anello [min_distance, max_distance] attorno al player, poi lo clampa dentro il rect.
+	var angle := randf_range(0.0, TAU)
+	var radius := min_distance if max_distance == INF else randf_range(min_distance, maxf(max_distance, min_distance))
+	var forced := origin + Vector2.RIGHT.rotated(angle) * radius
+	forced.x = clampf(forced.x, rect.position.x, rect.end.x)
+	forced.y = clampf(forced.y, rect.position.y, rect.end.y)
+	return forced

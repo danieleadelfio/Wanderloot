@@ -35,7 +35,7 @@ const LANE_COLOR := Color(1, 0.6, 0.2)
 
 var target: Node2D
 ## Area in cui il boss puo' ricomparire (teletrasporto) e cadono i cerchi; la imposta l'arena.
-var bounds: Rect2 = Rect2(-700.0, -400.0, 1400.0, 800.0)
+var bounds: Rect2 = Rect2(-7000.0, -4000.0, 14000.0, 8000.0)
 var phase: int = 1
 var state: State = State.CHASE
 var _timer: float = 0.0

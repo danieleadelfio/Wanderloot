@@ -27,3 +27,9 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Bilanciamento
 - Riscalati danno, vita e esperienza in tutto il gioco (circa x100 rispetto a prima): vita del player, danno delle armi, HP/exp dei nemici e dei boss. È un cambio di scala interno, il gioco si gioca allo stesso modo — serve solo per dare più margine ai numeri futuri.
+
+## In lavorazione — 26/09/2026
+
+### Novità
+- Arene **10 volte più grandi** (stessi rapporti di prima, tutto scalato x10: muri, decorazioni, zona di spawn).
+- La zona di estrazione non compare comunque mai a più di 1000px dal player, anche su un'arena così grande.

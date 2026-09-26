@@ -8,3 +8,4 @@ appear_after = 120.0
 channel_time = 6.0
 decay_rate = 0.5
 spawn_min_distance = 400.0
+spawn_max_distance = 1000.0
