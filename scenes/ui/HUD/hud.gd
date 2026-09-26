@@ -31,9 +31,18 @@ func _ready() -> void:
 	RunManager.exp_changed.connect(set_exp)
 	RunManager.leveled_up.connect(set_level)
 	RunManager.loot.changed.connect(set_loot)
+	# Bug (M12, #86): start_run() non emette leveled_up, quindi al restart post-morte la scritta
+	# livello restava quella della run precedente finche' non si arrivava al livello 2. Riallineo il
+	# livello ogni volta che lo stato torna RUNNING (copre anche il resume dopo il level-up).
+	RunManager.state_changed.connect(_on_state_changed)
 	set_level(RunManager.level)
 	set_exp(RunManager.experience, RunManager.exp_to_next())
 	set_loot(RunManager.loot.total())
+
+
+func _on_state_changed(state: RunManager.State) -> void:
+	if state == RunManager.State.RUNNING:
+		set_level(RunManager.level)
 
 
 func set_hp(current: int, maximum: int) -> void:
