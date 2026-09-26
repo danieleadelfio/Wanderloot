@@ -38,6 +38,9 @@ var overtime_rate: float = 1.0
 ## run. Indipendente da overtime: si moltiplicano tra loro (ArenaLevel non cambia in run).
 var level_hp: float = 1.0
 var level_rate: float = 1.0
+## Rage "naturale" per scadenza (M13, #86): solo dal livello arena 2 in su. A livello 1 i nemici
+## vanno in rage solo per un evento specifico (Pentagramma, overtime, urlo di boss), mai da soli.
+var natural_rage_enabled: bool = true
 ## Blocca nuove ondate senza toccare i nemici gia' vivi (Ossario, boss pre-overtime, M12, #86): i nemici
 ## presenti quando il blocco scatta restano e vengono uccisi normalmente, ma non ne arrivano di nuovi
 ## finche' il blocco non si toglie.
@@ -88,6 +91,7 @@ func _spawn_batch(count: int) -> void:
 		var enemy := _pools[index].spawn(spawn_position, _target)
 		if enemy == null:
 			continue
+		enemy.natural_rage_enabled = natural_rage_enabled
 		if spawn_raged or overtime_raged:
 			enemy.force_rage()
 		if overtime_speed != 1.0 or overtime_hp != 1.0 or level_hp != 1.0:

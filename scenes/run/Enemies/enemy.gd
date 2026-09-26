@@ -3,6 +3,9 @@ extends CharacterBody2D
 ## Nemico base guidato da EnemyData. Insegue il target. API poolable: activate()/deactivate().
 ## Dopo EnemyData.rage_after secondi in vita va in rage: piu' veloce, piu' dannoso; due fulmini rossi
 ## sopra la testa (RageBody, M12, #86), colore e texture del nemico restano invariati.
+## M13, #86: nelle arene di livello 1 questa rage "naturale" e' disattivata (`natural_rage_enabled`,
+## impostato da chi spawna) - a livello 1 si va in rage solo per un evento specifico (es. Pentagramma,
+## overtime, urlo di un boss), tutti via `force_rage()`, mai bloccato da questo flag.
 
 signal died(enemy: Enemy)
 signal hurt(enemy: Enemy)
@@ -15,6 +18,8 @@ signal shot_requested(origin: Vector2, direction: Vector2, weapon: WeaponData)
 var target: Node2D
 
 var is_raged: bool = false
+## Rage "naturale" per scadenza di rage_after (M13, #86): disattivata a livello arena 1.
+var natural_rage_enabled: bool = true
 ## Overtime: velocita' dei nemici nuovi moltiplicata (1 = normale).
 var speed_multiplier: float = 1.0
 
@@ -48,7 +53,7 @@ func apply_knockback(impulse: Vector2) -> void:
 
 func _physics_process(delta: float) -> void:
 	_alive_time += delta
-	if not is_raged and data.rage_after > 0.0 and _alive_time >= data.rage_after:
+	if natural_rage_enabled and not is_raged and data.rage_after > 0.0 and _alive_time >= data.rage_after:
 		_enter_rage()
 	# Hitstop locale: fermo per qualche frame, poi la spinta riparte da dove era.
 	if _freeze_left > 0.0:

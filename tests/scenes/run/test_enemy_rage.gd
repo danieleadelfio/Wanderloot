@@ -53,3 +53,18 @@ func test_rage_resets_when_reused_from_pool() -> void:
 	assert_bool(enemy.is_raged).is_false()
 	assert_int(enemy._hitbox.damage).is_equal(enemy.data.contact_damage)
 	assert_float(enemy._rage_body.modulate.a).is_equal(0.0)
+
+
+## M13, #86: a livello arena 1 la rage "naturale" e' disattivata, resta solo quella forzata da un evento.
+func test_natural_rage_disabled_blocks_the_timer() -> void:
+	var enemy := _enemy()
+	enemy.natural_rage_enabled = false
+	_live(enemy, enemy.data.rage_after + 1.0)
+	assert_bool(enemy.is_raged).is_false()
+
+
+func test_natural_rage_disabled_does_not_block_force_rage() -> void:
+	var enemy := _enemy()
+	enemy.natural_rage_enabled = false
+	enemy.force_rage()
+	assert_bool(enemy.is_raged).is_true()

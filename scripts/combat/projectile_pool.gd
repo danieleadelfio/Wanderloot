@@ -21,11 +21,15 @@ func spawn(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 		_free.append(_create())
 	var projectile: Projectile = _free.pop_back()
 	projectile.pull_target = pull_target
+	projectile.targets = targets
 	projectile.activate(origin, direction, weapon)
 
 
 ## Bersaglio attirato dai proiettili a buco nero (il player, per il pool dei nemici).
 var pull_target: Node2D
+## Ricochet (M13, #86): Callable che restituisce i nemici/boss colpibili (nemici del player) o e'
+## non impostata (pool dei nemici: WeaponData.ricochet_bounces resta sempre 0 li', mai usata).
+var targets: Callable
 
 
 func free_count() -> int:

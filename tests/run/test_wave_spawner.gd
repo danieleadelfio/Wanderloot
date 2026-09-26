@@ -46,3 +46,12 @@ func test_unblocking_lets_spawns_resume() -> void:
 	for i in 5:
 		_spawner._physics_process(0.1)
 	assert_int(_pool.active_count()).is_greater(0)
+
+
+## Livello arena 1 (M13, #86): niente rage naturale sui nemici spawnati, il flag si propaga da subito.
+func test_natural_rage_enabled_propagates_to_spawned_enemies() -> void:
+	_spawner.natural_rage_enabled = false
+	_spawner._physics_process(0.1)
+	assert_int(_pool.active_count()).is_greater(0)
+	for enemy in _pool.active_enemies():
+		assert_bool(enemy.natural_rage_enabled).is_false()

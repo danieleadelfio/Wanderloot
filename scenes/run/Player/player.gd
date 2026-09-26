@@ -31,9 +31,10 @@ var _dash_direction: Vector2 = Vector2.ZERO
 var _pull: Vector2 = Vector2.ZERO
 ## Tetto alla somma di piu' fonti di attrazione (M12, #86): con piu' Sfere del vuoto vicine la spinta
 ## si sommava senza limite e diventava impossibile scappare. MAX_PULL_FORCE = la spinta massima di una
-## singola sfera a distanza zero (pull_strength di void_orb.tres); con una sola fonte il tetto non tocca
+## singola sfera a distanza zero (pull_strength di void_orb.tres, ridotta di 1/3 in M13 #86: 100 -> 66,67);
+## con una sola fonte il tetto non tocca
 ## mai nulla, con piu' fonti impedisce che si sommino oltre quel livello.
-const MAX_PULL_FORCE: float = 100.0
+const MAX_PULL_FORCE: float = 66.67
 
 @onready var health: Health = %Health
 ## Mana dello sparo base (M12, #86): RefCounted puro come Knockback, non un nodo della scena.

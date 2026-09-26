@@ -16,6 +16,11 @@ extends Resource
 @export var spread_degrees: float = 10.0
 ## Nemici attraversati prima di sparire (upgrade "Perforazione").
 @export var pierce: int = 0
+## Rimbalzi su un altro nemico/boss vivo dopo il primo colpito (upgrade "Ricochet", M13, #86): il
+## proiettile si ridirige verso il piu' vicino (mai quello appena colpito) conservando la velocita';
+## nessun altro bersaglio in giro = sparisce come sempre. Applicato dopo la Perforazione (consuma
+## prima quella). 0 = nessun rimbalzo.
+@export var ricochet_bounces: int = 0
 ## Mana consumato per ogni colpo dello sparo base (0 = nessun costo, M12 #86): costa una volta per
 ## attivazione (un "while _cooldown <= 0" di Weapon.try_fire), moltiplicato per i proiettili del
 ## Ventaglio (M13, #86: un colpo a piu' proiettili vale di piu', quindi costa di piu').

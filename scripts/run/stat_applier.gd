@@ -36,6 +36,8 @@ static func apply(stat: UpgradeData.Stat, amount: float, is_multiplier: bool, st
 			stats.count_bonus += roundi(amount)
 		UpgradeData.Stat.PIERCE:
 			weapon.pierce = maxi(roundi(_modify(weapon.pierce, amount, is_multiplier)), 0)
+		UpgradeData.Stat.RICOCHET:
+			weapon.ricochet_bounces = maxi(roundi(_modify(weapon.ricochet_bounces, amount, is_multiplier)), 0)
 		UpgradeData.Stat.MANA_REGEN:
 			stats.mana_regen = maxf(_modify(stats.mana_regen, amount, is_multiplier), 0.0)
 		UpgradeData.Stat.MAX_MANA:

@@ -135,6 +135,8 @@ func _ready() -> void:
 	_level_up_choice.upgrade_chosen.connect(_on_upgrade_chosen)
 	_level_up_choice.reroll_requested.connect(_on_reroll_requested)
 	_player.shot_requested.connect(_projectile_pool.spawn)
+	# Ricochet (M13, #86): stessa lista di bersagli delle abilita' della bacchetta (targetable_enemies).
+	_projectile_pool.targets = targetable_enemies
 	_player.health.changed.connect(_hud.set_hp)
 	_player.died.connect(_on_player_died)
 	_player.health.damaged.connect(_hit_stop.trigger)
@@ -146,6 +148,8 @@ func _ready() -> void:
 	arena_level = ArenaLevel.level_for(MetaProgression.loadout.equipped_items())
 	_wave_spawner.level_hp = ArenaLevel.enemy_hp_multiplier(arena_level)
 	_wave_spawner.level_rate = ArenaLevel.spawn_rate_multiplier(arena_level)
+	# M13, #86: a livello 1 niente rage "naturale" per scadenza, solo per eventi specifici (sotto).
+	_wave_spawner.natural_rage_enabled = arena_level > 1
 	_hud.set_arena_level(arena_level)
 	_hud.set_minimap_context(_player, _map_indicators, _extraction_point, _pickup_pool, _events)
 	_player.begin_run(_equip_modifiers)
@@ -654,7 +658,9 @@ func _on_boss_summon(scene: PackedScene, count: int, at: Vector2) -> void:
 			continue
 		for k in count:
 			var point := (at + Vector2.RIGHT.rotated(TAU * k / maxi(count, 1)) * _rng.randf_range(70.0, 130.0)).clamp(extraction_spawn_rect.position, extraction_spawn_rect.end)
-			_enemy_pools[i].spawn(point, _player)
+			var summoned := _enemy_pools[i].spawn(point, _player)
+			if summoned:
+				summoned.natural_rage_enabled = arena_level > 1
 		_sfx.play(&"boss_warn")
 		return
 

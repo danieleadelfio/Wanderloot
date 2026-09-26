@@ -79,6 +79,7 @@ STAT_DAMAGE,Danno,Damage,Dégâts,Daño
 STAT_FIRE_RATE,Cadenza di fuoco,Fire rate,Cadence de tir,Cadencia de disparo
 STAT_PROJECTILES,Proiettili,Projectiles,Projectiles,Proyectiles
 STAT_PIERCE,Perforazione,Pierce,Perforation,Perforación
+STAT_RICOCHET,Rimbalzi,Ricochets,Ricochets,Rebotes
 STAT_PROJECTILE_SPEED,Vel. proiettile,Projectile speed,Vit. des projectiles,Vel. de proyectil
 STAT_PROJECTILE_LIFETIME,Durata proiettile,Projectile duration,Durée des projectiles,Duración de proyectil
 STAT_KNOCKBACK,Spinta,Knockback,Recul,Empuje
@@ -110,6 +111,8 @@ UPG_MULTISHOT_UP,Ventaglio,Spread,Éventail,Abanico
 UPG_MULTISHOT_UP_DESC,+1 proiettile per colpo,+1 projectile per shot,+1 projectile par tir,+1 proyectil por disparo
 UPG_PIERCE_UP,Perforazione,Pierce,Perforation,Perforación
 UPG_PIERCE_UP_DESC,I proiettili attraversano +1 nemico,Projectiles pass through +1 enemy,Les projectiles traversent +1 ennemi,Los proyectiles atraviesan +1 enemigo
+UPG_RICOCHET_UP,Ricochet,Ricochet,Ricochet,Rebote
+UPG_RICOCHET_UP_DESC,Il colpo rimbalza sul nemico più vicino dopo il primo (+1 rimbalzo per scelta),The shot bounces to the nearest enemy after the first hit (+1 bounce per pick),Le tir rebondit sur l'ennemi le plus proche après le premier touché (+1 rebond par choix),El disparo rebota hacia el enemigo más cercano tras el primer golpe (+1 rebote por elección)
 UPG_PROJECTILE_SPEED_UP,Gittata,Reach,Portée,Alcance
 UPG_PROJECTILE_SPEED_UP_DESC,+20% velocità proiettili,+20% projectile speed,+20 % de vitesse des projectiles,+20% de velocidad de los proyectiles
 MAT_BONE_SHARD,Frammento d'osso,Bone shard,Éclat d'os,Fragmento de hueso

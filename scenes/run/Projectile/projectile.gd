@@ -8,6 +8,10 @@ var _velocity: Vector2 = Vector2.ZERO
 var _time_left: float = 0.0
 var _active: bool = false
 var _pierce_left: int = 0
+var _bounces_left: int = 0
+## Ricochet (M13, #86): Callable dei nemici/boss colpibili, impostata dal pool insieme a pull_target.
+## Non impostata (pool dei nemici) = nessun rimbalzo possibile, a prescindere da ricochet_bounces.
+var targets: Callable
 ## Buco nero (M11.3): distanza percorsa, cresciuto, bersaglio attirato (impostato dal pool).
 var pull_target: Node2D
 var _weapon: WeaponData
@@ -58,6 +62,7 @@ func activate(origin: Vector2, direction: Vector2, weapon: WeaponData) -> void:
 	_hitbox.poison_interval = weapon.poison_interval
 	_hitbox.poison_damage = weapon.poison_damage
 	_pierce_left = weapon.pierce
+	_bounces_left = weapon.ricochet_bounces
 	_body.texture = weapon.projectile_texture if weapon.projectile_texture else _default_texture
 	_body.scale = Vector2.ONE * weapon.projectile_scale if weapon.projectile_scale > 0.0 else _default_scale
 	_body.modulate = weapon.projectile_tint
@@ -89,11 +94,31 @@ func _set_enabled(enabled: bool) -> void:
 	_hitbox.set_deferred("monitorable", enabled)
 
 
-func _on_hit(_hurtbox: Hurtbox) -> void:
+func _on_hit(hurtbox: Hurtbox) -> void:
 	# Perforazione: attraversa pierce nemici prima di sparire; i muri lo fermano sempre.
 	if _pierce_left > 0:
 		_pierce_left -= 1
 		return
+	# Ricochet: dopo il primo bersaglio, si ridirige sul nemico/boss vivo piu' vicino (mai quello
+	# appena colpito), fino a ricochet_bounces volte; nessun altro in giro = sparisce come sempre.
+	if _bounces_left > 0 and targets.is_valid():
+		var hit_node := hurtbox.get_parent()
+		var nearest: Node2D = null
+		var nearest_distance := INF
+		for target: Node2D in targets.call():
+			if target == hit_node or not is_instance_valid(target):
+				continue
+			var distance := global_position.distance_squared_to(target.global_position)
+			if distance < nearest_distance:
+				nearest_distance = distance
+				nearest = target
+		if nearest:
+			_bounces_left -= 1
+			var direction := global_position.direction_to(nearest.global_position)
+			if direction != Vector2.ZERO:
+				_velocity = direction * _velocity.length()
+				rotation = direction.angle()
+			return
 	deactivate()
 
 

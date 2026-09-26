@@ -14,6 +14,7 @@ static func _row_defs() -> Array[Dictionary]:
 		{"label": "STAT_FIRE_RATE", "getter": func(s: PlayerStats, w: WeaponData) -> float: return w.fire_rate, "format": func(v: float) -> String: return "%.1f/s" % v},
 		{"label": "STAT_PROJECTILES", "getter": func(s: PlayerStats, w: WeaponData) -> float: return float(w.projectile_count), "format": func(v: float) -> String: return str(int(round(v)))},
 		{"label": "STAT_PIERCE", "getter": func(s: PlayerStats, w: WeaponData) -> float: return float(w.pierce), "format": func(v: float) -> String: return str(int(round(v)))},
+		{"label": "STAT_RICOCHET", "getter": func(s: PlayerStats, w: WeaponData) -> float: return float(w.ricochet_bounces), "format": func(v: float) -> String: return str(int(round(v)))},
 		{"label": "STAT_COUNT_BONUS", "getter": func(s: PlayerStats, w: WeaponData) -> float: return float(s.count_bonus), "format": func(v: float) -> String: return "+%d" % int(round(v))},
 		{"label": "STAT_PROJECTILE_SPEED", "getter": func(s: PlayerStats, w: WeaponData) -> float: return w.projectile_speed, "format": func(v: float) -> String: return str(roundi(v))},
 		{"label": "STAT_PROJECTILE_LIFETIME", "getter": func(s: PlayerStats, w: WeaponData) -> float: return w.projectile_lifetime, "format": func(v: float) -> String: return "%.2fs" % v},

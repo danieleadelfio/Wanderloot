@@ -97,3 +97,12 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 ### Bilanciamento
 - Cadenza di fuoco base ridotta (da 4 a 2 colpi al secondo) e costo in mana per colpo ridotto di 1/3, per compensare: con il Ventaglio il mana finiva troppo in fretta.
 - Rigenerazione del mana di base alzata di 1/3.
+
+## In lavorazione (10) — 26/09/2026
+
+### Novità
+- Nuovo potenziamento di run: **Ricochet** — dopo il primo colpo, il proiettile rimbalza sul nemico più vicino; ogni scelta successiva aggiunge un rimbalzo in più.
+
+### Bilanciamento
+- Nelle arene di livello 1 i nemici non vanno più in rage da soli col passare del tempo: solo eventi specifici (es. il Pentagramma di sangue) li fanno infuriare. Dal livello 2 in su nessun cambiamento.
+- Forza di attrazione delle sfere dello Slime del vuoto ridotta di 1/3.
