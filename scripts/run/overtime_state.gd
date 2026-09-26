@@ -16,6 +16,9 @@ var elapsed: float = 0.0
 var _running: bool = false
 var _warned: Dictionary[String, bool] = {}
 var _boss_left: float = 0.0
+## Conto alla rovescia verso l'overtime x1 fermo (M13, #86): boss pre-overtime vivi. Solo prima del
+## livello 1: una volta in overtime il tempo non si ferma piu'.
+var held: bool = false
 
 
 func start(overtime: OvertimeData) -> void:
@@ -23,6 +26,7 @@ func start(overtime: OvertimeData) -> void:
 	level = 0
 	elapsed = 0.0
 	_warned.clear()
+	held = false
 	_running = data != null
 
 
@@ -39,7 +43,7 @@ func time_to_next_level() -> float:
 
 
 func tick(delta: float) -> void:
-	if not _running:
+	if not _running or (held and level == 0):
 		return
 	elapsed += delta
 	var left := time_to_next_level()
@@ -57,6 +61,13 @@ func tick(delta: float) -> void:
 		if _boss_left <= 0.0:
 			_boss_left += boss_interval()
 			boss_due.emit(bosses_per_wave)
+
+
+
+## Boss pre-overtime vivi: ferma il conto alla rovescia del livello 1 finche' non muore l'ultimo. Dal
+## livello 1 in poi non ha effetto (overtime gia' iniziato).
+func hold_for_bosses(alive_bosses: int) -> void:
+	held = level == 0 and alive_bosses > 0
 
 
 func speed_multiplier() -> float:

@@ -141,3 +141,5 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 - Nemici più lenti del 10%.
 - I nemici a distanza (Slime tossico, Slime del vuoto, Scheletro arciere) sparano il 35% più di rado.
 - In tutte le arene, finché un boss arrivato prima dell'overtime è vivo non compaiono nuovi nemici normali: ora vale anche per il boss extra del Pentagramma di sangue.
+- Mentre combatti il boss che arriva prima dell'overtime, il tempo verso l'overtime si ferma: quando lo sconfiggi hai ancora 30 secondi per estrarre.
+- I boss compaiono alla stessa distanza dei nemici normali, non più dall'altra parte dell'arena.

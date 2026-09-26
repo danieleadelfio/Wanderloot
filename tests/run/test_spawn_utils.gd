@@ -29,3 +29,47 @@ func test_default_max_distance_is_unbounded() -> void:
 	for i in 10:
 		var point := SpawnUtils.random_point_away(RECT, origin, 400.0)
 		assert_float(point.distance_to(origin)).is_greater_equal(400.0)
+
+
+## Boss (M13, #86): stesso anello di spawn dei nemici base (WaveSpawner 700-1200 px), non piu' ovunque
+## nell'arena oltre una distanza minima. Anche con piu' boss insieme e boss gia' presenti.
+func test_bosses_spawn_in_the_enemy_ring_and_stay_separated() -> void:
+	var spawner := WaveSpawner.new()
+	var min_d := spawner.spawn_min_distance
+	var max_d := spawner.spawn_max_distance
+	spawner.free()
+	var rng := RandomNumberGenerator.new()
+	for run_seed in 40:
+		rng.seed = run_seed
+		var origin := Vector2(rng.randf_range(-3000.0, 3000.0), rng.randf_range(-1500.0, 1500.0))
+		var existing: Array[Vector2] = [origin + Vector2(900.0, 0.0)]
+		var points := SpawnUtils.separated_points(RECT, origin, min_d, 350.0, 1 + run_seed % 4, rng, existing, max_d)
+		assert_int(points.size()).is_equal(1 + run_seed % 4)
+		for i in points.size():
+			var dist := points[i].distance_to(origin)
+			assert_float(dist).override_failure_message("seed %d dist %f" % [run_seed, dist]).is_between(min_d, max_d)
+			for other in points.slice(i + 1) + existing:
+				assert_float(points[i].distance_to(other)).is_greater_equal(350.0)
+
+
+## Player vicino a un angolo dell'arena: i punti restano dentro il rect e nell'anello.
+func test_ring_spawn_near_arena_corner_stays_inside() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	var origin := RECT.end - Vector2(300.0, 300.0)
+	var points := SpawnUtils.separated_points(RECT, origin, 700.0, 350.0, 3, rng, [] as Array[Vector2], 1200.0)
+	for point in points:
+		assert_bool(RECT.grow(0.01).has_point(point)).is_true()
+		assert_float(point.distance_to(origin)).is_between(700.0, 1200.0)
+
+
+## Senza max_origin (default) il comportamento resta quello di prima: ovunque nel rect oltre il minimo.
+func test_without_max_origin_points_can_be_far() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 3
+	var far := 0
+	for i in 20:
+		for point in SpawnUtils.separated_points(RECT, Vector2.ZERO, 380.0, 350.0, 1, rng):
+			if point.distance_to(Vector2.ZERO) > 1200.0:
+				far += 1
+	assert_int(far).is_greater(0)

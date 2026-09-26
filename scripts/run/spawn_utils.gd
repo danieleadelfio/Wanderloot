@@ -3,17 +3,19 @@ extends RefCounted
 ## Utility pure per scegliere punti di spawn.
 
 
-## Punto casuale in rect ad almeno min_distance da origin (fino a 10 tentativi, poi l'ultimo estratto).
 ## count punti in rect ad almeno min_origin da origin e ad almeno min_separation tra loro e dagli `existing`
 ## (es. boss multipli che non devono sovrapporsi). Con poco spazio la separazione si riduce fino a 200 px.
-static func separated_points(rect: Rect2, origin: Vector2, min_origin: float, min_separation: float, count: int, rng: RandomNumberGenerator, existing: Array[Vector2] = []) -> Array[Vector2]:
+## max_origin (M13, #86): con un valore finito i punti stanno nell'anello [min_origin, max_origin] attorno
+## a origin, lo stesso dei nemici base (WaveSpawner.spawn_min/max_distance), invece che ovunque nel rect.
+static func separated_points(rect: Rect2, origin: Vector2, min_origin: float, min_separation: float, count: int, rng: RandomNumberGenerator, existing: Array[Vector2] = [], max_origin: float = INF) -> Array[Vector2]:
 	var result: Array[Vector2] = []
 	var separation := min_separation
 	while result.size() < count:
 		var placed := false
 		for attempt in 40:
-			var candidate := Vector2(rng.randf_range(rect.position.x, rect.end.x), rng.randf_range(rect.position.y, rect.end.y))
-			if candidate.distance_to(origin) < min_origin:
+			var candidate := _candidate(rect, origin, min_origin, max_origin, rng)
+			var distance := candidate.distance_to(origin)
+			if distance < min_origin or distance > max_origin:
 				continue
 			var ok := true
 			for other in result + existing:
@@ -27,8 +29,18 @@ static func separated_points(rect: Rect2, origin: Vector2, min_origin: float, mi
 		if not placed:
 			separation = maxf(separation * 0.8, 200.0)
 			if separation <= 200.0 and not placed:
-				result.append(Vector2(rng.randf_range(rect.position.x, rect.end.x), rng.randf_range(rect.position.y, rect.end.y)))
+				result.append(_candidate(rect, origin, min_origin, max_origin, rng))
 	return result
+
+
+## Senza max_origin: uniforme nel rect. Con max_origin: uniforme sull'area dell'anello attorno a origin,
+## poi dentro il rect (vicino ai bordi puo' finire piu' vicino di min_origin: lo scarta il chiamante).
+static func _candidate(rect: Rect2, origin: Vector2, min_origin: float, max_origin: float, rng: RandomNumberGenerator) -> Vector2:
+	if max_origin == INF:
+		return Vector2(rng.randf_range(rect.position.x, rect.end.x), rng.randf_range(rect.position.y, rect.end.y))
+	var radius := sqrt(rng.randf_range(min_origin * min_origin, max_origin * max_origin))
+	var point := origin + Vector2.RIGHT.rotated(rng.randf_range(0.0, TAU)) * radius
+	return Vector2(clampf(point.x, rect.position.x, rect.end.x), clampf(point.y, rect.position.y, rect.end.y))
 
 
 ## max_distance (M13, arene 10x): oltre a min_distance, il punto non deve superare questa distanza

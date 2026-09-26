@@ -571,7 +571,7 @@ func _on_overtime_warned(seconds: int, next_level: int) -> void:
 func _on_overtime_level(level: int) -> void:
 	# L'overtime mescola sempre boss e nemici base: eventuali boss pre-overtime ancora vivi non bloccano
 	# piu' lo spawn da qui in poi.
-	_wave_spawner.update_boss_block(bosses.size(), level)
+	_apply_pre_overtime_boss_rule()
 	_wave_spawner.overtime_raged = arena.overtime.spawn_raged
 	_wave_spawner.overtime_speed = overtime.speed_multiplier()
 	_wave_spawner.overtime_hp = overtime.hp_multiplier()
@@ -597,13 +597,24 @@ func _spawn_boss() -> void:
 	_spawn_bosses(arena.boss_count + _extra_bosses + ArenaLevel.boss_bonus(arena_level))
 
 
+## Boss pre-overtime vivi (M12/M13, #86), in ogni arena e per ogni fonte di boss: niente nuovi nemici
+## base e conto alla rovescia verso l'overtime x1 fermo, cosi' dopo la morte dell'ultimo restano gli
+## stessi secondi di prima (il boss arriva a 30 s dall'overtime) per estrarre invece di finire in
+## overtime durante la lotta. Da overtime x1 in poi non blocca piu' nulla.
+func _apply_pre_overtime_boss_rule() -> void:
+	_wave_spawner.update_boss_block(bosses.size(), overtime.level)
+	overtime.hold_for_bosses(bosses.size())
+
+
 func _spawn_bosses(count: int) -> void:
 	if RunManager.state == RunManager.State.ENDED or count <= 0 or not arena.has_boss():
 		return
 	var taken: Array[Vector2] = []
 	for alive in bosses:
 		taken.append(alive.global_position)
-	var points := SpawnUtils.separated_points(extraction_spawn_rect, _player.global_position, arena.boss_spawn_min_distance, arena.boss_min_separation, count, _rng, taken)
+	# Stesso anello dei nemici base (M13, #86): prima solo una distanza minima (380px) e poi ovunque
+	# nell'arena 10x, cioe' spesso a migliaia di px dal player.
+	var points := SpawnUtils.separated_points(extraction_spawn_rect, _player.global_position, _wave_spawner.spawn_min_distance, arena.boss_min_separation, count, _rng, taken, _wave_spawner.spawn_max_distance)
 	for point in points:
 		var new_boss: Boss = arena.pick_boss_scene(_rng).instantiate()
 		new_boss.bounds = extraction_spawn_rect
@@ -623,7 +634,7 @@ func _spawn_bosses(count: int) -> void:
 		bosses.append(new_boss)
 	# Boss pre-overtime (M12/M13, #86): mentre sono vivi niente nuovi nemici base, in ogni arena e per
 	# ogni fonte (comparsa normale, bonus livello arena, Pentagramma); in overtime non blocca mai.
-	_wave_spawner.update_boss_block(bosses.size(), overtime.level)
+	_apply_pre_overtime_boss_rule()
 	_refresh_boss_bar()
 	_sfx.play(&"boss_appear")
 
@@ -678,7 +689,7 @@ func _on_boss_attack_started(attack: BossAttack) -> void:
 func _on_boss_died(dead: Boss) -> void:
 	bosses.erase(dead)
 	boss_defeated = bosses.is_empty()
-	_wave_spawner.update_boss_block(bosses.size(), overtime.level)
+	_apply_pre_overtime_boss_rule()
 	if boss_defeated and not _boss_event_queued and arena.boss_event_delay >= 0.0:
 		_boss_event_queued = true
 		_events.queue_event(arena.boss_event_delay)

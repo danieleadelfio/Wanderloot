@@ -88,3 +88,60 @@ func test_stopped_state_does_nothing() -> void:
 	_state.stop()
 	_run(60.0)
 	assert_array(_levels).is_empty()
+
+
+## Boss pre-overtime (M13, #86): compare a 30 s dall'overtime x1 e ferma il conto alla rovescia finche'
+## e' vivo, per quanto duri la lotta; alla sua morte restano di nuovo 30 s prima dell'overtime.
+func test_pre_overtime_boss_holds_the_countdown_until_it_dies() -> void:
+	_run(20.0)
+	assert_float(_state.time_to_next_level()).is_equal_approx(30.0, 0.05)
+	_state.hold_for_bosses(1)
+	_run(300.0)
+	assert_array(_levels).is_empty()
+	assert_float(_state.time_to_next_level()).is_equal_approx(30.0, 0.05)
+	_state.hold_for_bosses(0)
+	_run(29.8)
+	assert_array(_levels).is_empty()
+	_run(0.4)
+	assert_array(_levels).is_equal([1])
+
+
+## Piu' boss: il tempo resta fermo finche' non muore l'ultimo.
+func test_countdown_stays_held_while_any_boss_is_alive() -> void:
+	_run(20.0)
+	_state.hold_for_bosses(3)
+	_run(60.0)
+	_state.hold_for_bosses(1)
+	_run(60.0)
+	assert_float(_state.time_to_next_level()).is_equal_approx(30.0, 0.05)
+	_state.hold_for_bosses(0)
+	_run(30.2)
+	assert_array(_levels).is_equal([1])
+
+
+## Fermo = nessun avviso: il "10 s all'overtime" arriva solo dopo la morte del boss.
+func test_no_warnings_while_held() -> void:
+	_run(20.1)
+	var before := _warnings.size()
+	_state.hold_for_bosses(1)
+	_run(100.0)
+	assert_int(_warnings.size()).is_equal(before)
+	_state.hold_for_bosses(0)
+	_run(21.0)
+	assert_array(_warnings.back()).is_equal([10, 1])
+
+
+## In overtime (livello >= 1) i boss non fermano piu' nulla.
+func test_bosses_during_overtime_do_not_hold_time() -> void:
+	_run(50.1)
+	assert_array(_levels).is_equal([1])
+	_state.hold_for_bosses(4)
+	assert_bool(_state.held).is_false()
+	_run(50.0)
+	assert_array(_levels).is_equal([1, 2])
+
+
+func test_start_clears_a_previous_hold() -> void:
+	_state.hold_for_bosses(1)
+	_state.start(DATA)
+	assert_bool(_state.held).is_false()

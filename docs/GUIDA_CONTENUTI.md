@@ -136,7 +136,7 @@ Tutti i boss usano lo script `scenes/run/Bosses/boss.gd`; cambiano dati (`BossDa
    Regola: per `LEAP_SLAM`, `telegraph_time + leap_time` deve bastare a uscire dal cerchio anche partendo dal centro (`radius / 220` s × 1,5; lo verifica `tests/data/test_king_slime.gd`).
 4. **Boss**: duplica `king_slime.tres` → HP, velocità, contatto, exp, `drops` (chance 1 = garantito), `attacks`, `first_attack_delay`, `chase_time`, gruppo **Fase 2** (soglia di HP, velocità, ritmo, tinta).
 5. **Scena**: duplica `KingSlime.tscn`: radice → `data`; `Body/Sprite` → texture; raggi di collisione. Nodi obbligatori con unique name: `%Health`, `%Hurtbox` (mask 8), `%Hitbox` (layer 16), `%Body`, `%HitFlash`, `%Impact` (Telegraph con `top_level = true`), `%Windup` (Telegraph). La radice ha layer 4 e mask 1.
-6. **Arena**: in `ArenaData`, gruppo **Boss** → `boss_scene`, `boss_delay` (secondi dopo l'apertura dell'estrazione), `boss_spawn_min_distance`. Barra HP, suoni, drop ed exp sono già collegati.
+6. **Arena**: in `ArenaData`, gruppo **Boss** → `boss_scene`, `boss_delay` (secondi dopo l'apertura dell'estrazione; la distanza di comparsa e' l'anello dei nemici base, `WaveSpawner.spawn_min/max_distance`). Barra HP, suoni, drop ed exp sono già collegati.
 7. **Verifica**: `-- 8 boss arena=<id>` (il bot resta a combatterlo) e `-- 8 arena=<id>` (gioco normale); riporta la tabella nel GDD come in §10.6.
 
 Un **tipo di attacco nuovo** (es. carica in linea retta) è codice: voce in coda a `BossAttack.Kind`, ramo in `Boss._begin_attack`/`_execute`, test sulla parte pura in `BossPatterns`.
@@ -378,7 +378,7 @@ File in `data/run/` (`extraction_default` = Cripta, `extraction_ossuary`): `appe
 |---|---|---|---|
 | Quando compare | `data/arenas/<arena>.tres` | `boss_delay` (s dopo l'apertura dell'estrazione) | 20 |
 | **Quanti boss** | idem | `boss_count` | 1 (+1 per ogni Pentagramma superato) |
-| Distanza tra boss / dal player | idem | `boss_min_separation`, `boss_spawn_min_distance` | 350 / 380 |
+| Distanza tra boss / dal player | idem / `WaveSpawner` | `boss_min_separation`, `spawn_min_distance`-`spawn_max_distance` | 350 / 700-1200 |
 | Vita, velocità, contatto, exp | `data/bosses/king_slime.tres` | `max_hp`, `move_speed`, `contact_damage`, `exp_reward` | 400, 80, 2, 40 |
 | Drop | idem | `drops` | Gelatina 12–18, Nuclei 3–5 (garantiti) |
 | Ritmo | idem | `first_attack_delay`, `chase_time` | 2,5 s, 1,4 s |
