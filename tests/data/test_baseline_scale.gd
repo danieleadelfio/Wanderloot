@@ -6,12 +6,12 @@ extends GdUnitTestSuite
 
 func test_player_base_hp_is_rescaled() -> void:
 	var stats: PlayerStats = load("res://data/player/player_default.tres")
-	assert_int(stats.max_hp).is_equal(1000)
+	assert_int(stats.max_hp).is_equal(1200)
 
 
 func test_starter_wand_damage_is_rescaled() -> void:
 	var weapon: WeaponData = load("res://data/weapons/starter_wand.tres")
-	assert_int(weapon.damage).is_equal(100)
+	assert_int(weapon.damage).is_equal(135)
 
 
 func test_level_curve_base_exp_is_rescaled() -> void:

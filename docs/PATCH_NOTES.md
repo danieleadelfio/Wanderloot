@@ -123,3 +123,11 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 ### Bilanciamento
 - Ricochet: confermato che rimbalza già anche sui proiettili del Ventaglio e dell'Anello arcano, non solo sullo sparo base.
 - Cadenza di fuoco base riportata da 3 a 4 colpi al secondo.
+
+## In lavorazione (13) — 27/09/2026
+
+### Bilanciamento
+- Danno base della Bacchetta aumentato del 35%.
+- Rigenerazione del mana aumentata del 35%.
+- Vita base del personaggio aumentata del 20%.
+- Riserva di mana massima aumentata del 20%.

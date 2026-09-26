@@ -178,6 +178,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Bilanciamento player base (`starter_wand.tres`, `player_default.tres`): danno 100 -> 135 (+35%), rigenerazione mana 8 -> 10,8/s (+35%), vita 1000 -> 1200 (+20%), mana massimo 30 -> 36 (+20%) (#86).
 - Cadenza di fuoco base della Bacchetta riportata da 3 a 4 colpi/s (`starter_wand.tres`): il playtest sul rialzo a 3 non ha convinto, si torna al valore originale (#86).
 - Cadenza di fuoco base della Bacchetta rialzata da 2 a 3 colpi/s (`starter_wand.tres`), dopo il playtest sull'abbassamento a 2 del changelog precedente (#86).
 - Rage "naturale" per scadenza (`rage_after`) disattivata nelle **arene di livello 1** (`Enemy.natural_rage_enabled`, propagato da `WaveSpawner`/`Arena` in base ad `ArenaLevel`): a livello 1 si va in rage solo per un evento specifico che la forza esplicitamente (`force_rage()`: Pentagramma, overtime, urlo di boss), mai per il solo tempo passato. Dal livello 2 in su invariato (#86).

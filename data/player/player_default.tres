@@ -4,7 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-max_hp = 1000
+max_hp = 1200
 move_speed = 220.0
 invulnerability_time = 0.8
 pickup_radius = 90.0
+max_mana = 36.0
+mana_regen = 10.8
