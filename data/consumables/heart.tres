@@ -11,5 +11,5 @@ description = "CONS_HEART_DESC"
 icon = ExtResource("2")
 kind = 1
 duration = 0.0
-amount = 2.0
+amount = 200.0
 weight = 1.0

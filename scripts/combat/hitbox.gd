@@ -4,7 +4,7 @@ extends Area2D
 
 signal hit(hurtbox: Hurtbox)
 
-@export var damage: int = 1
+@export var damage: int = 100
 ## Intensita' della spinta (px/s) applicata all'Hurtbox colpita. 0 = nessuna.
 @export var knockback: float = 0.0
 ## Direzione della spinta; se zero si spinge via dal centro della Hitbox (es. contatto nemico).
@@ -12,7 +12,7 @@ var knockback_direction: Vector2 = Vector2.ZERO
 ## Veleno applicato all'Hurtbox colpita (0 = nessuno, M11.3).
 var poison_duration: float = 0.0
 var poison_interval: float = 1.5
-var poison_damage: int = 1
+var poison_damage: int = 100
 
 ## Se false l'Hurtbox la ignora (es. proiettile gia' consumato nello stesso frame).
 var active: bool = true

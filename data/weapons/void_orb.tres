@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1")
 display_name = "Sfera del vuoto"
-damage = 1
+damage = 100
 fire_rate = 1.0
 projectile_speed = 210.0
 projectile_lifetime = 3.2

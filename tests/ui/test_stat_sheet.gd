@@ -141,7 +141,7 @@ func test_run_rows_unaffected_stat_has_no_star() -> void:
 		by_label[row[0]] = row
 	var hp_row: PackedStringArray = by_label["STAT_MAX_HP"]
 	assert_str(hp_row[2]).is_equal("")
-	assert_str(hp_row[3]).is_equal("5")
+	assert_str(hp_row[3]).is_equal("500")
 
 
 func test_run_rows_count_bonus_zero_base_has_single_plus() -> void:

@@ -19,9 +19,9 @@ chance = 0.02
 [resource]
 script = ExtResource("1")
 display_name = "Slime del vuoto"
-max_hp = 6
+max_hp = 600
 move_speed = 110.0
-exp_reward = 2
+exp_reward = 200
 rage_speed_multiplier = 1.8
 attack_interval = 3.2
 attack_range = 420.0

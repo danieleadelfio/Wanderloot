@@ -160,6 +160,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Riscala baseline danno/HP/exp x100 in tutto il gioco (player, nemici, boss, veleno, cura del Cuore, curva livello); bonus flat di upgrade/equip/affix invariati, ora una percentuale più piccola e più bilanciabile della base — il vecchio "+1 danno" raddoppiava il danno base, ora è una frazione minima (#86).
 - Fusione dal fabbro: servono tre oggetti identici (stesso oggetto base, stessa rarità), non più due (`Forge.FUSION_COUNT`) (#86).
 - Gioco rinominato **Wanderloot** (GDD, BEST_PRACTICES, `project.godot`). Repo GitHub collegato, task tracking su GitHub Issues attivo.
 - Knockback e hitstop spostati definitivamente a M4.

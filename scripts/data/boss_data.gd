@@ -4,11 +4,11 @@ extends Resource
 
 @export var id: StringName = &""
 @export var display_name: String = ""
-@export var max_hp: int = 300
+@export var max_hp: int = 30000
 @export var move_speed: float = 90.0
-@export var contact_damage: int = 2
+@export var contact_damage: int = 200
 @export var contact_knockback: float = 520.0
-@export var exp_reward: int = 30
+@export var exp_reward: int = 3000
 ## Drop alla morte (chance 1.0 = garantito).
 @export var drops: Array[DropEntry] = []
 

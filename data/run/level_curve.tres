@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1")
-base_exp = 5
+base_exp = 500
 growth = 1.35

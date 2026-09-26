@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1")
 display_name = "Spuntone d'osso"
-damage = 1
+damage = 100
 fire_rate = 1.0
 projectile_speed = 320.0
 projectile_lifetime = 1.5

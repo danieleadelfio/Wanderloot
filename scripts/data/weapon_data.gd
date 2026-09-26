@@ -3,7 +3,7 @@ extends Resource
 ## Parametri di un'arma ranged. Il bilanciamento si fa solo nei .tres in res://data/weapons/.
 
 @export var display_name: String = ""
-@export var damage: int = 1
+@export var damage: int = 100
 ## Nessun tetto: gli upgrade possono spingerla oltre i tick di fisica (piu' colpi per tick).
 @export_range(0.1, 30.0, 0.1, "or_greater", "suffix:shots/s") var fire_rate: float = 4.0
 @export var projectile_speed: float = 600.0
@@ -24,7 +24,7 @@ extends Resource
 ## Secondi di veleno sul bersaglio colpito (0 = nessuno), ogni quanto e quanto danno (M11.3).
 @export var poison_duration: float = 0.0
 @export var poison_interval: float = 1.5
-@export var poison_damage: int = 1
+@export var poison_damage: int = 100
 
 @export_group("Buco nero")
 ## Dopo questi pixel il proiettile si ingrandisce, rallenta e attira il player (0 = mai; M11.3).

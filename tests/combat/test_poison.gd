@@ -28,8 +28,8 @@ func test_new_hit_refreshes_without_stacking() -> void:
 func test_player_is_poisoned_by_a_poison_hitbox() -> void:
 	var player: Player = auto_free(load("res://scenes/run/Player/Player.tscn").instantiate())
 	add_child(player)
-	assert_int(player.health.max_hp).is_equal(10)
+	assert_int(player.health.max_hp).is_equal(1000)
 	player.poison.apply(4.5, 1.5, 1)
 	for i in 60:
 		player.poison._physics_process(0.1)
-	assert_int(player.health.current).is_equal(7)
+	assert_int(player.health.current).is_equal(997)

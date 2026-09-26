@@ -6,14 +6,14 @@
 [resource]
 script = ExtResource("1")
 display_name = "Goccia tossica"
-damage = 1
+damage = 100
 fire_rate = 1.0
 projectile_speed = 250.0
 projectile_lifetime = 1.8
 knockback = 120.0
 poison_duration = 4.5
 poison_interval = 1.5
-poison_damage = 1
+poison_damage = 100
 projectile_texture = ExtResource("t")
 projectile_scale = 0.4
 projectile_tint = Color(0.55, 0.15, 0.85, 1)

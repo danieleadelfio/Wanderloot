@@ -5,9 +5,9 @@
 [resource]
 script = ExtResource("1")
 display_name = "Scheletro dell'armadio"
-max_hp = 4
+max_hp = 400
 move_speed = 23.33
-contact_damage = 1
+contact_damage = 100
 contact_knockback = 260.0
 exp_reward = 0
 rage_after = 0.0

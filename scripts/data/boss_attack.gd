@@ -35,7 +35,7 @@ enum Kind { AIMED_FAN, RING, LEAP_SLAM, SUMMON, RAIN, CHARGE, STOMP, SCREAM }
 @export_group("Salto")
 ## Raggio del cerchio di impatto (LEAP_SLAM).
 @export var radius: float = 130.0
-@export var damage: int = 2
+@export var damage: int = 200
 @export var knockback: float = 600.0
 @export var leap_time: float = 0.45
 @export var leap_height: float = 90.0

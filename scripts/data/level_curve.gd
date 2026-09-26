@@ -2,7 +2,7 @@ class_name LevelCurve
 extends Resource
 ## Exp richiesta per passare dal livello N al N+1: base_exp * growth^(N-1), arrotondata.
 
-@export var base_exp: int = 5
+@export var base_exp: int = 500
 @export var growth: float = 1.35
 
 

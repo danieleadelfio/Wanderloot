@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1")
 display_name = "Arco d'osso"
-damage = 1
+damage = 100
 fire_rate = 1.0
 projectile_speed = 240.0
 projectile_lifetime = 2.2

@@ -18,9 +18,9 @@ chance = 0.03
 [resource]
 script = ExtResource("1")
 display_name = "Slime di pietra"
-max_hp = 12
+max_hp = 1200
 move_speed = 55.0
-exp_reward = 3
+exp_reward = 300
 knockback_resistance = 0.6
 rage_speed_multiplier = 1.8
 drops = Array[ExtResource("2")]([SubResource("drop_gel"), SubResource("drop_core")])

@@ -14,5 +14,5 @@ teleport_after = true
 rain_count = 7
 rain_spread = 260.0
 radius = 70.0
-damage = 2
+damage = 200
 knockback = 400.0
