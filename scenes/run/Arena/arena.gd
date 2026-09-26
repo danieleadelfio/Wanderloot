@@ -131,9 +131,10 @@ func _ready() -> void:
 	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player, _equip_modifiers)
+	# In pausa finche' non si preme Continua, come gli eventi (M12, #86): prima spariva da sola dopo
+	# 7s con HUD.announce(), a volte prima che si finisse di leggere o si fosse anche solo mossi.
 	if not MetaProgression.has_seen_tutorial(&"first_run"):
-		_hud.announce(tr("TUTORIAL_RUN_TITLE"), tr("TUTORIAL_RUN_BODY"), 7.0)
-		MetaProgression.mark_tutorial_seen(&"first_run")
+		_show_first_time_notice(&"first_run", tr("TUTORIAL_RUN_TITLE"), tr("TUTORIAL_RUN_BODY"))
 	_create_enemy_pools()
 	_wand.setup(_player, _projectile_pool, targetable_enemies)
 	_wand.changed.connect(func(abilities: Array[WandAbility]) -> void: _hud.set_abilities(abilities, _wand.levels))
