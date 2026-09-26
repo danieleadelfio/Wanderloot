@@ -28,15 +28,18 @@ func try_fire(direction: Vector2) -> int:
 		return 0
 	var interval := 1.0 / (data.fire_rate * maxf(rate_multiplier, 0.01))
 	var aim := direction.normalized()
+	var count := maxi(data.projectile_count, 1)
+	# Costo per attivazione moltiplicato per i proiettili del Ventaglio (M13, #86): un colpo a ventaglio
+	# vale di piu' (piu' danno/proiettili), quindi costa di piu', non lo stesso di un colpo singolo.
+	var cost := data.mana_cost * count
 	var shots := 0
 	while _cooldown <= 0.0:
 		# A corto di mana: il colpo resta "in credito" (cooldown non consumato), riprende non appena il
 		# pool rigenera abbastanza, invece di perderlo o sparare gratis.
-		if mana and data.mana_cost > 0.0 and not mana.spend(data.mana_cost):
+		if mana and cost > 0.0 and not mana.spend(cost):
 			break
 		_cooldown += interval
 		shots += 1
-	var count := maxi(data.projectile_count, 1)
 	# Ventaglio centrato sulla mira; oltre 360° gli spazi si comprimono per coprire il cerchio.
 	var step := deg_to_rad(minf(data.spread_degrees, 360.0 / count))
 	for i in shots:

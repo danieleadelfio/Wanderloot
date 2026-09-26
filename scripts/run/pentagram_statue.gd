@@ -14,10 +14,13 @@ const INTERACT_RADIUS: float = 70.0
 var consumed: bool = false
 var _player_in_range: bool = false
 
+@onready var _prompt: Label = %Prompt
+
 
 func _ready() -> void:
 	body_entered.connect(_on_body_changed.bind(true))
 	body_exited.connect(_on_body_changed.bind(false))
+	_prompt.text = tr("PROMPT_PENTAGRAM_STATUE")
 
 
 func _process(_delta: float) -> void:
@@ -34,6 +37,7 @@ func place(at: Vector2) -> void:
 	consumed = false
 	_player_in_range = false
 	show()
+	_prompt.hide()
 	set_deferred("monitoring", true)
 	reset_physics_interpolation()
 
@@ -45,5 +49,8 @@ func consume() -> void:
 	set_deferred("monitoring", false)
 
 
+## Scritta "E — Interagisci" accanto al player quando e' vicino (M13, #86): prima non c'era alcun
+## indizio che si potesse interagire con la statua.
 func _on_body_changed(_body: Node2D, entered: bool) -> void:
 	_player_in_range = entered
+	_prompt.visible = entered and not consumed

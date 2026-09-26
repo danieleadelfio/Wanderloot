@@ -6,6 +6,7 @@ extends CanvasLayer
 ## (MapIndicatorArrow), come la freccia del portale di estrazione. La pausa la gestisce Arena.
 
 signal indicator_placed(world_position: Vector2)
+signal indicator_removed
 
 @onready var _window: Control = %Window
 @onready var _map_area: MapArea = %MapArea
@@ -16,6 +17,7 @@ func _ready() -> void:
 	_window.hide()
 	_poi_label.text = tr("MAP_NO_POI")
 	_map_area.indicator_placed.connect(func(pos: Vector2) -> void: indicator_placed.emit(pos))
+	_map_area.indicator_removed.connect(func() -> void: indicator_removed.emit())
 
 
 func close() -> void:

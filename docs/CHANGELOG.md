@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Scritta "E — Interagisci" accanto al player quando è vicino alla statua del Pentagramma (#86): non era chiaro che ci si potesse interagire. Mappa: clic destro cancella l'indicatore più vicino al cursore (`MapArea._gui_input`), legenda aggiornata (sinistro/destro/M-Esc); indicatori disegnati come triangoli (la posizione del player resta un cerchio); tooltip col nome passando il cursore sull'icona della statua del Pentagramma o di un consumabile a terra (`MapArea._get_tooltip`) (#86).
 - Pentagramma di sangue ridisegnato (#86): non piu' a tempo casuale tra gli eventi. Statua del demone (`PentagramStatue`, Area2D) e pentagramma con candele spente compaiono una volta sola a inizio run, in un punto fisso tra `min_player_distance` (900px) e `max_player_distance` (2800px) dal player, visibili anche su mappa e minimappa (icona statua). Avvicinandosi e premendo `interact` (E) la statua sparisce (`PentagramStatue.consume()`) e l'evento parte subito, niente piu' attesa col timeout d'ingresso (rimosso `activation_timeout`). Raggio del cerchio raddoppiato (110 -> 220px, arene 10x); candele accese ferme per `candles_start_extinguish_after` (10s, nuovo campo), poi se ne spegne una al secondo (`PentagramState` riscritta, logica pura testata). `RunEventDirector` tiene il Pentagramma separato dal pool a tempo (`_pick_event`/`event_times`); bot di playtest (`BotDriver`) raggiunge la statua e preme interact da solo.
 - Icona del consumabile (Magnete/Cuore/Furia) a terra visibile su mappa e minimappa finche' non viene raccolto (#86).
 - Spawn dei nemici in un anello attorno al player (`WaveSpawner.spawn_min_distance` 700px/`spawn_max_distance` 1200px) invece che ovunque nel rect dell'arena: con le arene 10x comparivano a migliaia di px, gia' in rage prima di arrivare. Un nemico oltre `despawn_distance` (1600px) sparisce in silenzio (nessun drop, nessun `enemy_died`) e viene rimpiazzato dal ciclo di ondate con uno spawn point sulla posizione attuale del player. Test su anello e despawn (#86).
@@ -132,6 +133,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Inventario di run (tasto I): il pannello poteva risultare più grande dello schermo su finestre piccole; ora si ridimensiona da solo per stare entro il 92% del viewport (`RunInventory._fit_to_viewport`) (#86).
+- Pezzo scelto dall'armadio degli Scheletri: risultava equipaggiato ma l'inventario di run (I) lo mostrava tra il loot raccolto invece che indossato sul manichino, facendo sembrare che non fosse equipaggiato; ora compare indossato (overlay di sola visualizzazione in `LoadoutPanel`, nessun cambio alle regole di rischio/estrazione già corrette) (#86).
 - Tutorial e Codex del Passo d'ombra spiegano che durante lo scatto (i-frame) si attraversano i nemici senza subire danno (#86).
 - Testi ancora fermi a "tre oggetti" per la fusione (suggerimento del fabbro, tutorial, Codex): ora dicono sei, coerenti con `Forge.FUSION_COUNT` (#86).
 - Tutorial contestuale degli eventi si fermava solo alla primissima run: ora si ferma la prima volta per OGNI tipo di evento mai incontrato (chiave per-evento invece di un flag unico), testo ripreso dal Codex (obiettivo + ricompensa).
@@ -170,6 +173,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Ventaglio: il costo in mana per attivazione ora è moltiplicato per il numero di proiettili (`Weapon.try_fire`), non più lo stesso di un colpo singolo — un colpo a ventaglio vale di più quindi costa di più (#86).
 - Magnete: velocita' e accelerazione di attrazione alzate (`max_speed` 1100->1800, `attract_acceleration` 2200->3200) per arrivare in tempi ragionevoli anche dall'altro capo di un'arena 10x; il raggio era gia' ignorato durante l'effetto, nessun bug li'. Test di conferma su una distanza di ~8000px (#86).
 - Tempo prima della rage (`EnemyData.rage_after`) alzato da 5s a 10s (default, `@export` per singolo nemico): con l'anello di spawn 700-1200px delle arene 10x molti nemici arrivavano al player gia' in rage per la sola camminata (#86).
 - Fusione dal fabbro: servono sei oggetti identici, non più tre (`Forge.FUSION_COUNT`); costi di crafting triplicati in tutte le ricette (`data/recipes/*.tres`); bonus del raggio di raccolta (magnete) ridotto di 3 volte sia da upgrade di run (Magnete, +30% → +10%) sia da equip (Cappuccio del viandante +20% → +7%, range affix 1,1–1,4 → 1,033–1,133) — economia e magnete erano troppo generosi rispetto al ritmo di progressione (#86).

@@ -301,5 +301,8 @@ UPG_MANA_REGEN_UP,Meditazione,Meditation,Méditation,Meditación
 UPG_MANA_REGEN_UP_DESC,+2 rigenerazione di mana al secondo.,+2 mana regen per second.,+2 régénération de mana par seconde.,+2 regeneración de maná por segundo.
 MAP_TITLE,Mappa dell'arena,Arena map,Carte de l'arène,Mapa de la arena
 MAP_NO_POI,Nessun punto di interesse per ora.,No points of interest yet.,Aucun point d'intérêt pour l'instant.,Sin puntos de interés por ahora.
-MAP_HINT,Clic sinistro: piazza un indicatore (max 5) · M o Esc: chiudi,Left click: place an indicator (max 5) · M or Esc: close,Clic gauche : placer un repère (max 5) · M ou Échap : fermer,Clic izquierdo: colocar un indicador (máx. 5) · M o Esc: cerrar
+MAP_HINT,Clic sinistro: piazza un indicatore (max 5) · Clic destro: cancella l'indicatore sotto il cursore · M o Esc: chiudi,Left click: place an indicator (max 5) · Right click: remove the indicator under the cursor · M or Esc: close,Clic gauche : placer un repère (max 5) · Clic droit : supprimer le repère sous le curseur · M ou Échap : fermer,Clic izquierdo: colocar un indicador (máx. 5) · Clic derecho: eliminar el indicador bajo el cursor · M o Esc: cerrar
 HUD_STATS_TITLE,Statistiche,Stats,Statistiques,Estadísticas
+PROMPT_PENTAGRAM_STATUE,E — Statua (attiva il Pentagramma),E — Statue (activates the Pentagram),E — Statue (active le Pentagramme),E — Estatua (activa el Pentagrama)
+MAP_TOOLTIP_PENTAGRAM_STATUE,Evento Pentagramma,Pentagram event,Événement Pentagramme,Evento Pentagrama
+RUNINV_TEMP_EQUIP,(equipaggiato solo per questa run — si perde se muori),(equipped for this run only — lost if you die),(équipé seulement pour cette run — perdu en cas de mort),(equipado solo para esta partida — se pierde si mueres)

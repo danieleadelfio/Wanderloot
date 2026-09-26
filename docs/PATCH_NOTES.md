@@ -75,3 +75,16 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Novità
 - Evento Pentagramma di sangue ripensato: niente più comparsa a caso durante la run. Ora, fin dall'inizio, da qualche parte nell'arena trovi un pentagramma con le candele spente e una statua di demone al centro — visibile anche su mappa e minimappa, così sai dove andare. Avvicinati e premi E: la statua sparisce e le candele si accendono. Restano accese per un po', poi iniziano a spegnersi una al secondo mentre i mostri si fanno più numerosi e aggressivi: resta nel cerchio finché non si spegne l'ultima, uscire fa fallire l'evento. Il cerchio è anche più grande di prima.
+
+## In lavorazione (8) — 26/09/2026
+
+### Novità
+- Vicino alla statua del Pentagramma ora compare la scritta "E — Interagisci", così è chiaro cosa fare.
+- Aprendo la mappa: clic destro cancella l'indicatore sotto il cursore, la legenda in basso lo spiega insieme agli altri comandi; gli indicatori sono ora dei triangoli (la tua posizione resta un cerchio); passando il cursore sulla statua del Pentagramma o su Cuore/Furia/Magnete a terra compare il loro nome.
+
+### Correzioni
+- La finestra dell'inventario di run (tasto I) non sborda più dallo schermo su finestre piccole.
+- Il pezzo scelto dall'armadio degli Scheletri ora compare indossato sul manichino nell'inventario di run, non più nel mucchio del loot raccolto — resta comunque a rischio: si perde se muori, diventa tuo solo estraendo.
+
+### Bilanciamento
+- Con il Ventaglio, il mana consumato per colpo è ora maggiore rispetto allo sparo singolo (proporzionale al numero di proiettili).

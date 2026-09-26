@@ -40,6 +40,10 @@ var _exp_remainder: float = 0.0
 var bosses: Array[Boss] = []
 ## Boss in piu' guadagnati dagli eventi (Pentagramma di sangue).
 var _extra_bosses: int = 0
+## Pezzi scelti dall'armadio (evento Scheletri nell'armadio, M13, #86): mostrati indossati nel
+## manichino dell'inventario di run (I), non nel mucchio del loot; restano comunque a rischio
+## (persi alla morte, mai scritti sul vero MetaProgression.loadout finche' non si estrae).
+var _run_equipped_items: Array[ItemInstance] = []
 var _bosses_spawned: bool = false
 ## Abilita' che gli eventi possono offrire (M10).
 @export var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
@@ -115,6 +119,7 @@ func _ready() -> void:
 	_run_end_screen.restart_requested.connect(_on_restart_requested)
 	_pause.mode_changed.connect(_on_pause_mode_changed)
 	_map_screen.indicator_placed.connect(_on_map_indicator_placed)
+	_map_screen.indicator_removed.connect(_on_map_indicator_placed.bind(Vector2.ZERO))
 	for i in MapIndicators.MAX_INDICATORS:
 		var arrow := MapIndicatorArrow.new()
 		arrow.color = _map_indicators.color_for(i)
@@ -290,6 +295,7 @@ func _on_closet_item_chosen(item: ItemInstance) -> void:
 	_pause.enabled = RunManager.state == RunManager.State.RUNNING
 	_refresh_pause()
 	RunManager.add_loot_item(item)
+	_run_equipped_items.append(item)
 	var modifiers := item.modifiers()
 	_equip_modifiers.append_array(modifiers)
 	_player.apply_equipment(modifiers)
@@ -748,7 +754,7 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_pause_menu.show_mode(mode)
 	if mode == PauseState.Mode.INVENTORY:
-		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items(), _player, _equip_modifiers)
+		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items(), _player, _equip_modifiers, _run_equipped_items)
 	else:
 		_run_inventory.close()
 	if mode == PauseState.Mode.MAP:

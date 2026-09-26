@@ -109,7 +109,11 @@ func _on_sort_pressed(mode: StashSort.Mode) -> void:
 		refresh(_loadout)
 
 
-func refresh(loadout: EquipmentLoadout) -> void:
+## overlay_items: pezzi mostrati indossati sul manichino senza toccare `loadout` (M13, #86: pezzo
+## dell'armadio scelto in run, a rischio finche' non si estrae con successo, mai scritto nel vero
+## EquipmentLoadout ne' nell'uid dell'ItemInstance). Primo slot libero tra quelli del suo tipo,
+## altrimenti sostituisce visivamente il primo (sola presentazione, sempre read_only in pratica).
+func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = []) -> void:
 	_loadout = loadout
 	_refresh_ability_levels(loadout)
 	# Bug (M12, #86): queue_free() lascia il nodo nell'albero fino a fine frame. Se refresh() viene
@@ -120,12 +124,17 @@ func refresh(loadout: EquipmentLoadout) -> void:
 	for child in _slots.get_children():
 		_slots.remove_child(child)
 		child.free()
+	var overlay_by_slot := _assign_overlay_slots(overlay_items)
 	for slot: int in SLOT_POSITIONS:
-		var item := loadout.equipped_in(slot)
+		var overlaid: bool = overlay_by_slot.has(slot)
+		var item: ItemInstance = overlay_by_slot[slot] if overlaid else loadout.equipped_in(slot)
 		var button: Button = ItemTile.for_item(item) if item else _item_button(null, tr(SLOT_NAMES[slot]))
 		button.size = button.custom_minimum_size
 		button.position = SLOT_POSITIONS[slot]
-		if item and not read_only:
+		if overlaid:
+			button.focus_mode = Control.FOCUS_NONE
+			button.tooltip_text += "\n" + tr("RUNINV_TEMP_EQUIP")
+		elif item and not read_only:
 			button.pressed.connect(unequip_requested.emit.bind(slot))
 		elif item:
 			button.focus_mode = Control.FOCUS_NONE
@@ -151,6 +160,19 @@ func refresh(loadout: EquipmentLoadout) -> void:
 
 
 ## Livelli totali di ogni abilita' data dai pezzi indossati (M12, #86), sommati come in run.
+func _assign_overlay_slots(overlay_items: Array[ItemInstance]) -> Dictionary[int, ItemInstance]:
+	var result: Dictionary[int, ItemInstance] = {}
+	for item in overlay_items:
+		var slots := EquipmentLoadout.slots_for(item.slot())
+		var target: int = slots[0]
+		for slot in slots:
+			if not result.has(slot):
+				target = slot
+				break
+		result[target] = item
+	return result
+
+
 func _refresh_ability_levels(loadout: EquipmentLoadout) -> void:
 	var levels: Dictionary = {}
 	for item in loadout.equipped_items():

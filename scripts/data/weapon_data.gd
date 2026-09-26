@@ -17,7 +17,8 @@ extends Resource
 ## Nemici attraversati prima di sparire (upgrade "Perforazione").
 @export var pierce: int = 0
 ## Mana consumato per ogni colpo dello sparo base (0 = nessun costo, M12 #86): costa una volta per
-## attivazione (un "while _cooldown <= 0" di Weapon.try_fire), non per proiettile del Ventaglio.
+## attivazione (un "while _cooldown <= 0" di Weapon.try_fire), moltiplicato per i proiettili del
+## Ventaglio (M13, #86: un colpo a piu' proiettili vale di piu', quindi costa di piu').
 @export var mana_cost: float = 0.0
 
 @export_group("Veleno")

@@ -86,3 +86,19 @@ func test_zero_mana_cost_never_gated_even_with_empty_pool() -> void:
 	add_child(weapon)
 	weapon.set_physics_process(false)
 	assert_int(weapon.try_fire(Vector2.RIGHT)).is_equal(1)
+
+
+## Ventaglio (M13, #86): un colpo con piu' proiettili costa piu' mana, non lo stesso di uno singolo.
+func test_ventaglio_multiplies_mana_cost_by_projectile_count() -> void:
+	var weapon: Weapon = auto_free(Weapon.new())
+	weapon.data = WeaponData.new()
+	weapon.data.fire_rate = 4.0
+	weapon.data.mana_cost = 5.0
+	weapon.data.projectile_count = 3
+	var mana := Mana.new()
+	mana.reset(15.0, 0.0)
+	weapon.mana = mana
+	add_child(weapon)
+	weapon.set_physics_process(false)
+	assert_int(weapon.try_fire(Vector2.RIGHT)).is_equal(1)
+	assert_float(mana.current).is_equal_approx(0.0, 0.001)
