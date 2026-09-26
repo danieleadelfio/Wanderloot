@@ -73,7 +73,8 @@ static func tooltip_panel(item: ItemInstance, header: String = "") -> Control:
 	box.custom_minimum_size.x = 260
 	box.add_theme_constant_override("separation", 2)
 	if header != "":
-		box.add_child(_line(header, Color(0.8, 0.8, 0.9, 0.7), 12))
+		# "Equipaggiato" era grigio scuro e poco leggibile nel confronto (M12, #86): bianco e in grassetto.
+		box.add_child(_line(header, Color(1, 1, 1, 0.95), 12, true))
 	box.add_child(_line(title(item), color(item), 18))
 	box.add_child(_line(rarity_name(item), color(item), 13))
 	box.add_child(_line(TranslationServer.translate(item.base.description), Color(0.9, 0.88, 0.8), 13))
@@ -87,14 +88,16 @@ static func tooltip_panel(item: ItemInstance, header: String = "") -> Control:
 	return box
 
 
-## Tooltip di confronto: l'oggetto a sinistra, quelli equipaggiati nello stesso slot a destra.
+## Tooltip di confronto: gli oggetti equipaggiati nello stesso slot a sinistra, quello non equipaggiato
+## per ultimo (vicino al cursore, M12 #86: prima era al contrario e il pezzo sotto il mouse finiva
+## lontano dal cursore).
 static func compare_panel(item: ItemInstance, equipped: Array[ItemInstance]) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 18)
-	row.add_child(tooltip_panel(item))
 	for other in equipped:
-		row.add_child(VSeparator.new())
 		row.add_child(tooltip_panel(other, TranslationServer.translate("TOOLTIP_EQUIPPED")))
+		row.add_child(VSeparator.new())
+	row.add_child(tooltip_panel(item))
 	return row
 
 
@@ -102,9 +105,15 @@ static func _ability_name(item: ItemInstance) -> String:
 	return "%s Lv%d" % [TranslationServer.translate(item.ability.display_name), item.ability_level(RARITIES)]
 
 
-static func _line(text: String, font_color: Color, size: int) -> Label:
+static func _line(text: String, font_color: Color, size: int, bold: bool = false) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.add_theme_color_override("font_color", font_color)
 	label.add_theme_font_size_override("font_size", size)
+	if bold:
+		# Nessun font bold dedicato nel progetto: grassetto finto via FontVariation (embolden).
+		var variation := FontVariation.new()
+		variation.base_font = ThemeDB.fallback_font
+		variation.variation_embolden = 1.0
+		label.add_theme_font_override("font", variation)
 	return label
