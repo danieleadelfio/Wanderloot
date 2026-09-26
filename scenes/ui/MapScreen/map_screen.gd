@@ -22,6 +22,6 @@ func close() -> void:
 	_window.hide()
 
 
-func present(arena_rect: Rect2, player: Node2D, indicators: MapIndicators) -> void:
-	_map_area.setup(arena_rect, player, indicators)
+func present(arena_rect: Rect2, player: Node2D, indicators: MapIndicators, pickup_pool: PickupPool = null) -> void:
+	_map_area.setup(arena_rect, player, indicators, pickup_pool)
 	_window.show()

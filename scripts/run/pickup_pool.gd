@@ -12,9 +12,11 @@ signal item_collected(item: ItemInstance)
 @export var pickup_scene: PackedScene
 @export var initial_size: int = 96
 @export var exp_texture: Texture2D
-## Accelerazione e velocita' massima dell'attrazione (px/s^2, px/s).
-@export var attract_acceleration: float = 2200.0
-@export var max_speed: float = 1100.0
+## Accelerazione e velocita' massima dell'attrazione (px/s^2, px/s). Alzate per le arene 10x (M13,
+## #86): il Magnete ignora gia' la distanza (radius_sq bypassato mentre _attract_all_left > 0, vedi
+## sotto), ma con arene fino a ~8600px di diagonale un oggetto lontano ci metteva troppo ad arrivare.
+@export var attract_acceleration: float = 3200.0
+@export var max_speed: float = 1800.0
 @export var absorb_radius: float = 14.0
 @export var pop_speed: float = 90.0
 
@@ -62,6 +64,12 @@ func attract_all(seconds: float) -> void:
 
 func active_count() -> int:
 	return _active.size()
+
+
+## Consumabili attualmente a terra (M13, #86): mostrati come icona su mappa e minimappa, cosi' il
+## player sa dove si trova un Magnete/Furia/Cuore anche a distanza. Solo Kind.CONSUMABLE.
+func active_consumables() -> Array[Pickup]:
+	return _active.filter(func(p: Pickup) -> bool: return p.kind == Pickup.Kind.CONSUMABLE)
 
 
 func _physics_process(delta: float) -> void:

@@ -61,3 +61,12 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Bilanciamento
 - Tempo prima che un nemico vada in rage alzato da 5 a 10 secondi (in linea con le arene più grandi): prima molti arrivavano già furiosi solo per la camminata dal punto di spawn.
+
+## In lavorazione (6) — 26/09/2026
+
+### Verifiche
+- Controllato il tiro casuale delle statistiche dell'equipaggiamento (es. Guanti del fabbro): funziona correttamente, gli affissi variano tra un drop e l'altro. Aggiunto un test per tenerlo d'occhio in futuro.
+- Controllato il raggio d'azione del Magnete: attira già tutto ciò che è a terra nell'arena a prescindere dalla distanza. Aumentata solo la velocità con cui gli oggetti arrivano, per non farli aspettare troppo su arene enormi.
+
+### Novità
+- Le icone di Magnete, Cuore e Furia, quando droppati a terra, compaiono anche su mappa e minimappa finché non li raccogli.

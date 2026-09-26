@@ -46,7 +46,7 @@ Riferimenti diretti: Vampire Survivors / Brotato (run loop, scelta reward a leve
 
 ### 3.2b Consumabili (M10.1, #50)
 
-I nemici possono lasciare **consumabili** (1,2% per uccisione, moltiplicato dal bonus drop; il boss ne lascia 2): oggetti a terra con effetto alla raccolta, attratti dal magnete come exp e materiali, che **non sono loot** (non vanno nel baule). **Magnete**: per 4 s attira tutto ciò che è a terra in tutta l'arena. **Cuore**: cura 200 HP. **Furia**: cadenza +50% per 6 s. Gli effetti a tempo compaiono nell'HUD con i secondi rimasti. Dati in `data/consumables/` (`ConsumableData`, `ConsumableTable` assegnata da `ArenaData.consumables`).
+I nemici possono lasciare **consumabili** (1,2% per uccisione, moltiplicato dal bonus drop; il boss ne lascia 2): oggetti a terra con effetto alla raccolta, attratti dal magnete come exp e materiali, che **non sono loot** (non vanno nel baule). **Magnete**: per 4 s attira tutto ciò che è a terra in tutta l'arena — gia' a prescindere dalla distanza (`PickupPool.attract_all()` ignora il raggio finche' e' attivo), non solo con le arene 10x; velocita'/accelerazione dell'attrazione alzate (M13, #86: `max_speed` 1100→1800, `attract_acceleration` 2200→3200) cosi' un oggetto recuperato dall'altro capo di un'arena enorme non ci mette un'eternita' ad arrivare. **Cuore**: cura 200 HP. **Furia**: cadenza +50% per 6 s. Gli effetti a tempo compaiono nell'HUD con i secondi rimasti. **M13, #86**: finche' un Magnete/Cuore/Furia e' a terra, la sua icona compare anche su mappa (tasto M) e minimappa, cosi' si vede dove si trova anche a distanza. Dati in `data/consumables/` (`ConsumableData`, `ConsumableTable` assegnata da `ArenaData.consumables`).
 
 ### 3.3 Abilità della bacchetta (M10, #45)
 

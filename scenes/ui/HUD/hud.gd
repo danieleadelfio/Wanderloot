@@ -52,8 +52,8 @@ func _on_state_changed(state: RunManager.State) -> void:
 
 
 ## Contesto della minimappa (M13, #86): una volta a inizio run, come set_arena_level.
-func set_minimap_context(player: Node2D, indicators: MapIndicators, extraction_point: Node2D) -> void:
-	_minimap.setup(player, indicators, extraction_point)
+func set_minimap_context(player: Node2D, indicators: MapIndicators, extraction_point: Node2D, pickup_pool: PickupPool = null) -> void:
+	_minimap.setup(player, indicators, extraction_point, pickup_pool)
 
 
 func set_hp(current: int, maximum: int) -> void:

@@ -13,16 +13,21 @@ const EXTRACTION_COLOR: Color = Color(1.0, 0.85, 0.2)
 var player: Node2D
 var indicators: MapIndicators
 var extraction_point: Node2D
+var pickup_pool: PickupPool
+
+## Dimensione dell'icona dei consumabili in minimappa (M13, #86): piu' piccola che sulla mappa intera.
+const CONSUMABLE_ICON_SIZE: float = 12.0
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-func setup(p: Node2D, ind: MapIndicators, extraction: Node2D) -> void:
+func setup(p: Node2D, ind: MapIndicators, extraction: Node2D, pool: PickupPool = null) -> void:
 	player = p
 	indicators = ind
 	extraction_point = extraction
+	pickup_pool = pool
 
 
 func _process(_delta: float) -> void:
@@ -56,3 +61,11 @@ func _draw() -> void:
 		var pts := indicators.points()
 		for i in pts.size():
 			draw_circle(_relative(pts[i], radius - 6.0), 5.0, indicators.color_for(i))
+	if pickup_pool:
+		for pickup in pickup_pool.active_consumables():
+			var icon := pickup.consumable.icon
+			if icon == null:
+				continue
+			var pos := _relative(pickup.global_position, radius - 6.0)
+			var half := CONSUMABLE_ICON_SIZE * 0.5
+			draw_texture_rect(icon, Rect2(pos - Vector2(half, half), Vector2.ONE * CONSUMABLE_ICON_SIZE), false)

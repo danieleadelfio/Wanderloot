@@ -5,6 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
+- Icona del consumabile (Magnete/Cuore/Furia) a terra visibile su mappa e minimappa finche' non viene raccolto (#86).
 - Spawn dei nemici in un anello attorno al player (`WaveSpawner.spawn_min_distance` 700px/`spawn_max_distance` 1200px) invece che ovunque nel rect dell'arena: con le arene 10x comparivano a migliaia di px, gia' in rage prima di arrivare. Un nemico oltre `despawn_distance` (1600px) sparisce in silenzio (nessun drop, nessun `enemy_died`) e viene rimpiazzato dal ciclo di ondate con uno spawn point sulla posizione attuale del player. Test su anello e despawn (#86).
 - Toggle statistiche in HUD: pulsante accanto al titolo "Statistiche" per nascondere/mostrare il blocco a sinistra (solo visivo), utile nei combattimenti piu' fitti (#86).
 - Attacco **carica in linea** dei boss: preavviso ridisegnato come una striscia rettangolare unica (segmenti `Telegraph` adiacenti senza cuciture) invece di cerchi separati in fila, stessa hitbox circolare invariata (#86).
@@ -168,6 +169,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Magnete: velocita' e accelerazione di attrazione alzate (`max_speed` 1100->1800, `attract_acceleration` 2200->3200) per arrivare in tempi ragionevoli anche dall'altro capo di un'arena 10x; il raggio era gia' ignorato durante l'effetto, nessun bug li'. Test di conferma su una distanza di ~8000px (#86).
 - Tempo prima della rage (`EnemyData.rage_after`) alzato da 5s a 10s (default, `@export` per singolo nemico): con l'anello di spawn 700-1200px delle arene 10x molti nemici arrivavano al player gia' in rage per la sola camminata (#86).
 - Fusione dal fabbro: servono sei oggetti identici, non più tre (`Forge.FUSION_COUNT`); costi di crafting triplicati in tutte le ricette (`data/recipes/*.tres`); bonus del raggio di raccolta (magnete) ridotto di 3 volte sia da upgrade di run (Magnete, +30% → +10%) sia da equip (Cappuccio del viandante +20% → +7%, range affix 1,1–1,4 → 1,033–1,133) — economia e magnete erano troppo generosi rispetto al ritmo di progressione (#86).
 - Bonus di danno e HP massimi sempre in percentuale, mai più flat, sia per gli upgrade di run (Potenza, Vigore) sia per l'equip (bonus fissi dell'oggetto base e range tirati in `affix_table.tres`): un "+1"/"+2" fisso pesava in modo sproporzionato a seconda della base (trascurabile su un'arma forte, enorme su una debole) e cambiava peso a ogni rescale della base; ora +10% danno (Potenza, Bacchetta di gelatina/d'ossa), +10% HP (Vigore, Corazza d'osso, Brache di cuoio), +20% HP (Amuleto del nucleo, doppio delle altre come prima), range 1,3%–8,3% negli affix tirati — stesso schema di Raffica/cadenza di fuoco (#86).

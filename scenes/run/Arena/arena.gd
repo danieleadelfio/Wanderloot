@@ -142,7 +142,7 @@ func _ready() -> void:
 	_wave_spawner.level_hp = ArenaLevel.enemy_hp_multiplier(arena_level)
 	_wave_spawner.level_rate = ArenaLevel.spawn_rate_multiplier(arena_level)
 	_hud.set_arena_level(arena_level)
-	_hud.set_minimap_context(_player, _map_indicators, _extraction_point)
+	_hud.set_minimap_context(_player, _map_indicators, _extraction_point, _pickup_pool)
 	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player, _equip_modifiers)
@@ -752,7 +752,7 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	else:
 		_run_inventory.close()
 	if mode == PauseState.Mode.MAP:
-		_map_screen.present(extraction_spawn_rect, _player, _map_indicators)
+		_map_screen.present(extraction_spawn_rect, _player, _map_indicators, _pickup_pool)
 	else:
 		_map_screen.close()
 	_refresh_pause()

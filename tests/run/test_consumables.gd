@@ -54,6 +54,28 @@ func test_magnet_attracts_everything_in_the_arena() -> void:
 	assert_int(collected[0]).is_equal(5)
 
 
+## Arene 10x (M13, #86): il Magnete deve recuperare un oggetto anche dall'altra parte di un'arena
+## enorme (~8000px), non solo da poche centinaia di px come nel test sopra.
+func test_magnet_attracts_from_across_a_10x_arena() -> void:
+	var target: Node2D = auto_free(Node2D.new())
+	add_child(target)
+	var pool: PickupPool = auto_free(PickupPool.new())
+	pool.pickup_scene = load("res://scenes/run/Pickup/Pickup.tscn")
+	pool.initial_size = 2
+	pool.pop_speed = 0.0
+	pool.target = target
+	add_child(pool)
+	pool.set_physics_process(false)
+	var collected := [0]
+	pool.exp_collected.connect(func(amount: int) -> void: collected[0] += amount)
+	pool.spawn_exp(Vector2(7000, 4000), 1)
+	pool.attract_all(4.0)
+	# Budget generoso (20s simulati) per attraversare tutta l'arena in accelerazione.
+	for i in 1200:
+		pool._physics_process(TICK)
+	assert_int(collected[0]).is_equal(1)
+
+
 func test_heal_is_capped_at_max() -> void:
 	var health: Health = auto_free(Health.new())
 	health.reset(5)

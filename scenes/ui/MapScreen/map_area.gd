@@ -16,12 +16,17 @@ const COMPASS := {
 var arena_rect: Rect2
 var player: Node2D
 var indicators: MapIndicators
+var pickup_pool: PickupPool
+
+## Dimensione dell'icona dei consumabili sulla mappa (M13, #86).
+const CONSUMABLE_ICON_SIZE: float = 20.0
 
 
-func setup(rect: Rect2, p: Node2D, ind: MapIndicators) -> void:
+func setup(rect: Rect2, p: Node2D, ind: MapIndicators, pool: PickupPool = null) -> void:
 	arena_rect = rect
 	player = p
 	indicators = ind
+	pickup_pool = pool
 	queue_redraw()
 
 
@@ -54,6 +59,14 @@ func _draw() -> void:
 		var pts := indicators.points()
 		for i in pts.size():
 			draw_circle(_world_to_local(pts[i]), 7.0, indicators.color_for(i))
+	if pickup_pool:
+		for pickup in pickup_pool.active_consumables():
+			var icon := pickup.consumable.icon
+			if icon == null:
+				continue
+			var center := _world_to_local(pickup.global_position)
+			var half := CONSUMABLE_ICON_SIZE * 0.5
+			draw_texture_rect(icon, Rect2(center - Vector2(half, half), Vector2.ONE * CONSUMABLE_ICON_SIZE), false)
 	for label in COMPASS:
 		var pos: Vector2 = COMPASS[label] * size
 		draw_string(ThemeDB.fallback_font, pos, label, HORIZONTAL_ALIGNMENT_CENTER, -1, 16, Color.WHITE)
