@@ -521,6 +521,9 @@ func _on_overtime_warned(seconds: int, next_level: int) -> void:
 
 ## Nuovo livello: nemici nuovi in rage, piu' veloci e resistenti; i boss arrivano da overtime.boss_due.
 func _on_overtime_level(level: int) -> void:
+	# L'overtime mescola sempre boss e nemici base (comportamento attuale): eventuali boss pre-overtime
+	# ancora vivi non bloccano piu' lo spawn da qui in poi.
+	_wave_spawner.spawning_blocked = false
 	_wave_spawner.overtime_raged = arena.overtime.spawn_raged
 	_wave_spawner.overtime_speed = overtime.speed_multiplier()
 	_wave_spawner.overtime_hp = overtime.hp_multiplier()
@@ -544,6 +547,11 @@ func _on_overtime_level(level: int) -> void:
 func _spawn_boss() -> void:
 	_bosses_spawned = true
 	_spawn_bosses(arena.boss_count + _extra_bosses + ArenaLevel.boss_bonus(arena_level))
+	# Boss pre-overtime (Ossario, M12, #86): mentre sono vivi, niente nuovi nemici base finche' non
+	# muoiono o non arriva l'overtime (che li mescola come ora, vedi _on_overtime_level). I nemici gia'
+	# in giro a quel momento restano e vanno uccisi normalmente.
+	if not bosses.is_empty():
+		_wave_spawner.spawning_blocked = true
 
 
 func _spawn_bosses(count: int) -> void:
@@ -622,6 +630,8 @@ func _on_boss_attack_started(attack: BossAttack) -> void:
 func _on_boss_died(dead: Boss) -> void:
 	bosses.erase(dead)
 	boss_defeated = bosses.is_empty()
+	if _wave_spawner.spawning_blocked and bosses.is_empty():
+		_wave_spawner.spawning_blocked = false
 	if boss_defeated and not _boss_event_queued and arena.boss_event_delay >= 0.0:
 		_boss_event_queued = true
 		_events.queue_event(arena.boss_event_delay)

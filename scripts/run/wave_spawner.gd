@@ -30,6 +30,10 @@ var overtime_rate: float = 1.0
 ## run. Indipendente da overtime: si moltiplicano tra loro (ArenaLevel non cambia in run).
 var level_hp: float = 1.0
 var level_rate: float = 1.0
+## Blocca nuove ondate senza toccare i nemici gia' vivi (Ossario, boss pre-overtime, M12, #86): i nemici
+## presenti quando il blocco scatta restano e vengono uccisi normalmente, ma non ne arrivano di nuovi
+## finche' il blocco non si toglie.
+var spawning_blocked: bool = false
 
 
 func _ready() -> void:
@@ -53,7 +57,7 @@ func active_count() -> int:
 func _physics_process(delta: float) -> void:
 	_elapsed += delta
 	_cooldown -= delta
-	if _cooldown > 0.0 or _pools.is_empty():
+	if _cooldown > 0.0 or _pools.is_empty() or spawning_blocked:
 		return
 	_cooldown = wave_data.interval_at(_elapsed) / maxf(overtime_rate * level_rate, 0.01)
 	var cap := mini(roundi(wave_data.max_alive_at(_elapsed) * surge_multiplier * overtime_alive), MAX_ALIVE)
