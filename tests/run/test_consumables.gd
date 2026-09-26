@@ -23,9 +23,9 @@ func test_pick_respects_weights_and_chance() -> void:
 	assert_object(table.roll(rng)).is_null()
 
 
-func test_real_table_has_three_consumables() -> void:
+func test_real_table_has_four_consumables() -> void:
 	var table: ConsumableTable = load("res://data/consumables/consumable_table.tres")
-	assert_int(table.entries.size()).is_equal(3)
+	assert_int(table.entries.size()).is_equal(4)
 	var crypt: ArenaData = load("res://data/arenas/crypt.tres")
 	assert_object(crypt.consumables).is_not_null()
 

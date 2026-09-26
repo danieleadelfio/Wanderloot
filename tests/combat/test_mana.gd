@@ -58,3 +58,14 @@ func test_set_max_value_lowering_clamps_current() -> void:
 	mana.set_max_value(4.0)
 	assert_float(mana.max_value).is_equal_approx(4.0, 0.001)
 	assert_float(mana.current).is_equal_approx(4.0, 0.001)
+
+
+## Prisma di Mana (consumabile, M13, #86): finche' unlimited e' attivo, il costo e' sempre permesso e
+## spend() non consuma dal pool (si vede pieno).
+func test_unlimited_allows_any_cost_and_does_not_drain() -> void:
+	var mana := Mana.new()
+	mana.reset(10.0, 0.0)
+	mana.unlimited = true
+	assert_bool(mana.can_afford(999.0)).is_true()
+	assert_bool(mana.spend(999.0)).is_true()
+	assert_float(mana.current).is_equal_approx(10.0, 0.001)

@@ -496,6 +496,8 @@ func _on_consumable_collected(consumable: ConsumableData) -> void:
 			_player.health.heal(roundi(consumable.amount))
 		ConsumableData.Kind.FRENZY:
 			_player.boost_fire_rate(consumable.amount, consumable.duration)
+		ConsumableData.Kind.MANA_PRISM:
+			_player.boost_infinite_mana(consumable.duration)
 	if consumable.duration > 0.0:
 		_buffs[consumable.display_name] = consumable.duration
 

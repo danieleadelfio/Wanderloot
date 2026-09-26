@@ -16,5 +16,7 @@ extends Resource
 @export var drop_chance_multiplier: float = 1.0
 ## Mana massimo (M12, #86): consumato dallo sparo base (WeaponData.mana_cost), non dalle abilita'.
 @export var max_mana: float = 30.0
-## Mana rigenerato al secondo (upgrade "Meditazione").
-@export var mana_regen: float = 6.0
+## Mana rigenerato al secondo (upgrade "Meditazione"). M13, #86: alzata da 6 a 8 (+1/3), lo sparo
+## base a cadenza ridotta (2/s) ne consuma anche meno; il Ventaglio (costo per attivazione
+## moltiplicato per i proiettili) restava comunque a corto di mana con la vecchia rigenerazione.
+@export var mana_regen: float = 8.0

@@ -678,10 +678,20 @@ def icon_frenzy():
                '<path d="M32 36 C35 40 38 42 38 47 C38 52 35 55 32 55 C29 55 26 52 26 47 C26 43 30 41 32 36 Z" fill="#fff4c0"/>' % OUTLINE, defs, 64)
 
 
+def icon_mana_prism():
+    defs = ('<linearGradient id="mp" x1="0" y1="0" x2="0" y2="1">'
+            '<stop offset="0" stop-color="#bfe8ff"/><stop offset="0.55" stop-color="#4fa8f0"/><stop offset="1" stop-color="#1a4f9c"/>'
+            '</linearGradient>')
+    return svg('<path d="M32 5 L52 24 L42 58 L22 58 L12 24 Z" fill="url(#mp)" %s/>'
+               '<path d="M32 5 L42 24 L32 58 L22 24 Z" fill="#eaf7ff" opacity="0.35"/>'
+               '<path d="M12 24 L52 24" stroke="#0d2e63" stroke-width="2" opacity="0.5"/>' % OUTLINE, defs, 64)
+
+
 def build_consumables():
     save("icon_magnet", [icon_magnet()], 64)
     save("icon_heart", [icon_heart()], 64)
     save("icon_frenzy", [icon_frenzy()], 64)
+    save("icon_mana_prism", [icon_mana_prism()], 64)
 
 
 # --- Equipaggiamento M11: icone dei nuovi slot e manichino ------------------------------------------

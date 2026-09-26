@@ -3,7 +3,7 @@ extends Resource
 ## Consumabile a terra (M10.1): effetto immediato o a tempo alla raccolta. Non e' loot: non va nel baule.
 ## Nuovi tipi solo in coda all'enum (valore salvato nei .tres).
 
-enum Kind { MAGNET, HEAL, FRENZY }
+enum Kind { MAGNET, HEAL, FRENZY, MANA_PRISM }
 
 @export var id: StringName = &""
 ## Chiavi di traduzione.
@@ -13,7 +13,7 @@ enum Kind { MAGNET, HEAL, FRENZY }
 @export var kind: Kind = Kind.MAGNET
 ## Secondi dell'effetto (MAGNET, FRENZY).
 @export var duration: float = 4.0
-## HP curati (HEAL) o moltiplicatore della cadenza (FRENZY).
+## HP curati (HEAL) o moltiplicatore della cadenza (FRENZY). Ignorato da MANA_PRISM (solo `duration`).
 @export var amount: float = 1.0
 ## Peso relativo nella tabella dei drop.
 @export var weight: float = 1.0

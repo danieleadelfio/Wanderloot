@@ -5,8 +5,9 @@
 [ext_resource type="Resource" path="res://data/consumables/magnet.tres" id="2"]
 [ext_resource type="Resource" path="res://data/consumables/heart.tres" id="3"]
 [ext_resource type="Resource" path="res://data/consumables/frenzy.tres" id="4"]
+[ext_resource type="Resource" path="res://data/consumables/mana_prism.tres" id="5"]
 
 [resource]
 script = ExtResource("1")
-entries = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4")])
+entries = Array[ExtResource("0")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])
 drop_chance = 0.012

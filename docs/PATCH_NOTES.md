@@ -88,3 +88,12 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Bilanciamento
 - Con il Ventaglio, il mana consumato per colpo è ora maggiore rispetto allo sparo singolo (proporzionale al numero di proiettili).
+
+## In lavorazione (9) — 26/09/2026
+
+### Novità
+- Nuovo consumabile: **Prisma di Mana** (si raccoglie a terra come Magnete/Cuore/Furia, icona anche su mappa e minimappa): mana infinito per 6 secondi.
+
+### Bilanciamento
+- Cadenza di fuoco base ridotta (da 4 a 2 colpi al secondo) e costo in mana per colpo ridotto di 1/3, per compensare: con il Ventaglio il mana finiva troppo in fretta.
+- Rigenerazione del mana di base alzata di 1/3.

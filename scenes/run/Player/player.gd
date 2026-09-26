@@ -18,6 +18,7 @@ const AIM_DEADZONE: float = 0.3
 ## Riferimenti ai .tres base (condivisi, mai modificati): ogni run parte da copie fresche.
 var _base_stats: PlayerStats
 var _frenzy_token: int = 0
+var _mana_prism_token: int = 0
 var _base_weapon: WeaponData
 ## Passo d'ombra (M11.1): niente sparo, lo sparo diventa uno scatto invulnerabile a cariche.
 var dash_mode: bool = false
@@ -195,6 +196,17 @@ func boost_fire_rate(multiplier: float, seconds: float) -> void:
 	# Una Furia raccolta nel frattempo rinnova la durata: vale solo l'ultima.
 	if is_inside_tree() and token == _frenzy_token:
 		_weapon.rate_multiplier = 1.0
+
+
+## Prisma di Mana (consumabile, M13, #86): mana infinito per `seconds`; si ferma con la pausa del gioco.
+func boost_infinite_mana(seconds: float) -> void:
+	_mana_prism_token += 1
+	var token := _mana_prism_token
+	mana.unlimited = true
+	await get_tree().create_timer(seconds, false).timeout
+	# Un Prisma raccolto nel frattempo rinnova la durata: vale solo l'ultimo.
+	if is_inside_tree() and token == _mana_prism_token:
+		mana.unlimited = false
 
 
 func has_shield() -> bool:
