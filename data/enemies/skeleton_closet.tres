@@ -1,15 +1,14 @@
-[gd_resource type="Resource" script_class="EnemyData" format=3]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://dulcovynlnlwm"]
 
 [ext_resource type="Script" uid="uid://dj6e0fe8px7k5" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://b1tu3o4nntegy" path="res://scripts/data/drop_entry.gd" id="1_d63y8"]
 
 [resource]
 script = ExtResource("1")
 display_name = "Scheletro dell'armadio"
 max_hp = 400
 move_speed = 23.33
-contact_damage = 100
-contact_knockback = 260.0
 exp_reward = 0
-rage_after = 0.0
+contact_knockback = 260.0
 invulnerable = true
-drops = Array[Resource]([])
+rage_after = 0.0

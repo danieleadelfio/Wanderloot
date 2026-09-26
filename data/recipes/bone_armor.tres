@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="RecipeData" format=3]
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://d2miugi1asi02"]
 
-[ext_resource type="Script" path="res://scripts/data/recipe_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/material_cost.gd" id="2"]
-[ext_resource type="Resource" path="res://data/equipment/bone_armor.tres" id="3"]
+[ext_resource type="Script" uid="uid://bhmrjnmx76tw5" path="res://scripts/data/recipe_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://s7tnwldktqqe" path="res://scripts/data/material_cost.gd" id="2"]
+[ext_resource type="Resource" uid="uid://dm6v6b4tyoeed" path="res://data/equipment/bone_armor.tres" id="3"]
 [ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m_bone"]
 [ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m_ess"]
 

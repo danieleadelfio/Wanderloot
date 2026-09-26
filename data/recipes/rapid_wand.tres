@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="RecipeData" format=3]
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://b045br4r6d0wj"]
 
-[ext_resource type="Script" path="res://scripts/data/recipe_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/material_cost.gd" id="2"]
-[ext_resource type="Resource" path="res://data/equipment/rapid_wand.tres" id="3"]
+[ext_resource type="Script" uid="uid://bhmrjnmx76tw5" path="res://scripts/data/recipe_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://s7tnwldktqqe" path="res://scripts/data/material_cost.gd" id="2"]
+[ext_resource type="Resource" uid="uid://udxtaemaq32k" path="res://data/equipment/rapid_wand.tres" id="3"]
 [ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="4"]
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="5"]
 

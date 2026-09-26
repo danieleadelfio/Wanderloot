@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyData" format=3]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://dso7jbieacmbb"]
 
-[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/drop_entry.gd" id="2"]
+[ext_resource type="Script" uid="uid://dj6e0fe8px7k5" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://b1tu3o4nntegy" path="res://scripts/data/drop_entry.gd" id="2"]
 [ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="3"]
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="4"]
 [ext_resource type="Resource" path="res://data/weapons/toxic_glob.tres" id="w"]
@@ -22,8 +22,8 @@ display_name = "Slime tossico"
 max_hp = 600
 move_speed = 110.0
 exp_reward = 200
-rage_speed_multiplier = 1.8
+ranged_weapon = ExtResource("w")
 attack_interval = 2.4
 attack_range = 380.0
-ranged_weapon = ExtResource("w")
+rage_speed_multiplier = 1.8
 drops = Array[ExtResource("2")]([SubResource("drop_gel"), SubResource("drop_core")])

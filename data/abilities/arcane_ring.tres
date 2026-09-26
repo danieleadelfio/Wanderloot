@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="WandAbility" format=3]
+[gd_resource type="Resource" script_class="WandAbility" format=3 uid="uid://r6uslfw4brnj"]
 
-[ext_resource type="Script" path="res://scripts/data/wand_ability.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/run/abilities/ring_burst_effect.gd" id="2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/icon_arcane_ring.png" id="3"]
+[ext_resource type="Script" uid="uid://klkpl2c0xjlv" path="res://scripts/data/wand_ability.gd" id="1"]
+[ext_resource type="Script" uid="uid://otc2bgawplo7" path="res://scripts/run/abilities/ring_burst_effect.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://7pxtt4wdv1xb" path="res://assets/sprites/icon_arcane_ring.png" id="3"]
 
 [sub_resource type="Resource" id="effect"]
 script = ExtResource("2")

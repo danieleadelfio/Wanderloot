@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="RecipeData" format=3]
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://c5rbyf5kyp1ck"]
 
-[ext_resource type="Script" path="res://scripts/data/recipe_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/material_cost.gd" id="2"]
-[ext_resource type="Resource" path="res://data/equipment/leather_pants.tres" id="3"]
-[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
+[ext_resource type="Script" uid="uid://bhmrjnmx76tw5" path="res://scripts/data/recipe_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://s7tnwldktqqe" path="res://scripts/data/material_cost.gd" id="2"]
+[ext_resource type="Resource" uid="uid://o4rs8mr4xjcb" path="res://data/equipment/leather_pants.tres" id="3"]
 [ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="m_core"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
 
 [sub_resource type="Resource" id="cost_gel"]
 script = ExtResource("2")

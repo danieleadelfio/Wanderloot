@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="EquipmentData" format=3]
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://o4rs8mr4xjcb"]
 
-[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/stat_modifier.gd" id="2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/icon_leather_pants.png" id="ic"]
+[ext_resource type="Script" uid="uid://dctkhh4x8gi4m" path="res://scripts/data/equipment_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://b3dmi0rw7ply7" path="res://scripts/data/stat_modifier.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://uursr8hktdlx" path="res://assets/sprites/icon_leather_pants.png" id="ic"]
 
 [sub_resource type="Resource" id="mod_0"]
 script = ExtResource("2")

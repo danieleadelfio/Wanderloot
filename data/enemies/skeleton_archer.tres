@@ -25,6 +25,5 @@ behavior = 1
 ranged_weapon = ExtResource("bow")
 attack_interval = 2.6
 attack_range = 420.0
-rage_after = 6.0
 rage_speed_multiplier = 1.3
 drops = Array[ExtResource("2")]([SubResource("d0"), SubResource("d1")])

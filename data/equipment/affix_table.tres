@@ -1,16 +1,14 @@
-[gd_resource type="Resource" script_class="AffixTable" format=3]
+[gd_resource type="Resource" script_class="AffixTable" format=3 uid="uid://m2di78s8onmy"]
 
-[ext_resource type="Script" path="res://scripts/data/affix_table.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/affix_roll.gd" id="2"]
+[ext_resource type="Script" uid="uid://b4nrrk45jw4t2" path="res://scripts/data/affix_table.gd" id="1"]
+[ext_resource type="Script" uid="uid://ff2uvlac2fup" path="res://scripts/data/affix_roll.gd" id="2"]
 
 [sub_resource type="Resource" id="a0"]
 script = ExtResource("2")
-stat = 0
 min_value = 1.013
 max_value = 1.083
 is_multiplier = true
 slots = Array[int]([0, 3, 7])
-weight = 1.0
 
 [sub_resource type="Resource" id="a1"]
 script = ExtResource("2")
@@ -18,8 +16,6 @@ stat = 1
 min_value = 1.013
 max_value = 1.083
 is_multiplier = true
-slots = Array[int]([])
-weight = 1.0
 
 [sub_resource type="Resource" id="a2"]
 script = ExtResource("2")
@@ -37,7 +33,6 @@ min_value = 1.03
 max_value = 1.12
 is_multiplier = true
 slots = Array[int]([6, 5, 1])
-weight = 1.0
 
 [sub_resource type="Resource" id="a4"]
 script = ExtResource("2")
@@ -46,7 +41,6 @@ min_value = 1.013
 max_value = 1.083
 is_multiplier = true
 slots = Array[int]([4, 5, 2, 1])
-weight = 1.0
 
 [sub_resource type="Resource" id="a5"]
 script = ExtResource("2")
@@ -63,7 +57,6 @@ stat = 6
 min_value = 1.033
 max_value = 1.133
 is_multiplier = true
-slots = Array[int]([])
 weight = 0.8
 
 [sub_resource type="Resource" id="a7"]
@@ -71,8 +64,6 @@ script = ExtResource("2")
 stat = 7
 min_value = 0.05
 max_value = 0.25
-is_multiplier = false
-slots = Array[int]([])
 weight = 0.8
 
 [sub_resource type="Resource" id="a8"]
@@ -80,8 +71,6 @@ script = ExtResource("2")
 stat = 8
 min_value = 0.05
 max_value = 0.25
-is_multiplier = false
-slots = Array[int]([])
 weight = 0.8
 
 [sub_resource type="Resource" id="a9"]
@@ -89,7 +78,6 @@ script = ExtResource("2")
 stat = 9
 min_value = 0.05
 max_value = 0.2
-is_multiplier = false
 slots = Array[int]([4, 2])
 weight = 0.6
 
@@ -105,18 +93,12 @@ weight = 0.6
 [sub_resource type="Resource" id="a11"]
 script = ExtResource("2")
 stat = 13
-min_value = 1
-max_value = 1
-is_multiplier = false
 slots = Array[int]([1])
 weight = 0.25
 
 [sub_resource type="Resource" id="a12"]
 script = ExtResource("2")
 stat = 12
-min_value = 1
-max_value = 1
-is_multiplier = false
 slots = Array[int]([0])
 weight = 0.3
 

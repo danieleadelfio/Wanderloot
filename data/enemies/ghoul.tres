@@ -20,6 +20,5 @@ script = ExtResource("1")
 display_name = "Ghoul"
 max_hp = 200
 move_speed = 175.0
-rage_after = 4.0
 rage_speed_multiplier = 1.25
 drops = Array[ExtResource("2")]([SubResource("d0"), SubResource("d1")])

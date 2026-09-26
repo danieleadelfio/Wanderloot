@@ -8,23 +8,18 @@
 [ext_resource type="Resource" path="res://data/waves/wave_default.tres" id="6"]
 [ext_resource type="Resource" path="res://data/run/extraction_default.tres" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/run/Enemies/EnemyBasic/EnemyBasic.tscn" id="8"]
-[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeToxic/SlimeToxic.tscn" id="st"]
-[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeVoid/SlimeVoid.tscn" id="sv"]
-[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeStone/SlimeStone.tscn" id="ss"]
+[ext_resource type="Script" uid="uid://bub4i8pp6me2o" path="res://scripts/data/run_event_data.gd" id="8_bra8g"]
 [ext_resource type="PackedScene" uid="uid://cmyk53big7wyo" path="res://scenes/run/Bosses/KingSlime/KingSlime.tscn" id="boss"]
-
-[ext_resource type="Resource" path="res://data/events/lightning_storm.tres" id="storm"]
-
-[ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
-
-[ext_resource type="Resource" path="res://data/run/overtime_default.tres" id="overtime"]
-
-[ext_resource type="Resource" path="res://data/equipment/drops_crypt.tres" id="items"]
-
-[ext_resource type="Resource" path="res://data/events/blood_pentagram.tres" id="pentagram"]
-
-[ext_resource type="Resource" path="res://data/events/shadow_step.tres" id="shadow"]
 [ext_resource type="Resource" path="res://data/events/skeletons_closet.tres" id="closet"]
+[ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
+[ext_resource type="Resource" path="res://data/equipment/drops_crypt.tres" id="items"]
+[ext_resource type="Resource" path="res://data/run/overtime_default.tres" id="overtime"]
+[ext_resource type="Resource" path="res://data/events/blood_pentagram.tres" id="pentagram"]
+[ext_resource type="Resource" path="res://data/events/shadow_step.tres" id="shadow"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeStone/SlimeStone.tscn" id="ss"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeToxic/SlimeToxic.tscn" id="st"]
+[ext_resource type="Resource" path="res://data/events/lightning_storm.tres" id="storm"]
+[ext_resource type="PackedScene" path="res://scenes/run/Enemies/SlimeVoid/SlimeVoid.tscn" id="sv"]
 
 [sub_resource type="Resource" id="slime"]
 script = ExtResource("2")
@@ -59,11 +54,10 @@ music = ExtResource("5")
 wave_data = ExtResource("6")
 extraction_data = ExtResource("7")
 enemies = Array[ExtResource("2")]([SubResource("slime"), SubResource("toxic"), SubResource("void"), SubResource("stone")])
-boss_scene = ExtResource("boss")
-events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow"), ExtResource("closet")])
-event_times = PackedFloat32Array(35, 80)
 consumables = ExtResource("cons")
 item_drops = ExtResource("items")
 overtime = ExtResource("overtime")
+boss_scene = ExtResource("boss")
+events = Array[ExtResource("8_bra8g")]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow"), ExtResource("closet")])
+event_times = PackedFloat32Array(35, 80)
 drip_spots = Array[Vector2]([Vector2(-4200, -1800), Vector2(4300, 2200)])
-drip_color = Color(0.3, 0.42, 0.5, 0.55)

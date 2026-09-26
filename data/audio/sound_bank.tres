@@ -17,22 +17,19 @@
 [ext_resource type="AudioStream" uid="uid://b31mc172tjnw3" path="res://assets/audio/boss_appear.wav" id="b0"]
 [ext_resource type="AudioStream" uid="uid://b477va0kgfp3s" path="res://assets/audio/boss_warn.wav" id="b1"]
 [ext_resource type="AudioStream" uid="uid://be8btd3kifngi" path="res://assets/audio/boss_slam.wav" id="b2"]
-[ext_resource type="AudioStream" path="res://assets/audio/event_start.wav" id="ev0"]
-[ext_resource type="AudioStream" path="res://assets/audio/lightning.wav" id="ev1"]
-[ext_resource type="AudioStream" path="res://assets/audio/power_up.wav" id="pu"]
-[ext_resource type="AudioStream" path="res://assets/audio/candle_out.wav" id="co"]
-
-[ext_resource type="AudioStream" path="res://assets/audio/drop_common.wav" id="s_drop_common"]
-[ext_resource type="AudioStream" path="res://assets/audio/drop_uncommon.wav" id="s_drop_uncommon"]
-[ext_resource type="AudioStream" path="res://assets/audio/drop_rare.wav" id="s_drop_rare"]
-[ext_resource type="AudioStream" path="res://assets/audio/drop_super_rare.wav" id="s_drop_super_rare"]
-[ext_resource type="AudioStream" path="res://assets/audio/drop_legendary.wav" id="s_drop_legendary"]
-[ext_resource type="AudioStream" path="res://assets/audio/drop_mythic.wav" id="s_drop_mythic"]
-
-[ext_resource type="AudioStream" path="res://assets/audio/overtime_warn.wav" id="s_overtime_warn"]
-[ext_resource type="AudioStream" path="res://assets/audio/overtime_start.wav" id="s_overtime_start"]
-
-[ext_resource type="AudioStream" path="res://assets/audio/dash.wav" id="s_dash"]
+[ext_resource type="AudioStream" uid="uid://cfioqsal2o6ts" path="res://assets/audio/candle_out.wav" id="co"]
+[ext_resource type="AudioStream" uid="uid://ckeuehnkouuek" path="res://assets/audio/event_start.wav" id="ev0"]
+[ext_resource type="AudioStream" uid="uid://c2m82jd4v0qnp" path="res://assets/audio/lightning.wav" id="ev1"]
+[ext_resource type="AudioStream" uid="uid://cra7xs0di2uud" path="res://assets/audio/power_up.wav" id="pu"]
+[ext_resource type="AudioStream" uid="uid://cgl8v2jkntuoq" path="res://assets/audio/dash.wav" id="s_dash"]
+[ext_resource type="AudioStream" uid="uid://o8uc84cigvpi" path="res://assets/audio/drop_common.wav" id="s_drop_common"]
+[ext_resource type="AudioStream" uid="uid://chxn8vr4r8bcw" path="res://assets/audio/drop_legendary.wav" id="s_drop_legendary"]
+[ext_resource type="AudioStream" uid="uid://2lttdnom3fsi" path="res://assets/audio/drop_mythic.wav" id="s_drop_mythic"]
+[ext_resource type="AudioStream" uid="uid://d074eix4jxmc0" path="res://assets/audio/drop_rare.wav" id="s_drop_rare"]
+[ext_resource type="AudioStream" uid="uid://bnkgwqyop6wq5" path="res://assets/audio/drop_super_rare.wav" id="s_drop_super_rare"]
+[ext_resource type="AudioStream" uid="uid://dc6v4yeyid5ml" path="res://assets/audio/drop_uncommon.wav" id="s_drop_uncommon"]
+[ext_resource type="AudioStream" uid="uid://b2uipwgvrkmpq" path="res://assets/audio/overtime_start.wav" id="s_overtime_start"]
+[ext_resource type="AudioStream" uid="uid://q8a8wdr0wajn" path="res://assets/audio/overtime_warn.wav" id="s_overtime_warn"]
 
 [sub_resource type="Resource" id="e0"]
 script = ExtResource("2")
@@ -148,7 +145,6 @@ script = ExtResource("2")
 id = &"power_up"
 stream = ExtResource("pu")
 volume_db = -4.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_candle_out"]
 script = ExtResource("2")
@@ -169,49 +165,42 @@ script = ExtResource("2")
 id = &"drop_uncommon"
 stream = ExtResource("s_drop_uncommon")
 volume_db = -7.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_drop_rare"]
 script = ExtResource("2")
 id = &"drop_rare"
 stream = ExtResource("s_drop_rare")
 volume_db = -6.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_drop_super_rare"]
 script = ExtResource("2")
 id = &"drop_super_rare"
 stream = ExtResource("s_drop_super_rare")
 volume_db = -5.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_drop_legendary"]
 script = ExtResource("2")
 id = &"drop_legendary"
 stream = ExtResource("s_drop_legendary")
 volume_db = -3.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_drop_mythic"]
 script = ExtResource("2")
 id = &"drop_mythic"
 stream = ExtResource("s_drop_mythic")
 volume_db = -2.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_overtime_warn"]
 script = ExtResource("2")
 id = &"overtime_warn"
 stream = ExtResource("s_overtime_warn")
 volume_db = -6.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_overtime_start"]
 script = ExtResource("2")
 id = &"overtime_start"
 stream = ExtResource("s_overtime_start")
 volume_db = -2.0
-pitch_variance = 0.0
 
 [sub_resource type="Resource" id="e_dash"]
 script = ExtResource("2")

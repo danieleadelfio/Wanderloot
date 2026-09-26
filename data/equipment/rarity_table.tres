@@ -1,20 +1,13 @@
-[gd_resource type="Resource" script_class="RarityTable" format=3]
+[gd_resource type="Resource" script_class="RarityTable" format=3 uid="uid://dwqd0cdma3ym4"]
 
-[ext_resource type="Script" path="res://scripts/data/rarity_table.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/rarity_tier.gd" id="2"]
+[ext_resource type="Script" uid="uid://h15m1hep3oaw" path="res://scripts/data/rarity_table.gd" id="1"]
+[ext_resource type="Script" uid="uid://byqjby21porn6" path="res://scripts/data/rarity_tier.gd" id="2"]
 
 [sub_resource type="Resource" id="t0"]
 script = ExtResource("2")
 display_name = "RARITY_COMMON"
 color = Color(0.72, 0.72, 0.72, 1)
-affix_count = 1
-roll_min = 0.0
-roll_max = 0.35
-ability_count = 0
 drop_weight = 60.0
-salvage_multiplier = 1
-drop_sound = &"drop_common"
-glow_scale = 1.0
 
 [sub_resource type="Resource" id="t1"]
 script = ExtResource("2")
@@ -23,7 +16,6 @@ color = Color(0.36, 0.82, 0.42, 1)
 affix_count = 2
 roll_min = 0.2
 roll_max = 0.55
-ability_count = 0
 drop_weight = 25.0
 salvage_multiplier = 2
 drop_sound = &"drop_uncommon"
@@ -36,7 +28,6 @@ color = Color(0.29, 0.56, 0.82, 1)
 affix_count = 3
 roll_min = 0.4
 roll_max = 0.75
-ability_count = 0
 drop_weight = 10.0
 salvage_multiplier = 3
 drop_sound = &"drop_rare"
@@ -64,7 +55,6 @@ roll_min = 0.75
 roll_max = 1.0
 ability_count = 1
 ability_level = 2
-drop_weight = 1.0
 salvage_multiplier = 8
 drop_sound = &"drop_legendary"
 glow_scale = 1.9

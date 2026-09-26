@@ -7,32 +7,24 @@
 [ext_resource type="AudioStream" uid="uid://bam0na54ym3fl" path="res://assets/audio/music_ossuary.wav" id="5"]
 [ext_resource type="Resource" path="res://data/waves/wave_ossuary.tres" id="6"]
 [ext_resource type="Resource" path="res://data/run/extraction_ossuary.tres" id="7"]
-[ext_resource type="PackedScene" path="res://scenes/run/Enemies/Ghoul/Ghoul.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://luitwougum7j" path="res://scenes/run/Enemies/Ghoul/Ghoul.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/run/Enemies/SkeletonArcher/SkeletonArcher.tscn" id="9"]
+[ext_resource type="Script" uid="uid://bub4i8pp6me2o" path="res://scripts/data/run_event_data.gd" id="13_xhya6"]
+[ext_resource type="PackedScene" path="res://scenes/run/Bosses/BoneColossus/BoneColossus.tscn" id="boss_BoneColossus"]
+[ext_resource type="PackedScene" path="res://scenes/run/Bosses/GhoulQueen/GhoulQueen.tscn" id="boss_GhoulQueen"]
+[ext_resource type="PackedScene" path="res://scenes/run/Bosses/Necromancer/Necromancer.tscn" id="boss_Necromancer"]
+[ext_resource type="Resource" path="res://data/events/skeletons_closet.tres" id="closet"]
+[ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
 [ext_resource type="Texture2D" uid="uid://bwpgof5xasvd5" path="res://assets/sprites/deco_skull.png" id="d0"]
 [ext_resource type="Texture2D" uid="uid://c0eg110icdsrq" path="res://assets/sprites/deco_bones.png" id="d1"]
 [ext_resource type="Texture2D" uid="uid://bm28oor568g2a" path="res://assets/sprites/deco_ribcage.png" id="d2"]
 [ext_resource type="Texture2D" uid="uid://bdxdpu0nqjan3" path="res://assets/sprites/deco_blood.png" id="d3"]
 [ext_resource type="Texture2D" uid="uid://cb6lkvbqetk1" path="res://assets/sprites/deco_gravestone.png" id="d4"]
-
-[ext_resource type="Resource" path="res://data/events/lightning_storm.tres" id="storm"]
-
-[ext_resource type="PackedScene" path="res://scenes/run/Bosses/Necromancer/Necromancer.tscn" id="boss_Necromancer"]
-
-[ext_resource type="PackedScene" path="res://scenes/run/Bosses/BoneColossus/BoneColossus.tscn" id="boss_BoneColossus"]
-
-[ext_resource type="PackedScene" path="res://scenes/run/Bosses/GhoulQueen/GhoulQueen.tscn" id="boss_GhoulQueen"]
-
-[ext_resource type="Resource" path="res://data/consumables/consumable_table.tres" id="cons"]
-
-[ext_resource type="Resource" path="res://data/run/overtime_default.tres" id="overtime"]
-
 [ext_resource type="Resource" path="res://data/equipment/drops_ossuary.tres" id="items"]
-
+[ext_resource type="Resource" path="res://data/run/overtime_default.tres" id="overtime"]
 [ext_resource type="Resource" path="res://data/events/blood_pentagram.tres" id="pentagram"]
-
 [ext_resource type="Resource" path="res://data/events/shadow_step.tres" id="shadow"]
-[ext_resource type="Resource" path="res://data/events/skeletons_closet.tres" id="closet"]
+[ext_resource type="Resource" path="res://data/events/lightning_storm.tres" id="storm"]
 
 [sub_resource type="Resource" id="ghoul"]
 script = ExtResource("2")
@@ -66,13 +58,13 @@ fog_count = 16
 wave_data = ExtResource("6")
 extraction_data = ExtResource("7")
 enemies = Array[ExtResource("2")]([SubResource("ghoul"), SubResource("archer")])
-unlock_arena = &"crypt"
-unlock_extractions = 3
-events = Array[Resource]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow"), ExtResource("closet")])
-event_times = PackedFloat32Array(30, 75)
 consumables = ExtResource("cons")
-boss_scenes = Array[PackedScene]([ExtResource("boss_Necromancer"), ExtResource("boss_BoneColossus"), ExtResource("boss_GhoulQueen")])
 item_drops = ExtResource("items")
 overtime = ExtResource("overtime")
+boss_scenes = Array[PackedScene]([ExtResource("boss_Necromancer"), ExtResource("boss_BoneColossus"), ExtResource("boss_GhoulQueen")])
+events = Array[ExtResource("13_xhya6")]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow"), ExtResource("closet")])
+event_times = PackedFloat32Array(30, 75)
 drip_spots = Array[Vector2]([Vector2(-3800, -2600), Vector2(4000, 2000)])
 drip_color = Color(0.35, 0.03, 0.03, 0.6)
+unlock_arena = &"crypt"
+unlock_extractions = 3

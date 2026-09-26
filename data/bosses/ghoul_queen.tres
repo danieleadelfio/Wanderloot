@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="BossData" format=3]
+[gd_resource type="Resource" script_class="BossData" format=3 uid="uid://dq2v7636h5xrp"]
 
-[ext_resource type="Script" path="res://scripts/data/boss_data.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/data/drop_entry.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/data/boss_attack.gd" id="3"]
+[ext_resource type="Script" uid="uid://di0yec4nu08c2" path="res://scripts/data/boss_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://b1tu3o4nntegy" path="res://scripts/data/drop_entry.gd" id="2"]
+[ext_resource type="Script" uid="uid://dpu84hvin1o0m" path="res://scripts/data/boss_attack.gd" id="3"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/queen_chain_leap.tres" id="a0"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/queen_swipe.tres" id="a1"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/queen_scream.tres" id="a2"]
 [ext_resource type="Resource" path="res://data/bosses/attacks/queen_pack.tres" id="a3"]
 [ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m0"]
 [ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m1"]
-[ext_resource type="PackedScene" path="res://scenes/run/Enemies/Ghoul/Ghoul.tscn" id="ps"]
+[ext_resource type="PackedScene" uid="uid://luitwougum7j" path="res://scenes/run/Enemies/Ghoul/Ghoul.tscn" id="ps"]
 
 [sub_resource type="Resource" id="d0"]
 script = ExtResource("2")
@@ -31,14 +31,11 @@ id = &"ghoul_queen"
 display_name = "BOSS_GHOUL_QUEEN"
 max_hp = 38000
 move_speed = 150.0
-contact_damage = 200
 exp_reward = 6000
+drops = Array[ExtResource("2")]([SubResource("d0"), SubResource("d1")])
+attacks = Array[ExtResource("3")]([ExtResource("a0"), ExtResource("a1"), ExtResource("a2"), ExtResource("a3")])
 first_attack_delay = 1.5
 chase_time = 1.1
 phase_two_speed_multiplier = 1.2
-phase_two_tempo_multiplier = 0.7
-phase_two_tint = Color(1, 0.7, 0.7, 1)
-drops = Array[ExtResource("2")]([SubResource("d0"), SubResource("d1")])
-attacks = Array[ExtResource("3")]([ExtResource("a0"), ExtResource("a1"), ExtResource("a2"), ExtResource("a3")])
 phase_two_summon_scene = ExtResource("ps")
 phase_two_summon_count = 4
