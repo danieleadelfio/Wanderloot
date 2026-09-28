@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpc6u4fee8ai4"
-path="res://.godot/imported/hub_chest.png-c7836d7b4642ea11ac13155fd77cd50c.ctex"
+uid="uid://wfa1fh077uk1"
+path="res://.godot/imported/hub_rock4.png-98d0dee864f2b7ddddb41da40e43c4f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/hub_chest.png"
-dest_files=["res://.godot/imported/hub_chest.png-c7836d7b4642ea11ac13155fd77cd50c.ctex"]
+source_file="res://assets/sprites/hub_rock4.png"
+dest_files=["res://.godot/imported/hub_rock4.png-98d0dee864f2b7ddddb41da40e43c4f5.ctex"]
 
 [params]
 

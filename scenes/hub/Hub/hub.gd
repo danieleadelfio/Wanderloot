@@ -36,7 +36,8 @@ var _autosave_tween: Tween
 @onready var _portal_window: Control = %PortalWindow
 @onready var _sfx: SfxPlayer = %Sfx
 @onready var _start_button: Button = %StartButton
-@onready var _prompt: Label = %Prompt
+@onready var _prompt: Control = %Prompt
+@onready var _prompt_label: Label = %PromptLabel
 @onready var _dim: ColorRect = %Dim
 @onready var _pause_menu: PauseMenu = %PauseMenu
 @onready var _inventory_window: Control = %InventoryWindow
@@ -189,7 +190,7 @@ func _process(_delta: float) -> void:
 	var spot := _nearest_spot()
 	_prompt.visible = spot != null and _open_window == null and not _pause_open
 	if spot:
-		_prompt.text = spot.prompt
+		_prompt_label.text = spot.prompt
 
 
 func _unhandled_input(event: InputEvent) -> void:

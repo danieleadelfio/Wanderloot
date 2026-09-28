@@ -33,6 +33,13 @@ const Q=new URLSearchParams(location.search),MODE=Q.get('mode')||'full',PNAME=Q.
 const PROPS={},PSTR={};
 const PROP=(name,x,y,r,str,dy=0)=>{PROPS[name]={x,y:y+dy,r};PSTR[name]={str,dy};return MODE==='full'?str:''};
 const cutProp=(s,a0,name,x,y,r,dy=0)=>s.slice(0,a0)+PROP(name,x,y,r,s.slice(a0),dy);
+// Strati separati (ogni strato e' un'immagine a se' in gioco: cielo fermo, isole che ondeggiano piano, nebbia davanti).
+// Il contenuto non marcato appartiene allo strato 'main'.
+const LAYERQ=Q.get('layer')||'main';
+const lay=(name,str,dy=0)=>MODE==='full'?str:`<!--L:${name}--><g transform="translate(0 ${dy})">${str}</g><!--/L-->`;
+const pickLayer=(art,name)=>name==='main'?art.replace(/<!--L:\w+-->[\s\S]*?<!--\/L-->/g,''):[...art.matchAll(new RegExp(`<!--L:${name}-->([\\s\\S]*?)<!--\\/L-->`,'g'))].map(m=>m[1]).join('');
+// Fiamme e scintille animate in gioco: fuori dall'anteprima completa non si disegnano, se ne registra la posizione.
+const LIVE_FX=MODE!=='full';const FLAMES=[];let CURDY=0;
 // Bordo del pavimento calpestabile delle isole raggiungibili (stesso calcolo di island(): usato per le collisioni).
 const FLOOR_ISLANDS=[[190,410,180,140,63,-75],[1218,410,180,140,63,-75],[704,360,290,230,65,0]];
 window.floorPaths=()=>FLOOR_ISLANDS.map(([cx,cy,rx,ry,seed,dy])=>{const n=16,j=.05,rr=mk(seed),k=[];for(let i=0;i<n;i++)k.push(1+(rr()-.5)*2*j);for(let i=0;i<n;i++){const m=((n/2-i)%n+n)%n;if(m<i)k[i]=k[m]}return smooth(k.map((v,i)=>{const a=i/n*Math.PI*2;return[cx+Math.cos(a)*(rx-13)*v,cy+dy-3+Math.sin(a)*(ry-11)*v]}))});
@@ -57,11 +64,14 @@ const tree=(x,y,R,r,pal=['#0f2a19','#1a4427','#2a6538','#4b8a4c'])=>{
   s+=lumps.map(l=>`<path d="${blob(l[0]-l[2]*.28,l[1]-l[2]*.3,l[2]*.46,l[2]*.42,r,8,.18)}" fill="${pal[2]}"/>`).join('');
   for(let i=0;i<Math.round(R/3);i++){const a=r()*6.283,d=r()*R*.75;s+=`<circle cx="${x+Math.cos(a)*d-R*.15}" cy="${y+Math.sin(a)*d-R*.18}" r="${1.5+r()*2.6}" fill="${pal[3]}" opacity=".7"/>`}
   return s};
+const flameShape=(x,y,sc)=>{const f=(w,h,c,dy=0)=>`<path d="M${x},${y+h*.7+dy} C${x-w},${y+h*.3+dy} ${x-w*.55},${y-h*.35+dy} ${x},${y-h+dy} C${x+w*.55},${y-h*.35+dy} ${x+w},${y+h*.3+dy} ${x},${y+h*.7+dy}Z" fill="${c}"/>`;
+  return f(9*sc,20*sc,'#e0501a')+f(7*sc,16*sc,'#ff9a28',1)+f(4.2*sc,11*sc,'#ffe27a',2)+f(2*sc,6*sc,'#fffbe0',3)};
 const flame=(x,y,sc,L,gl='gW',gr=140)=>{
   L.push(`<circle cx="${x}" cy="${y}" r="${gr*sc}" fill="url(#${gl})"/>`);
+  if(LIVE_FX){FLAMES.push({x,y:y+CURDY,sc});return ''}
   const f=(w,h,c,dy=0)=>`<path d="M${x},${y+h*.7+dy} C${x-w},${y+h*.3+dy} ${x-w*.55},${y-h*.35+dy} ${x},${y-h+dy} C${x+w*.55},${y-h*.35+dy} ${x+w},${y+h*.3+dy} ${x},${y+h*.7+dy}Z" fill="${c}"/>`;
   return f(9*sc,20*sc,'#e0501a')+f(7*sc,16*sc,'#ff9a28',1)+f(4.2*sc,11*sc,'#ffe27a',2)+f(2*sc,6*sc,'#fffbe0',3)};
-const brazier=(x,y,L,r)=>`<g filter="url(#b4)" opacity=".5"><circle cx="${x+8}" cy="${y+11}" r="19" fill="#000"/></g><circle cx="${x}" cy="${y}" r="19" fill="#4a4d47" stroke="${OL}" stroke-width="3"/><circle cx="${x}" cy="${y}" r="14" fill="#6d7068"/><circle cx="${x}" cy="${y}" r="10" fill="#1d1a17"/>`+[0,1,2,3,4,5].map(i=>`<rect x="${x-2}" y="${y-19}" width="4" height="7" fill="#2e302c" transform="rotate(${i*60} ${x} ${y})"/>`).join('')+`<circle cx="${x}" cy="${y}" r="8" fill="#d4501a"/>`+flame(x,y-4,1.15,L)+Array.from({length:6},()=>`<circle cx="${x+(r()-.5)*40}" cy="${y-20-r()*50}" r="${.8+r()*1.4}" fill="#ffc36a" opacity="${.5+r()*.5}"/>`).join('');
+const brazier=(x,y,L,r)=>`<g filter="url(#b4)" opacity=".5"><circle cx="${x+8}" cy="${y+11}" r="19" fill="#000"/></g><circle cx="${x}" cy="${y}" r="19" fill="#4a4d47" stroke="${OL}" stroke-width="3"/><circle cx="${x}" cy="${y}" r="14" fill="#6d7068"/><circle cx="${x}" cy="${y}" r="10" fill="#1d1a17"/>`+[0,1,2,3,4,5].map(i=>`<rect x="${x-2}" y="${y-19}" width="4" height="7" fill="#2e302c" transform="rotate(${i*60} ${x} ${y})"/>`).join('')+`<circle cx="${x}" cy="${y}" r="8" fill="#d4501a"/>`+flame(x,y-4,1.15,L)+(LIVE_FX?'':Array.from({length:6},()=>`<circle cx="${x+(r()-.5)*40}" cy="${y-20-r()*50}" r="${.8+r()*1.4}" fill="#ffc36a" opacity="${.5+r()*.5}"/>`).join(''));
 const barrel=(x,y,R,r)=>`<g filter="url(#b4)" opacity=".5"><circle cx="${x+5}" cy="${y+7}" r="${R}" fill="#000"/></g><circle cx="${x}" cy="${y}" r="${R}" fill="#6b4a2b" stroke="${OL}" stroke-width="2.5"/>`+Array.from({length:10},(_,i)=>`<line x1="${x}" y1="${y}" x2="${x+Math.cos(i*.628)*R}" y2="${y+Math.sin(i*.628)*R}" stroke="#3d2a17" stroke-width="1.5"/>`).join('')+`<circle cx="${x}" cy="${y}" r="${R*.72}" fill="none" stroke="#7b7f86" stroke-width="2.5"/><circle cx="${x}" cy="${y}" r="${R*.3}" fill="#87603a" stroke="#3d2a17" stroke-width="1.5"/><path d="${blob(x-R*.3,y-R*.3,R*.3,R*.22,r,7,.2)}" fill="#fff" opacity=".12"/>`;
 const sack=(x,y,R,r,c='#9a8a5c')=>`<g filter="url(#b4)" opacity=".5"><ellipse cx="${x+5}" cy="${y+7}" rx="${R*1.05}" ry="${R*.9}" fill="#000"/></g><path d="${blob(x,y,R*1.05,R*.9,r,9,.1)}" fill="${c}" stroke="${OL}" stroke-width="2.5"/><path d="${blob(x-R*.25,y-R*.25,R*.6,R*.45,r,8,.15)}" fill="#fff" opacity=".16"/><path d="M${x-R*.35},${y-R*.15} q${R*.35},${R*.4} ${R*.7},0" stroke="#3a301a" stroke-width="2.2" fill="none"/><circle cx="${x}" cy="${y+R*.08}" r="2.5" fill="#3a301a"/>`;
 const crate=(x,y,w,r)=>`<g filter="url(#b4)" opacity=".5"><rect x="${x+6}" y="${y+8}" width="${w}" height="${w}" fill="#000"/></g><rect x="${x}" y="${y}" width="${w}" height="${w}" fill="#7a5a36" stroke="${OL}" stroke-width="2.5"/><rect x="${x+5}" y="${y+5}" width="${w-10}" height="${w-10}" fill="none" stroke="#4a331d" stroke-width="3"/><path d="M${x+5},${y+5}L${x+w-5},${y+w-5}M${x+w-5},${y+5}L${x+5},${y+w-5}" stroke="#4a331d" stroke-width="3"/><rect x="${x}" y="${y}" width="${w}" height="4" fill="#fff" opacity=".13"/>`;
@@ -118,17 +128,71 @@ const dirtSite=(x,y,w,h,r)=>{let s=`<g filter="url(#b4)" opacity=".5"><rect x="$
   for(let i=0;i<5;i++)s+=`<path d="${blob(x+24+i*10+r()*6,y+h-16+r()*8,10+r()*4,8,r,7,.25)}" fill="${pick(r,['#7b7d76','#6a6c66','#8a8c84'])}" stroke="${OL}" stroke-width="2"/>`;
   return s};
 
+
+// Incudine sul ceppo (vista dall'alto leggermente inclinata): tacco con fori quadro e tondo, piano lucido, gradino,
+// corno conico; fianco anteriore in ombra, piedi sul ceppo cerchiato di ferro; pezzo arroventato, tenaglie, martello.
+const anvilPro=(AX,AY,L)=>{const OLk='#07080b',S='#3f4653',SD='#232830',SL='#5c6676',SH='#b9c3d0',W='#6a4a2c',WD='#3e2a18';
+ let u=`<g transform="translate(${AX} ${AY}) scale(1.2)">`;
+ u+=`<g filter="url(#b4)" opacity=".55"><ellipse cx="8" cy="18" rx="40" ry="30" fill="#000"/><path d="M-52,-20 L70,-10 L40,8 L-48,8Z" fill="#000" transform="translate(8 14)"/></g>`;
+ u+=`<path d="M-34,6 L-34,14 A34,28 0 0 0 34,14 L34,6 A34,28 0 0 1 -34,6Z" fill="${WD}" stroke="${OLk}" stroke-width="2.4"/>`;
+ for(let x=-30;x<=30;x+=6){const y0=6+28*Math.sqrt(1-(x/34)**2),y1=y0+8;u+=`<path d="M${x},${n1(y0)} L${x+1},${n1(y1)}" stroke="#241608" stroke-width="1.3"/>`}
+ u+=`<path d="M-34,10 A34,28 0 0 0 34,10" fill="none" stroke="${OLk}" stroke-width="4.4"/><path d="M-34,10 A34,28 0 0 0 34,10" fill="none" stroke="#4a515c" stroke-width="2.4"/>`;
+ [-24,-8,8,24].forEach(x=>{const y=10+28*Math.sqrt(1-(x/34)**2);u+=`<circle cx="${x}" cy="${n1(y)}" r="1.3" fill="#9aa2ad"/>`});
+ u+=`<ellipse cx="0" cy="6" rx="34" ry="28" fill="${W}" stroke="${OLk}" stroke-width="2.4"/>`;
+ [26,19,12,5].forEach((r,i)=>u+=`<ellipse cx="${-1+i*.4}" cy="${7+i*.3}" rx="${r}" ry="${r*.82}" fill="none" stroke="#4a3220" stroke-width="1.1" opacity=".9"/>`);
+ u+=`<path d="M-2,8 L-20,-4 M3,9 L24,20 M0,6 L6,-14" stroke="#3a2616" stroke-width="1.2"/><ellipse cx="-12" cy="-6" rx="10" ry="6" fill="#fff" opacity=".07"/>`;
+ u+=`<path d="M-26,-2 L26,-2 L31,10 L-31,10Z" fill="${SD}" stroke="${OLk}" stroke-width="2.2" stroke-linejoin="round"/><path d="M-10,-2 L10,-2 L8,6 L-8,6Z" fill="#1a1e25"/>`;
+ u+=`<path d="M-42,4 L-28,4 L-24,15 L-46,15Z M28,4 L42,4 L46,15 L24,15Z" fill="#2c323c" stroke="${OLk}" stroke-width="2" stroke-linejoin="round"/><path d="M-44,14 L-25,14 M26,14 L45,14" stroke="#4a525e" stroke-width="1.2"/>`;
+ u+=`<path d="M-51,-1 L26,-1 L34,-3 Q56,-2 70,-10 Q60,3 34,4 L26,6 L-48,6 Q-51,6 -51,3Z" fill="${SD}" stroke="${OLk}" stroke-width="2.2" stroke-linejoin="round"/><path d="M-48,3.5 L24,3.5" stroke="#3a414c" stroke-width="1"/>`;
+ const top='M-52,-19 Q-52,-21 -49,-21 L26,-21 L26,-17 L34,-17 Q56,-18 70,-10 Q56,-2 34,-3 L26,-3 L26,-1 L-49,-1 Q-52,-1 -52,-3Z';
+ u+=`<path d="${top}" fill="${S}" stroke="${OLk}" stroke-width="2.6" stroke-linejoin="round"/>`;
+ u+=`<path d="M-45,-19 L24,-19 L24,-3 L-45,-3Z" fill="${SL}"/><path d="M-45,-11 L24,-11 L24,-3 L-45,-3Z" fill="#000" opacity=".12"/>`;
+ u+=`<path d="M-43,-18 L22,-18" stroke="${SH}" stroke-width="1.6" stroke-linecap="round"/><path d="M-30,-15 L8,-15" stroke="#fff" stroke-width="1" opacity=".35" stroke-linecap="round"/><path d="M-20,-7 l6,1 M4,-6 l8,-1" stroke="#2a3038" stroke-width=".9" opacity=".8"/>`;
+ u+=`<path d="M26,-17 L34,-17 L34,-3 L26,-3Z" fill="#343a45"/><path d="M35,-15 Q54,-16 67,-10.6" stroke="${SH}" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M35,-5 Q52,-4 66,-8.6" stroke="#1a1e25" stroke-width="1.4" fill="none"/>`;
+ u+=`<rect x="-49.5" y="-15" width="6" height="6" fill="#0c0e12" stroke="#2a2f38" stroke-width=".8"/><circle cx="-40" cy="-9" r="2.2" fill="#0c0e12"/>`;
+ u+=`<path d="M-52,-19 L-52,-3 M26,-21 L26,-1" stroke="${OLk}" stroke-width="1.2"/>`;
+ // pezzo arroventato
+ L.push(`<rect x="${AX-26}" y="${AY-22}" width="52" height="22" rx="11" fill="#ff8a2a" opacity=".75" filter="url(#b10)"/>`);
+ u+=`<g transform="rotate(-6 1 -11)"><rect x="-13" y="-15" width="28" height="7" rx="3.4" fill="#ff6a1a" stroke="#5a1a04" stroke-width="1.2"/><rect x="-10" y="-14" width="21" height="3.2" rx="1.6" fill="#ffd06a"/><rect x="-5" y="-13.4" width="9" height="1.6" rx=".8" fill="#fff8d8"/></g>`;
+ // tenaglie che tengono il pezzo
+ u+=`<path d="M-14,-12 L-38,20 M-12,-10 L-33,24" stroke="${OLk}" stroke-width="4.2" stroke-linecap="round"/><path d="M-14,-12 L-38,20 M-12,-10 L-33,24" stroke="#4a515c" stroke-width="2.2" stroke-linecap="round"/><circle cx="-17.5" cy="-7" r="1.8" fill="#9aa2ad" stroke="${OLk}" stroke-width=".8"/><path d="M-16,-13 L-12,-13" stroke="#8a929c" stroke-width="1.6"/>`;
+ // martello appoggiato sul ceppo
+ u+=`<path d="M18,14 L40,28" stroke="${OLk}" stroke-width="5" stroke-linecap="round"/><path d="M18,14 L40,28" stroke="#8a6034" stroke-width="3" stroke-linecap="round"/><g transform="rotate(32 16 12)"><rect x="8" y="7" width="16" height="9" rx="1.6" fill="#555e6b" stroke="${OLk}" stroke-width="1.8"/><rect x="9" y="8" width="14" height="2.4" fill="#aab4c0"/></g>`;
+ return u+'</g>'};
+// Baule del deposito: coperchio bombato visto dall'alto, fronte in ombra, assi, bande di ferro chiodate,
+// angolari e bordi d'oro, serratura a scudo con gemma, maniglie ad anello; luce dorata dalla fessura.
+const chestPro=(X,Y,L)=>{const OLk='#0d0906',WL='#6e4827',WM='#5a3a1f',WD='#3e2714',FE='#6e7682',FEL='#a9b2bd',G='#d7b24c',GL='#f3d986',GD='#8a6a1a';
+ let u=`<g transform="translate(${X} ${Y})">`;
+ u+=`<g filter="url(#b4)" opacity=".55"><rect x="-58" y="-34" width="128" height="82" rx="12" fill="#000"/></g>`;
+ for(const sx of[-1,1])u+=`<path d="M${sx*64},-2 q${sx*9},0 ${sx*9},9 q0,9 ${-sx*9},9" fill="none" stroke="${OLk}" stroke-width="5"/><path d="M${sx*64},-2 q${sx*9},0 ${sx*9},9 q0,9 ${-sx*9},9" fill="none" stroke="${FE}" stroke-width="2.6"/><rect x="${sx>0?60:-66}" y="-4" width="6" height="8" rx="1.5" fill="${FE}" stroke="${OLk}" stroke-width="1.4"/>`;
+ u+=`<rect x="-64" y="4" width="128" height="36" rx="6" fill="${WD}" stroke="${OLk}" stroke-width="3"/>`+[16,28].map(y=>`<path d="M-62,${y} H62" stroke="#2a190c" stroke-width="1.6"/>`).join('');
+ u+=`<rect x="-64" y="-40" width="128" height="48" rx="13" fill="${WM}" stroke="${OLk}" stroke-width="3"/>`;
+ u+=`<rect x="-61" y="-37" width="122" height="18" rx="10" fill="${WL}"/><rect x="-58" y="-35" width="110" height="4" rx="2" fill="#fff" opacity=".12"/><rect x="-62" y="-8" width="124" height="14" rx="4" fill="#000" opacity=".18"/>`;
+ u+=[-26,-12].map(y=>`<path d="M-62,${y} H62" stroke="#3e2714" stroke-width="1.5"/>`).join('')+[[-50,-33],[-18,-19],[30,-31],[48,-17],[-36,-2]].map(([x,y])=>`<path d="M${x},${y} q4,-1.5 8,0" stroke="#3e2714" stroke-width="1" fill="none"/>`).join('');
+ for(const bx of[-44,32]){u+=`<rect x="${bx}" y="-40" width="12" height="80" fill="${FE}" stroke="${OLk}" stroke-width="2"/><rect x="${bx+1.5}" y="-38" width="2.5" height="76" fill="${FEL}" opacity=".7"/>`;for(const ry of[-32,-18,-4,14,30])u+=`<circle cx="${bx+6}" cy="${ry}" r="1.9" fill="${FEL}" stroke="${OLk}" stroke-width=".8"/>`}
+ u+=`<rect x="-64" y="-40" width="128" height="48" rx="13" fill="none" stroke="${G}" stroke-width="2.6"/><rect x="-64" y="4" width="128" height="36" rx="6" fill="none" stroke="${G}" stroke-width="2.2"/>`;
+ const corner=(x,y,fx,fy)=>`<path d="M${x},${y} h${fx*20} v${fy*5} h${-fx*15} v${fy*15} h${-fx*5}Z" fill="${G}" stroke="${OLk}" stroke-width="1.6"/><path d="M${x+fx*3},${y+fy*3} h${fx*14}" stroke="${GL}" stroke-width="1.2"/><circle cx="${x+fx*9}" cy="${y+fy*9}" r="1.4" fill="${GD}"/>`;
+ u+=corner(-64,-40,1,1)+corner(64,-40,-1,1)+corner(-64,40,1,-1)+corner(64,40,-1,-1);
+ L.push(`<rect x="${X-64}" y="${Y-3}" width="128" height="16" rx="8" fill="#ffc85a" opacity=".55" filter="url(#b10)"/>`);
+ u+=`<path d="M-60,5 H60" stroke="${OLk}" stroke-width="2.6"/><path d="M-58,5 H58" stroke="#ffd77a" stroke-width="1.4" filter="url(#b2)"/><path d="M-56,5 H56" stroke="#fff3c0" stroke-width=".7"/>`;
+ u+=`<rect x="-5" y="-16" width="10" height="20" rx="2" fill="${G}" stroke="${OLk}" stroke-width="1.6"/><path d="M-3,-14 v16" stroke="${GL}" stroke-width="1.1"/>`;
+ u+=`<path d="M-14,0 L14,0 L14,17 Q14,27 0,32 Q-14,27 -14,17Z" fill="${G}" stroke="${OLk}" stroke-width="2"/><path d="M-10.5,3.5 L10.5,3.5 L10.5,16.5 Q10.5,24 0,28 Q-10.5,24 -10.5,16.5Z" fill="none" stroke="${GD}" stroke-width="1.4"/>`;
+ u+=`<circle cx="0" cy="15" r="3.2" fill="#1a1006"/><path d="M-1.6,16 L1.6,16 L1,23 L-1,23Z" fill="#1a1006"/><path d="M0,4 l3.4,3.6 l-3.4,3.6 l-3.4,-3.6Z" fill="#c8203a" stroke="${OLk}" stroke-width="1"/><path d="M-1,5.6 l1.2,-1" stroke="#ffd0d8" stroke-width=".9"/>`;
+ u+=`<path d="M-12,2 Q-6,0.5 0,1" stroke="${GL}" stroke-width="1.2" fill="none"/>`;
+ return u+'</g>'};
 /* ---------------- SCENE E v2 ---------------- */
 function sceneE(){
  const r=mk(41),L=[];let s='';
  const OLc='#120f26';
+ const sky0=s.length;
  s+=`<rect width="${W}" height="${H}" fill="url(#sky)"/>`;
  s+=[[250,160,380,130,'#3d2a8a',.32],[1160,180,360,130,'#1d4a8a',.26],[704,650,660,140,'#5a2a7a',.3],[704,300,300,160,'#4a2aa0',.18]].map(([x,y,rx,ry,c,o])=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${c}" opacity="${o}" filter="url(#b24)"/>`).join('');
  for(let i=0;i<170;i++){const x=r()*W,y=r()*H,big=r()<.06;s+=big?`<path d="M${x},${y-4}L${x+1},${y-1}L${x+4},${y}L${x+1},${y+1}L${x},${y+4}L${x-1},${y+1}L${x-4},${y}L${x-1},${y-1}Z" fill="#fff4dc" opacity=".8"/>`:`<circle cx="${n1(x)}" cy="${n1(y)}" r="${n1(r()*1.2+.3)}" fill="${pick(r,['#dfe6ff','#ffe9c8','#cfe6ff'])}" opacity="${n1(.25+r()*.6)}"/>`}
  const far=(cx,cy,rx,ry,o)=>`<g opacity="${o}" filter="url(#b2)"><polygon points="${cx-rx*.8},${cy} ${cx+rx*.8},${cy} ${cx+rx*.1},${cy+ry*3.2}" fill="#15112c"/><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#2a2450"/><ellipse cx="${cx}" cy="${cy-ry*.2}" rx="${rx*.85}" ry="${ry*.6}" fill="#34305e"/></g>`;
- s+=far(70,300,46,14,.55)+far(1350,280,40,12,.5)+far(560,50,34,10,.4)+far(900,40,28,8,.35)+far(1340,640,54,16,.45)+far(60,640,44,13,.45);
+ s=s.slice(0,sky0)+lay('sky',s.slice(sky0));
+ s+=lay('sky',far(70,300,46,14,.55)+far(1350,280,40,12,.5)+far(560,50,34,10,.4)+far(900,40,28,8,.35)+far(1340,640,54,16,.45)+far(60,640,44,13,.45));
  const rock=(x,y,R)=>`<polygon points="${x-R},${y} ${x+R},${y} ${x+R*.2},${y+R*1.8}" fill="#1c1734" stroke="#0c0a1c" stroke-width="2"/><ellipse cx="${x}" cy="${y}" rx="${R}" ry="${R*.55}" fill="#4a4670" stroke="#0c0a1c" stroke-width="2.5"/><ellipse cx="${x-R*.2}" cy="${y-R*.12}" rx="${R*.55}" ry="${R*.25}" fill="#66628f"/>`;
- s+=rock(470,70,13)+rock(950,76,10)+rock(420,610,11)+rock(1000,620,14)+rock(40,160,9)+rock(1375,170,11);
+ [[470,70,13],[950,76,10],[420,610,11],[1000,620,14],[40,160,9],[1375,170,11]].forEach(([x,y,R],i)=>s+=PROP('rock'+i,x,y+R*.4,R*2.2,rock(x,y,R)));
 
  const flag=(cx,cy,rx,ry,rr)=>{let u=`<rect x="${cx-rx-10}" y="${cy-ry-10}" width="${2*rx+20}" height="${2*ry+20}" fill="#2a2646"/>`;const pal=['#545175','#5c597e','#4f4c70','#636084','#58557a'];let row=0;
   for(let y=cy-ry-10;y<cy+ry+10;y+=30,row++){let x=cx-rx-10-(row%2)*22;while(x<cx+rx+10){const w=38+Math.floor(rr()*4)*8;u+=`<rect x="${x+1.5}" y="${y+1.5}" width="${w-3}" height="27" rx="4" fill="${pick(rr,pal)}" stroke="#1d1a33" stroke-width="2"/><path d="M${x+5},${y+5}h${w-12}" stroke="#fff" stroke-opacity=".12" stroke-width="2" stroke-linecap="round"/>`;if(rr()<.04)u+=`<path d="M${x+w*.3},${y+6}l6,8l-3,9" stroke="#1d1a33" stroke-width="1.5" fill="none"/>`;x+=w}}
@@ -190,14 +254,14 @@ function sceneE(){
   return u};
 
  // --- islands (back to front)
- s+='<g transform="translate(0 -64)">'+island(190,124,120,48,61)+island(1218,124,120,48,61)+'</g>';
+ s+=lay('nw',island(190,124,120,48,61),-64)+lay('ne',island(1218,124,120,48,61),-64);
  s+='<g transform="translate(0 -75)">'+island(190,410,180,140,63)+island(1218,410,180,140,63)+'</g>';
  const CX=704,CY=360,PX=704,PY=335;
  const centerFloor=(cx,cy,rx,ry,rr)=>{let u=flag(cx,cy,rx,ry,rr);
   const slab=(x,y,w,h)=>{let v='';const hor=w>h,n=Math.max(1,Math.round((hor?w:h)/46));for(let i=0;i<n;i++){const bx=hor?x+i*w/n:x,by=hor?y:y+i*h/n,bw=hor?w/n:w,bh=hor?h:h/n;v+=`<rect x="${n1(bx+1.5)}" y="${n1(by+1.5)}" width="${n1(bw-3)}" height="${n1(bh-3)}" rx="4" fill="${pick(rr,['#7a769c','#827ea4','#736f96'])}" stroke="#1d1a33" stroke-width="2"/><path d="M${n1(bx+5)},${n1(by+5)}h${n1(bw-12)}" stroke="#fff" stroke-opacity=".16" stroke-width="2"/>`}return v};
   return u+slab(396,312,40,46)+slab(972,312,40,46)+slab(681,548,46,92)};
  s+=island(CX,CY,290,230,65,centerFloor);
- s+=island(704,694,150,52,66);
+ s+=lay('s',island(704,694,150,52,66));
  // raised dais: side face
  s+=`<g filter="url(#b10)" opacity=".55"><circle cx="${PX+14}" cy="${PY+40}" r="216" fill="#000"/></g><circle cx="${PX}" cy="${PY+28}" r="216" fill="#1a1634" stroke="${OLc}" stroke-width="3"/><circle cx="${PX}" cy="${PY+14}" r="216" fill="#26213f"/>`;
  for(let d=12;d<=168;d+=7){const a=d/57.3,x=PX+Math.cos(a)*216,y=PY+Math.sin(a)*216;s+=`<path d="M${n1(x)},${n1(y)}L${n1(x)},${n1(y+28)}" stroke="#110e22" stroke-width="2"/>`;if(d%14==5)s+=`<path d="M${n1(x-10)},${n1(y+14)}L${n1(x)},${n1(y+14)}" stroke="#110e22" stroke-width="1.6"/>`}
@@ -238,7 +302,7 @@ function sceneE(){
  const tongs=(x,y,a)=>`<g transform="rotate(${a} ${x} ${y})"><path d="M${x-3},${y}L${x-6},${y+34}M${x+3},${y}L${x+6},${y+34}" stroke="${OL}" stroke-width="5" stroke-linecap="round"/><path d="M${x-3},${y}L${x-6},${y+34}M${x+3},${y}L${x+6},${y+34}" stroke="#4a5058" stroke-width="2.6" stroke-linecap="round"/><circle cx="${x}" cy="${y+8}" r="2.5" fill="#8a929c"/></g>`;
  const ingots=(x,y)=>[[0,0,'#9aa2ad'],[18,0,'#9aa2ad'],[9,-8,'#d7b24c']].map(([dx,dy,c])=>`<polygon points="${x+dx},${y+dy} ${x+dx+16},${y+dy} ${x+dx+14},${y+dy+9} ${x+dx+2},${y+dy+9}" fill="${c}" stroke="${OL}" stroke-width="1.8"/><path d="M${x+dx+3},${y+dy+2}h10" stroke="#fff" stroke-opacity=".4" stroke-width="1.5"/>`).join('');
 
- const s0=s.length,l0=L.length;
+ const s0=s.length,l0=L.length;CURDY=-75;
  // ---- FORGE island: anvil showcase
  const AX=190,AY=420;
  s+=`<g filter="url(#b10)" opacity=".55"><circle cx="${AX+12}" cy="${AY+20}" r="88" fill="#000"/></g><circle cx="${AX}" cy="${AY+14}" r="88" fill="#1c1830" stroke="${OLc}" stroke-width="3"/><circle cx="${AX}" cy="${AY}" r="88" fill="#3a3348" stroke="${OLc}" stroke-width="3"/>`;
@@ -247,15 +311,10 @@ function sceneE(){
  s+=`<g filter="url(#b2)">${wr}</g>${wr}<circle cx="${AX}" cy="${AY}" r="56" fill="#2c2638" stroke="${OLc}" stroke-width="3"/><circle cx="${AX}" cy="${AY}" r="52" fill="none" stroke="#ff9a3a" stroke-width="2" opacity=".7"/>`;
  L.push(`<circle cx="${AX}" cy="${AY+60}" r="130" fill="url(#gW)" opacity=".35"/>`);
  const a_anv=s.length;
- {const k=2.3,pt=[[-27,-8],[-11,-11],[22,-11],[26,-3],[12,1],[14,9],[-14,9],[-12,1],[-27,-2]].map(([a,b])=>n1(AX+a*k)+','+n1(AY+b*k)).join(' ');let rg='';for(let i=1;i<5;i++)rg+=`<circle cx="${AX}" cy="${AY+6}" r="${34-i*6}" fill="none" stroke="#3a2818" stroke-width="1.5"/>`;
- s+=`<g filter="url(#b4)" opacity=".55"><circle cx="${AX+8}" cy="${AY+16}" r="36" fill="#000"/><polygon points="${pt}" fill="#000" transform="translate(10 14)"/></g><circle cx="${AX}" cy="${AY+6}" r="34" fill="#5a4129" stroke="${OL}" stroke-width="3"/>${rg}`;
- s+=`<polygon points="${pt}" fill="#3a4250" stroke="#05070a" stroke-width="3.5" stroke-linejoin="round"/><polygon points="${n1(AX-24*k)},${n1(AY-7.5*k)} ${n1(AX-11*k)},${n1(AY-10*k)} ${n1(AX+21*k)},${n1(AY-10*k)} ${n1(AX+24*k)},${n1(AY-4*k)} ${n1(AX-24*k)},${n1(AY-4*k)}" fill="#5e6878"/><path d="M${n1(AX-22*k)},${n1(AY-8*k)}L${n1(AX+19*k)},${n1(AY-9.5*k)}" stroke="#a9b3c0" stroke-width="3" stroke-linecap="round"/><rect x="${n1(AX-11*k)}" y="${n1(AY+1*k)}" width="${n1(22*k)}" height="${n1(8*k)}" fill="#1c2027"/>`;
- s+=`<rect x="${AX-14}" y="${AY-22}" width="40" height="9" rx="3" fill="#ff7b22" stroke="#6a2a08" stroke-width="1.5"/><rect x="${AX-10}" y="${AY-21}" width="30" height="4" rx="2" fill="#ffe08a"/>`;
- L.push(`<rect x="${AX-24}" y="${AY-30}" width="60" height="26" rx="12" fill="#ff9a3a" opacity=".6" filter="url(#b10)"/>`);}
- s=cutProp(s,a_anv,'anvil',AX,AY,84,-75);
+ s+=anvilPro(AX,AY,L);
+ s=cutProp(s,a_anv,'anvil',AX,AY,92,-75);
  for(let i=0;i<22;i++){const a=r()*6.283,d=18+r()*55;L.push(`<circle cx="${n1(AX+Math.cos(a)*d)}" cy="${n1(AY-12+Math.sin(a)*d*.7)}" r="${n1(.8+r()*1.6)}" fill="${pick(r,['#ffd27a','#ffae3a','#fff2c0'])}"/>`)}
- s+=hammer(AX+64,AY-30,35)+tongs(AX-66,AY-28,-30);
- s+=hearth(92,352)+`<g filter="url(#b4)" opacity=".5"><path d="M104,300l42,-8l0,36z" fill="#000" transform="translate(6 8)"/></g><path d="M104,300 L146,292 L148,328 L106,316Z" fill="#6b4a2c" stroke="${OL}" stroke-width="2.5"/><path d="M112,304 L142,298 M113,311 L144,310" stroke="#4a331d" stroke-width="2"/><rect x="146" y="300" width="16" height="6" rx="2" fill="#5a4129" stroke="${OL}" stroke-width="1.6"/>`;
+ s+=hearth(92,352)+flame(84,352,.7,L,'gW',40)+flame(99,356,.6,L,'gW',40)+flame(92,346,.85,L,'gW',40)+`<g filter="url(#b4)" opacity=".5"><path d="M104,300l42,-8l0,36z" fill="#000" transform="translate(6 8)"/></g><path d="M104,300 L146,292 L148,328 L106,316Z" fill="#6b4a2c" stroke="${OL}" stroke-width="2.5"/><path d="M112,304 L142,298 M113,311 L144,310" stroke="#4a331d" stroke-width="2"/><rect x="146" y="300" width="16" height="6" rx="2" fill="#5a4129" stroke="${OL}" stroke-width="1.6"/>`;
  s+=barrel(288,352,20,r)+`<circle cx="288" cy="352" r="13" fill="#2f5c6c"/><circle cx="284" cy="348" r="3.5" fill="#8fc0cc" opacity=".6"/>`+ingots(232,300);
  s+=Array.from({length:9},(_,i)=>`<path d="${blob(58+(i%3)*12+r()*4,462+Math.floor(i/3)*10+r()*4,8,6,r,7,.3)}" fill="${pick(r,['#1a1a1e','#26262c','#101014'])}" stroke="#000" stroke-width="1.5"/>`).join('');
  s+=`<g filter="url(#b4)" opacity=".5"><circle cx="310" cy="472" r="18" fill="#000" transform="translate(5 7)"/></g><circle cx="310" cy="472" r="18" fill="#8a8b86" stroke="${OL}" stroke-width="3"/><circle cx="310" cy="472" r="12" fill="#6d6e6a"/><circle cx="310" cy="472" r="4" fill="#2e2f2c"/><rect x="286" y="484" width="48" height="7" fill="#5a4129" stroke="${OL}" stroke-width="2"/>`;
@@ -268,20 +327,19 @@ function sceneE(){
  L.push(`<circle cx="${VX}" cy="${VY}" r="170" fill="url(#gW)" opacity=".7"/>`);
  const cw=128,ch=80,cx0=VX-cw/2,cy0=VY-ch/2-4;
  const a_ch=s.length;
- s+=chest(cx0,cy0,cw,ch)+`<rect x="${cx0}" y="${cy0}" width="${cw}" height="${ch}" rx="11" fill="none" stroke="#d7b24c" stroke-width="3"/>`+[[cx0,cy0],[cx0+cw-18,cy0],[cx0,cy0+ch-18],[cx0+cw-18,cy0+ch-18]].map(([x,y])=>`<rect x="${x}" y="${y}" width="18" height="18" rx="4" fill="#d7b24c" stroke="${OL}" stroke-width="2"/><circle cx="${x+9}" cy="${y+9}" r="3" fill="#8a6a1a"/>`).join('');
- s+=`<rect x="${cx0+6}" y="${cy0+ch*.33-2}" width="${cw-12}" height="4" fill="#ffd77a" filter="url(#b2)"/>`;
+ s+=chestPro(VX,VY-4,L);
  s=cutProp(s,a_ch,'chest',VX,VY-4,88,-75);
- L.push(`<rect x="${cx0}" y="${cy0+ch*.33-8}" width="${cw}" height="16" fill="#ffc85a" opacity=".5" filter="url(#b10)"/>`);
  [[VX-78,VY-78],[VX+78,VY-78],[VX-78,VY+78],[VX+78,VY+78]].forEach(([x,y])=>s+=candle(n1(x*1+0),n1(y)));
  s+=coins(VX-48,VY+62,20)+coins(VX+48,VY+62,20)+coins(VX,VY+78,12)+gem(VX-22,VY+72,'#e0405a')+gem(VX+22,VY+72,'#3ac07a');
  s+=barrel(1116,352,20,r)+barrel(1146,326,14,r)+barrel(1320,352,20,r)+barrel(1290,326,14,r)+crate(1080,450,28,r)+sack(1100,500,15,r)+crate(1328,450,28,r)+sack(1336,500,15,r,'#8a7a50');
- s=s.slice(0,s0)+'<g transform="translate(0 -75)">'+s.slice(s0)+'</g>';L.splice(l0,L.length-l0,'<g transform="translate(0 -75)">'+L.slice(l0).join('')+'</g>');
+ s=s.slice(0,s0)+'<g transform="translate(0 -75)">'+s.slice(s0)+'</g>';L.splice(l0,L.length-l0,'<g transform="translate(0 -75)">'+L.slice(l0).join('')+'</g>');CURDY=0;
  // unlock sites
- {const s1=s.length,l1=L.length;s+=site(145,100,90,48)+site(1173,100,90,48,1);s=s.slice(0,s1)+'<g transform="translate(0 -64)">'+s.slice(s1)+'</g>';L.splice(l1,L.length-l1,'<g transform="translate(0 -64)">'+L.slice(l1).join('')+'</g>');}
- s+=site(652,664,104,48);
+ {const l1=L.length;s+=lay('nw',site(145,100,90,48),-64)+lay('ne',site(1173,100,90,48,1),-64);L.splice(l1,L.length-l1,'<g transform="translate(0 -64)">'+L.slice(l1).join('')+'</g>');}
+ s+=lay('s',site(652,664,104,48));
  // bridges
- s+=bridge(334,335,424,335)+bridge(984,335,1074,335)+bridge(704,590,704,654);
- s+=bridge(190,209,190,102,46)+bridge(1218,209,1218,102,46);
+ s+=bridge(334,335,424,335)+bridge(984,335,1074,335);
+ s+=lay('s',bridge(704,590,704,654));
+ s+=lay('nw',bridge(190,209,190,102,46))+lay('ne',bridge(1218,209,1218,102,46));
  const barrier=(x,y)=>{L.push(`<circle cx="${x}" cy="${y}" r="26" fill="url(#gP)" opacity=".8"/>`);let u=`<g filter="url(#b4)" opacity=".5"><rect x="${x-30}" y="${y+2}" width="60" height="12" fill="#000"/></g>`;
   for(const sx of [-24,24])u+=`<path d="M${x+sx-6},${y-7}L${x+sx+6},${y+7}M${x+sx+6},${y-7}L${x+sx-6},${y+7}" stroke="#1e130a" stroke-width="6" stroke-linecap="round"/><path d="M${x+sx-6},${y-7}L${x+sx+6},${y+7}M${x+sx+6},${y-7}L${x+sx-6},${y+7}" stroke="#7a5a34" stroke-width="3" stroke-linecap="round"/>`;
   u+=`<rect x="${x-30}" y="${y-5}" width="60" height="10" rx="2" fill="#8a6a40" stroke="#1e130a" stroke-width="2.5"/>`+[-18,-6,6,18].map(o=>`<path d="M${x+o-4},${y-5}l8,10" stroke="#5a3e22" stroke-width="3"/>`).join('');
@@ -290,14 +348,15 @@ function sceneE(){
  s+=barrier(190,201)+barrier(1218,201)+barrier(704,598);
  s+=lamp(340,312)+lamp(418,358)+lamp(990,358)+lamp(1068,312)+lamp(678,596);
  for(let i=0;i<34;i++){const a=r()*6.283,d=120+r()*220;L.push(`<circle cx="${n1(PX+Math.cos(a)*d)}" cy="${n1(PY+Math.sin(a)*d*.8)}" r="${n1(.8+r()*1.8)}" fill="${pick(r,['#c8b0ff','#e6dcff','#ffe2a8'])}" opacity="${n1(.35+r()*.5)}"/>`)}
- s+=[[120,740,300,40,.18],[1290,740,300,40,.18],[704,768,560,40,.2]].map(([x,y,rx,ry,o])=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#b6a8e8" opacity="${o}" filter="url(#b24)"/>`).join('');
+ s+=lay('fog',[[120,740,300,40,.18],[1290,740,300,40,.18],[704,768,560,40,.2]].map(([x,y,rx,ry,o])=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#b6a8e8" opacity="${o}" filter="url(#b24)"/>`).join(''));
  return {art:s,L,ambient:'#0d1030',ambOp:.12};
 }
 const build=({art,L,ambient,ambOp})=>`<svg class="s" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs><filter id="roughS" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.4"/></filter></defs><g filter="url(#roughS)">${art}</g><rect width="${W}" height="${H}" fill="${ambient}" opacity="${ambOp}" style="mix-blend-mode:multiply"/><g style="mix-blend-mode:screen">${L.join('')}</g><rect width="${W}" height="${H}" filter="url(#mottle)" opacity=".08" style="mix-blend-mode:overlay"/><rect width="${W}" height="${H}" filter="url(#grain)" opacity=".07" style="mix-blend-mode:overlay"/><rect width="${W}" height="${H}" fill="url(#vig)"/></svg>`;
-const SC=sceneE();window.PROPS=PROPS;
+const SC=sceneE();window.PROPS=PROPS;window.FLAMES=FLAMES;
+PROPS.flame={x:0,y:0,r:30};PSTR.flame={str:flameShape(0,6,1.4),dy:0};
 {const root=document.getElementById('root');const RF='<defs><filter id="roughS" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.4"/></filter></defs>';
  if(MODE!=='full'){document.body.style.cssText='margin:0;padding:0;background:transparent';}
- if(MODE==='ground')root.innerHTML=`<svg id="out" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${RF}<g filter="url(#roughS)">${SC.art}</g><rect width="${W}" height="${H}" filter="url(#mottle)" opacity=".08" style="mix-blend-mode:overlay"/><rect width="${W}" height="${H}" filter="url(#grain)" opacity=".07" style="mix-blend-mode:overlay"/></svg>`;
+ if(MODE==='ground')root.innerHTML=`<svg id="out" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${RF}<defs><filter id="grainIn" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="8" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComposite in="g" in2="SourceGraphic" operator="in" result="gi"/><feComponentTransfer in="gi" result="gi2"><feFuncA type="linear" slope=".14"/></feComponentTransfer><feBlend in="gi2" in2="SourceGraphic" mode="overlay" result="b"/><feComposite in="b" in2="SourceGraphic" operator="in"/></filter></defs><g id="art" filter="url(#roughS)"><g filter="url(#grainIn)">${pickLayer(SC.art,LAYERQ)}</g></g></svg>`;
  else if(MODE==='glow')root.innerHTML=`<svg id="out" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${SC.L.join('')}</svg>`;
  else if(MODE==='prop'){const p=PROPS[PNAME],q=PSTR[PNAME];root.innerHTML=`<svg id="out" width="${2*p.r}" height="${2*p.r}" viewBox="${p.x-p.r} ${p.y-p.r} ${2*p.r} ${2*p.r}">${RF}<g filter="url(#roughS)"><g transform="translate(0 ${q.dy})">${q.str}</g></g></svg>`;}
  else root.innerHTML=`<section><h2>Hub — Piattaforma arcana sospesa</h2>${build(SC)}</section>`;}

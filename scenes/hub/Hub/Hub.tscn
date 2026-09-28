@@ -25,6 +25,21 @@
 [ext_resource type="Script" path="res://scripts/combat/light_flicker.gd" id="flicker"]
 [ext_resource type="Shader" path="res://assets/shaders/tree_sway.gdshader" id="tree_sway_shader"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hub_ground.png" id="hub_ground"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_layer_sky.png" id="hub_layer_sky"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_layer_nw.png" id="hub_layer_nw"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_layer_ne.png" id="hub_layer_ne"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_layer_s.png" id="hub_layer_s"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_layer_fog.png" id="hub_layer_fog"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_flame.png" id="hub_flame"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_rock0.png" id="hub_rock0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_rock1.png" id="hub_rock1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_rock2.png" id="hub_rock2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_rock3.png" id="hub_rock3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_rock4.png" id="hub_rock4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_rock5.png" id="hub_rock5"]
+[ext_resource type="Script" path="res://scripts/hub/float_bob.gd" id="float_bob"]
+[ext_resource type="Script" path="res://scripts/hub/star_twinkle.gd" id="star_twinkle"]
+[ext_resource type="Shader" path="res://assets/shaders/flame_flicker.gdshader" id="flame_shader"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hub_glow.png" id="hub_glow"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hub_vortex.png" id="hub_vortex"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hub_tree_w.png" id="hub_tree_w"]
@@ -88,8 +103,30 @@ radius = 27.5
 [sub_resource type="CircleShape2D" id="hub_c34"]
 radius = 42.5
 
+[sub_resource type="CircleShape2D" id="hub_c41"]
+radius = 51.2
+
 [sub_resource type="CircleShape2D" id="hub_c100"]
 radius = 125.0
+
+[sub_resource type="ShaderMaterial" id="flame_a"]
+shader = ExtResource("flame_shader")
+shader_parameter/distort_amount = 0.02
+shader_parameter/speed = 6.0
+
+[sub_resource type="ShaderMaterial" id="flame_b"]
+shader = ExtResource("flame_shader")
+shader_parameter/distort_amount = 0.024
+shader_parameter/speed = 7.4
+
+[sub_resource type="ShaderMaterial" id="flame_c"]
+shader = ExtResource("flame_shader")
+shader_parameter/distort_amount = 0.018
+shader_parameter/speed = 5.1
+
+[sub_resource type="Gradient" id="ember_grad"]
+offsets = PackedFloat32Array(0, 0.25, 1)
+colors = PackedColorArray(1, 0.9, 0.55, 0, 1, 0.62, 0.25, 1, 1, 0.35, 0.1, 0)
 
 [sub_resource type="ShaderMaterial" id="tree_sway_mat"]
 shader = ExtResource("tree_sway_shader")
@@ -111,8 +148,120 @@ script = ExtResource("music")
 [node name="Ambient" type="CanvasModulate" parent="."]
 color = Color(0.9, 0.89, 0.94, 1)
 
+[node name="Backdrop" type="Node2D" parent="."]
+
+[node name="Sky" type="Sprite2D" parent="Backdrop"]
+z_index = -14
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
+texture = ExtResource("hub_layer_sky")
+
+[node name="Stars" type="Node2D" parent="Backdrop"]
+z_index = -13
+script = ExtResource("star_twinkle")
+points = PackedVector2Array(335.6, -428.3, 49.2, -411.8, -366.0, -401.8, -866.6, -271.4, -434.6, -290.0, -136.3, -370.4, 125.2, -344.5, -423.6, -456.9, -834.3, -340.5, -78.4, -444.4, 182.6, -441.5, 833.0, -446.2, -215.7, -375.5, 430.9, -420.6, 439.6, -290.0, 214.0, -371.7, 390.4, 181.4, -391.2, 458.4, 388.3, -157.4, 391.4, 374.1, 843.5, -332.3, -451.4, -380.5, -388.3, 308.2, -294.8, -442.7, -20.4, -355.0, -825.8, -437.6, -391.3, 62.8, 375.3, -357.7, -171.9, -465.5, -390.6, -195.2, 260.8, -445.7, -298.9, -344.6, 387.6, -38.1, 290.4, -353.2, -391.7, -65.6, 392.5, 61.1, -388.1, 200.7, 387.6, 285.5, 389.4, 466.3, -4.5, -466.1, 109.1, -457.7, 388.3, -233.9, -392.2, 383.4, 817.5, -261.5)
+
+[node name="Rock0" type="Node2D" parent="Backdrop"]
+z_index = -12
+position = Vector2(-292.5, -386)
+script = ExtResource("float_bob")
+amplitude = 4.0
+period = 13.0
+phase = 0.0
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/Rock0"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_rock0")
+
+[node name="Rock1" type="Node2D" parent="Backdrop"]
+z_index = -12
+position = Vector2(307.5, -380)
+script = ExtResource("float_bob")
+amplitude = 3.0
+period = 17.0
+phase = 1.3
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/Rock1"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_rock1")
+
+[node name="Rock2" type="Node2D" parent="Backdrop"]
+z_index = -12
+position = Vector2(-355, 288)
+script = ExtResource("float_bob")
+amplitude = 3.5
+period = 11.0
+phase = 2.6
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/Rock2"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_rock2")
+
+[node name="Rock3" type="Node2D" parent="Backdrop"]
+z_index = -12
+position = Vector2(370, 302)
+script = ExtResource("float_bob")
+amplitude = 4.5
+period = 19.0
+phase = 3.9
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/Rock3"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_rock3")
+
+[node name="Rock4" type="Node2D" parent="Backdrop"]
+z_index = -12
+position = Vector2(-830, -275.5)
+script = ExtResource("float_bob")
+amplitude = 2.5
+period = 15.0
+phase = 5.2
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/Rock4"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_rock4")
+
+[node name="Rock5" type="Node2D" parent="Backdrop"]
+z_index = -12
+position = Vector2(838.8, -262)
+script = ExtResource("float_bob")
+amplitude = 3.0
+period = 14.0
+phase = 6.5
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/Rock5"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_rock5")
+
+[node name="IslandNW" type="Node2D" parent="Backdrop"]
+script = ExtResource("float_bob")
+amplitude = 2.5
+period = 26.0
+phase = 1.1
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/IslandNW"]
+z_index = -11
+position = Vector2(-621.9, -316.9)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_layer_nw")
+
+[node name="IslandNE" type="Node2D" parent="Backdrop"]
+script = ExtResource("float_bob")
+amplitude = 2.5
+period = 24.0
+phase = 3.9
+
+[node name="Sprite" type="Sprite2D" parent="Backdrop/IslandNE"]
+z_index = -11
+position = Vector2(663.1, -316.9)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_layer_ne")
+
 [node name="World" type="Node2D" parent="."]
 process_mode = 1
+script = ExtResource("float_bob")
+amplitude = 1.5
+period = 22.0
 
 [node name="Ground" type="Sprite2D" parent="World"]
 z_index = -10
@@ -120,12 +269,12 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("hub_ground")
 
 [node name="Glow" type="Sprite2D" parent="World"]
-z_index = -9
+z_index = -8
 material = SubResource("glow_add")
 texture = ExtResource("hub_glow")
 
 [node name="Vortex" type="Sprite2D" parent="World"]
-z_index = -8
+z_index = -7
 material = SubResource("unshaded")
 position = Vector2(0, -61.3)
 scale = Vector2(0.5, 0.5)
@@ -160,7 +309,7 @@ polygon = PackedVector2Array(350.0, -118.8, 350.0, -106.2, 255.0, -106.2, 255.0,
 polygon = PackedVector2Array(350.0, -16.2, 350.0, 8.8, 255.0, 8.8, 255.0, -16.2)
 
 [node name="Solid6" type="CollisionPolygon2D" parent="World/Bounds"]
-polygon = PackedVector2Array(-565.0, -80.0, -565.0, -22.5, -720.0, -22.5, -720.0, -80.0)
+polygon = PackedVector2Array(-537.5, -80.0, -537.5, -26.2, -720.0, -26.2, -720.0, -80.0)
 
 [node name="Solid7" type="CollisionPolygon2D" parent="World/Bounds"]
 polygon = PackedVector2Array(-755.0, -211.2, -675.0, -211.2, -675.0, -157.5, -755.0, -175.0)
@@ -172,7 +321,7 @@ polygon = PackedVector2Array(-545.0, -211.2, -545.0, -185.0, -595.0, -185.0, -59
 polygon = PackedVector2Array(-462.5, 31.2, -462.5, 41.2, -522.5, 41.2, -522.5, 31.2)
 
 [node name="Solid10" type="CollisionPolygon2D" parent="World/Bounds"]
-polygon = PackedVector2Array(722.5, -103.8, 722.5, -3.8, 562.5, -3.8, 562.5, -103.8)
+polygon = PackedVector2Array(732.5, -103.8, 732.5, -3.8, 552.5, -3.8, 552.5, -103.8)
 
 [node name="Solid11" type="CollisionPolygon2D" parent="World/Bounds"]
 polygon = PackedVector2Array(505.0, -11.2, 505.0, 23.8, 470.0, 23.8, 470.0, -11.2)
@@ -225,8 +374,8 @@ position = Vector2(455.0, -90.0)
 shape = SubResource("hub_c7")
 
 [node name="Round11" type="CollisionShape2D" parent="World/Bounds"]
-position = Vector2(-642.5, -41.2)
-shape = SubResource("hub_c34")
+position = Vector2(-642.5, -40.0)
+shape = SubResource("hub_c41")
 
 [node name="Round12" type="CollisionShape2D" parent="World/Bounds"]
 position = Vector2(-765.0, -133.8)
@@ -375,6 +524,9 @@ energy = 0.6
 range_item_cull_mask = 2
 texture = SubResource("light_tex")
 texture_scale = 1.3
+script = ExtResource("flicker")
+amplitude = 0.15
+speed = 4.0
 
 [node name="VaultLight" type="PointLight2D" parent="World"]
 position = Vector2(642.5, -48.8)
@@ -408,6 +560,131 @@ texture_scale = 1.3
 script = ExtResource("flicker")
 amplitude = 0.12
 speed = 6.0
+
+[node name="Flames" type="Node2D" parent="World"]
+z_index = -6
+
+[node name="Flame0" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_a")
+position = Vector2(-162.5, 216.3)
+scale = Vector2(0.411, 0.411)
+texture = ExtResource("hub_flame")
+
+[node name="Flame1" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_b")
+position = Vector2(162.5, 216.3)
+scale = Vector2(0.411, 0.411)
+texture = ExtResource("hub_flame")
+
+[node name="Flame2" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_c")
+position = Vector2(-775, -137.5)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("hub_flame")
+
+[node name="Flame3" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_a")
+position = Vector2(-756.3, -132)
+scale = Vector2(0.214, 0.214)
+texture = ExtResource("hub_flame")
+
+[node name="Flame4" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_b")
+position = Vector2(-765, -145.8)
+scale = Vector2(0.304, 0.304)
+texture = ExtResource("hub_flame")
+
+[node name="Flame5" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_c")
+position = Vector2(545, -151.7)
+scale = Vector2(0.196, 0.196)
+texture = ExtResource("hub_flame")
+
+[node name="Flame6" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_a")
+position = Vector2(740, -151.7)
+scale = Vector2(0.196, 0.196)
+texture = ExtResource("hub_flame")
+
+[node name="Flame7" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_b")
+position = Vector2(545, 43.3)
+scale = Vector2(0.196, 0.196)
+texture = ExtResource("hub_flame")
+
+[node name="Flame8" type="Sprite2D" parent="World/Flames"]
+material = SubResource("flame_c")
+position = Vector2(740, 43.3)
+scale = Vector2(0.196, 0.196)
+texture = ExtResource("hub_flame")
+
+[node name="Embers0" type="CPUParticles2D" parent="World/Flames"]
+material = SubResource("glow_add")
+position = Vector2(-162.5, 220.0)
+amount = 7
+lifetime = 1.8
+randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 6.0
+direction = Vector2(0, -1)
+spread = 30.0
+gravity = Vector2(0, -10)
+initial_velocity_min = 8.0
+initial_velocity_max = 20.0
+scale_amount_min = 1.2
+scale_amount_max = 2.4
+color_ramp = SubResource("ember_grad")
+
+[node name="Embers1" type="CPUParticles2D" parent="World/Flames"]
+material = SubResource("glow_add")
+position = Vector2(162.5, 220.0)
+amount = 7
+lifetime = 1.8
+randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 6.0
+direction = Vector2(0, -1)
+spread = 30.0
+gravity = Vector2(0, -10)
+initial_velocity_min = 8.0
+initial_velocity_max = 20.0
+scale_amount_min = 1.2
+scale_amount_max = 2.4
+color_ramp = SubResource("ember_grad")
+
+[node name="Embers2" type="CPUParticles2D" parent="World/Flames"]
+material = SubResource("glow_add")
+position = Vector2(-765.0, -140.0)
+amount = 9
+lifetime = 1.8
+randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 14.0
+direction = Vector2(0, -1)
+spread = 30.0
+gravity = Vector2(0, -10)
+initial_velocity_min = 8.0
+initial_velocity_max = 20.0
+scale_amount_min = 1.2
+scale_amount_max = 2.4
+color_ramp = SubResource("ember_grad")
+
+[node name="Embers3" type="CPUParticles2D" parent="World/Flames"]
+material = SubResource("glow_add")
+position = Vector2(-642.5, -62.5)
+amount = 5
+lifetime = 1.8
+randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector2(0, -1)
+spread = 30.0
+gravity = Vector2(0, -10)
+initial_velocity_min = 8.0
+initial_velocity_max = 20.0
+scale_amount_min = 1.2
+scale_amount_max = 2.4
+color_ramp = SubResource("ember_grad")
 
 [node name="ForgeSpot" type="Area2D" parent="World" node_paths=PackedStringArray("window")]
 position = Vector2(-642.5, -48.8)
@@ -451,6 +728,27 @@ tutorial_description = "TUTORIAL_PORTAL_DESC"
 [node name="Shape" type="CollisionShape2D" parent="World/PortalSpot"]
 shape = SubResource("spot_portal")
 
+[node name="Foreground" type="Node2D" parent="."]
+
+[node name="IslandS" type="Node2D" parent="Foreground"]
+script = ExtResource("float_bob")
+amplitude = 2.0
+period = 25.0
+phase = 2.4
+
+[node name="Sprite" type="Sprite2D" parent="Foreground/IslandS"]
+z_index = -9
+position = Vector2(1.9, 435.6)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_layer_s")
+
+[node name="Fog" type="Sprite2D" parent="Foreground"]
+z_index = 2
+position = Vector2(1.3, 462.5)
+scale = Vector2(1, 1)
+texture = ExtResource("hub_layer_fog")
+modulate = Color(1, 1, 1, 0.9)
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="UI"]
@@ -493,24 +791,38 @@ theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 text = "HUB_AUTOSAVE"
 
-[node name="Prompt" type="Label" parent="UI"]
+[node name="Prompt" type="PanelContainer" parent="UI"]
 unique_name_in_owner = true
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -90.0
-offset_right = 300.0
-offset_bottom = -50.0
+offset_top = -56.0
+offset_bottom = -56.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 22
+theme_type_variation = &"HudPlate"
+
+[node name="Row" type="HBoxContainer" parent="UI/Prompt"]
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Key" type="PanelContainer" parent="UI/Prompt/Row"]
+custom_minimum_size = Vector2(30, 30)
+theme_type_variation = &"BadgePanel"
+
+[node name="KeyLabel" type="Label" parent="UI/Prompt/Row/Key"]
+theme_override_colors/font_color = Color(0.91, 0.78, 0.42, 1)
+theme_override_font_sizes/font_size = 20
+text = "E"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PromptLabel" type="Label" parent="UI/Prompt/Row"]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
 
 [node name="MenuIcons" type="HBoxContainer" parent="UI"]
 anchors_preset = 1

@@ -62,9 +62,9 @@ SLOT_ACCESSORY,Amuleto,Amulet,Amulette,Amuleto
 SLOT_NONE,nessuno,none,aucun,ninguno
 STASH_TITLE,Risorse,Resources,Ressources,Recursos
 STASH_EMPTY,Nessuna risorsa: estraila da una run.,No resources: extract them from a run.,Aucune ressource : extrayez-en lors d'une expédition.,Sin recursos: extráelos de una expedición.
-PROMPT_PORTAL,E — Portale (scegli l'arena e parti),E — Portal (choose the arena and go),E — Portail (choisir l'arène et partir),E — Portal (elige la arena y parte)
-PROMPT_FORGE,E — Fabbro (crafting),E — Blacksmith (crafting),E — Forgeron (artisanat),E — Herrero (fabricación)
-PROMPT_CHEST,E — Baule (inventario),E — Chest (inventory),E — Coffre (inventaire),E — Cofre (inventario)
+PROMPT_PORTAL,Portale (scegli l'arena e parti),Portal (choose the arena and go),Portail (choisir l'arène et partir),Portal (elige la arena y parte)
+PROMPT_FORGE,Fabbro (crafting),Blacksmith (crafting),Forgeron (artisanat),Herrero (fabricación)
+PROMPT_CHEST,Baule (inventario),Chest (inventory),Coffre (inventaire),Cofre (inventario)
 RUNEND_EXTRACTED,Estrazione riuscita!,Extraction successful!,Extraction réussie !,¡Extracción completada!
 RUNEND_DEAD,Sei morto,You died,Vous êtes mort,Has muerto
 RUNEND_SUMMARY,Livello %d  ·  Tempo %d:%02d  ·  Uccisioni %d,Level %d  ·  Time %d:%02d  ·  Kills %d,Niveau %d  ·  Temps %d:%02d  ·  Éliminations %d,Nivel %d  ·  Tiempo %d:%02d  ·  Bajas %d

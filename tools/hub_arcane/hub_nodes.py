@@ -1,11 +1,12 @@
-"""Collisioni dell'hub arcano (GDD §7): area calpestabile e ostacoli, in coordinate mondo.
+"""Nodi generati dell'hub arcano (GDD §7), in coordinate mondo: collisioni e stelle che luccicano.
 
 Legge tools/hub_arcane/hub_layout.json (scritto da render.js) e stampa i nodi .tscn di `World/Bounds`
-(da incollare in scenes/hub/Hub/Hub.tscn). Coordinate degli oggetti = quelle del mockup (hub_arcane.html).
-Uso: python3 tools/hub_arcane/hub_collision.py > /tmp/bounds.tscn   — richiede: pip install shapely
+(area calpestabile e ostacoli) e i punti di `Backdrop/Stars` (da incollare in scenes/hub/Hub/Hub.tscn). Coordinate degli oggetti = quelle del mockup (hub_arcane.html).
+Uso: python3 tools/hub_arcane/hub_nodes.py > /tmp/hub_nodes.tscn   — richiede: pip install shapely
 """
 import json
 import os
+import random
 
 from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
@@ -41,10 +42,10 @@ dais_wall = unary_union([disc(704, 335, 222), disc(704, 363, 222).intersection(r
 dais_wall = dais_wall.difference(disc(704, 335, 210)).difference(rect(400, 299, 512, 371)).difference(rect(896, 299, 1008, 371))
 solids = list(getattr(dais_wall, "geoms", [dais_wall])) + [
     rect(424, 289, 500, 299), rect(424, 371, 500, 391), rect(908, 289, 984, 299), rect(908, 371, 984, 391),
-    rect(128, 320, 252, 366),                                 # incudine
+    rect(128, 320, 274, 363),                                 # incudine
     Polygon([w(100, 215), w(164, 215), w(164, 258), w(100, 244)]),  # mantice
     rect(228, 215, 268, 236), rect(286, 409, 334, 417),        # lingotti, base della mola
-    rect(1154, 301, 1282, 381),                                # baule
+    rect(1146, 301, 1290, 381),                                # baule
     rect(1080, 375, 1108, 403), rect(1328, 375, 1356, 403),    # casse
 ]
 circles = [
@@ -52,7 +53,7 @@ circles = [
     (575.3, 206.3, 22), (832.7, 206.3, 22), (575.3, 463.7, 22), (832.7, 463.7, 22),  # obelischi
     (462, 452, 14), (946, 452, 14), (574, 566, 19), (834, 566, 19),                  # alberi, bracieri
     (340, 312, 7), (1068, 312, 7),                                                    # lanterne dei ponti
-    (190, 351, 34), (92, 277, 34), (288, 277, 20), (310, 397, 18),                    # ceppo, focolare, barile, mola
+    (190, 352, 41), (92, 277, 34), (288, 277, 20), (310, 397, 18),                    # ceppo, focolare, barile, mola
     (1116, 277, 20), (1146, 251, 14), (1320, 277, 20), (1290, 251, 14),                # botti
     (1100, 425, 15), (1336, 425, 15),                                                 # sacchi
     (1140, 267, 7), (1296, 267, 7), (1140, 423, 7), (1296, 423, 7),                   # candele
@@ -75,4 +76,14 @@ for i, s in enumerate(solids):
 for i, (x, y, r) in enumerate(circles):
     p = w(x, y)
     out.append('[node name="Round%d" type="CollisionShape2D" parent="World/Bounds"]\nposition = Vector2(%.1f, %.1f)\nshape = SubResource("hub_c%d")\n' % (i, p[0], p[1], r))
+# Stelle che luccicano: punti di cielo lontani da isole, scogli pendenti e ponti.
+islands = [(190, 60, 120, 48), (1218, 60, 120, 48), (190, 335, 180, 140), (1218, 335, 180, 140), (704, 360, 290, 230), (704, 694, 150, 52)]
+sky_block = unary_union([rect(cx - rx - 20, cy - ry - 20, cx + rx + 20, cy + ry * 2.6 + 80) for cx, cy, rx, ry in islands])
+rng = random.Random(11)
+stars = []
+while len(stars) < 44:
+    x, y = rng.uniform(10, 1398), rng.uniform(10, 758)
+    if not sky_block.contains(Point(*w(x, y))) and all((x - a) ** 2 + (y - b) ** 2 > 60 ** 2 for a, b in stars):
+        stars.append((x, y))
+out.append("# Backdrop/Stars.points\npoints = PackedVector2Array(%s)\n" % ", ".join("%.1f, %.1f" % w(x, y) for x, y in stars))
 print("\n".join(out))
