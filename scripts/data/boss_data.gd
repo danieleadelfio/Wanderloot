@@ -33,6 +33,9 @@ extends Resource
 @export_group("Teletrasporto")
 ## Distanza minima dal player del punto di ricomparsa (attacchi con teleport_after).
 @export var teleport_distance: float = 280.0
+## Distanza massima dal punto di partenza del boss (M13, #86): con le arene 10x il Negromante poteva
+## ricomparire ovunque e non si ritrovava piu'.
+@export var teleport_max_jump: float = 400.0
 
 
 func phase_for(hp_ratio: float) -> int:

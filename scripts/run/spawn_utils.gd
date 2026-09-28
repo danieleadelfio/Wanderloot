@@ -62,3 +62,19 @@ static func random_point_away(rect: Rect2, origin: Vector2, min_distance: float,
 	forced.x = clampf(forced.x, rect.position.x, rect.end.x)
 	forced.y = clampf(forced.y, rect.position.y, rect.end.y)
 	return forced
+
+
+## Punto di ricomparsa di un teletrasporto (M13, #86): entro max_jump da `from` (posizione del boss
+## prima del salto), il piu' possibile ad almeno min_player_distance dal player, dentro rect. Se nessun
+## candidato e' abbastanza lontano dal player, salta di max_jump nella direzione opposta al player.
+## Mai oltre max_jump da `from` (il clamp nel rect non allontana: `from` sta nel rect).
+static func teleport_point(rect: Rect2, from: Vector2, player_position: Vector2, min_player_distance: float, max_jump: float) -> Vector2:
+	for i in 30:
+		var radius := sqrt(randf()) * max_jump
+		var candidate := (from + Vector2.RIGHT.rotated(randf() * TAU) * radius).clamp(rect.position, rect.end)
+		if candidate.distance_to(player_position) >= min_player_distance:
+			return candidate
+	var away := player_position.direction_to(from)
+	if away == Vector2.ZERO:
+		away = Vector2.RIGHT.rotated(randf() * TAU)
+	return (from + away * max_jump).clamp(rect.position, rect.end)

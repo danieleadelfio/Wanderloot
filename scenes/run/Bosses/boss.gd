@@ -278,10 +278,11 @@ func _recover() -> void:
 		_teleport()
 
 
-## Svanisce e ricompare lontano dal player, dentro bounds.
+## Svanisce e ricompare lontano dal player, dentro bounds, ma mai oltre teleport_max_jump dal punto
+## in cui era (M13, #86).
 func _teleport() -> void:
-	var from := target.global_position if is_instance_valid(target) else global_position
-	var point := SpawnUtils.random_point_away(bounds, from, data.teleport_distance)
+	var player_position := target.global_position if is_instance_valid(target) else global_position
+	var point := SpawnUtils.teleport_point(bounds, global_position, player_position, data.teleport_distance, data.teleport_max_jump)
 	var tween := create_tween()
 	tween.tween_property(_body, "modulate:a", 0.0, 0.18)
 	tween.tween_callback(func() -> void:

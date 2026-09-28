@@ -189,6 +189,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Selezione arena: evidenziazione e focus restano sull'arena scelta invece di tornare sulla Cripta (#67).
 
 ### Changed
+- Teletrasporto dei boss (Negromante): ricompare sempre entro 400 px dal punto di partenza (`BossData.teleport_max_jump`, `SpawnUtils.teleport_point`, testato), resta ad almeno `teleport_distance` dal player quando possibile; con le arene 10x poteva ricomparire ovunque. Verificato che i boss non hanno raggio di aggro (inseguono sempre il player su tutta l'arena) (#86).
 - Fulmine errante: con meno bersagli che fulmini cadono comunque tutti, a giro sui nemici piu' vicini (`WandAbilities.strike_plan`, testato); i colpi in piu' sullo stesso bersaglio arrivano in fila ogni 0,15 s (forte sui boss). Pool dei fulmini 8 → 12 (#86).
 - Carte di level-up: i potenziamenti con tetto (Ventaglio max 2, Ricochet max 4) mostrano il livello attuale su quello massimo (`LEVELUP_PICK_LEVEL`, `LevelUpChoice.present(picks)`); descrizioni di Ventaglio (solo proiettili dello sparo base, non abilita'), Ricochet (max livello 4) e Contatore (solo abilita', non attacco base ne' barriera) rese esplicite (#86).
 - **Ricochet** prima della Perforazione (era il contrario) e al massimo 4 scelte (`ricochet_up.tres` `max_picks = 4`); test end-to-end Anello arcano + Ricochet + Perforazione (#86).

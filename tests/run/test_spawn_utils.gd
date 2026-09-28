@@ -73,3 +73,21 @@ func test_without_max_origin_points_can_be_far() -> void:
 			if point.distance_to(Vector2.ZERO) > 1200.0:
 				far += 1
 	assert_int(far).is_greater(0)
+
+
+## Teletrasporto dei boss (M13, #86): mai oltre max_jump dal punto di partenza, dentro il rect.
+func test_teleport_point_stays_within_max_jump() -> void:
+	var rect := Rect2(-5000, -5000, 10000, 10000)
+	for i in 200:
+		var from := Vector2(randf_range(-4800, 4800), randf_range(-4800, 4800))
+		var player := from + Vector2.RIGHT.rotated(randf() * TAU) * randf_range(0.0, 350.0)
+		var point := SpawnUtils.teleport_point(rect, from, player, 300.0, 400.0)
+		assert_float(point.distance_to(from)).is_less_equal(400.01)
+		assert_bool(rect.has_point(point) or point.x == rect.end.x or point.y == rect.end.y).is_true()
+
+
+func test_teleport_point_prefers_distance_from_player() -> void:
+	var rect := Rect2(-5000, -5000, 10000, 10000)
+	for i in 50:
+		var point := SpawnUtils.teleport_point(rect, Vector2.ZERO, Vector2(50, 0), 300.0, 400.0)
+		assert_float(point.distance_to(Vector2(50, 0))).is_greater_equal(300.0)
