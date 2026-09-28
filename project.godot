@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Wanderloot"
-config/version="1.0.6"
+config/version="1.0.7"
 run/main_scene="res://scenes/menu/MainMenu/MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/icon/icon.png"
