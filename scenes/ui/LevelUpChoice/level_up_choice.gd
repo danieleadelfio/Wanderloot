@@ -18,7 +18,9 @@ func _ready() -> void:
 
 
 ## rerolls_left: quanti reroll restano nella run; il bottone si disabilita a 0.
-func present(options: Array[UpgradeData], rerolls_left: int) -> void:
+## picks: volte gia' scelto ogni upgrade nella run; per quelli con tetto (max_picks > 0) la carta
+## mostra il livello attuale su quello massimo (Ventaglio, Ricochet).
+func present(options: Array[UpgradeData], rerolls_left: int, picks: Dictionary[UpgradeData, int] = {}) -> void:
 	for child in _choices.get_children():
 		_choices.remove_child(child)
 		child.queue_free()
@@ -26,6 +28,8 @@ func present(options: Array[UpgradeData], rerolls_left: int) -> void:
 		var button := Button.new()
 		button.theme_type_variation = &"UpgradeCard"
 		button.text = "%s\n%s" % [tr(upgrade.display_name), tr(upgrade.description)]
+		if upgrade.max_picks > 0:
+			button.text += "\n" + tr("LEVELUP_PICK_LEVEL") % [picks.get(upgrade, 0), upgrade.max_picks]
 		button.custom_minimum_size = BUTTON_SIZE
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		button.pressed.connect(_on_choice_pressed.bind(upgrade))

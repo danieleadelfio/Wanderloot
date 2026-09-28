@@ -46,6 +46,7 @@ DATA_DELETED,Dati cancellati.,Data deleted.,Données supprimées.,Datos borrados
 DATA_DELETE_FAIL,Cancellazione non riuscita.,Deletion failed.,Échec de la suppression.,Error al borrar.
 LEVELUP_TITLE,Level up! Scegli un potenziamento,Level up! Choose an upgrade,Niveau supérieur ! Choisissez une amélioration,¡Subes de nivel! Elige una mejora
 LEVELUP_REROLL,Reroll (una scelta in meno) · %d rimasti,Reroll (one fewer choice) · %d left,Relancer (un choix en moins) · %d restants,Rerollear (una opción menos) · %d restantes
+LEVELUP_PICK_LEVEL,Livello attuale: %d/%d,Current level: %d/%d,Niveau actuel : %d/%d,Nivel actual: %d/%d
 TAB_INVENTORY,Inventario,Inventory,Inventaire,Inventario
 TAB_STATS,Statistiche,Stats,Statistiques,Estadísticas
 INV_CLOSE_HINT,I inventario · C statistiche · ESC per chiudere,I inventory · C stats · ESC to close,I inventaire · C statistiques · Échap pour fermer,I inventario · C estadísticas · ESC para cerrar
@@ -108,11 +109,11 @@ UPG_MAX_HP_UP_DESC,+10% HP massimi (e cura la stessa quantità),+10% max HP (and
 UPG_MOVE_SPEED_UP,Agilità,Agility,Agilité,Agilidad
 UPG_MOVE_SPEED_UP_DESC,+10% velocità di movimento,+10% movement speed,+10 % de vitesse de déplacement,+10% de velocidad de movimiento
 UPG_MULTISHOT_UP,Ventaglio,Spread,Éventail,Abanico
-UPG_MULTISHOT_UP_DESC,+1 proiettile per colpo,+1 projectile per shot,+1 projectile par tir,+1 proyectil por disparo
+UPG_MULTISHOT_UP_DESC,"+1 proiettile allo sparo base (solo proiettili, non alle abilità). Max livello 2","+1 projectile to your basic shot (projectiles only, not abilities). Max level 2","+1 projectile au tir de base (projectiles uniquement, pas les capacités). Niveau 2 max","+1 proyectil al disparo básico (solo proyectiles, no habilidades). Nivel máx. 2"
 UPG_PIERCE_UP,Perforazione,Pierce,Perforation,Perforación
 UPG_PIERCE_UP_DESC,I proiettili attraversano +1 nemico,Projectiles pass through +1 enemy,Les projectiles traversent +1 ennemi,Los proyectiles atraviesan +1 enemigo
 UPG_RICOCHET_UP,Ricochet,Ricochet,Ricochet,Rebote
-UPG_RICOCHET_UP_DESC,Il colpo rimbalza sul nemico più vicino dopo il primo (+1 rimbalzo per scelta),The shot bounces to the nearest enemy after the first hit (+1 bounce per pick),Le tir rebondit sur l'ennemi le plus proche après le premier touché (+1 rebond par choix),El disparo rebota hacia el enemigo más cercano tras el primer golpe (+1 rebote por elección)
+UPG_RICOCHET_UP_DESC,"Il colpo rimbalza sul nemico più vicino dopo il primo (+1 rimbalzo per scelta). Max livello 4","The shot bounces to the nearest enemy after the first hit (+1 bounce per pick). Max level 4","Le tir rebondit sur l'ennemi le plus proche après le premier touché (+1 rebond par choix). Niveau 4 max","El disparo rebota al enemigo más cercano tras el primer impacto (+1 rebote por elección). Nivel máx. 4"
 UPG_PROJECTILE_SPEED_UP,Gittata,Reach,Portée,Alcance
 UPG_PROJECTILE_SPEED_UP_DESC,+20% velocità proiettili,+20% projectile speed,+20 % de vitesse des projectiles,+20% de velocidad de los proyectiles
 MAT_BONE_SHARD,Frammento d'osso,Bone shard,Éclat d'os,Fragmento de hueso
@@ -162,7 +163,7 @@ CONS_MANA_PRISM,Prisma di Mana,Mana Prism,Prisme de mana,Prisma de maná
 CONS_MANA_PRISM_DESC,Mana infinito per 6 s.,Infinite mana for 6 s.,Mana infini pendant 6 s.,Maná infinito durante 6 s.
 HUD_BUFF,%s %ds,%s %ds,%s %d s,%s %d s
 UPG_COUNTER_UP,Contatore,Counter,Compteur,Contador
-UPG_COUNTER_UP_DESC,"+1 proiettile alle abilità (non allo sparo, non alla barriera)","+1 projectile to your abilities (not your shots, not the barrier)","+1 projectile aux capacités (pas aux tirs, pas à la barrière)","+1 proyectil a las habilidades (no a los disparos, no a la barrera)"
+UPG_COUNTER_UP_DESC,"+1 proiettile solo alle abilità: non tocca l'attacco base né la barriera","+1 projectile to abilities only: does not affect your basic attack or the barrier","+1 projectile aux capacités uniquement : n'affecte pas l'attaque de base ni la barrière","+1 proyectil solo a las habilidades: no afecta al ataque básico ni a la barrera"
 STAT_COUNT_BONUS,Contatore,Counter,Compteur,Contador
 EVENT_PENTAGRAM_TITLE,PENTAGRAMMA DI SANGUE,BLOOD PENTAGRAM,PENTAGRAMME DE SANG,PENTAGRAMA DE SANGRE
 EVENT_PENTAGRAM_SUBTITLE,Le candele si sono accese,The candles have been lit,Les bougies se sont allumées,Se han encendido las velas

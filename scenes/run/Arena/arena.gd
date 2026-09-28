@@ -740,7 +740,7 @@ func _on_leveled_up(_level: int) -> void:
 
 
 func _present_level_up() -> void:
-	_level_up_choice.present(upgrade_table.pick(_current_choice_count, _rng, _upgrade_picks), RunManager.rerolls_left())
+	_level_up_choice.present(upgrade_table.pick(_current_choice_count, _rng, _upgrade_picks), RunManager.rerolls_left(), _upgrade_picks)
 
 
 ## Reroll (M12, #86): una scelta in meno (minimo 1), consuma un reroll della run.
