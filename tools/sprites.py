@@ -71,22 +71,20 @@ def slime_svg(squash=False, rage=False, palette="blue"):
 
 
 # --- Player: mago incappucciato con bastone; frame 2 leggermente sollevato ----------------------
+def class_template(name):
+    """Legge un template di classe (tools/class_templates/<name>.svg): coordinate locali, piedi a y~55.
+    Restituisce (defs, ombra, corpo, alone)."""
+    with open(os.path.join(ROOT, "tools", "class_templates", name + ".svg"), encoding="utf-8") as f:
+        src = f.read()
+    part = lambda tag: src.split("<!--%s-->" % tag)[1].split("<!--/%s-->" % tag)[0]
+    return part("DEFS"), part("SHADOW"), part("BODY"), part("GLOW")
+
+
 def player_svg(up=False):
-    dy = -6 if up else 0
-    defs = ('<linearGradient id="robe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f78e0"/><stop offset="1" stop-color="#23306a"/></linearGradient>'
-            '<radialGradient id="hood" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="#6cc0ff"/><stop offset="0.5" stop-color="#3b5dc9"/><stop offset="1" stop-color="#23306a"/></radialGradient>'
-            '<radialGradient id="orb" cx="0.4" cy="0.4" r="0.6"><stop offset="0" stop-color="#fffbe8"/><stop offset="0.5" stop-color="#ffcd75"/><stop offset="1" stop-color="#ef7d57"/></radialGradient>'
-            '<radialGradient id="glow"><stop offset="0" stop-color="#ffcd75" stop-opacity="%s"/><stop offset="1" stop-color="#ffcd75" stop-opacity="0"/></radialGradient>' % ("0.85" if up else "0.6"))
-    body = ('<ellipse cx="124" cy="238" rx="66" ry="12" fill="#000" opacity="0.3"/><g transform="translate(0 %d)">'
-            '<path d="M64 232 L92 120 L156 120 L184 232 Q124 248 64 232 Z" fill="url(#robe)" stroke="#141a3a" stroke-width="7" stroke-linejoin="round"/>'
-            '<path d="M108 128 L124 230 L140 128 Z" fill="#1c2656" opacity="0.5"/>'
-            '<rect x="96" y="168" width="56" height="12" rx="4" fill="#ffcd75" stroke="#7a4d1c" stroke-width="3"/>'
-            '<path d="M72 130 C66 58 182 58 176 130 C172 158 76 158 72 130 Z" fill="url(#hood)" stroke="#141a3a" stroke-width="7"/>'
-            '<ellipse cx="124" cy="124" rx="34" ry="30" fill="#141a2c"/><ellipse cx="124" cy="130" rx="25" ry="20" fill="#f4c49a"/>'
-            '<ellipse cx="113" cy="127" rx="5" ry="6" fill="#1a1c2c"/><ellipse cx="135" cy="127" rx="5" ry="6" fill="#1a1c2c"/>'
-            '<line x1="200" y1="92" x2="182" y2="236" stroke="#5a3218" stroke-width="13" stroke-linecap="round"/>'
-            '<line x1="200" y1="92" x2="182" y2="236" stroke="#9a6035" stroke-width="5" stroke-linecap="round"/>'
-            '<circle cx="202" cy="80" r="42" fill="url(#glow)"/><circle cx="202" cy="80" r="15" fill="url(#orb)" stroke="#7a3a20" stroke-width="3"/></g>' % dy)
+    """Player = classe Mago (stile hub arcano). Frame 2: respiro, corpo piu' alto e sfera piu' luminosa."""
+    defs, shadow, body, glow = class_template("mago")
+    body = ('<g transform="translate(128 138) scale(1.6)">%s<g transform="translate(0 %s)">%s<g opacity="%s">%s</g></g></g>'
+            % (shadow, "-2.5" if up else "0", body, "0.9" if up else "0.6", glow))
     return svg(body, defs)
 
 
