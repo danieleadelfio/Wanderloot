@@ -23,6 +23,8 @@ const SKELETON_CLOSET := preload("res://scenes/run/Enemies/SkeletonCloset/Skelet
 ## Giallo: si distingue dai fulmini azzurri del Fulmine errante (M11.4, #82).
 const STRIKE_COLOR := Color(1.0, 0.85, 0.25)
 const POOL_SIZE := 8
+## Zone contemporanee del Pavimento di lava (una fase alla volta).
+const LAVA_POOL_SIZE := 16
 
 ## Eventi a tempo (esclude il Pentagramma: vedi pentagram_event).
 var events: Array[RunEventData] = []
@@ -53,6 +55,10 @@ var _skeletons: Array[Enemy] = []
 ## Boss pre-overtime vivi (M13, #86): il conto alla rovescia verso il prossimo evento (tempi fissi ed
 ## evento accodato) resta fermo, come l'overtime; un evento gia' in corso finisce normalmente.
 var held: bool = false
+var _lava_zones: Array[LavaZone] = []
+var _lava_elapsed: float = 0.0
+## Ultima fase del Pavimento di lava gia' generata (-1 = nessuna).
+var _lava_phase: int = -1
 
 
 func _ready() -> void:
@@ -75,6 +81,11 @@ func _ready() -> void:
 	add_child(_statue)
 	_skeleton_target = Node2D.new()
 	add_child(_skeleton_target)
+	# Come pentagramma e statua: a terra, sotto il player (il direttore e' prima di lui nell'albero).
+	for i in LAVA_POOL_SIZE:
+		var zone := LavaZone.new()
+		add_child(zone)
+		_lava_zones.append(zone)
 
 
 func setup(arena: ArenaData, for_player: Player) -> void:
@@ -104,6 +115,10 @@ func danger_zones() -> Array[Vector3]:
 	for strike in _strikes:
 		if strike.is_running():
 			zones.append(Vector3(strike.global_position.x, strike.global_position.y, strike.radius))
+	# Lava (M13, #86): il quadrato come il cerchio che lo contiene.
+	for zone in _lava_zones:
+		if zone.is_running():
+			zones.append(Vector3(zone.global_position.x, zone.global_position.y, zone.size * 0.71))
 	return zones
 
 
@@ -137,6 +152,8 @@ func _physics_process(delta: float) -> void:
 				_tick_timed(delta)
 			RunEventData.Kind.SKELETONS_CLOSET:
 				_tick_timed(delta)
+			RunEventData.Kind.LAVA_FLOOR:
+				_tick_lava(delta)
 		return
 	if events.is_empty() or held:
 		return
@@ -194,6 +211,9 @@ func _start(event: RunEventData, timed: bool = true) -> void:
 			player.start_dash_mode(event)
 		elif event.kind == RunEventData.Kind.SKELETONS_CLOSET:
 			_spawn_skeletons(event)
+		elif event.kind == RunEventData.Kind.LAVA_FLOOR:
+			_lava_elapsed = 0.0
+			_lava_phase = -1
 	event_started.emit(event)
 	if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM:
 		# Niente attesa di ingresso (M13, #86): l'interazione con la statua e' gia' l'attivazione.
@@ -208,6 +228,42 @@ func _tick_storm(delta: float) -> void:
 	event_progress.emit(state.remaining_ratio())
 	if state.tick(delta) == RunEventState.Status.COMPLETED:
 		_finish(true)
+
+
+## Pavimento di lava (M13, #86): a ogni nuova fase le zone di quella fase (piu' piccole e numerose
+## col passare delle fasi); sulla lava attiva il player brucia (danno a tempo come il veleno). Non
+## fallisce mai: finisce allo scadere della durata, senza ricompensa.
+func _tick_lava(delta: float) -> void:
+	_lava_elapsed += delta
+	var phase := LavaState.phase_at(current, _lava_elapsed)
+	if phase > _lava_phase and phase < current.lava_phase_count:
+		_lava_phase = phase
+		_spawn_lava_phase(phase)
+	for zone in _lava_zones:
+		if zone.is_active() and zone.rect().has_point(player.global_position):
+			player.burn_on_lava(current.lava_interval, current.lava_damage, current.lava_first_tick)
+			break
+	event_progress.emit(state.remaining_ratio())
+	if state.tick(delta) == RunEventState.Status.COMPLETED:
+		_finish(true)
+
+
+func _spawn_lava_phase(phase: int) -> void:
+	var side := LavaState.zone_size(current, phase)
+	# La lava deve spegnersi prima della fase successiva (e prima della fine dell'evento).
+	var active := minf(current.lava_active_time, maxf(LavaState.phase_duration(current) - current.lava_warning, 0.3))
+	var half := Vector2.ONE * side * 0.5
+	for i in LavaState.zone_count(current, phase):
+		var center := player.global_position
+		if i >= current.lava_aimed_zones:
+			center += Vector2.RIGHT.rotated(_rng.randf() * TAU) * _rng.randf_range(side * 0.6, current.lava_spread)
+		else:
+			center += Vector2.RIGHT.rotated(_rng.randf() * TAU) * _rng.randf_range(0.0, side * 0.3)
+		center = center.clamp(bounds.position + half, bounds.end - half)
+		for zone in _lava_zones:
+			if not zone.is_running():
+				zone.start(center, side, current.lava_warning, active)
+				break
 
 
 ## Passo d'ombra: dura `duration` secondi; come la Tempesta fallisce al primo colpo.
@@ -268,9 +324,10 @@ func _spawn_strike() -> void:
 			return
 
 
-## Tempesta e Passo d'ombra falliscono al primo colpo subito; il Pentagramma no (conta solo restare nel cerchio).
+## Tempesta e Passo d'ombra falliscono al primo colpo subito; il Pentagramma no (conta solo restare
+## nel cerchio), il Pavimento di lava nemmeno (evento atmosferico, non si puo' fallire).
 func _on_player_damaged() -> void:
-	if current != null and current.kind != RunEventData.Kind.BLOOD_PENTAGRAM and state.status == RunEventState.Status.RUNNING:
+	if current != null and current.kind != RunEventData.Kind.BLOOD_PENTAGRAM and current.kind != RunEventData.Kind.LAVA_FLOOR and state.status == RunEventState.Status.RUNNING:
 		state.fail()
 		_finish(false)
 
@@ -286,6 +343,8 @@ func _finish(success: bool) -> void:
 	current = null
 	for strike in _strikes:
 		strike.stop()
+	for zone in _lava_zones:
+		zone.stop()
 	if event.kind == RunEventData.Kind.BLOOD_PENTAGRAM:
 		_pentagram.active = false
 		_pentagram.set_lit(0)

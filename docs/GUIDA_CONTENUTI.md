@@ -413,6 +413,7 @@ Tempi in `data/arenas/<arena>.tres` → `event_times` (Cripta 35 e 80 s), `event
 | Tempesta di fulmini | `data/events/lightning_storm.tres` | `duration`, `strike_interval`, `strike_telegraph`, `strike_radius`, `strike_damage`, `aimed_chance`, `reward_choices` | 10 s, 0,55 s, 0,8 s, 70 px, 1, 35%, 3 abilità |
 | Passo d'ombra | `data/events/shadow_step.tres` | `duration`, `dash_charges`, `dash_recharge`, `dash_speed`, `dash_duration` (= invulnerabilità), `reward_choices` | 10 s, 6, 2 s, 850 px/s, 0,2 s, 3 abilità |
 | Pentagramma di sangue | `data/events/blood_pentagram.tres` | `activation_timeout`, `duration`, `candle_count`, `circle_radius`, `monster_bonus`, `spawn_raged`, `bonus_bosses` | 20 s, 15 s, 15, 110 px, +30%, sì, +1 boss |
+| The Floor is Lava | `data/events/lava_floor.tres` | `duration`, `lava_phase_count`, `lava_zones_first`/`lava_zones_last`, `lava_size_first`/`lava_size_last`, `lava_warning`, `lava_active_time`, `lava_spread`, `lava_aimed_zones`, `lava_damage`, `lava_interval`, `lava_first_tick` | 16 s, 4 fasi, 2→9 zone, 460→170 px, 1,3 s, 2,4 s, 650 px, 1, 100 ogni 1,5 s (come il veleno), 0,25 s; nessuna ricompensa |
 
 ### 8.7b Rarità e bonus dell'equipaggiamento
 

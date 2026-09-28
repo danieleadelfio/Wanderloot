@@ -15,6 +15,25 @@
 [ext_resource type="Script" path="res://scripts/combat/shield_visual.gd" id="sv"]
 [ext_resource type="Script" path="res://scripts/combat/dash_ring.gd" id="dr"]
 [ext_resource type="Script" path="res://scripts/combat/poison.gd" id="po"]
+[sub_resource type="CanvasItemMaterial" id="flames_material"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Gradient" id="flame_dot_grad"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="flame_dot"]
+gradient = SubResource("flame_dot_grad")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="flames_ramp"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 0.95, 0.5, 1, 1, 0.5, 0.1, 0.9, 0.8, 0.1, 0.05, 0)
+
 [sub_resource type="Gradient" id="light_grad"]
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.4, 1, 1, 1, 0)
@@ -95,11 +114,35 @@ data = ExtResource("6")
 script = ExtResource("7")
 target = NodePath("../Body")
 
-[node name="Poison" type="Node" parent="." node_paths=PackedStringArray("health", "tint_target")]
+[node name="Poison" type="Node" parent="." node_paths=PackedStringArray("health")]
 unique_name_in_owner = true
 script = ExtResource("po")
 health = NodePath("../Health")
-tint_target = NodePath("../Body")
+
+[node name="Burn" type="Node" parent="." node_paths=PackedStringArray("health")]
+unique_name_in_owner = true
+script = ExtResource("po")
+health = NodePath("../Health")
+tint = Color(1, 0.5, 0.18, 1)
+
+[node name="BurnFlames" type="CPUParticles2D" parent="."]
+unique_name_in_owner = true
+material = SubResource("flames_material")
+position = Vector2(0, 6)
+emitting = false
+amount = 26
+lifetime = 0.7
+texture = SubResource("flame_dot")
+emission_shape = 3
+emission_rect_extents = Vector2(12, 4)
+direction = Vector2(0, -1)
+spread = 20.0
+gravity = Vector2(0, -60)
+initial_velocity_min = 25.0
+initial_velocity_max = 55.0
+scale_amount_min = 0.5
+scale_amount_max = 1.0
+color_ramp = SubResource("flames_ramp")
 
 [node name="Knockback" type="Node" parent="."]
 unique_name_in_owner = true

@@ -1,6 +1,8 @@
 class_name Poison
 extends Node
-## Veleno su un Health: danno a tempo e tinta verde del bersaglio finche' dura.
+## Veleno su un Health: danno a tempo e tinta verde del bersaglio finche' dura. Riusato per la
+## bruciatura della lava (M13, #86, nodo Burn del player, tinta arancione): senza tint_target emette solo
+## `changed` e la tinta la decide il proprietario (il player combina veleno e bruciatura).
 
 signal changed(active: bool)
 
@@ -12,11 +14,15 @@ signal changed(active: bool)
 var state := PoisonState.new()
 
 
-func apply(duration: float, interval: float, damage: int) -> void:
+func apply(duration: float, interval: float, damage: int, first_tick: float = -1.0) -> void:
 	var was := state.is_active()
-	state.apply(duration, interval, damage)
+	state.apply(duration, interval, damage, first_tick)
 	if not was:
 		_set_tint(true)
+
+
+func is_active() -> bool:
+	return state.is_active()
 
 
 func clear() -> void:

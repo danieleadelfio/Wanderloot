@@ -237,6 +237,7 @@ const EVENT_CODEX_BODY: Dictionary[StringName, StringName] = {
 	&"blood_pentagram": &"CODEX_EVENT_PENTAGRAM_BODY",
 	&"shadow_step": &"CODEX_EVENT_SHADOWSTEP_BODY",
 	&"skeletons_closet": &"CODEX_EVENT_CLOSET_BODY",
+	&"lava_floor": &"CODEX_EVENT_LAVA_BODY",
 }
 
 
@@ -267,7 +268,12 @@ func _end_surge() -> void:
 
 func _on_event_completed(event: RunEventData) -> void:
 	_end_surge()
-	_hud.end_event(true, tr("EVENT_PENTAGRAM_REWARD") if event.bonus_bosses > 0 else "")
+	var detail := ""
+	if event.bonus_bosses > 0:
+		detail = tr("EVENT_PENTAGRAM_REWARD")
+	elif event.kind == RunEventData.Kind.LAVA_FLOOR:
+		detail = tr("EVENT_LAVA_END")
+	_hud.end_event(true, detail)
 	if event.bonus_bosses > 0 and arena.has_boss():
 		_extra_bosses += event.bonus_bosses
 		_refresh_overtime_bosses()

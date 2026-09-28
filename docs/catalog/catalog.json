@@ -423,6 +423,12 @@
    "status": "pianificato",
    "source": "wanderloot",
    "desc": "Buio totale per 12 s: sopravvivi senza perdere più di 1 HP. Tipico dell'Ossario."
+  },
+  {
+   "name": "The Floor is Lava",
+   "status": "M13",
+   "source": "wanderloot",
+   "desc": "Zone quadrate che dopo un breve avviso diventano lava: prima poche e grandi, poi piccole e numerose. Sulla lava si brucia (danno come il veleno). Nessuna ricompensa, non si fallisce: evento atmosferico che costringe a muoversi."
   }
  ],
  "equipment_intro": "L'equipaggiamento è permanente (hub) e diventa istanze uniche con rarità e bonus tirati a caso. Nell'inventario un <b>manichino</b> mostra gli slot: cliccando un oggetto va nel suo slot, cliccando un oggetto equipaggiato lo si toglie.",

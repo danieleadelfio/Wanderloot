@@ -23,6 +23,7 @@ static func sections() -> Array[Dictionary]:
 				{"title": "CODEX_EVENT_PENTAGRAM_TITLE", "body": "CODEX_EVENT_PENTAGRAM_BODY"},
 				{"title": "CODEX_EVENT_SHADOWSTEP_TITLE", "body": "CODEX_EVENT_SHADOWSTEP_BODY"},
 				{"title": "CODEX_EVENT_CLOSET_TITLE", "body": "CODEX_EVENT_CLOSET_BODY"},
+				{"title": "CODEX_EVENT_LAVA_TITLE", "body": "CODEX_EVENT_LAVA_BODY"},
 			],
 		},
 		{

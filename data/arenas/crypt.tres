@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="ArenaData" format=3 uid="uid://7k8m2l5ul7wp"]
 
+[ext_resource type="Resource" path="res://data/events/lava_floor.tres" id="lava"]
 [ext_resource type="Script" uid="uid://dgwponj2wp2oi" path="res://scripts/data/arena_data.gd" id="1"]
 [ext_resource type="Script" uid="uid://dwevj8qcur7e6" path="res://scripts/data/enemy_spawn.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://bev3ym80bq0ix" path="res://assets/sprites/floor.png" id="3"]
@@ -58,6 +59,6 @@ consumables = ExtResource("cons")
 item_drops = ExtResource("items")
 overtime = ExtResource("overtime")
 boss_scene = ExtResource("boss")
-events = Array[ExtResource("8_bra8g")]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow"), ExtResource("closet")])
+events = Array[ExtResource("8_bra8g")]([ExtResource("storm"), ExtResource("pentagram"), ExtResource("shadow"), ExtResource("closet"), ExtResource("lava")])
 event_times = PackedFloat32Array(35, 80)
 drip_spots = Array[Vector2]([Vector2(-4200, -1800), Vector2(4300, 2200)])

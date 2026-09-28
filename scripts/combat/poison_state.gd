@@ -9,13 +9,15 @@ var damage: int = 1
 var _tick_left: float = 0.0
 
 
-func apply(duration: float, every: float, amount: int) -> void:
+## first_tick: secondi al primo danno di una nuova applicazione (< 0 = un intervallo, come il veleno).
+## La lava (M13, #86) lo usa corto, se no entrando e uscendo di continuo non si prendeva mai danno.
+func apply(duration: float, every: float, amount: int, first_tick: float = -1.0) -> void:
 	var was_active := is_active()
 	remaining = maxf(remaining, duration)
 	interval = maxf(every, 0.05)
 	damage = amount
 	if not was_active:
-		_tick_left = interval
+		_tick_left = interval if first_tick < 0.0 else first_tick
 
 
 func is_active() -> bool:

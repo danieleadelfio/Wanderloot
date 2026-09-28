@@ -3,14 +3,14 @@ extends Resource
 ## Evento a tempo della run (M10): titolo e sottotitolo a schermo, durata, regole, ricompensa.
 ## Nuovi tipi solo in coda all'enum (valore salvato nei .tres).
 
-enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP, SKELETONS_CLOSET }
+enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP, SKELETONS_CLOSET, LAVA_FLOOR }
 
 @export var id: StringName = &""
 ## Chiavi di traduzione: titolo grande e obiettivo in poche parole.
 @export var title: String = ""
 @export var subtitle: String = ""
 @export var kind: Kind = Kind.LIGHTNING_STORM
-## Durata (Tempesta, Passo d'ombra, Scheletri nell'armadio). Non usata dal Pentagramma, che deriva
+## Durata (Tempesta, Passo d'ombra, Scheletri nell'armadio, Pavimento di lava). Non usata dal Pentagramma, che deriva
 ## la propria durata da candle_count e candles_start_extinguish_after.
 @export var duration: float = 10.0
 ## Abilita' proposte a evento superato (0 = nessuna).
@@ -69,3 +69,26 @@ enum Kind { LIGHTNING_STORM, BLOOD_PENTAGRAM, SHADOW_STEP, SKELETONS_CLOSET }
 ## Pezzi proposti dall'armadio a evento superato (mai estratti prima; se ne restano meno, si propone
 ## quel che c'e'). Ruolo equivalente a reward_choices, ma per equipaggiamento invece di abilita'.
 @export var closet_choices: int = 3
+
+@export_group("Pavimento di lava")
+## The Floor is Lava (M13, #86): evento "atmosferico", nessuna ricompensa e nessun fallimento, serve a
+## far muovere il player. La durata e' divisa in lava_phase_count fasi uguali; a ogni fase compaiono
+## zone quadrate: prima poche e grandi, poi via via piu' numerose e piccole (interpolazione lineare
+## tra i valori di inizio e fine). Ogni zona: preavviso, poi lava per lava_active_time.
+@export var lava_phase_count: int = 4
+@export var lava_zones_first: int = 2
+@export var lava_zones_last: int = 9
+## Lato del quadrato (px) nella prima e nell'ultima fase.
+@export var lava_size_first: float = 460.0
+@export var lava_size_last: float = 170.0
+@export var lava_warning: float = 1.3
+@export var lava_active_time: float = 2.4
+## Distanza massima dal player del centro delle zone; le prime lava_aimed_zones di ogni fase sono
+## centrate vicino al player (lo costringono a spostarsi).
+@export var lava_spread: float = 650.0
+@export var lava_aimed_zones: int = 1
+## Danno come il veleno (toxic_glob): lava_damage ogni lava_interval secondi finche' si sta sulla
+## lava; il primo arriva dopo lava_first_tick secondi.
+@export var lava_damage: int = 100
+@export var lava_interval: float = 1.5
+@export var lava_first_tick: float = 0.25

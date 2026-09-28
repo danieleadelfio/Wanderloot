@@ -51,6 +51,9 @@ var mana: Mana = Mana.new()
 @onready var _dash_ring: DashRing = %DashRing
 ## Veleno (M11.3): applicato dai colpi avvelenati, azzerato a inizio run.
 @onready var poison: Poison = %Poison
+## Bruciatura della lava (M13, #86): stesso componente del veleno, tinta arancione + fiammelle.
+@onready var burn: Poison = %Burn
+@onready var _burn_flames: CPUParticles2D = %BurnFlames
 
 
 func _ready() -> void:
@@ -63,6 +66,8 @@ func _ready() -> void:
 	_hurtbox.shield_broken.connect(set_shield.bind(false))
 	_hurtbox.shield_broken.connect(shield_broken.emit)
 	_hurtbox.poisoned.connect(poison.apply)
+	poison.changed.connect(_refresh_status_tint.unbind(1))
+	burn.changed.connect(_refresh_status_tint.unbind(1))
 	begin_run([])
 
 
@@ -76,6 +81,7 @@ func begin_run(equipment: Array[StatModifier]) -> void:
 	mana.reset(stats.max_mana, stats.mana_regen)
 	_weapon.mana = mana
 	poison.clear()
+	burn.clear()
 	_knockback.reset()
 	set_shield(false)
 	_hurtbox.invulnerability_time = stats.invulnerability_time
@@ -250,3 +256,21 @@ func _get_aim_direction() -> Vector2:
 ## Direzione verso il mouse (l'opzione mancini, M12 #86, scambia i tasti di sparo/scatto: non tocca la mira).
 func _mouse_aim_direction() -> Vector2:
 	return global_position.direction_to(get_global_mouse_position())
+
+
+## Sulla lava (M13, #86): chiamato ogni tick di fisica finche' il player sta in una zona attiva. La
+## bruciatura dura ancora `linger` secondi dopo essere uscito; primo danno dopo first_tick secondi.
+func burn_on_lava(interval: float, damage: int, first_tick: float, linger: float = 0.2) -> void:
+	burn.apply(linger, interval, damage, first_tick)
+
+
+## Tinta di stato: bruciatura (arancione) sopra veleno (verde), altrimenti nessuna. Un solo punto che
+## scrive self_modulate, cosi' la fine di uno dei due non cancella la tinta dell'altro.
+func _refresh_status_tint() -> void:
+	if burn.is_active():
+		_body.self_modulate = burn.tint
+	elif poison.is_active():
+		_body.self_modulate = poison.tint
+	else:
+		_body.self_modulate = Color.WHITE
+	_burn_flames.emitting = burn.is_active()
