@@ -11,7 +11,9 @@ signal over_cap(ability: WandAbility, overflow: int)
 
 const TELEGRAPH := preload("res://scenes/run/Telegraph/Telegraph.tscn")
 const STRIKE_COLOR := Color(0.55, 0.85, 1.0)
-const STRIKE_POOL_SIZE := 8
+const STRIKE_POOL_SIZE := 12
+## Ritardo tra due fulmini sullo stesso bersaglio (giro successivo di strike_plan).
+const STRIKE_REPEAT_DELAY := 0.15
 
 @export var slot_count: int = 3
 
@@ -192,16 +194,32 @@ func spawn_ring(count: int, damage_multiplier: float) -> void:
 		_projectile_pool.spawn(player.global_position, direction, weapon)
 
 
+## Fulmini sui nemici piu' vicini entro range, uno per bersaglio a giro (M13, #86): con meno bersagli
+## che fulmini cadono comunque tutti, e i bersagli vicini ne prendono piu' d'uno (coi boss e' molto forte).
+## I colpi ripetuti sullo stesso bersaglio arrivano in fila (STRIKE_REPEAT_DELAY), non sovrapposti.
 func strike_nearest(max_range: float, radius: float, damage_bonus: int, count: int = 1) -> void:
 	var in_range: Array[Node2D] = []
 	for target: Node2D in _targets.call():
 		if player.global_position.distance_to(target.global_position) <= max_range:
 			in_range.append(target)
 	in_range.sort_custom(func(a: Node2D, b: Node2D) -> bool: return player.global_position.distance_squared_to(a.global_position) < player.global_position.distance_squared_to(b.global_position))
+	var plan := strike_plan(in_range.size(), count)
 	var fired := 0
 	for strike in _strikes:
-		if fired >= mini(count, in_range.size()):
+		if fired >= plan.size():
 			return
 		if not strike.is_running():
-			strike.start(in_range[fired].global_position, radius, 0.06, player.weapon_data().damage + damage_bonus, 180.0)
+			var round_index := floori(float(fired) / maxi(in_range.size(), 1))
+			strike.start(in_range[plan[fired]].global_position, radius, 0.06 + STRIKE_REPEAT_DELAY * round_index, player.weapon_data().damage + damage_bonus, 180.0)
 			fired += 1
+
+
+## Indici dei bersagli (ordinati per distanza) per `count` fulmini: a giro, 0,1,..,n-1,0,1,...
+## Nessun bersaglio = nessun fulmine (logica pura, testata).
+static func strike_plan(target_count: int, count: int) -> Array[int]:
+	var plan: Array[int] = []
+	if target_count <= 0:
+		return plan
+	for i in maxi(count, 0):
+		plan.append(i % target_count)
+	return plan

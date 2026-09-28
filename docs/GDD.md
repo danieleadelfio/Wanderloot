@@ -56,7 +56,7 @@ La bacchetta ha **3 slot** di abilità per la run; l'ordine non conta e le abili
 | Abilità | Attivazione | Effetto | Colore |
 |---|---|---|---|
 | Anello arcano | ogni 12 colpi | anello di 6 proiettili con l'arma della run | viola |
-| Fulmine errante | ogni 350 px percorsi | fulmine sul nemico più vicino entro 420 px: danno dell'arma + 2 in raggio 70 | azzurro |
+| Fulmine errante | ogni 350 px percorsi | fulmine sul nemico più vicino entro 420 px: danno dell'arma + 2 in raggio 70; un fulmine per livello (+ Contatore) sui nemici più vicini **a giro** (M13, #86): con meno bersagli che fulmini cadono tutti, i colpi in più arrivano in fila (0,15 s) sugli stessi bersagli, boss compresi | azzurro |
 | Barriera arcana | ricarica 12 s dopo la rottura (10/8/6 s da Lv5, M12 #86 #18) | annulla N colpi = livello (attiva subito alla presa); alla rottura, onda d'urto che respinge i nemici entro 100px (M12 #86) | oro |
 
 Il catalogo completo (abilità di Magicraft riadattate e originali) è in `docs/catalog/` (§13).

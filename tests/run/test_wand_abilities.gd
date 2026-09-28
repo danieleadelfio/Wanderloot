@@ -181,3 +181,11 @@ func test_hurtbox_shield_absorbs_one_hit() -> void:
 	assert_int(hurtbox.shield_charges).is_equal(0)
 	hurtbox._try_hit(hitbox)
 	assert_int(health.current).is_equal(3)
+
+
+## Fulmine errante (M13, #86): con meno bersagli che fulmini cadono tutti, a giro sui piu' vicini.
+func test_strike_plan_cycles_targets_when_fewer_than_strikes() -> void:
+	assert_array(WandAbilities.strike_plan(3, 2)).is_equal([0, 1])
+	assert_array(WandAbilities.strike_plan(1, 3)).is_equal([0, 0, 0])
+	assert_array(WandAbilities.strike_plan(2, 5)).is_equal([0, 1, 0, 1, 0])
+	assert_array(WandAbilities.strike_plan(0, 4)).is_empty()

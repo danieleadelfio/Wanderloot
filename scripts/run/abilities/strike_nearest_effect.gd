@@ -1,7 +1,8 @@
 class_name StrikeNearestEffect
 extends AbilityEffect
 ## Fulmine sul nemico piu' vicino entro range: danno ad area (danno dell'arma + bonus). Fulmine errante.
-## Un fulmine per livello; con il Contatore altrettanti in piu' (i nemici piu' vicini, uno per fulmine).
+## Un fulmine per livello; con il Contatore altrettanti in piu' (i nemici piu' vicini a giro: con meno
+## bersagli che fulmini cadono tutti, qualcuno ne prende piu' d'uno).
 
 @export var range: float = 420.0
 @export var radius: float = 70.0
