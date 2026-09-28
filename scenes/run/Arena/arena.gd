@@ -125,6 +125,9 @@ func _ready() -> void:
 		arrow.color = _map_indicators.color_for(i)
 		_indicator_layer.add_child(arrow)
 		_map_indicator_arrows.append(arrow)
+	var boss_indicator := BossIndicator.new()
+	boss_indicator.targets = func() -> Array[Boss]: return bosses
+	_indicator_layer.add_child(boss_indicator)
 	_pause_menu.action_requested.connect(_pause.request)
 	_pause_menu.save_requested.connect(_on_save_requested)
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
