@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Wanderloot"
+config/version="1.0.6"
 run/main_scene="res://scenes/menu/MainMenu/MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/icon/icon.png"
@@ -34,7 +35,7 @@ mouse_cursor/custom_image_hotspot=Vector2(6, 4)
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/release_version/plugin.cfg")
 
 [gui]
 

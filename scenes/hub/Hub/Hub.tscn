@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://scenes/ui/VersionLabel/VersionLabel.tscn" id="version_label"]
 [ext_resource type="Script" path="res://scenes/hub/Hub/hub.gd" id="hub"]
 [ext_resource type="Texture2D" path="res://assets/sprites/icon_bag.png" id="icon_bag"]
 [ext_resource type="Texture2D" path="res://assets/sprites/icon_stats.png" id="icon_stats"]
@@ -815,3 +816,5 @@ unique_name_in_owner = true
 
 [node name="HubTutorial" parent="." instance=ExtResource("hub_tutorial")]
 unique_name_in_owner = true
+
+[node name="VersionLabel" parent="." instance=ExtResource("version_label")]

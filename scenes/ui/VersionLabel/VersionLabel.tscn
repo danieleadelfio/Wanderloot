@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/VersionLabel/version_label.gd" id="1"]
+
+[node name="VersionLabel" type="CanvasLayer"]
+layer = 90
+script = ExtResource("1")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -24.0
+offset_right = 140.0
+offset_bottom = -4.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.45)
+theme_override_font_sizes/font_size = 13
+text = "v1.0.0"
+vertical_alignment = 2

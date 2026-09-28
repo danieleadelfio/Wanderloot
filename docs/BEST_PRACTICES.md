@@ -133,6 +133,7 @@ Framework scelto: **GdUnit4** (attivamente mantenuto, nativo per Godot 4, scene 
 - Ogni commit che cambia feature/scope/gameplay: aggiornare `docs/GDD.md` (sezione toccata) e aggiungere voce in `docs/CHANGELOG.md` nello stesso commit — non a posteriori.
 - Task tracking: GitHub Issues + Projects su `danieleadelfio/Wanderloot`, una milestone per ogni M del GDD. Nessun sistema duplicato.
 - Referenziare la issue nel messaggio di commit (`feat: enemy pool (#1)`, `Closes #1` per chiuderla col push).
+- **Release (M13, #86)**: il numero di versione lo alza solo l'export (`addons/release_version`), mai a mano; dopo ogni export si committa `project.godot` con `chore: release x.y.z`.
 
 ## 6. Regola generale
 

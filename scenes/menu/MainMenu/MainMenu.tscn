@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://scenes/ui/VersionLabel/VersionLabel.tscn" id="version_label"]
 [ext_resource type="Script" path="res://scenes/menu/MainMenu/main_menu.gd" id="script"]
 [ext_resource type="Script" path="res://scripts/audio/sfx_player.gd" id="sfx"]
 [ext_resource type="Resource" path="res://data/audio/sound_bank.tres" id="bank"]
@@ -133,3 +134,5 @@ text = "MENU_QUIT"
 unique_name_in_owner = true
 layout_mode = 2
 allow_delete = true
+
+[node name="VersionLabel" parent="." instance=ExtResource("version_label")]

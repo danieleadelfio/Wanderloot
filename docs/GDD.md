@@ -477,6 +477,7 @@ Lettura: con la vita dei boss x2 l'overtime (50 s dopo l'estrazione, 30 s dopo l
 ## 12. Processo e versionamento
 
 - Repo GitHub: `danieleadelfio/Wanderloot` (remote `origin`, branch `main`).
+- **Numero di release (M13, #86)**: `application/config/version` nei Project Settings (ora **1.0.6**, l'ultimo eseguibile esportato), mostrato in basso a sinistra in menu, piazza e arena (`VersionLabel`). **Ogni export lo alza di uno prima di impacchettare** (plugin editor `addons/release_version`, `ReleaseVersion.next`): la build appena esportata mostra gia' il numero nuovo; ogni cifra va da 0 a 9 (1.0.9 → 1.1.0, mai 1.0.10). "Esporta tutto" alza una sola volta per tutti i preset (finestra di 120 s). Dopo un export `project.godot` risulta modificato: va committato (`chore: release x.y.z`).
 - Task tracking: GitHub Issues + Projects, attivo. Una milestone per ogni M del §10; nessun sistema di task parallelo.
 - Vedi `docs/BEST_PRACTICES.md` per convenzioni di codice, architettura e testing (GdUnit4). Vedi `docs/CHANGELOG.md` per lo storico modifiche. Vedi `docs/GUIDA_CONTENUTI.md` per le procedure operative (nuovi nemici, arene, personaggi, equipaggiamento, suoni).
 - **Bilanciamento**: dove si cambia ogni valore (player, livelli, potenziamenti, nemici, ondate, estrazione, boss e numero di boss, eventi, loot, consumabili, abilità) e come verificarlo col bot: `docs/GUIDA_CONTENUTI.md` §8.

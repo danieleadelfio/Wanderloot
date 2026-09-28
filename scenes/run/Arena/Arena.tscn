@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://scenes/ui/VersionLabel/VersionLabel.tscn" id="version_label"]
 [ext_resource type="Script" path="res://scenes/run/Arena/arena.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/combat/projectile_pool.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/run/Projectile/Projectile.tscn" id="3"]
@@ -272,3 +273,5 @@ script = ExtResource("wand")
 
 [node name="AbilityChoice" parent="." instance=ExtResource("ability_choice")]
 unique_name_in_owner = true
+
+[node name="VersionLabel" parent="." instance=ExtResource("version_label")]
