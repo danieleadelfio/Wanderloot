@@ -175,3 +175,8 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 - Mostrare/nascondere le statistiche in run non fa più cambiare dimensione alla barra vita/mana/exp sopra.
 - Il Re Slime ora avvisa di nuovo prima della raffica a ventaglio.
 - Nel confronto tra un pezzo equipaggiato e uno nuovo le due schede sono allineate, si leggono più facilmente affiancate.
+
+## In lavorazione (19) — 28/09/2026
+
+### Correzioni
+- Mappa: togliendo un indicatore, la freccia a bordo schermo che ci puntava ora sparisce insieme ad esso.

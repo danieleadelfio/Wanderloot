@@ -9,7 +9,13 @@ extends Control
 
 var color: Color = Color.WHITE
 var target_position: Vector2 = Vector2.ZERO
-var active: bool = false
+## Bug (M13, #86): spegnendo "active" restava a schermo l'ultimo fotogramma disegnato (_draw non
+## veniva piu' richiamato per cancellare la freccia). Il setter forza un redraw a ogni cambio.
+var active: bool = false:
+	set(value):
+		if value != active:
+			active = value
+			queue_redraw()
 
 
 func _ready() -> void:

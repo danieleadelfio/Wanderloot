@@ -138,6 +138,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 - Setup repo git locale, changelog, best practice di sviluppo.
 
 ### Fixed
+- Mappa: togliendo un indicatore piazzato, la freccia a bordo schermo che ci puntava restava disegnata. `_process` chiedeva un redraw solo `if active`, quindi spegnendo `active` nessuno cancellava l'ultimo fotogramma disegnato. Il setter di `MapIndicatorArrow.active` ora forza sempre un `queue_redraw()` quando il valore cambia (#86).
 - HUD: mostrare/nascondere le Statistiche cambiava anche la size del blocco sopra (barre vita/mana/exp, slot arma, abilità), perché `HudPlate` riempiva la larghezza della `VBox` condivisa con `StatsGrid`. `HudPlate` ora ha `size_flags_horizontal = 0`, indipendente dai fratelli (#86).
 - Re Slime: la raffica a ventaglio (M12, #40) aveva tolto il cerchio di preavviso e non restava alcun segnale dell'attacco in arrivo. Ripristinato `show_windup` (#86).
 - Confronto equipaggiato/non equipaggiato nei tooltip: il pezzo equipaggiato aveva la scritta "Equipaggiato" sopra e quello non equipaggiato no, quindi i due riquadri avevano altezze diverse e le righe sotto erano disallineate. `ItemText.tooltip_panel` riserva sempre quella riga, vuota se non c'è un header (#86).
