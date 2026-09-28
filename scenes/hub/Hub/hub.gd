@@ -1,5 +1,5 @@
 extends Node2D
-## Hub fuori dalla run (GDD §7): piazza esplorabile con fabbro, baule e portale. Composition root dell'hub.
+## Hub fuori dalla run (GDD §7): isole sospese esplorabili con fabbro, baule e portale. Composition root dell'hub.
 ## Il player cammina nella piazza; con E su un punto di interazione si apre la sua finestra (gioco in pausa), ESC o E la chiude.
 ## ESC senza finestre aperte apre il menu di pausa (Riprendi, Salva, Carica, Torna al menu).
 
@@ -102,10 +102,36 @@ func _ready() -> void:
 func _restore_saved_position() -> void:
 	if not MetaProgression.has_pending_hub_position():
 		return
+	var saved := MetaProgression.take_pending_hub_position()
+	# Un salvataggio fatto nella vecchia piazza (M7) puo' cadere nel vuoto tra le isole o dentro un oggetto:
+	# in quel caso si resta al punto d'arrivo sulla piazza del portale.
+	if not _is_walkable(saved):
+		return
 	var player: Node2D = %Player
-	player.global_position = MetaProgression.take_pending_hub_position()
+	player.global_position = saved
 	player.reset_physics_interpolation()
 	(player.get_node("Camera2D") as Camera2D).reset_smoothing()
+
+
+## Punto sul pavimento dell'hub e fuori dagli ostacoli (GDD §7): dentro il bordo calpestabile
+## (`WalkEdge`, poligono a segmenti) e fuori da ogni poligono solido o cerchio di `Bounds`.
+func _is_walkable(point: Vector2) -> bool:
+	var bounds: Node2D = %Bounds
+	var local := bounds.to_local(point)
+	for child in bounds.get_children():
+		if child is CollisionPolygon2D:
+			var area := child as CollisionPolygon2D
+			var inside := Geometry2D.is_point_in_polygon(local, area.polygon)
+			if area.build_mode == CollisionPolygon2D.BUILD_SEGMENTS:
+				if not inside:
+					return false
+			elif inside:
+				return false
+		elif child is CollisionShape2D and (child as CollisionShape2D).shape is CircleShape2D:
+			var round_shape := child as CollisionShape2D
+			if local.distance_to(round_shape.position) < (round_shape.shape as CircleShape2D).radius:
+				return false
+	return true
 
 
 ## Tour guidato della piazza alla prima nuova partita (M12, #86): la camera si stacca dal player e

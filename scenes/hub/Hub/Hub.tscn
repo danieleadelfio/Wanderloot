@@ -20,21 +20,21 @@
 [ext_resource type="Script" path="res://scripts/audio/music_player.gd" id="music"]
 [ext_resource type="AudioStream" path="res://assets/audio/music_hub.wav" id="music_hub"]
 [ext_resource type="PackedScene" path="res://scenes/run/Player/Player.tscn" id="player"]
-[ext_resource type="PackedScene" path="res://scenes/hub/Lamp/Lamp.tscn" id="lamp"]
 [ext_resource type="Script" path="res://scripts/hub/interactable.gd" id="interactable"]
 [ext_resource type="Script" path="res://scripts/hub/spinner.gd" id="spinner"]
 [ext_resource type="Script" path="res://scripts/combat/light_flicker.gd" id="flicker"]
-[ext_resource type="Texture2D" path="res://assets/sprites/plaza_floor.png" id="plaza_floor"]
-[ext_resource type="Texture2D" path="res://assets/sprites/fountain.png" id="fountain"]
-[ext_resource type="Texture2D" path="res://assets/sprites/house_forge.png" id="house_forge"]
-[ext_resource type="Texture2D" path="res://assets/sprites/house_store.png" id="house_store"]
-[ext_resource type="Texture2D" path="res://assets/sprites/anvil.png" id="anvil"]
-[ext_resource type="Texture2D" path="res://assets/sprites/chest.png" id="chest"]
-[ext_resource type="Texture2D" path="res://assets/sprites/portal_arch.png" id="portal_arch"]
-[ext_resource type="Texture2D" path="res://assets/sprites/portal_swirl.png" id="portal_swirl"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tree.png" id="tree"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tree_b.png" id="tree_b"]
 [ext_resource type="Shader" path="res://assets/shaders/tree_sway.gdshader" id="tree_sway_shader"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_ground.png" id="hub_ground"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_glow.png" id="hub_glow"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_vortex.png" id="hub_vortex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_tree_w.png" id="hub_tree_w"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_tree_e.png" id="hub_tree_e"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_obelisk45.png" id="hub_obelisk45"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_obelisk135.png" id="hub_obelisk135"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_obelisk225.png" id="hub_obelisk225"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_obelisk315.png" id="hub_obelisk315"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_anvil.png" id="hub_anvil"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hub_chest.png" id="hub_chest"]
 
 [sub_resource type="Gradient" id="light_grad"]
 offsets = PackedFloat32Array(0, 0.5, 1)
@@ -51,30 +51,45 @@ fill_to = Vector2(1, 0.5)
 [sub_resource type="CanvasItemMaterial" id="unshaded"]
 light_mode = 1
 
-[sub_resource type="CapsuleShape2D" id="fountain_shape"]
-radius = 52.0
-height = 206.0
+[sub_resource type="CanvasItemMaterial" id="glow_add"]
+blend_mode = 1
+light_mode = 1
 
-[sub_resource type="RectangleShape2D" id="house_shape"]
-size = Vector2(360, 120)
-
-[sub_resource type="RectangleShape2D" id="prop_shape"]
-size = Vector2(52, 24)
-
-[sub_resource type="RectangleShape2D" id="pillar_shape"]
-size = Vector2(34, 22)
-
-[sub_resource type="RectangleShape2D" id="wall_h"]
-size = Vector2(1800, 40)
-
-[sub_resource type="RectangleShape2D" id="wall_v"]
-size = Vector2(40, 1300)
-
-[sub_resource type="CircleShape2D" id="spot_big"]
+[sub_resource type="CircleShape2D" id="spot_forge"]
 radius = 110.0
 
-[sub_resource type="CircleShape2D" id="spot_small"]
-radius = 90.0
+[sub_resource type="CircleShape2D" id="spot_chest"]
+radius = 125.0
+
+[sub_resource type="CircleShape2D" id="spot_portal"]
+radius = 175.0
+
+[sub_resource type="CircleShape2D" id="hub_c7"]
+radius = 8.8
+
+[sub_resource type="CircleShape2D" id="hub_c14"]
+radius = 17.5
+
+[sub_resource type="CircleShape2D" id="hub_c15"]
+radius = 18.8
+
+[sub_resource type="CircleShape2D" id="hub_c18"]
+radius = 22.5
+
+[sub_resource type="CircleShape2D" id="hub_c19"]
+radius = 23.8
+
+[sub_resource type="CircleShape2D" id="hub_c20"]
+radius = 25.0
+
+[sub_resource type="CircleShape2D" id="hub_c22"]
+radius = 27.5
+
+[sub_resource type="CircleShape2D" id="hub_c34"]
+radius = 42.5
+
+[sub_resource type="CircleShape2D" id="hub_c100"]
+radius = 125.0
 
 [sub_resource type="ShaderMaterial" id="tree_sway_mat"]
 shader = ExtResource("tree_sway_shader")
@@ -94,377 +109,229 @@ stream = ExtResource("music_hub")
 script = ExtResource("music")
 
 [node name="Ambient" type="CanvasModulate" parent="."]
-color = Color(0.52, 0.49, 0.68, 1)
+color = Color(0.9, 0.89, 0.94, 1)
 
 [node name="World" type="Node2D" parent="."]
 process_mode = 1
 
-[node name="Floor" type="Sprite2D" parent="World"]
+[node name="Ground" type="Sprite2D" parent="World"]
 z_index = -10
-texture_repeat = 2
-position = Vector2(0, -50)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("plaza_floor")
-region_enabled = true
-region_rect = Rect2(0, 0, 3600, 2600)
+texture = ExtResource("hub_ground")
+
+[node name="Glow" type="Sprite2D" parent="World"]
+z_index = -9
+material = SubResource("glow_add")
+texture = ExtResource("hub_glow")
+
+[node name="Vortex" type="Sprite2D" parent="World"]
+z_index = -8
+material = SubResource("unshaded")
+position = Vector2(0, -61.3)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("hub_vortex")
+script = ExtResource("spinner")
+speed = 0.5
 
 [node name="Bounds" type="StaticBody2D" parent="World"]
+unique_name_in_owner = true
 
-[node name="Top" type="CollisionShape2D" parent="World/Bounds"]
-position = Vector2(0, -420)
-shape = SubResource("wall_h")
+[node name="WalkEdge" type="CollisionPolygon2D" parent="World/Bounds"]
+unique_name_in_owner = true
+build_mode = 1
+polygon = PackedVector2Array(-444.4, -99.7, -453.4, -121.4, -466.4, -140.9, -474.1, -149.7, -500.5, -173.1, -530.3, -191.8, -562.7, -205.7, -596.7, -214.6, -631.7, -218.8, -666.9, -217.8, -701.6, -211.7, -735.1, -200.9, -766.6, -185.2, -795.2, -164.6, -812.1, -148.4, -819.7, -139.4, -832.4, -119.7, -837.3, -109.0, -843.9, -86.5, -845.8, -63.2, -844.5, -51.5, -837.9, -29.0, -822.6, 2.7, -802.6, 31.7, -785.4, 47.6, -765.2, 59.5, -732.5, 72.6, -687.8, 87.2, -653.3, 94.1, -629.9, 93.9, -595.4, 86.7, -539.7, 68.0, -507.8, 53.1, -489.2, 38.8, -474.0, 21.0, -456.0, -9.3, -443.3, -40.0, -350.0, -40.0, -350.0, -16.2, -332.7, -16.2, -331.3, 10.4, -328.2, 30.4, -323.4, 50.0, -316.5, 69.0, -307.6, 87.2, -285.6, 121.1, -272.7, 136.7, -258.8, 151.3, -227.8, 177.3, -194.0, 199.4, -176.1, 208.9, -157.7, 217.2, -138.6, 224.0, -119.1, 229.1, -99.1, 232.4, -58.8, 235.3, 22.1, 235.7, 82.7, 234.1, 122.7, 228.3, 142.2, 222.9, 161.1, 215.7, 197.2, 197.5, 230.8, 175.1, 246.6, 162.4, 261.4, 148.7, 287.8, 118.1, 299.3, 101.4, 309.4, 83.9, 317.9, 65.5, 324.4, 46.4, 328.9, 26.7, 331.6, 6.7, 332.8, -16.2, 350.0, -16.2, 350.0, -40.0, 443.3, -40.0, 451.6, -18.2, 468.5, 12.8, 482.4, 31.7, 499.6, 47.6, 509.4, 54.0, 530.5, 64.3, 585.9, 83.8, 620.1, 92.5, 643.4, 94.6, 655.1, 93.9, 678.2, 89.7, 723.1, 75.8, 756.2, 63.6, 777.2, 53.1, 786.9, 46.5, 803.8, 30.3, 823.5, 1.1, 838.6, -30.7, 844.8, -53.3, 845.9, -65.0, 843.5, -88.3, 840.6, -99.7, 831.6, -121.4, 818.6, -140.9, 793.8, -165.8, 765.0, -186.1, 733.4, -201.6, 711.1, -209.1, 688.3, -214.6, 653.3, -218.8, 618.1, -217.8, 594.9, -214.2, 572.1, -208.6, 539.2, -196.2, 508.5, -178.9, 481.1, -156.8, 465.3, -139.4, 458.4, -129.9, 447.7, -109.0, 440.5, -82.5, 350.0, -82.5, 350.0, -106.2, 319.9, -106.2, 310.0, -131.6, 300.1, -149.2, 288.7, -165.9, 276.0, -181.6, 248.2, -211.1, 204.4, -253.0, 172.9, -278.3, 155.8, -289.1, 137.5, -297.7, 118.4, -304.3, 42.8, -320.2, 8.6, -323.6, -8.6, -323.6, -34.3, -321.5, -102.4, -308.3, -122.0, -303.2, -141.0, -296.3, -159.0, -287.2, -176.0, -276.2, -191.9, -263.8, -221.9, -236.6, -250.9, -208.4, -278.4, -178.8, -290.9, -162.9, -302.1, -146.0, -311.6, -128.2, -320.0, -106.2, -350.0, -106.2, -350.0, -82.5, -440.6, -82.5)
 
-[node name="Bottom" type="CollisionShape2D" parent="World/Bounds"]
-position = Vector2(0, 580)
-shape = SubResource("wall_h")
+[node name="Solid0" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(273.8, -106.5, 272.2, -115.4, 270.3, -124.3, 268.0, -133.1, 265.6, -141.8, 262.8, -150.4, 259.7, -159.0, 256.4, -167.4, 252.8, -175.8, 248.9, -184.0, 244.7, -192.1, 240.3, -200.0, 235.7, -207.8, 230.7, -215.4, 225.6, -222.9, 220.2, -230.2, 214.5, -237.3, 208.6, -244.2, 202.5, -250.9, 196.2, -257.5, 189.7, -263.8, 183.0, -269.9, 176.0, -275.8, 168.9, -281.4, 161.6, -286.8, 154.2, -292.0, 146.5, -296.9, 138.8, -301.6, 130.8, -306.0, 122.7, -310.1, 114.5, -314.0, 106.2, -317.6, 97.7, -321.0, 89.2, -324.0, 80.6, -326.8, 71.8, -329.3, 63.0, -331.5, 54.1, -333.4, 45.2, -335.0, 36.2, -336.4, 27.2, -337.4, 18.1, -338.2, 9.1, -338.6, 0.0, -338.8, -9.1, -338.6, -18.1, -338.2, -27.2, -337.4, -36.2, -336.4, -45.2, -335.0, -54.1, -333.4, -63.0, -331.5, -71.8, -329.3, -80.6, -326.8, -89.2, -324.0, -97.7, -321.0, -106.2, -317.6, -114.5, -314.0, -122.7, -310.1, -130.8, -306.0, -138.7, -301.6, -146.5, -296.9, -154.2, -292.0, -161.6, -286.8, -168.9, -281.4, -176.0, -275.8, -183.0, -269.9, -189.7, -263.8, -196.2, -257.5, -202.5, -250.9, -208.6, -244.2, -214.5, -237.3, -220.2, -230.2, -225.6, -222.9, -230.7, -215.4, -235.7, -207.8, -240.3, -200.0, -244.7, -192.1, -248.9, -184.0, -252.8, -175.8, -256.4, -167.4, -259.7, -159.0, -262.8, -150.4, -265.6, -141.8, -268.0, -133.1, -270.3, -124.3, -272.2, -115.4, -273.8, -106.5, -273.8, -106.2, -258.6, -106.2, -257.5, -112.5, -255.6, -120.9, -253.6, -129.2, -251.2, -137.4, -248.6, -145.6, -245.7, -153.7, -242.5, -161.7, -239.1, -169.6, -235.4, -177.4, -231.5, -185.0, -227.3, -192.5, -222.9, -199.9, -218.3, -207.1, -213.4, -214.2, -208.3, -221.0, -202.9, -227.8, -197.4, -234.3, -191.6, -240.7, -185.6, -246.9, -179.4, -252.8, -173.1, -258.6, -166.5, -264.2, -159.8, -269.5, -152.9, -274.6, -145.8, -279.5, -138.6, -284.2, -131.2, -288.6, -123.7, -292.8, -116.1, -296.7, -108.3, -300.4, -100.5, -303.8, -92.5, -306.9, -84.4, -309.8, -76.2, -312.4, -67.9, -314.8, -59.6, -316.9, -51.2, -318.7, -42.8, -320.2, -34.3, -321.5, -25.7, -322.5, -17.2, -323.2, -8.6, -323.6, 0.0, -323.8, 8.6, -323.6, 17.2, -323.2, 25.7, -322.5, 34.3, -321.5, 42.8, -320.2, 51.2, -318.7, 59.6, -316.9, 67.9, -314.8, 76.2, -312.4, 84.4, -309.8, 92.5, -306.9, 100.5, -303.8, 108.3, -300.4, 116.1, -296.7, 123.7, -292.8, 131.3, -288.6, 138.6, -284.2, 145.8, -279.5, 152.9, -274.6, 159.8, -269.5, 166.5, -264.2, 173.1, -258.6, 179.4, -252.8, 185.6, -246.9, 191.6, -240.7, 197.4, -234.3, 202.9, -227.8, 208.3, -221.0, 213.4, -214.2, 218.3, -207.1, 222.9, -199.9, 227.3, -192.5, 231.5, -185.0, 235.4, -177.4, 239.1, -169.6, 242.5, -161.7, 245.7, -153.7, 248.6, -145.6, 251.2, -137.4, 253.6, -129.2, 255.6, -120.9, 257.5, -112.5, 258.6, -106.2, 273.8, -106.2)
 
-[node name="Left" type="CollisionShape2D" parent="World/Bounds"]
-position = Vector2(-880, -50)
-shape = SubResource("wall_v")
+[node name="Solid1" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(257.5, -10.0, 255.6, -1.6, 253.6, 6.7, 251.2, 14.9, 248.6, 23.1, 245.7, 31.2, 242.5, 39.2, 239.1, 47.1, 235.4, 54.9, 231.5, 62.5, 227.3, 70.0, 222.9, 77.4, 218.3, 84.6, 213.4, 91.7, 208.3, 98.5, 202.9, 105.3, 197.4, 111.8, 191.6, 118.2, 185.6, 124.4, 179.4, 130.3, 173.1, 136.1, 166.5, 141.7, 159.8, 147.0, 152.9, 152.1, 145.8, 157.0, 138.6, 161.7, 131.2, 166.1, 123.7, 170.3, 116.1, 174.2, 108.3, 177.9, 100.5, 181.3, 92.5, 184.4, 84.4, 187.3, 76.2, 189.9, 67.9, 192.3, 59.6, 194.4, 51.2, 196.2, 42.8, 197.7, 34.3, 199.0, 25.7, 200.0, 17.2, 200.7, 8.6, 201.1, 0.0, 201.2, -8.6, 201.1, -17.2, 200.7, -25.7, 200.0, -34.3, 199.0, -42.8, 197.7, -51.2, 196.2, -59.6, 194.4, -67.9, 192.3, -76.2, 189.9, -84.4, 187.3, -92.5, 184.4, -100.5, 181.3, -108.3, 177.9, -116.1, 174.2, -123.7, 170.3, -131.3, 166.1, -138.6, 161.7, -145.8, 157.0, -152.9, 152.1, -159.8, 147.0, -166.5, 141.7, -173.1, 136.1, -179.4, 130.3, -185.6, 124.4, -191.6, 118.2, -197.4, 111.8, -202.9, 105.3, -208.3, 98.5, -213.4, 91.7, -218.3, 84.6, -222.9, 77.4, -227.3, 70.0, -231.5, 62.5, -235.4, 54.9, -239.1, 47.1, -242.5, 39.2, -245.7, 31.2, -248.6, 23.1, -251.2, 14.9, -253.6, 6.7, -255.6, -1.6, -257.5, -10.0, -258.6, -16.2, -277.3, -16.2, -276.9, -8.1, -276.2, 0.9, -275.1, 10.0, -273.8, 19.0, -272.2, 27.9, -270.3, 36.8, -268.0, 45.6, -265.6, 54.3, -262.8, 62.9, -259.7, 71.5, -256.4, 79.9, -252.8, 88.3, -248.9, 96.5, -244.7, 104.6, -240.3, 112.5, -235.7, 120.3, -230.7, 127.9, -225.6, 135.4, -220.2, 142.7, -214.5, 149.8, -208.6, 156.7, -202.5, 163.4, -196.2, 170.0, -189.7, 176.3, -183.0, 182.4, -176.0, 188.3, -168.9, 193.9, -161.6, 199.3, -154.2, 204.5, -146.5, 209.4, -138.8, 214.1, -130.8, 218.5, -122.7, 222.6, -114.5, 226.5, -106.2, 230.1, -97.7, 233.5, -89.2, 236.5, -80.6, 239.3, -71.8, 241.8, -63.0, 244.0, -54.1, 245.9, -45.2, 247.5, -36.2, 248.9, -27.2, 249.9, -18.1, 250.7, -9.1, 251.1, 0.0, 251.2, 9.1, 251.1, 18.1, 250.7, 27.2, 249.9, 36.2, 248.9, 45.2, 247.5, 54.1, 245.9, 63.0, 244.0, 71.8, 241.8, 80.6, 239.3, 89.2, 236.5, 97.7, 233.5, 106.2, 230.1, 114.5, 226.5, 122.7, 222.6, 130.8, 218.5, 138.7, 214.1, 146.5, 209.4, 154.2, 204.5, 161.6, 199.3, 168.9, 193.9, 176.0, 188.3, 183.0, 182.4, 189.7, 176.3, 196.2, 170.0, 202.5, 163.4, 208.6, 156.7, 214.5, 149.8, 220.2, 142.7, 225.6, 135.4, 230.7, 127.9, 235.7, 120.3, 240.3, 112.5, 244.7, 104.6, 248.9, 96.5, 252.8, 88.3, 256.4, 79.9, 259.7, 71.5, 262.8, 62.9, 265.6, 54.3, 268.0, 45.6, 270.3, 36.8, 272.2, 27.9, 273.8, 19.0, 275.1, 10.0, 276.2, 0.9, 276.9, -8.1, 277.3, -16.2, 258.6, -16.2)
 
-[node name="Right" type="CollisionShape2D" parent="World/Bounds"]
-position = Vector2(880, -50)
-shape = SubResource("wall_v")
+[node name="Solid2" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(-255.0, -118.8, -255.0, -106.2, -350.0, -106.2, -350.0, -118.8)
+
+[node name="Solid3" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(-255.0, -16.2, -255.0, 8.8, -350.0, 8.8, -350.0, -16.2)
+
+[node name="Solid4" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(350.0, -118.8, 350.0, -106.2, 255.0, -106.2, 255.0, -118.8)
+
+[node name="Solid5" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(350.0, -16.2, 350.0, 8.8, 255.0, 8.8, 255.0, -16.2)
+
+[node name="Solid6" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(-565.0, -80.0, -565.0, -22.5, -720.0, -22.5, -720.0, -80.0)
+
+[node name="Solid7" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(-755.0, -211.2, -675.0, -211.2, -675.0, -157.5, -755.0, -175.0)
+
+[node name="Solid8" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(-545.0, -211.2, -545.0, -185.0, -595.0, -185.0, -595.0, -211.2)
+
+[node name="Solid9" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(-462.5, 31.2, -462.5, 41.2, -522.5, 41.2, -522.5, 31.2)
+
+[node name="Solid10" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(722.5, -103.8, 722.5, -3.8, 562.5, -3.8, 562.5, -103.8)
+
+[node name="Solid11" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(505.0, -11.2, 505.0, 23.8, 470.0, 23.8, 470.0, -11.2)
+
+[node name="Solid12" type="CollisionPolygon2D" parent="World/Bounds"]
+polygon = PackedVector2Array(815.0, -11.2, 815.0, 23.8, 780.0, 23.8, 780.0, -11.2)
+
+[node name="Round0" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(0.0, -61.2)
+shape = SubResource("hub_c100")
+
+[node name="Round1" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-160.9, -222.1)
+shape = SubResource("hub_c22")
+
+[node name="Round2" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(160.9, -222.1)
+shape = SubResource("hub_c22")
+
+[node name="Round3" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-160.9, 99.6)
+shape = SubResource("hub_c22")
+
+[node name="Round4" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(160.9, 99.6)
+shape = SubResource("hub_c22")
+
+[node name="Round5" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-302.5, 85.0)
+shape = SubResource("hub_c14")
+
+[node name="Round6" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(302.5, 85.0)
+shape = SubResource("hub_c14")
+
+[node name="Round7" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-162.5, 227.5)
+shape = SubResource("hub_c19")
+
+[node name="Round8" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(162.5, 227.5)
+shape = SubResource("hub_c19")
+
+[node name="Round9" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-455.0, -90.0)
+shape = SubResource("hub_c7")
+
+[node name="Round10" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(455.0, -90.0)
+shape = SubResource("hub_c7")
+
+[node name="Round11" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-642.5, -41.2)
+shape = SubResource("hub_c34")
+
+[node name="Round12" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-765.0, -133.8)
+shape = SubResource("hub_c34")
+
+[node name="Round13" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-520.0, -133.8)
+shape = SubResource("hub_c20")
+
+[node name="Round14" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(-492.5, 16.2)
+shape = SubResource("hub_c18")
+
+[node name="Round15" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(515.0, -133.8)
+shape = SubResource("hub_c20")
+
+[node name="Round16" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(552.5, -166.2)
+shape = SubResource("hub_c14")
+
+[node name="Round17" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(770.0, -133.8)
+shape = SubResource("hub_c20")
+
+[node name="Round18" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(732.5, -166.2)
+shape = SubResource("hub_c14")
+
+[node name="Round19" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(495.0, 51.2)
+shape = SubResource("hub_c15")
+
+[node name="Round20" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(790.0, 51.2)
+shape = SubResource("hub_c15")
+
+[node name="Round21" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(545.0, -146.2)
+shape = SubResource("hub_c7")
+
+[node name="Round22" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(740.0, -146.2)
+shape = SubResource("hub_c7")
+
+[node name="Round23" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(545.0, 48.8)
+shape = SubResource("hub_c7")
+
+[node name="Round24" type="CollisionShape2D" parent="World/Bounds"]
+position = Vector2(740.0, 48.8)
+shape = SubResource("hub_c7")
 
 [node name="Props" type="Node2D" parent="World"]
 y_sort_enabled = true
 
-[node name="Forge" type="StaticBody2D" parent="World/Props"]
-position = Vector2(-450, -420)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Forge"]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("house_forge")
-offset = Vector2(0, -244)
-
-[node name="Shape0" type="CollisionShape2D" parent="World/Props/Forge"]
-position = Vector2(0, -62)
-shape = SubResource("house_shape")
-
-[node name="Store" type="StaticBody2D" parent="World/Props"]
-position = Vector2(450, -420)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Store"]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("house_store")
-offset = Vector2(0, -244)
-
-[node name="Shape0" type="CollisionShape2D" parent="World/Props/Store"]
-position = Vector2(0, -62)
-shape = SubResource("house_shape")
-
-[node name="Fountain" type="StaticBody2D" parent="World/Props"]
-position = Vector2(0, -20)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Fountain"]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("fountain")
-offset = Vector2(0, -60)
-
-[node name="Shape" type="CollisionShape2D" parent="World/Props/Fountain"]
-rotation = 1.5708
-shape = SubResource("fountain_shape")
-
-[node name="Anvil" type="StaticBody2D" parent="World/Props"]
-position = Vector2(-250, -330)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Anvil"]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("anvil")
-offset = Vector2(0, -48)
-
-[node name="Shape0" type="CollisionShape2D" parent="World/Props/Anvil"]
-position = Vector2(0, -10)
-shape = SubResource("prop_shape")
-
-[node name="Chest" type="StaticBody2D" parent="World/Props"]
-position = Vector2(250, -330)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Chest"]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("chest")
-offset = Vector2(0, -48)
-
-[node name="Shape0" type="CollisionShape2D" parent="World/Props/Chest"]
-position = Vector2(0, -10)
-shape = SubResource("prop_shape")
-
-[node name="Portal" type="StaticBody2D" parent="World/Props"]
-position = Vector2(0, 540)
-
-[node name="Swirl" type="Sprite2D" parent="World/Props/Portal"]
-material = SubResource("unshaded")
-position = Vector2(0, -74)
-scale = Vector2(0.46, 0.5)
-texture = ExtResource("portal_swirl")
-script = ExtResource("spinner")
-
-[node name="Arch" type="Sprite2D" parent="World/Props/Portal"]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("portal_arch")
-offset = Vector2(0, -200)
-
-[node name="Light" type="PointLight2D" parent="World/Props/Portal"]
-position = Vector2(0, -80)
-color = Color(0.75, 0.45, 1, 1)
-energy = 1.2
-texture = SubResource("light_tex")
-texture_scale = 2.4
-script = ExtResource("flicker")
-amplitude = 0.12
-speed = 2.0
-
-[node name="Pillar0" type="CollisionShape2D" parent="World/Props/Portal"]
-position = Vector2(-75, -10)
-shape = SubResource("pillar_shape")
-
-[node name="Pillar1" type="CollisionShape2D" parent="World/Props/Portal"]
-position = Vector2(75, -10)
-shape = SubResource("pillar_shape")
-
-[node name="ForgeGlow" type="PointLight2D" parent="World"]
-position = Vector2(-450, -470)
-color = Color(1, 0.55, 0.25, 1)
-energy = 0.9
-texture = SubResource("light_tex")
-texture_scale = 2.0
-
 [node name="Tree0" type="Node2D" parent="World/Props"]
-position = Vector2(-150, -470)
+position = Vector2(-302.5, 85)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree0"]
 material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
-flip_h = true
+texture = ExtResource("hub_tree_w")
 
 [node name="Tree1" type="Node2D" parent="World/Props"]
-position = Vector2(150, -470)
+position = Vector2(302.5, 85)
 
 [node name="Sprite" type="Sprite2D" parent="World/Props/Tree1"]
 material = SubResource("tree_sway_mat")
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
+texture = ExtResource("hub_tree_e")
 
-[node name="Tree2" type="Node2D" parent="World/Props"]
-position = Vector2(-820, -470)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree2"]
-material = SubResource("tree_sway_mat")
+[node name="Obelisk0" type="Sprite2D" parent="World/Props"]
+position = Vector2(-160.9, -222.1)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-flip_h = true
+texture = ExtResource("hub_obelisk225")
 
-[node name="Tree3" type="Node2D" parent="World/Props"]
-position = Vector2(820, -470)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree3"]
-material = SubResource("tree_sway_mat")
+[node name="Obelisk1" type="Sprite2D" parent="World/Props"]
+position = Vector2(160.8, -222.1)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
+texture = ExtResource("hub_obelisk315")
 
-[node name="Tree4" type="Node2D" parent="World/Props"]
-position = Vector2(-850, -300)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree4"]
-material = SubResource("tree_sway_mat")
+[node name="Obelisk2" type="Sprite2D" parent="World/Props"]
+position = Vector2(-160.9, 99.6)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-flip_h = true
+texture = ExtResource("hub_obelisk135")
 
-[node name="Tree5" type="Node2D" parent="World/Props"]
-position = Vector2(-850, -120)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree5"]
-material = SubResource("tree_sway_mat")
+[node name="Obelisk3" type="Sprite2D" parent="World/Props"]
+position = Vector2(160.9, 99.6)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
+texture = ExtResource("hub_obelisk45")
 
-[node name="Tree6" type="Node2D" parent="World/Props"]
-position = Vector2(-850, 60)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree6"]
-material = SubResource("tree_sway_mat")
+[node name="Anvil" type="Sprite2D" parent="World/Props"]
+position = Vector2(-642.5, -48.8)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
-flip_h = true
+texture = ExtResource("hub_anvil")
 
-[node name="Tree7" type="Node2D" parent="World/Props"]
-position = Vector2(-850, 240)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree7"]
-material = SubResource("tree_sway_mat")
+[node name="Chest" type="Sprite2D" parent="World/Props"]
+position = Vector2(642.5, -53.8)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-
-[node name="Tree8" type="Node2D" parent="World/Props"]
-position = Vector2(-850, 420)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree8"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-flip_h = true
-
-[node name="Tree9" type="Node2D" parent="World/Props"]
-position = Vector2(850, -300)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree9"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
-
-[node name="Tree10" type="Node2D" parent="World/Props"]
-position = Vector2(850, -120)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree10"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-flip_h = true
-
-[node name="Tree11" type="Node2D" parent="World/Props"]
-position = Vector2(850, 60)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree11"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-
-[node name="Tree12" type="Node2D" parent="World/Props"]
-position = Vector2(850, 240)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree12"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
-flip_h = true
-
-[node name="Tree13" type="Node2D" parent="World/Props"]
-position = Vector2(850, 420)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree13"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-
-[node name="Tree14" type="Node2D" parent="World/Props"]
-position = Vector2(-760, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree14"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-flip_h = true
-
-[node name="Tree15" type="Node2D" parent="World/Props"]
-position = Vector2(-560, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree15"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
-
-[node name="Tree16" type="Node2D" parent="World/Props"]
-position = Vector2(-360, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree16"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-flip_h = true
-
-[node name="Tree17" type="Node2D" parent="World/Props"]
-position = Vector2(-180, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree17"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-
-[node name="Tree18" type="Node2D" parent="World/Props"]
-position = Vector2(180, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree18"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
-flip_h = true
-
-[node name="Tree19" type="Node2D" parent="World/Props"]
-position = Vector2(360, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree19"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-
-[node name="Tree20" type="Node2D" parent="World/Props"]
-position = Vector2(560, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree20"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree")
-offset = Vector2(0, -140)
-flip_h = true
-
-[node name="Tree21" type="Node2D" parent="World/Props"]
-position = Vector2(760, 640)
-
-[node name="Sprite" type="Sprite2D" parent="World/Props/Tree21"]
-material = SubResource("tree_sway_mat")
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("tree_b")
-offset = Vector2(0, -140)
-
-[node name="Lamp0" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(-230, -150)
-
-[node name="Lamp1" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(230, -150)
-
-[node name="Lamp2" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(-230, 150)
-
-[node name="Lamp3" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(230, 150)
-
-[node name="Lamp4" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(-150, 470)
-
-[node name="Lamp5" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(150, 470)
-
-[node name="Lamp6" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(-250, -420)
-
-[node name="Lamp7" parent="World/Props" instance=ExtResource("lamp")]
-position = Vector2(250, -420)
+texture = ExtResource("hub_chest")
 
 [node name="Player" parent="World/Props" instance=ExtResource("player")]
 unique_name_in_owner = true
-position = Vector2(0, 260)
+position = Vector2(0.0, 138.8)
 weapon_enabled = false
 
 [node name="Light" parent="World/Props/Player" index="1"]
@@ -472,16 +339,78 @@ energy = 0.45
 texture_scale = 2.4
 
 [node name="Camera2D" type="Camera2D" parent="World/Props/Player"]
-limit_left = -900
-limit_top = -700
-limit_right = 900
-limit_bottom = 600
-zoom = Vector2(0.85, 0.85)
+limit_left = -880
+limit_top = -480
+limit_right = 880
+limit_bottom = 480
 process_callback = 0
 position_smoothing_enabled = true
 
+[node name="PortalLight" type="PointLight2D" parent="World"]
+position = Vector2(0.0, -61.2)
+color = Color(0.75, 0.45, 1, 1)
+energy = 1.1
+range_item_cull_mask = 2
+texture = SubResource("light_tex")
+texture_scale = 2.3
+script = ExtResource("flicker")
+amplitude = 0.12
+speed = 2.0
+
+[node name="ForgeLight" type="PointLight2D" parent="World"]
+position = Vector2(-765.0, -133.8)
+color = Color(1, 0.55, 0.25, 1)
+energy = 1.0
+range_item_cull_mask = 2
+texture = SubResource("light_tex")
+texture_scale = 1.7
+script = ExtResource("flicker")
+amplitude = 0.1
+speed = 5.0
+
+[node name="AnvilLight" type="PointLight2D" parent="World"]
+position = Vector2(-642.5, -48.8)
+color = Color(1, 0.6, 0.3, 1)
+energy = 0.6
+range_item_cull_mask = 2
+texture = SubResource("light_tex")
+texture_scale = 1.3
+
+[node name="VaultLight" type="PointLight2D" parent="World"]
+position = Vector2(642.5, -48.8)
+color = Color(1, 0.8, 0.45, 1)
+energy = 0.8
+range_item_cull_mask = 2
+texture = SubResource("light_tex")
+texture_scale = 1.7
+script = ExtResource("flicker")
+amplitude = 0.05
+speed = 3.0
+
+[node name="BrazierLight0" type="PointLight2D" parent="World"]
+position = Vector2(-162.5, 227.5)
+color = Color(1, 0.6, 0.3, 1)
+energy = 0.8
+range_item_cull_mask = 2
+texture = SubResource("light_tex")
+texture_scale = 1.3
+script = ExtResource("flicker")
+amplitude = 0.12
+speed = 6.0
+
+[node name="BrazierLight1" type="PointLight2D" parent="World"]
+position = Vector2(162.5, 227.5)
+color = Color(1, 0.6, 0.3, 1)
+energy = 0.8
+range_item_cull_mask = 2
+texture = SubResource("light_tex")
+texture_scale = 1.3
+script = ExtResource("flicker")
+amplitude = 0.12
+speed = 6.0
+
 [node name="ForgeSpot" type="Area2D" parent="World" node_paths=PackedStringArray("window")]
-position = Vector2(-270, -320)
+position = Vector2(-642.5, -48.8)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
@@ -492,10 +421,10 @@ tutorial_title = "TUTORIAL_FORGE_TITLE"
 tutorial_description = "TUTORIAL_FORGE_DESC"
 
 [node name="Shape" type="CollisionShape2D" parent="World/ForgeSpot"]
-shape = SubResource("spot_big")
+shape = SubResource("spot_forge")
 
 [node name="ChestSpot" type="Area2D" parent="World" node_paths=PackedStringArray("window")]
-position = Vector2(250, -310)
+position = Vector2(642.5, -53.8)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
@@ -506,10 +435,10 @@ tutorial_title = "TUTORIAL_CHEST_TITLE"
 tutorial_description = "TUTORIAL_CHEST_DESC"
 
 [node name="Shape" type="CollisionShape2D" parent="World/ChestSpot"]
-shape = SubResource("spot_small")
+shape = SubResource("spot_chest")
 
 [node name="PortalSpot" type="Area2D" parent="World" node_paths=PackedStringArray("window")]
-position = Vector2(0, 470)
+position = Vector2(0, -61.3)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
@@ -520,7 +449,7 @@ tutorial_title = "TUTORIAL_PORTAL_TITLE"
 tutorial_description = "TUTORIAL_PORTAL_DESC"
 
 [node name="Shape" type="CollisionShape2D" parent="World/PortalSpot"]
-shape = SubResource("spot_big")
+shape = SubResource("spot_portal")
 
 [node name="UI" type="CanvasLayer" parent="."]
 

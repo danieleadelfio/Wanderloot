@@ -80,6 +80,7 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 ## 3.1.0 Grafica (da M6)
 
 - Sorgente = SVG in `assets/art/`, generato da `tools/sprites.py` (o modificato in Inkscape); il PNG in `assets/sprites/` è un derivato, esportato a 2x della dimensione a schermo. In scena gli Sprite2D stanno a scala 0.5.
+- Eccezione (hub arcano, M13): ambienti grandi che usano sfocature/filtri/fusioni SVG non supportati da cairosvg si generano da una pagina HTML esportata con Chromium headless (`tools/hub_arcane/`); stesse regole di scala (PNG a 2x, sprite a 0,5), collisioni ricavate dagli stessi dati del generatore.
 - Filtro texture lineare (default di progetto). Non mischiare più pixel art e vettoriale nella stessa scena.
 - Stessa dimensione a schermo = stesso fattore: se un asset cambia dimensione si rigenera il PNG, non si cambia la scala del nodo.
 
