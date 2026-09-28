@@ -25,3 +25,14 @@ func test_phase_two_attacks_exist_and_drops_are_guaranteed() -> void:
 	assert_bool(data.attacks.any(func(a: BossAttack) -> bool: return a.min_phase == 2)).is_true()
 	for entry in data.drops:
 		assert_float(entry.chance).is_equal(1.0)
+
+
+## Bug (M13, #86): la raffica a ventaglio (M12, #40) toglieva il cerchio di preavviso sul boss e non
+## restava altro segnale dell'attacco in arrivo. Ripristinato: ogni attacco senza un proprio telegraph
+## dedicato (LEAP_SLAM/STOMP/RAIN/CHARGE hanno il loro) mostra il cerchio di preavviso sul boss.
+func test_every_attack_without_its_own_ground_telegraph_shows_the_windup_circle() -> void:
+	var data: BossData = load("res://data/bosses/king_slime.tres")
+	var own_telegraph: Array[BossAttack.Kind] = [BossAttack.Kind.LEAP_SLAM, BossAttack.Kind.STOMP, BossAttack.Kind.RAIN, BossAttack.Kind.CHARGE]
+	for attack in data.attacks:
+		if not own_telegraph.has(attack.kind):
+			assert_bool(attack.show_windup).override_failure_message("nessun preavviso per: " + attack.display_name).is_true()

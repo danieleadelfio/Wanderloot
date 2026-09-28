@@ -69,3 +69,24 @@ func test_no_weapon_shows_the_basic_wand() -> void:
 	assert_object((hud.get_node("%WeaponIcon") as TextureRect).texture).is_same(Hud.BASE_WEAPON_ICON)
 	assert_object((slot.get_theme_stylebox(&"panel") as StyleBoxTexture).modulate_color).is_equal(Hud.BASE_WEAPON_BORDER)
 	assert_str(slot.tooltip_text).is_equal(tr("HUD_WEAPON_BASE"))
+
+
+## Bug (M13, #86): mostrare/nascondere le Statistiche cambiava anche la size dell'HudPlate sopra
+## (barre vita/mana/exp, slot arma, abilita'), perche' HudPlate riempiva la VBox che si allarga o si
+## restringe in base alla larghezza minima di StatsGrid (esclusa dal calcolo quando e' nascosta). Ora
+## HudPlate non si allarga con i fratelli: ha la propria larghezza, indipendente da Statistiche.
+func test_hud_plate_size_does_not_change_when_stats_are_toggled() -> void:
+	var hud := _hud()
+	await get_tree().process_frame
+	var plate: PanelContainer = hud.get_node("%HudPlate")
+	var stats_toggle: Button = hud.get_node("%StatsToggle")
+	var stats_grid: GridContainer = hud.get_node("%StatsGrid")
+	assert_bool(stats_grid.visible).is_true()
+	var size_before := plate.size
+	stats_toggle.pressed.emit()
+	await get_tree().process_frame
+	assert_bool(stats_grid.visible).is_false()
+	assert_vector(plate.size).is_equal(size_before)
+	stats_toggle.pressed.emit()
+	await get_tree().process_frame
+	assert_vector(plate.size).is_equal(size_before)

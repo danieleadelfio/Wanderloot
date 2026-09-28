@@ -72,9 +72,10 @@ static func tooltip_panel(item: ItemInstance, header: String = "") -> Control:
 	var box := VBoxContainer.new()
 	box.custom_minimum_size.x = 260
 	box.add_theme_constant_override("separation", 2)
-	if header != "":
-		# "Equipaggiato" era grigio scuro e poco leggibile nel confronto (M12, #86): bianco e in grassetto.
-		box.add_child(_line(header, Color(1, 1, 1, 0.95), 12, true))
+	# "Equipaggiato" era grigio scuro e poco leggibile nel confronto (M12, #86): bianco e in grassetto.
+	# La riga si aggiunge sempre, anche vuota, cosi' il pezzo equipaggiato e quello non equipaggiato nel
+	# confronto restano allineati invece di avere il container di uno piu' alto dell'altro (M13, #86).
+	box.add_child(_line(header, Color(1, 1, 1, 0.95), 12, true))
 	box.add_child(_line(title(item), color(item), 18))
 	box.add_child(_line(rarity_name(item), color(item), 13))
 	box.add_child(_line(TranslationServer.translate(item.base.description), Color(0.9, 0.88, 0.8), 13))

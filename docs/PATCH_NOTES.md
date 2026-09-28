@@ -168,3 +168,10 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Novità
 - Tour della piazza: nuovo passo che spiega a cosa serve l'Ascensione.
+
+## In lavorazione (18) — 28/09/2026
+
+### Correzioni
+- Mostrare/nascondere le statistiche in run non fa più cambiare dimensione alla barra vita/mana/exp sopra.
+- Il Re Slime ora avvisa di nuovo prima della raffica a ventaglio.
+- Nel confronto tra un pezzo equipaggiato e uno nuovo le due schede sono allineate, si leggono più facilmente affiancate.
