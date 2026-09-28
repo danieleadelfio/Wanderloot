@@ -188,6 +188,8 @@ def build_arena_and_icons():
     save("icon_slime_core", [icon_core()], 64)
     save("icon_gel_wand", [icon_wand("#38b764", False)], 64)
     save("icon_rapid_wand", [icon_wand("#73eff7", True)], 64)
+    # Bacchetta base (M13, #86): slot arma dell'HUD quando non e' equipaggiata nessuna arma.
+    save("icon_starter_wand", [icon_wand("#b9a7e6", False)], 64)
     save("icon_core_amulet", [icon_amulet()], 64)
     save("icon_slime_boots", [icon_boots()], 64)
 

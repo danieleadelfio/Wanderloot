@@ -171,6 +171,22 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="weapon_slot"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.1, 0.09, 0.14, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [resource]
 TooltipLabel/colors/font_color = Color(0.95, 0.95, 1, 1)
 TooltipPanel/styles/panel = SubResource("tooltip")
@@ -215,3 +231,5 @@ ClosetDoorRight/base_type = &"Panel"
 ClosetDoorRight/styles/panel = SubResource("closet_door_right")
 ClosetHandle/base_type = &"Panel"
 ClosetHandle/styles/panel = SubResource("closet_handle")
+WeaponSlot/base_type = &"PanelContainer"
+WeaponSlot/styles/panel = SubResource("weapon_slot")

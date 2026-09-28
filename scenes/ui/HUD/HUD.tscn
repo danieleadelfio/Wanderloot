@@ -118,9 +118,28 @@ theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 
-[node name="AbilityBar" type="HBoxContainer" parent="Margin/VBox"]
+[node name="ActionRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="WeaponSlot" type="PanelContainer" parent="Margin/VBox/ActionRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"WeaponSlot"
+
+[node name="WeaponIcon" type="TextureRect" parent="Margin/VBox/ActionRow/WeaponSlot"]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AbilityBar" type="HBoxContainer" parent="Margin/VBox/ActionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
 theme_override_constants/separation = 6
 
 [node name="BossPanel" type="VBoxContainer" parent="."]

@@ -2,6 +2,11 @@ class_name Hud
 extends CanvasLayer
 ## HUD minimale: HP ed estrazione (da Arena), livello, exp e loot di run (da RunManager).
 
+## Bacchetta base: mostrata nello slot arma quando non e' equipaggiata nessuna arma (M13, #86).
+const BASE_WEAPON_ICON: Texture2D = preload("res://assets/sprites/icon_starter_wand.png")
+## Bordo dello slot arma senza arma equipaggiata (oro della UI, non una rarita').
+const BASE_WEAPON_BORDER: Color = Color(0.78, 0.62, 0.36)
+
 @onready var _hp_label: Label = %HpLabel
 @onready var _hp_bar: ProgressBar = %HpBar
 @onready var _mp_bar: ProgressBar = %MpBar
@@ -15,6 +20,9 @@ extends CanvasLayer
 @onready var _stats_grid: GridContainer = %StatsGrid
 @onready var _stats_toggle: Button = %StatsToggle
 @onready var _ability_bar: HBoxContainer = %AbilityBar
+## Slot dell'arma equipaggiata (M13, #86), accanto alle abilita'.
+@onready var _weapon_slot: PanelContainer = %WeaponSlot
+@onready var _weapon_icon: TextureRect = %WeaponIcon
 @onready var _buff_label: Label = %BuffLabel
 @onready var _event_banner: Control = %EventBanner
 @onready var _event_title: Label = %EventTitle
@@ -107,6 +115,27 @@ func _on_stats_toggle_pressed() -> void:
 
 func _refresh_stats_toggle() -> void:
 	_stats_toggle.text = "+" if not _stats_grid.visible else "-"
+
+
+## Arma da mostrare nello slot (logica pura, M13 #86): l'ultima arma scelta dall'armadio in questa run
+## (indossata finche' si e' in run, anche se a rischio) prevale su quella equipaggiata nel baule; null =
+## nessuna arma, si vede la bacchetta base.
+static func weapon_to_show(equipped: ItemInstance, run_equipped: Array[ItemInstance]) -> ItemInstance:
+	for i in range(run_equipped.size() - 1, -1, -1):
+		if run_equipped[i].slot() == EquipmentData.Slot.WEAPON:
+			return run_equipped[i]
+	return equipped
+
+
+## Slot arma: icona, bordo nel colore della rarita' e tooltip dell'oggetto (come nel baule).
+## from_run = pezzo dell'armadio, indossato solo per questa run (stessa nota del manichino).
+func set_weapon(item: ItemInstance, from_run: bool = false) -> void:
+	_weapon_icon.texture = item.base.icon if item else BASE_WEAPON_ICON
+	_weapon_slot.add_theme_stylebox_override(&"panel", UiTheme.tinted(&"panel", &"WeaponSlot", ItemText.color(item) if item else BASE_WEAPON_BORDER))
+	if item == null:
+		_weapon_slot.tooltip_text = tr("HUD_WEAPON_BASE")
+	else:
+		_weapon_slot.tooltip_text = ItemText.tooltip(item) + ("\n" + tr("RUNINV_TEMP_EQUIP") if from_run else "")
 
 
 ## Icone delle abilita' della bacchetta (M10); il riempimento mostra l'avanzamento verso l'attivazione.

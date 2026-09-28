@@ -143,3 +143,8 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 - In tutte le arene, finché un boss arrivato prima dell'overtime è vivo non compaiono nuovi nemici normali: ora vale anche per il boss extra del Pentagramma di sangue.
 - Mentre combatti il boss che arriva prima dell'overtime, il tempo verso l'overtime si ferma: quando lo sconfiggi hai ancora 30 secondi per estrarre.
 - I boss compaiono alla stessa distanza dei nemici normali, non più dall'altra parte dell'arena.
+
+## In lavorazione (15) — 28/09/2026
+
+### Novità
+- Nell'HUD, accanto alle abilità, ora vedi l'arma che hai equipaggiato, con il colore della sua rarità (passaci sopra col mouse per i dettagli). Senza arma compare la bacchetta base; se prendi un'arma dall'armadio degli Scheletri, lì vedi quella.

@@ -71,10 +71,10 @@ dell'angolo non deformabile; il centro e i lati devono potersi ripetere/stirare 
 | Barra di scorrimento | base `VScrollBar` | liste | 8 x variabile | 3 | |
 | Slot abilità HUD | da creare: `AbilitySlot` | barra abilità in run | 36x36 (+cornice) | 8 | cornice + riempimento dal basso (già `TextureProgressBar`) |
 | Minimappa | da creare: cornice minimappa | HUD in alto a destra | cerchio ~160 | — | anello con N/S/E/O, oggi disegnata in codice |
-| **Slot arma HUD** | da creare: `WeaponSlot` | HUD | ~56x56 | 10 | **elemento nuovo**: oggi l'HUD non mostra l'arma equipaggiata |
+| Slot arma HUD | `WeaponSlot` | HUD, accanto alle abilità | 56x56 | 10 | cornice chiara tintata con la rarità (oro senza arma); icona dell'arma o `icon_starter_wand` |
 
 "Da creare" = oggi è un `Button`/`Control` generico o disegnato in codice: il tipo si aggiunge al tema quando
-arriva l'asset. Lo **slot arma** non esiste ancora: è una piccola feature da aggiungere all'HUD (issue a parte).
+arriva l'asset.
 
 ## 4. Prompt per i concept (Higgsfield)
 
@@ -128,4 +128,4 @@ genera 3-4 varianti e scegline una.
 | Stili centralizzati nel tema (tipi sopra, aspetto invariato) | ✅ M13 #86 |
 | Concept Higgsfield | da fare (Daniele) |
 | Ridisegno SVG + aggancio al tema | da fare dopo i concept |
-| Slot arma in HUD (nuovo elemento) | da decidere/pianificare |
+| Slot arma in HUD (nuovo elemento) | ✅ M13 #86 (stile provvisorio, reskin con gli altri) |

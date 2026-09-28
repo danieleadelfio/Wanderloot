@@ -311,3 +311,4 @@ HUD_STATS_TITLE,Statistiche,Stats,Statistiques,Estadísticas
 PROMPT_PENTAGRAM_STATUE,E — Statua (attiva il Pentagramma),E — Statue (activates the Pentagram),E — Statue (active le Pentagramme),E — Estatua (activa el Pentagrama)
 MAP_TOOLTIP_PENTAGRAM_STATUE,Evento Pentagramma,Pentagram event,Événement Pentagramme,Evento Pentagrama
 RUNINV_TEMP_EQUIP,(equipaggiato solo per questa run — si perde se muori),(equipped for this run only — lost if you die),(équipé seulement pour cette run — perdu en cas de mort),(equipado solo para esta partida — se pierde si mueres)
+HUD_WEAPON_BASE,Bacchetta base: nessuna arma equipaggiata,Basic wand: no weapon equipped,Baguette de base : aucune arme équipée,Varita básica: ningún arma equipada

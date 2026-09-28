@@ -155,6 +155,7 @@ func _ready() -> void:
 	_player.begin_run(_equip_modifiers)
 	_hud.set_hp(_player.health.current, _player.health.max_hp)
 	_hud.set_stats(_player, _equip_modifiers)
+	_refresh_hud_weapon()
 	# In pausa finche' non si preme Continua, come gli eventi (M12, #86): prima spariva da sola dopo
 	# 7s con HUD.announce(), a volte prima che si finisse di leggere o si fosse anche solo mossi.
 	if not MetaProgression.has_seen_tutorial(&"first_run"):
@@ -306,8 +307,16 @@ func _on_closet_item_chosen(item: ItemInstance) -> void:
 	if item.ability:
 		_wand.equip_bonus(item.ability, item.ability_level(MetaProgression.rarity_table))
 	_hud.set_stats(_player, _equip_modifiers)
+	_refresh_hud_weapon()
 	_sfx.play(&"pickup_item")
 
+
+
+## Slot arma dell'HUD (M13, #86): arma del baule, o quella presa dall'armadio in questa run.
+func _refresh_hud_weapon() -> void:
+	var equipped := MetaProgression.loadout.equipped_in(EquipmentLoadout.EquipSlot.WEAPON)
+	var shown := Hud.weapon_to_show(equipped, _run_equipped_items)
+	_hud.set_weapon(shown, shown != null and shown != equipped)
 
 func _on_event_failed(event: RunEventData) -> void:
 	_end_surge()
