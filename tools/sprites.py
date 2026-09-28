@@ -610,10 +610,22 @@ def icon_codex():
                '<path d="M37 24 L49 21 M37 31 L49 29 M37 39 L49 37" stroke="#7a5a2e" stroke-width="2" stroke-linecap="round"/>' % OUTLINE, defs, 64)
 
 
+def icon_boss_skull():
+    """Teschio con occhi rossi dell'indicatore dei boss fuori schermo (M13, #86)."""
+    defs = ('<radialGradient id="eye" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffd0c0"/>'
+            '<stop offset="0.35" stop-color="#ff2a1a"/><stop offset="1" stop-color="#ff2a1a" stop-opacity="0"/></radialGradient>')
+    return svg('<path d="M10 30 C10 8 54 8 54 30 C54 40 49 45 44 46 L44 55 L20 55 L20 46 C15 45 10 40 10 30 Z" fill="#ece4d0" %s/>'
+               '<ellipse cx="22" cy="30" rx="7.5" ry="8" fill="#140a0a"/><ellipse cx="42" cy="30" rx="7.5" ry="8" fill="#140a0a"/>'
+               '<circle cx="22" cy="30" r="7" fill="url(#eye)"/><circle cx="42" cy="30" r="7" fill="url(#eye)"/>'
+               '<path d="M29 40 L32 45 L35 40 Z" fill="#140a0a"/>'
+               '<path d="M26 49 L26 55 M32 49 L32 55 M38 49 L38 55" stroke="#140a0a" stroke-width="2.5"/>' % OUTLINE, defs, 64)
+
+
 def build_hub_icons():
     save("icon_bag", [icon_bag()], 64)
     save("icon_stats", [icon_stats()], 64)
     save("icon_codex", [icon_codex()], 64)
+    save("icon_boss_skull", [icon_boss_skull()], 64)
 
 
 # --- Icone delle abilita' della bacchetta (M10) ----------------------------------------------------
@@ -682,11 +694,15 @@ def icon_frenzy():
 
 def icon_mana_prism():
     defs = ('<linearGradient id="mp" x1="0" y1="0" x2="0" y2="1">'
-            '<stop offset="0" stop-color="#bfe8ff"/><stop offset="0.55" stop-color="#4fa8f0"/><stop offset="1" stop-color="#1a4f9c"/>'
-            '</linearGradient>')
-    return svg('<path d="M32 5 L52 24 L42 58 L22 58 L12 24 Z" fill="url(#mp)" %s/>'
-               '<path d="M32 5 L42 24 L32 58 L22 24 Z" fill="#eaf7ff" opacity="0.35"/>'
-               '<path d="M12 24 L52 24" stroke="#0d2e63" stroke-width="2" opacity="0.5"/>' % OUTLINE, defs, 64)
+            '<stop offset="0" stop-color="#ffffff"/><stop offset="0.55" stop-color="#e6ebf2"/><stop offset="1" stop-color="#a7b1c2"/>'
+            '</linearGradient>'
+            '<radialGradient id="mph" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>'
+            '<stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>')
+    # Bianco (M13, #86): azzurro si confondeva con le gemme dell'exp. Alone chiaro per staccarlo dal pavimento.
+    return svg('<circle cx="32" cy="32" r="31" fill="url(#mph)"/>'
+               '<path d="M32 5 L52 24 L42 58 L22 58 L12 24 Z" fill="url(#mp)" %s/>'
+               '<path d="M32 5 L42 24 L32 58 L22 24 Z" fill="#ffffff" opacity="0.6"/>'
+               '<path d="M12 24 L52 24" stroke="#5b6475" stroke-width="2" opacity="0.5"/>' % OUTLINE, defs, 64)
 
 
 def build_consumables():
