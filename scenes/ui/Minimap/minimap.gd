@@ -52,12 +52,21 @@ func _relative(world_pos: Vector2, radius: float) -> Vector2:
 func _draw() -> void:
 	var radius := size.x * 0.5
 	var center := size * 0.5
-	draw_circle(center, radius, Color(0.06, 0.06, 0.09, 0.85))
-	draw_arc(center, radius, 0.0, TAU, 48, Color(0.75, 0.75, 0.8, 1.0), 2.0)
-	draw_string(ThemeDB.fallback_font, center + Vector2(-4, -radius + 12), "N", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, Color.WHITE)
-	draw_string(ThemeDB.fallback_font, center + Vector2(-4, radius - 4), "S", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, Color.WHITE)
-	draw_string(ThemeDB.fallback_font, center + Vector2(radius - 12, 4), "E", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, Color.WHITE)
-	draw_string(ThemeDB.fallback_font, center + Vector2(-radius + 4, 4), "O", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, Color.WHITE)
+	# Stile A "Reliquiario d'oro" (M13, #86): anello d'oro doppio con rombi cardinali, lettere col font dei titoli.
+	var gold := Color(0.79, 0.62, 0.33)
+	draw_circle(center, radius, Color(0.05, 0.035, 0.07, 0.85))
+	draw_arc(center, radius - 2.5, 0.0, TAU, 64, Color(0.23, 0.16, 0.08), 5.0)
+	draw_arc(center, radius - 2.5, 0.0, TAU, 64, gold, 2.2)
+	draw_arc(center, radius - 8.0, 0.0, TAU, 64, Color(gold, 0.55), 1.0)
+	for direction in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+		var tip: Vector2 = center + direction * (radius - 2.5)
+		var side: Vector2 = direction.orthogonal() * 4.5
+		draw_colored_polygon(PackedVector2Array([tip - direction * 5.0, tip + side, tip + direction * 5.0, tip - side]), gold)
+	var font := get_theme_font(&"font", &"TitleLabel")
+	draw_string(font, center + Vector2(-5, -radius + 22), "N", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, gold)
+	draw_string(font, center + Vector2(-5, radius - 12), "S", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, gold)
+	draw_string(font, center + Vector2(radius - 22, 5), "E", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, gold)
+	draw_string(font, center + Vector2(-radius + 12, 5), "O", HORIZONTAL_ALIGNMENT_CENTER, -1, 13, gold)
 	if player == null:
 		return
 	draw_circle(center, 4.0, Color(0.95, 0.95, 1.0))

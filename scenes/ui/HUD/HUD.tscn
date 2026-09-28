@@ -17,61 +17,72 @@ theme_override_constants/margin_top = 12
 layout_mode = 2
 mouse_filter = 2
 
-[node name="HpLabel" type="Label" parent="Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "HP"
-
-[node name="HpBar" type="ProgressBar" parent="Margin/VBox"]
-theme_type_variation = &"HpBar"
-unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 12)
+[node name="HudPlate" type="PanelContainer" parent="Margin/VBox"]
 layout_mode = 2
 mouse_filter = 2
-step = 1.0
-show_percentage = false
+theme_type_variation = &"HudPlate"
 
-[node name="MpBar" type="ProgressBar" parent="Margin/VBox"]
-theme_type_variation = &"ManaBar"
-unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 8)
+[node name="PlateVBox" type="VBoxContainer" parent="Margin/VBox/HudPlate"]
 layout_mode = 2
 mouse_filter = 2
-step = 1.0
-show_percentage = false
+theme_override_constants/separation = 2
 
-[node name="LevelLabel" type="Label" parent="Margin/VBox"]
+[node name="LevelLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
+theme_type_variation = &"TitleLabel"
 unique_name_in_owner = true
 layout_mode = 2
 text = "LV 1"
 
-[node name="ArenaLevelLabel" type="Label" parent="Margin/VBox"]
+[node name="ArenaLevelLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 0.85)
 theme_override_font_sizes/font_size = 12
 text = "Livello arena 1"
 
-[node name="ExpBar" type="ProgressBar" parent="Margin/VBox"]
-theme_type_variation = &"ExpBar"
+[node name="HpLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 8)
+layout_mode = 2
+text = "HP"
+
+[node name="HpBar" type="ProgressBar" parent="Margin/VBox/HudPlate/PlateVBox"]
+theme_type_variation = &"HpBar"
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 14)
 layout_mode = 2
 mouse_filter = 2
 step = 1.0
 show_percentage = false
 
-[node name="ExpLabel" type="Label" parent="Margin/VBox"]
+[node name="MpBar" type="ProgressBar" parent="Margin/VBox/HudPlate/PlateVBox"]
+theme_type_variation = &"ManaBar"
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 10)
+layout_mode = 2
+mouse_filter = 2
+step = 1.0
+show_percentage = false
+
+[node name="ExpBar" type="ProgressBar" parent="Margin/VBox/HudPlate/PlateVBox"]
+theme_type_variation = &"ExpBar"
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 10)
+layout_mode = 2
+mouse_filter = 2
+step = 1.0
+show_percentage = false
+
+[node name="ExpLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "EXP 0"
 
-[node name="ExtractionLabel" type="Label" parent="Margin/VBox"]
+[node name="ExtractionLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = ""
 
-[node name="OvertimeLabel" type="Label" parent="Margin/VBox"]
+[node name="OvertimeLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -80,11 +91,43 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 text = ""
 
-[node name="LootLabel" type="Label" parent="Margin/VBox"]
+[node name="LootLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.35, 1)
 text = "Loot a rischio: 0"
+
+[node name="BuffLabel" type="Label" parent="Margin/VBox/HudPlate/PlateVBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+
+[node name="ActionRow" type="HBoxContainer" parent="Margin/VBox/HudPlate/PlateVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="WeaponSlot" type="PanelContainer" parent="Margin/VBox/HudPlate/PlateVBox/ActionRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"WeaponSlot"
+
+[node name="WeaponIcon" type="TextureRect" parent="Margin/VBox/HudPlate/PlateVBox/ActionRow/WeaponSlot"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AbilityBar" type="HBoxContainer" parent="Margin/VBox/HudPlate/PlateVBox/ActionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
 
 [node name="StatsHeader" type="HBoxContainer" parent="Margin/VBox"]
 layout_mode = 2
@@ -111,37 +154,6 @@ theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 0
 columns = 4
 
-[node name="BuffLabel" type="Label" parent="Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-
-[node name="ActionRow" type="HBoxContainer" parent="Margin/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="WeaponSlot" type="PanelContainer" parent="Margin/VBox/ActionRow"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(56, 56)
-layout_mode = 2
-size_flags_vertical = 4
-theme_type_variation = &"WeaponSlot"
-
-[node name="WeaponIcon" type="TextureRect" parent="Margin/VBox/ActionRow/WeaponSlot"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="AbilityBar" type="HBoxContainer" parent="Margin/VBox/ActionRow"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 6
-
 [node name="BossPanel" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -156,6 +168,7 @@ grow_horizontal = 2
 mouse_filter = 2
 
 [node name="BossName" type="Label" parent="BossPanel"]
+theme_type_variation = &"TitleLabel"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
@@ -186,6 +199,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="AnnounceTitle" type="Label" parent="Announce"]
+theme_type_variation = &"TitleLabel"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.35, 0.28, 1)
@@ -219,6 +233,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="EventTitle" type="Label" parent="EventBanner"]
+theme_type_variation = &"TitleLabel"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.9, 1, 1)

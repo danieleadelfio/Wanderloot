@@ -55,18 +55,40 @@ func test_every_theme_type_used_exists_in_the_theme() -> void:
 	assert_int(used).is_greater(10)
 
 
-func test_roles_keep_the_current_look() -> void:
+## Stile A "Reliquiario d'oro" (M13, #86): cornici a texture 9-slice, font dei titoli e del testo.
+func test_style_a_frames_and_fonts() -> void:
 	var theme := UiTheme.project_theme()
-	var window := theme.get_stylebox(&"panel", &"WindowPanel") as StyleBoxFlat
-	assert_object(window.border_color).is_equal(Color(0.78, 0.62, 0.36, 1))
-	assert_float(window.content_margin_left).is_equal(20.0)
+	for pair: Array in [[&"WindowPanel", &"panel", "ui_window"], [&"WindowPanelHighlight", &"panel", "ui_window_highlight"],
+			[&"TooltipPanel", &"panel", "ui_plate"], [&"HudPlate", &"panel", "ui_plate"], [&"ItemSlot", &"normal", "ui_slot_normal"],
+			[&"EmptySlot", &"normal", "ui_slot_empty"], [&"WeaponSlot", &"panel", "ui_slot_normal"], [&"AbilitySlot", &"panel", "ui_ability_slot"],
+			[&"Button", &"normal", "ui_button_normal"], [&"UpgradeCard", &"normal", "ui_card"], [&"AbilityCard", &"hover", "ui_card_hover"]]:
+		var box := theme.get_stylebox(pair[1], pair[0])
+		assert_bool(box is StyleBoxTexture).override_failure_message("%s/%s non e' una cornice" % [pair[0], pair[1]]).is_true()
+		assert_str((box as StyleBoxTexture).texture.resource_path).is_equal("res://assets/sprites/ui/%s.png" % pair[2])
+	assert_str(theme.default_font.resource_path).is_equal("res://assets/fonts/CormorantGaramond-SemiBold.ttf")
+	assert_str(theme.get_font(&"font", &"TitleLabel").resource_path).is_equal("res://assets/fonts/CinzelDecorative-Bold.ttf")
+	assert_str(String(theme.get_type_variation_base(&"TitleLabel"))).is_equal("Label")
+
+
+func test_bars_keep_their_colors() -> void:
+	var theme := UiTheme.project_theme()
 	assert_object((theme.get_stylebox(&"fill", &"HpBar") as StyleBoxFlat).bg_color).is_equal(Color(0.86, 0.2, 0.25, 1))
 	assert_object((theme.get_stylebox(&"fill", &"ManaBar") as StyleBoxFlat).bg_color).is_equal(Color(0.25, 0.75, 0.95, 1))
 	assert_object((theme.get_stylebox(&"fill", &"ExpBar") as StyleBoxFlat).bg_color).is_equal(Color(0.25, 0.55, 1, 1))
 	assert_object((theme.get_stylebox(&"fill", &"BossBar") as StyleBoxFlat).bg_color).is_equal(Color(0.62, 0.2, 0.85, 1))
 	for bar: StringName in [&"HpBar", &"ManaBar", &"ExpBar", &"EventBar", &"BossBar"]:
 		assert_str(String(theme.get_type_variation_base(bar))).is_equal("ProgressBar")
-		assert_bool(theme.has_stylebox(&"background", bar)).is_true()
+		assert_bool(theme.get_stylebox(&"background", bar) is StyleBoxTexture).is_true()
+
+
+## Ogni titolo delle finestre e degli annunci usa il font dei titoli.
+func test_titles_use_the_title_type() -> void:
+	for pair: Array in [["res://scenes/ui/HUD/HUD.tscn", "AnnounceTitle"], ["res://scenes/hub/LoadoutPanel/LoadoutPanel.tscn", "Title"],
+			["res://scenes/ui/LevelUpChoice/LevelUpChoice.tscn", "Title"], ["res://scenes/ui/PauseMenu/PauseMenu.tscn", "Title"]]:
+		var text := FileAccess.get_file_as_string(pair[0])
+		var start := text.find('[node name="%s" type="Label"' % pair[1])
+		assert_int(start).is_greater(-1)
+		assert_str(text.substr(start, 200)).contains('theme_type_variation = &"TitleLabel"')
 
 
 ## Rarita': copia tinta, lo stile del tema resta intatto (bianco) per tutti gli altri oggetti.
@@ -76,8 +98,8 @@ func test_item_tile_border_follows_rarity_without_touching_the_theme() -> void:
 	add_child(tile)
 	assert_str(String(tile.theme_type_variation)).is_equal("ItemSlot")
 	for state: StringName in [&"normal", &"hover", &"pressed"]:
-		assert_object((tile.get_theme_stylebox(state) as StyleBoxFlat).border_color).is_equal(ItemText.color(item))
-	assert_object((UiTheme.project_theme().get_stylebox(&"normal", &"ItemSlot") as StyleBoxFlat).border_color).is_equal(Color.WHITE)
+		assert_object((tile.get_theme_stylebox(state) as StyleBoxTexture).modulate_color).is_equal(ItemText.color(item))
+	assert_object((UiTheme.project_theme().get_stylebox(&"normal", &"ItemSlot") as StyleBoxTexture).modulate_color).is_equal(Color.WHITE)
 
 
 func test_tint_colors_flat_borders_and_texture_frames_on_a_copy() -> void:

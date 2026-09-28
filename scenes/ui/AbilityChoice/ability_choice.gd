@@ -62,6 +62,7 @@ func _fill(abilities: Array[WandAbility], on_pressed: Callable) -> void:
 		child.queue_free()
 	for ability in abilities:
 		var button := Button.new()
+		button.theme_type_variation = &"AbilityCard"
 		if _is_capped(ability):
 			button.text = "%s\n%s" % [tr("ABILITY_CHOICE_BAG_TITLE") % tr(ability.display_name), tr("ABILITY_CHOICE_BAG_DESC")]
 			button.icon = BAG_ICON

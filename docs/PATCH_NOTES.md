@@ -148,3 +148,8 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Novità
 - Nell'HUD, accanto alle abilità, ora vedi l'arma che hai equipaggiato, con il colore della sua rarità (passaci sopra col mouse per i dettagli). Senza arma compare la bacchetta base; se prendi un'arma dall'armadio degli Scheletri, lì vedi quella.
+
+## In lavorazione (16) — 28/09/2026
+
+### Novità
+- Nuova veste grafica di tutta l'interfaccia: cornici dorate in stile gotico per finestre, HUD, inventario, bottoni e scelte di level-up, nuovi caratteri per titoli e testi.

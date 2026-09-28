@@ -24,6 +24,7 @@ func present(options: Array[UpgradeData], rerolls_left: int) -> void:
 		child.queue_free()
 	for upgrade in options:
 		var button := Button.new()
+		button.theme_type_variation = &"UpgradeCard"
 		button.text = "%s\n%s" % [tr(upgrade.display_name), tr(upgrade.description)]
 		button.custom_minimum_size = BUTTON_SIZE
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

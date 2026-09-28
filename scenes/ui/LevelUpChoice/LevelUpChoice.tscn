@@ -27,6 +27,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="Center/VBox"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 text = "LEVELUP_TITLE"
 horizontal_alignment = 1

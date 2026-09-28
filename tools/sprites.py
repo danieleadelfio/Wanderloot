@@ -746,6 +746,99 @@ def build_equipment_slots():
 
 
 
+# --- UI "Reliquiario d'oro" (M13, #86, stile A scelto dai mockup) -------------------------------------
+# Cornici 9-slice per StyleBoxTexture del tema (data/ui/wanderloot_theme.tres). Eccezione alla regola del
+# 2x: StyleBoxTexture disegna gli angoli alla dimensione in pixel della texture (niente scala), quindi le
+# cornici sono a 1x della misura a schermo. Sorgenti in assets/art/ui/, PNG in assets/sprites/ui/.
+# Le cornici tintabili (slot degli oggetti) sono chiare e neutre: il colore della rarita' arriva da
+# StyleBoxTexture.modulate_color (UiTheme.tint).
+UI_GOLD = "#C99D55"
+UI_GOLD_DARK = "#3a2a14"
+UI_GEM = "#8e3fd0"
+UI_NEUTRAL = "#F2E8D5"
+UI_ART = os.path.join(ART, "ui")
+UI_OUT = os.path.join(OUT, "ui")
+
+
+def save_ui(name, svg_text, w, h):
+    os.makedirs(UI_ART, exist_ok=True)
+    os.makedirs(UI_OUT, exist_ok=True)
+    with open(os.path.join(UI_ART, name + ".svg"), "w", newline="\n") as f:
+        f.write(svg_text)
+    render(svg_text, w, h).save(os.path.join(UI_OUT, name + ".png"))
+
+
+def ui_svg(w, h, body, defs=""):
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d"><defs>%s</defs>%s</svg>' % (w, h, w, h, defs, body)
+
+
+def ui_filigree(x, y, sx, sy, gold=UI_GOLD, gem=UI_GEM):
+    """Angolo: voluta doppia + gemma a rombo. sx/sy = verso (+1/-1)."""
+    return ('<g transform="translate(%s,%s) scale(%s,%s)">' % (x, y, sx, sy)
+            + '<path d="M2 26 C2 10 10 2 26 2" fill="none" stroke="%s" stroke-width="2.4"/>' % gold
+            + '<path d="M7 26 C8 15 15 8 26 7" fill="none" stroke="%s" stroke-width="1" opacity="0.7"/>' % gold
+            + '<path d="M26 2 c4 0 6 3 4 6 c-2 3 -6 1 -5 -2" fill="none" stroke="%s" stroke-width="1.6"/>' % gold
+            + '<path d="M2 26 c0 4 3 6 6 4 c3 -2 1 -6 -2 -5" fill="none" stroke="%s" stroke-width="1.6"/>' % gold
+            + '<rect x="3" y="3" width="9" height="9" transform="rotate(45 7.5 7.5)" fill="%s" stroke="%s" stroke-width="1.4"/>' % (gem, gold)
+            + '</g>')
+
+
+def ui_frame(w, h, top="#241a33", bottom="#1b1426", rich=True, glow=False, gold=UI_GOLD, gem=UI_GEM):
+    """Finestra/pannello: fondo sfumato viola, doppio filo d'oro, volute agli angoli (rich)."""
+    defs = '<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (top, bottom)
+    body = ""
+    if glow:
+        body += '<rect x="1" y="1" width="%d" height="%d" rx="8" fill="none" stroke="%s" stroke-width="2" opacity="0.35"/>' % (w - 2, h - 2, gold)
+    body += ('<rect x="4" y="4" width="%d" height="%d" rx="6" fill="url(#bg)"/>' % (w - 8, h - 8)
+             + '<rect x="4" y="4" width="%d" height="%d" rx="6" fill="none" stroke="%s" stroke-width="5"/>' % (w - 8, h - 8, UI_GOLD_DARK)
+             + '<rect x="4" y="4" width="%d" height="%d" rx="6" fill="none" stroke="%s" stroke-width="2.2"/>' % (w - 8, h - 8, gold)
+             + '<rect x="10" y="10" width="%d" height="%d" rx="3" fill="none" stroke="%s" stroke-width="0.9" opacity="0.55"/>' % (w - 20, h - 20, gold))
+    if rich:
+        body += ui_filigree(2, 2, 1, 1, gold, gem) + ui_filigree(w - 2, 2, -1, 1, gold, gem)
+        body += ui_filigree(2, h - 2, 1, -1, gold, gem) + ui_filigree(w - 2, h - 2, -1, -1, gold, gem)
+    return ui_svg(w, h, body, defs)
+
+
+def ui_slot(s, color=UI_NEUTRAL, fill="#150f1f", inset=False, notch=True):
+    body = ('<rect x="3" y="3" width="%d" height="%d" rx="7" fill="%s" stroke="%s" stroke-width="5"/>' % (s - 6, s - 6, fill, "#1a1208")
+            + '<rect x="3" y="3" width="%d" height="%d" rx="7" fill="none" stroke="%s" stroke-width="2.4"/>' % (s - 6, s - 6, color)
+            + '<rect x="8" y="8" width="%d" height="%d" rx="4" fill="none" stroke="%s" stroke-width="0.8" opacity="0.45"/>' % (s - 16, s - 16, color))
+    if inset:
+        body += '<rect x="6" y="6" width="%d" height="4" rx="2" fill="#000" opacity="0.35"/>' % (s - 12)
+    if notch:
+        body += '<rect x="%s" y="0.5" width="6" height="6" transform="rotate(45 %s 3.5)" fill="%s"/>' % (s / 2 - 3, s / 2, color)
+    return ui_svg(s, s, body)
+
+
+def ui_button(fill_top, fill_bottom, border=UI_GOLD, w=64, h=40):
+    defs = '<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (fill_top, fill_bottom)
+    return ui_svg(w, h, '<rect x="1.5" y="1.5" width="%d" height="%d" rx="5" fill="url(#b)" stroke="%s" stroke-width="1.6"/>'
+                        '<rect x="4.5" y="4.5" width="%d" height="%d" rx="3" fill="none" stroke="%s" stroke-width="0.7" opacity="0.4"/>' % (w - 3, h - 3, border, w - 9, h - 9, border), defs)
+
+
+def ui_bar_frame(w=40, h=16):
+    r = h / 2 - 1
+    return ui_svg(w, h, '<rect x="1" y="1" width="%d" height="%d" rx="%s" fill="#0f0a16" stroke="%s" stroke-width="1.6"/>' % (w - 2, h - 2, r, UI_GOLD))
+
+
+def build_ui():
+    save_ui("ui_window", ui_frame(112, 112), 112, 112)
+    save_ui("ui_window_highlight", ui_frame(112, 112, top="#2b1f3d", glow=True, gem="#c48cff"), 112, 112)
+    save_ui("ui_plate", ui_frame(56, 56, rich=False), 56, 56)
+    save_ui("ui_card", ui_frame(80, 80), 80, 80)
+    save_ui("ui_card_hover", ui_frame(80, 80, top="#33244a", bottom="#221830", glow=True, gold="#E6BE72", gem="#c48cff"), 80, 80)
+    save_ui("ui_slot_normal", ui_slot(64), 64, 64)
+    save_ui("ui_slot_hover", ui_slot(64, fill="#261a36"), 64, 64)
+    save_ui("ui_slot_pressed", ui_slot(64, fill="#0e0a15", inset=True), 64, 64)
+    save_ui("ui_slot_empty", ui_slot(60, color="#6b5a45", fill="#120d1a", notch=False), 60, 60)
+    save_ui("ui_ability_slot", ui_slot(48, color=UI_GOLD, notch=False), 48, 48)
+    save_ui("ui_button_normal", ui_button("#2c1f3b", "#1f1529"), 64, 40)
+    save_ui("ui_button_hover", ui_button("#3d2b52", "#2a1d39", border="#E6BE72"), 64, 40)
+    save_ui("ui_button_pressed", ui_button("#5a3e1e", "#3a2610", border="#E6BE72"), 64, 40)
+    save_ui("ui_button_disabled", ui_button("#221c28", "#19141e", border="#5e5241"), 64, 40)
+    save_ui("ui_bar_frame", ui_bar_frame(), 40, 16)
+
+
 # --- Icona dell'eseguibile (M11.2): portale viola su fondo scuro --------------------------------------
 def app_icon_svg():
     cx, cy, ro, ri, base = 512, 470, 340, 232, 870
@@ -966,4 +1059,5 @@ if __name__ == "__main__":
     build_crypt_slimes()
     build_necromancer()
     build_pentagram_statue()
+    build_ui()
     print("sprites:", sorted(f for f in os.listdir(OUT) if f.endswith(".png")))

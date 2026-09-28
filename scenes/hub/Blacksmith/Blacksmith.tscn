@@ -14,6 +14,7 @@ ability_catalog = ExtResource("3")
 layout_mode = 2
 
 [node name="Title" type="Label" parent="VBox"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "BLACKSMITH_TITLE"

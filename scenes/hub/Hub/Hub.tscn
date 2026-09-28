@@ -524,6 +524,7 @@ shape = SubResource("spot_big")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="UI"]
+theme_type_variation = &"TitleLabel"
 offset_left = 24.0
 offset_top = 16.0
 offset_right = 600.0
@@ -672,6 +673,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="StashTitle" type="Label" parent="UI/InventoryWindow/Panel/VBox/Tabs/Inventario/StashPanel/VBox"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "STASH_TITLE"
@@ -792,6 +794,7 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="UI/CodexWindow/Panel/VBox"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
 theme_override_font_sizes/font_size = 26

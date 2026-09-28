@@ -52,6 +52,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Title" type="Label" parent="HBox/Stash"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "LOADOUT_TITLE"

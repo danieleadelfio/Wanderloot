@@ -74,6 +74,7 @@ layout_mode = 2
 theme_override_constants/separation = 28
 
 [node name="Title" type="Label" parent="Center/Panel"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
 theme_override_colors/font_outline_color = Color(0.1, 0.05, 0.15, 1)

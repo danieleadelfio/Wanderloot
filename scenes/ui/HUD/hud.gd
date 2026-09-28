@@ -103,7 +103,8 @@ func set_loot(total: int) -> void:
 ## quando superano l'equip da solo (StatSheet.run_rows); chiamata a inizio run e a ogni level-up.
 func set_stats(player: Player, equip_modifiers: Array[StatModifier]) -> void:
 	var rows := StatSheet.run_rows(player.base_stats(), player.base_weapon_data(), equip_modifiers, player.stats, player.weapon_data())
-	StatSheet.fill_with_equip(_stats_grid, rows, 11)
+	# 13 e non 11 (M13, #86): Cormorant Garamond (stile A) ha l'occhio piu' piccolo del font di default.
+	StatSheet.fill_with_equip(_stats_grid, rows, 13)
 
 
 ## Nascondi/mostra le statistiche (M13, #86): utile durante i combattimenti piu' fitti, quando il
@@ -167,12 +168,17 @@ func set_abilities(abilities: Array[WandAbility], levels: Dictionary = {}) -> vo
 			label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 			label.grow_vertical = Control.GROW_DIRECTION_BEGIN
 			icon.add_child(label)
-		_ability_bar.add_child(icon)
+		# Cornice "AbilitySlot" del tema (stile A, M13 #86): l'icona resta il primo figlio (set_ability_progress).
+		var slot := PanelContainer.new()
+		slot.theme_type_variation = &"AbilitySlot"
+		slot.mouse_filter = Control.MOUSE_FILTER_PASS
+		slot.add_child(icon)
+		_ability_bar.add_child(slot)
 
 
 func set_ability_progress(index: int, ratio: float) -> void:
 	if index < _ability_bar.get_child_count():
-		(_ability_bar.get_child(index) as TextureProgressBar).value = ratio
+		(_ability_bar.get_child(index).get_child(0) as TextureProgressBar).value = ratio
 
 
 ## Evento in corso (M10): titolo grande, obiettivo in poche parole, barra del tempo rimasto.
@@ -214,6 +220,8 @@ func set_buffs(buffs: Dictionary) -> void:
 	for name in buffs:
 		parts.append(tr("HUD_BUFF") % [tr(name), ceili(buffs[name])])
 	_buff_label.text = "  ".join(parts)
+	# Nascosta quando vuota: dentro la cornice dell'HUD lasciava una riga vuota (stile A, M13 #86).
+	_buff_label.visible = not parts.is_empty()
 
 
 func show_boss(boss_name: String, current: int, maximum: int) -> void:

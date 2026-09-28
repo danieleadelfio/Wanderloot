@@ -52,6 +52,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="LootTitle" type="Label" parent="Window/Panel/VBox/Tabs/Inventario/LootPanel/VBox"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "RUNINV_TITLE"

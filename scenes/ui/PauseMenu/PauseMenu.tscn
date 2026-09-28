@@ -40,6 +40,7 @@ layout_mode = 2
 theme_override_constants/separation = 14
 
 [node name="Title" type="Label" parent="Menu/Center/VBox"]
+theme_type_variation = &"TitleLabel"
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "PAUSE_TITLE"
@@ -105,6 +106,7 @@ layout_mode = 2
 show_language_hint = true
 
 [node name="PauseLabel" type="Label" parent="."]
+theme_type_variation = &"TitleLabel"
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.6)
 anchors_preset = 15

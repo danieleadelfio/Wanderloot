@@ -50,7 +50,7 @@ func test_slot_shows_icon_rarity_border_and_tooltip() -> void:
 	hud.set_weapon(wand)
 	var slot: PanelContainer = hud.get_node("%WeaponSlot")
 	assert_object((hud.get_node("%WeaponIcon") as TextureRect).texture).is_same(wand.base.icon)
-	assert_object((slot.get_theme_stylebox(&"panel") as StyleBoxFlat).border_color).is_equal(ItemText.color(wand))
+	assert_object((slot.get_theme_stylebox(&"panel") as StyleBoxTexture).modulate_color).is_equal(ItemText.color(wand))
 	assert_str(slot.tooltip_text).is_equal(ItemText.tooltip(wand))
 
 
@@ -67,5 +67,5 @@ func test_no_weapon_shows_the_basic_wand() -> void:
 	hud.set_weapon(null)
 	var slot: PanelContainer = hud.get_node("%WeaponSlot")
 	assert_object((hud.get_node("%WeaponIcon") as TextureRect).texture).is_same(Hud.BASE_WEAPON_ICON)
-	assert_object((slot.get_theme_stylebox(&"panel") as StyleBoxFlat).border_color).is_equal(Hud.BASE_WEAPON_BORDER)
+	assert_object((slot.get_theme_stylebox(&"panel") as StyleBoxTexture).modulate_color).is_equal(Hud.BASE_WEAPON_BORDER)
 	assert_str(slot.tooltip_text).is_equal(tr("HUD_WEAPON_BASE"))

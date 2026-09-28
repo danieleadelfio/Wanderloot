@@ -7,7 +7,8 @@ della UI o il suo tipo di tema. Decisioni prese (M13, #86):
   finali si ridisegnano in SVG (`assets/art/ui/`, generati da `tools/sprites.py` come il resto) ed esportati in
   PNG a 2x (`assets/sprites/ui/`). Resta valida la regola di BEST_PRACTICES §3.1.0 (sorgente SVG, niente mix
   raster/vettoriale).
-- **Direzione artistica: gotico cupo oro/viola**, evoluzione della palette attuale (Cripta/Ossario).
+- **Direzione artistica: gotico cupo oro/viola**, stile **A "Reliquiario d'oro"**: cornici d'oro brunito a doppio filo con volute e gemme viola agli angoli, fondo viola scuro sfumato. Font: **Cinzel Decorative Bold** per titoli, bottoni e schede (`TitleLabel`), **Cormorant Garamond SemiBold** per il testo (default del tema, 17 px; Bold per le carte). Entrambi SIL OFL, licenze in `assets/fonts/`.
+- **Risoluzione delle cornici: 1x** (eccezione alla regola del 2x): `StyleBoxTexture` disegna gli angoli alla loro dimensione in pixel, senza scala.
 - **Un solo punto di aggancio: il tema** `data/ui/wanderloot_theme.tres`. Ogni elemento ha un tipo di tema
   (colonna "Tipo" sotto); il reskin sostituisce gli `StyleBoxFlat` di quel tipo con `StyleBoxTexture`
   (9-slice), senza toccare scene o script. Guardia: `tests/ui/test_ui_theme.gd`.
@@ -126,6 +127,6 @@ genera 3-4 varianti e scegline una.
 | Fase | Stato |
 |---|---|
 | Stili centralizzati nel tema (tipi sopra, aspetto invariato) | ✅ M13 #86 |
-| Concept Higgsfield | da fare (Daniele) |
-| Ridisegno SVG + aggancio al tema | da fare dopo i concept |
+| Concept | ✅ sostituiti da 4 mockup vettoriali (A Reliquiario, B Cripta, C Grimorio, D Arcano) su screenshot reali: **scelto A** |
+| Stile A applicato (cornici SVG in `tools/sprites.py` → `build_ui()`, tema, font) | ✅ M13 #86 |
 | Slot arma in HUD (nuovo elemento) | ✅ M13 #86 (stile provvisorio, reskin con gli altri) |
