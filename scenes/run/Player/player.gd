@@ -4,6 +4,8 @@ extends CharacterBody2D
 
 signal shot_requested(origin: Vector2, direction: Vector2, data: WeaponData)
 signal died
+## Colpito da una Hitbox nemica (non dal veleno/lava che scorrono nel tempo): scossa dello schermo (M13, #86).
+signal hit_taken(amount: int)
 ## Scatto del Passo d'ombra (per il suono).
 signal dashed
 ## Barriera arcana esaurita (M12, #86): la composition root ci aggancia lo shockwave che respinge i nemici.
@@ -57,6 +59,7 @@ func _ready() -> void:
 	_weapon.fired.connect(shot_requested.emit)
 	health.died.connect(died.emit)
 	_hurtbox.knocked.connect(_knockback.apply)
+	_hurtbox.hurt.connect(hit_taken.emit)
 	_hurtbox.shield_broken.connect(set_shield.bind(false))
 	_hurtbox.shield_broken.connect(shield_broken.emit)
 	_hurtbox.poisoned.connect(poison.apply)

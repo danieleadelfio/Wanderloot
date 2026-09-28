@@ -87,6 +87,7 @@ var overtime := OvertimeState.new()
 @onready var _extraction_timer: Timer = %ExtractionTimer
 @onready var _run_end_screen: RunEndScreen = %RunEndScreen
 @onready var _hit_stop: HitStop = %HitStop
+@onready var _screen_shake: ScreenShake = %ScreenShake
 @onready var _sfx: SfxPlayer = %Sfx
 @onready var _extraction_indicator: ExtractionIndicator = %ExtractionIndicator
 @onready var _pause: PauseController = %PauseController
@@ -143,6 +144,7 @@ func _ready() -> void:
 	_player.health.changed.connect(_hud.set_hp)
 	_player.died.connect(_on_player_died)
 	_player.health.damaged.connect(_hit_stop.trigger)
+	_player.hit_taken.connect(_screen_shake.shake)
 	_player.health.damaged.connect(_sfx.play.bind(&"player_hurt").unbind(1))
 	_player.shot_requested.connect(_sfx.play.bind(&"shoot").unbind(3))
 	_player.shield_broken.connect(_on_shield_broken)
