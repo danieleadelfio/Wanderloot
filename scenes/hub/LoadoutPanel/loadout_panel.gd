@@ -130,7 +130,7 @@ func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = [])
 	for slot: int in SLOT_POSITIONS:
 		var overlaid: bool = overlay_by_slot.has(slot)
 		var item: ItemInstance = overlay_by_slot[slot] if overlaid else loadout.equipped_in(slot)
-		var button: Button = ItemTile.for_item(item) if item else _item_button(null, tr(SLOT_NAMES[slot]))
+		var button: Button = ItemTile.for_item(item) if item else _empty_slot_button(tr(SLOT_NAMES[slot]))
 		button.size = button.custom_minimum_size
 		button.position = SLOT_POSITIONS[slot]
 		if overlaid:
@@ -198,26 +198,13 @@ func _refresh_ability_levels(loadout: EquipmentLoadout) -> void:
 	_ability_levels.tooltip_text = _ability_levels.text
 
 
-func _item_button(item: ItemInstance, empty_label: String) -> Button:
+## Slot vuoto del manichino: stile "EmptySlot" del tema (M13, #86), nome dello slot come testo.
+func _empty_slot_button(label: String) -> Button:
 	var button := Button.new()
+	button.theme_type_variation = &"EmptySlot"
 	button.custom_minimum_size = SLOT_SIZE
 	button.size = SLOT_SIZE
 	button.focus_mode = Control.FOCUS_ALL
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.1, 0.09, 0.14, 0.92)
-	style.set_border_width_all(2)
-	style.border_color = ItemText.color(item) if item else Color(0.4, 0.38, 0.48)
-	style.set_corner_radius_all(6)
-	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
-		button.add_theme_stylebox_override(state, style)
-	if item:
-		button.icon = item.base.icon
-		button.expand_icon = true
-		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		button.tooltip_text = ItemText.tooltip(item)
-	else:
-		button.text = empty_label
-		button.add_theme_font_size_override("font_size", 10)
-		button.add_theme_color_override("font_disabled_color", Color(0.7, 0.7, 0.8, 0.6))
-		button.tooltip_text = empty_label
+	button.text = label
+	button.tooltip_text = label
 	return button

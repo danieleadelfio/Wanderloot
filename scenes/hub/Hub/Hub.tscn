@@ -75,22 +75,6 @@ radius = 110.0
 [sub_resource type="CircleShape2D" id="spot_small"]
 radius = 90.0
 
-[sub_resource type="StyleBoxFlat" id="window_style"]
-content_margin_left = 20.0
-content_margin_top = 18.0
-content_margin_right = 20.0
-content_margin_bottom = 14.0
-bg_color = Color(0.1, 0.09, 0.14, 0.97)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.78, 0.62, 0.36, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
 [sub_resource type="ShaderMaterial" id="tree_sway_mat"]
 shader = ExtResource("tree_sway_shader")
 
@@ -662,7 +646,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1080, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("window_style")
+theme_type_variation = &"WindowPanel"
 
 [node name="VBox" type="VBoxContainer" parent="UI/InventoryWindow/Panel"]
 layout_mode = 2
@@ -737,7 +721,7 @@ grow_vertical = 2
 [node name="Panel" type="PanelContainer" parent="UI/BlacksmithWindow"]
 custom_minimum_size = Vector2(760, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("window_style")
+theme_type_variation = &"WindowPanel"
 
 [node name="VBox" type="VBoxContainer" parent="UI/BlacksmithWindow/Panel"]
 layout_mode = 2
@@ -766,7 +750,7 @@ grow_vertical = 2
 [node name="Panel" type="PanelContainer" parent="UI/PortalWindow"]
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("window_style")
+theme_type_variation = &"WindowPanel"
 
 [node name="VBox" type="VBoxContainer" parent="UI/PortalWindow/Panel"]
 layout_mode = 2

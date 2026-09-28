@@ -20,6 +20,7 @@ docs/
   BEST_PRACTICES.md
   GUIDA_CONTENUTI.md             # procedure operative: nuovi nemici, arene, personaggi, equip, suoni
   EQUIP_INFO.md                   # statistiche/range/drop rate di ogni pezzo di equip, aggiornato a ogni nuovo pezzo
+  UI_ASSETS.md                    # elementi UI, tipi di tema, misure/9-slice degli asset, prompt dei concept
 ```
 
 Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa cartella della scena. Se sono condivisi da più scene, vanno in `scripts/`/`assets/` generici.
@@ -81,6 +82,8 @@ Regola: se una scena ha script/asset esclusivamente suoi, stanno nella stessa ca
 - Sorgente = SVG in `assets/art/`, generato da `tools/sprites.py` (o modificato in Inkscape); il PNG in `assets/sprites/` è un derivato, esportato a 2x della dimensione a schermo. In scena gli Sprite2D stanno a scala 0.5.
 - Filtro texture lineare (default di progetto). Non mischiare più pixel art e vettoriale nella stessa scena.
 - Stessa dimensione a schermo = stesso fattore: se un asset cambia dimensione si rigenera il PNG, non si cambia la scala del nodo.
+
+- **Stili UI solo nel tema (M13, #86)**: ogni stile di finestre, slot, barre e bottoni sta in `data/ui/wanderloot_theme.tres` come tipo (`theme_type_variation`, es. `WindowPanel`, `ItemSlot`, `HpBar`); scene e script non contengono `StyleBoxFlat`/`StyleBoxTexture` ne' `theme_override_styles` (lo verifica `tests/ui/test_ui_theme.gd`). Un colore che dipende dai dati (bordo della rarita') si applica a una copia dello stile del tema con `UiTheme.tint`, che funziona anche con le future cornici a texture (`modulate_color`: cornice disegnata chiara e neutra). Asset UI: concept esterni (Higgsfield) solo come riferimento, l'asset finale e' SVG come il resto (vedi `docs/UI_ASSETS.md`).
 
 - Luci (M7): solo poche `PointLight2D` (player, torce, candele); mai una luce per proiettile o per nemico. Ciò che deve restare leggibile al buio (proiettili, pickup, UI di gioco) usa un `CanvasItemMaterial` con `light_mode = unshaded`.
 

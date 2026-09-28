@@ -3,39 +3,6 @@
 [ext_resource type="Script" path="res://scenes/run/ClosetReward/closet_reward.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/hub/LoadoutPanel/LoadoutPanel.tscn" id="lp"]
 
-[sub_resource type="StyleBoxFlat" id="window_style"]
-content_margin_left = 24.0
-content_margin_top = 20.0
-content_margin_right = 24.0
-content_margin_bottom = 20.0
-bg_color = Color(0.1, 0.09, 0.14, 0.97)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.78, 0.62, 0.36, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="door_style"]
-bg_color = Color(0.24, 0.15, 0.09, 1)
-border_width_right = 6
-border_color = Color(0.12, 0.07, 0.04, 1)
-
-[sub_resource type="StyleBoxFlat" id="door_style_right"]
-bg_color = Color(0.24, 0.15, 0.09, 1)
-border_width_left = 6
-border_color = Color(0.12, 0.07, 0.04, 1)
-
-[sub_resource type="StyleBoxFlat" id="handle_style"]
-bg_color = Color(0.78, 0.62, 0.36, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
 [node name="ClosetReward" type="CanvasLayer"]
 process_mode = 3
 layer = 13
@@ -65,7 +32,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 160.0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("door_style")
+theme_type_variation = &"ClosetDoorLeft"
 
 [node name="LeftHandle" type="Panel" parent="Window/LeftDoor"]
 layout_mode = 0
@@ -80,7 +47,7 @@ offset_right = 110.0
 offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("handle_style")
+theme_type_variation = &"ClosetHandle"
 
 [node name="RightDoor" type="Panel" parent="Window"]
 layout_mode = 1
@@ -90,7 +57,7 @@ anchor_bottom = 1.0
 offset_left = -160.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("door_style_right")
+theme_type_variation = &"ClosetDoorRight"
 
 [node name="RightHandle" type="Panel" parent="Window/RightDoor"]
 layout_mode = 0
@@ -105,7 +72,7 @@ offset_right = -90.0
 offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("handle_style")
+theme_type_variation = &"ClosetHandle"
 
 [node name="Center" type="CenterContainer" parent="Window"]
 layout_mode = 1
@@ -118,7 +85,7 @@ grow_vertical = 2
 [node name="Panel" type="PanelContainer" parent="Window/Center"]
 custom_minimum_size = Vector2(760, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("window_style")
+theme_type_variation = &"WindowPanel"
 
 [node name="VBox" type="VBoxContainer" parent="Window/Center/Panel"]
 layout_mode = 2

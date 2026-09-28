@@ -17,22 +17,6 @@ fill = 1
 fill_from = Vector2(0.5, 0.45)
 fill_to = Vector2(1.1, 1.1)
 
-[sub_resource type="StyleBoxFlat" id="panel_style"]
-content_margin_left = 24.0
-content_margin_top = 20.0
-content_margin_right = 24.0
-content_margin_bottom = 20.0
-bg_color = Color(0.1, 0.09, 0.14, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.78, 0.62, 0.36, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15

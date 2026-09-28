@@ -61,11 +61,7 @@ func _add_trash_badge() -> void:
 		return
 	var panel := PanelContainer.new()
 	panel.name = "TrashBadge"
-	var bg := StyleBoxFlat.new()
-	bg.bg_color = Color(0, 0, 0, 0.55)
-	bg.set_corner_radius_all(4)
-	bg.set_content_margin_all(2)
-	panel.add_theme_stylebox_override("panel", bg)
+	panel.theme_type_variation = &"BadgePanel"
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -127,11 +123,7 @@ func _style(border: Color) -> void:
 	expand_icon = true
 	icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	focus_mode = Control.FOCUS_NONE
-	for state in ["normal", "hover", "pressed"]:
-		var box := StyleBoxFlat.new()
-		box.bg_color = Color(0.1, 0.09, 0.14, 0.95) if state == "normal" else Color(0.18, 0.16, 0.24, 0.95)
-		box.border_color = border
-		box.set_border_width_all(3)
-		box.set_corner_radius_all(6)
-		box.set_content_margin_all(6)
-		add_theme_stylebox_override(state, box)
+	# Stile "ItemSlot" del tema, bordo nel colore della rarita' (M13, #86: prima stili scritti qui).
+	theme_type_variation = &"ItemSlot"
+	for state: StringName in [&"normal", &"hover", &"pressed"]:
+		add_theme_stylebox_override(state, UiTheme.tinted(state, &"ItemSlot", border))
