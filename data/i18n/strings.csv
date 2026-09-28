@@ -22,7 +22,7 @@ SAVE_OK,Partita salvata,Game saved,Partie sauvegardée,Partida guardada
 SAVE_OK_RUN,Partita salvata (il loot della run resta a rischio),Game saved (run loot is still at risk),Partie sauvegardée (le butin de l'expédition reste en jeu),Partida guardada (el botín de la expedición sigue en riesgo)
 SAVE_FAIL,Salvataggio non riuscito,Save failed,Échec de la sauvegarde,Error al guardar
 RUNINV_TITLE,Raccolto in questa run,Collected this run,Récolté pendant l'expédition,Recogido en esta expedición
-RUNINV_HINT,Gioco in pausa · I o ESC per chiudere,Game paused · I or ESC to close,Jeu en pause · I ou Échap pour fermer,Juego en pausa · I o ESC para cerrar
+RUNINV_HINT,Gioco in pausa · Clic destro su un oggetto: segna come spazzatura · I o ESC per chiudere,Game paused · Right click an item: mark as trash · I or ESC to close,Jeu en pause · Clic droit sur un objet : marquer comme camelote · I ou Échap pour fermer,Juego en pausa · Clic derecho en un objeto: marcar como chatarra · I o ESC para cerrar
 RUNINV_EQUIPPED,Equipaggiato,Equipped,Équipé,Equipado
 RUNINV_NOTHING,"Niente, per ora.",Nothing yet.,Rien pour l'instant.,Nada por ahora.
 RUNINV_TOTAL,Totale a rischio: %d  ·  si perde tutto se muori,Total at risk: %d  ·  you lose it all if you die,Total en jeu : %d  ·  tout est perdu si vous mourez,Total en riesgo: %d  ·  lo pierdes todo si mueres
@@ -49,7 +49,7 @@ LEVELUP_REROLL,Reroll (una scelta in meno) · %d rimasti,Reroll (one fewer choic
 LEVELUP_PICK_LEVEL,Livello attuale: %d/%d,Current level: %d/%d,Niveau actuel : %d/%d,Nivel actual: %d/%d
 TAB_INVENTORY,Inventario,Inventory,Inventaire,Inventario
 TAB_STATS,Statistiche,Stats,Statistiques,Estadísticas
-INV_CLOSE_HINT,I inventario · C statistiche · ESC per chiudere,I inventory · C stats · ESC to close,I inventaire · C statistiques · Échap pour fermer,I inventario · C estadísticas · ESC para cerrar
+INV_CLOSE_HINT,Clic sinistro: indossa/togli · Clic destro: segna come spazzatura · I inventario · C statistiche · ESC per chiudere,Left click: wear/unwear · Right click: mark as trash · I inventory · C stats · ESC to close,Clic gauche : porter/enlever · Clic droit : marquer comme camelote · I inventaire · C statistiques · Échap pour fermer,Clic izquierdo: poner/quitar · Clic derecho: marcar como chatarra · I inventario · C estadísticas · ESC para cerrar
 BLACKSMITH_TITLE,Fabbro,Blacksmith,Forgeron,Herrero
 BLACKSMITH_RESOURCES,Risorse: %s,Resources: %s,Ressources : %s,Recursos: %s
 BLACKSMITH_RESOURCES_EMPTY,Nessuna risorsa,No resources,Aucune ressource,Sin recursos
@@ -60,8 +60,8 @@ LOADOUT_EQUIPPED,equipaggiato,equipped,équipé,equipado
 SLOT_WEAPON,Arma,Weapon,Arme,Arma
 SLOT_ACCESSORY,Amuleto,Amulet,Amulette,Amuleto
 SLOT_NONE,nessuno,none,aucun,ninguno
-STASH_TITLE,Baule,Chest,Coffre,Cofre
-STASH_EMPTY,Baule vuoto: estrai loot da una run.,Chest empty: extract loot from a run.,Coffre vide : extrayez du butin d'une expédition.,Cofre vacío: extrae botín de una expedición.
+STASH_TITLE,Risorse,Resources,Ressources,Recursos
+STASH_EMPTY,Nessuna risorsa: estraila da una run.,No resources: extract them from a run.,Aucune ressource : extrayez-en lors d'une expédition.,Sin recursos: extráelos de una expedición.
 PROMPT_PORTAL,E — Portale (scegli l'arena e parti),E — Portal (choose the arena and go),E — Portail (choisir l'arène et partir),E — Portal (elige la arena y parte)
 PROMPT_FORGE,E — Fabbro (crafting),E — Blacksmith (crafting),E — Forgeron (artisanat),E — Herrero (fabricación)
 PROMPT_CHEST,E — Baule (inventario),E — Chest (inventory),E — Coffre (inventaire),E — Cofre (inventario)
@@ -235,7 +235,7 @@ SORT_CATEGORY,Categoria,Category,Catégorie,Categoría
 TOOLTIP_EQUIPPED,Equipaggiato,Equipped,Équipé,Equipado
 ABILITY_LEVEL_UP,Lv%d → Lv%d,Lv%d → Lv%d,Nv%d → Nv%d,Nv%d → Nv%d
 ABILITY_CHOICE_BAG_TITLE,%s (già al massimo),%s (already maxed),%s (déjà au maximum),%s (ya al máximo)
-ABILITY_CHOICE_BAG_DESC,Bag of Resources: dà materiali invece di un livello.,Bag of Resources: gives materials instead of a level.,Sac de ressources : donne des matériaux au lieu d'un niveau.,Bolsa de recursos: da materiales en vez de un nivel.
+ABILITY_CHOICE_BAG_DESC,Bag of Resources: un sacchetto di materiali da aprire nella piazza (se estrai) invece di un livello.,Bag of Resources: a bag of materials to open in the plaza (if you extract) instead of a level.,Sac de ressources : un sac de matériaux à ouvrir sur la place (si vous vous extrayez) au lieu d'un niveau.,Bolsa de recursos: una bolsa de materiales para abrir en la plaza (si extraes) en vez de un nivel.
 BOSS_NECROMANCER,Negromante,Necromancer,Nécromancien,Nigromante
 BOSS_BONE_COLOSSUS,Colosso d'ossa,Bone Colossus,Colosse d'os,Coloso de huesos
 BOSS_GHOUL_QUEEN,Regina dei Ghoul,Ghoul Queen,Reine des goules,Reina de los necrófagos
@@ -324,3 +324,5 @@ EVENT_LAVA_SUBTITLE,Esci dai quadrati prima che diventino lava,Get off the squar
 EVENT_LAVA_END,La lava si raffredda,The lava cools down,La lave refroidit,La lava se enfría
 CODEX_EVENT_LAVA_TITLE,The Floor is Lava,The Floor is Lava,Le sol est de la lave,El suelo es lava
 CODEX_EVENT_LAVA_BODY,"Sul pavimento compaiono zone quadrate con un bordo arancione: dopo un breve avviso diventano lava per qualche secondo. Prima poche e grandi, poi sempre più piccole e numerose. Stando sulla lava bruci (danno a tempo come il veleno, player arancione con fiammelle). Nessuna ricompensa e non si può fallire: è come un evento atmosferico che ti costringe a muoverti.","Square zones with an orange border appear on the floor: after a short warning they turn to lava for a few seconds. First few and large, then smaller and more numerous. Standing on lava burns you (damage over time like poison, player turns orange with flames). No reward and it can't be failed: it's like weather that forces you to keep moving.","Des zones carrées au bord orange apparaissent au sol : après un court avertissement elles deviennent lave pendant quelques secondes. D'abord peu nombreuses et grandes, puis plus petites et nombreuses. Sur la lave vous brûlez (dégâts dans le temps comme le poison, personnage orange avec des flammèches). Aucune récompense et impossible d'échouer : c'est comme une météo qui vous force à bouger.","En el suelo aparecen zonas cuadradas con borde naranja: tras un breve aviso se vuelven lava durante unos segundos. Primero pocas y grandes, luego más pequeñas y numerosas. Sobre la lava te quemas (daño en el tiempo como el veneno, jugador naranja con llamitas). Sin recompensa y no se puede fallar: es como un evento climático que te obliga a moverte."
+BAG_NAME,Bag of Resources,Bag of Resources,Sac de ressources,Bolsa de recursos
+BAG_DESC,Clic per aprirlo: dà 10 di un materiale a caso.,Click to open it: gives 10 of a random material.,Cliquez pour l'ouvrir : donne 10 d'un matériau au hasard.,Haz clic para abrirla: da 10 de un material al azar.

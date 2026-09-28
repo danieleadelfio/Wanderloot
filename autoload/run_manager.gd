@@ -91,6 +91,13 @@ func add_loot(material: MaterialData, amount: int) -> void:
 	loot.add(material, amount)
 
 
+## Bag of Resources (M13, #86): sacchetti chiusi, a rischio come il resto del loot.
+func add_loot_bags(count: int) -> void:
+	if not is_running():
+		return
+	loot.add_bags(count)
+
+
 func add_loot_item(item: ItemInstance) -> void:
 	if not is_running():
 		return

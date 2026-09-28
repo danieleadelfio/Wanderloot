@@ -3,6 +3,11 @@ extends Node2D
 ## Il player cammina nella piazza; con E su un punto di interazione si apre la sua finestra (gioco in pausa), ESC o E la chiude.
 ## ESC senza finestre aperte apre il menu di pausa (Riprendi, Salva, Carica, Torna al menu).
 
+## Apertura del Bag of Resources (M13, #86): icone in volo, durata del volo, ritardo tra una e l'altra.
+const BAG_FLY_PIECES := 8
+const BAG_FLY_TIME := 0.55
+const BAG_FLY_STAGGER := 0.07
+
 ## Solo per mostrare i nomi nel baule; id sconosciuti vengono mostrati grezzi.
 @export var materials: Array[MaterialData] = []
 ## Frazione dello schermo entro cui la finestra Inventario deve stare (stesso fix di
@@ -12,6 +17,12 @@ extends Node2D
 
 var _material_names: Dictionary[StringName, String] = {}
 var _material_icons: Dictionary[StringName, Texture2D] = {}
+## Apertura di un Bag of Resources in corso (M13, #86): la lista Risorse mostra questi valori (che
+## salgono man mano che le icone arrivano) invece di quelli veri, gia' aggiornati da open_bag().
+var _stash_override: Dictionary[StringName, int] = {}
+var _bag_animating: bool = false
+var _stash_labels: Dictionary[StringName, Label] = {}
+var _stash_icons: Dictionary[StringName, TextureRect] = {}
 var _interactables: Array[Interactable] = []
 var _open_window: Control = null
 var _pause_open: bool = false
@@ -59,6 +70,7 @@ func _ready() -> void:
 	_loadout_panel.unequip_requested.connect(MetaProgression.unequip)
 	_loadout_panel.seen_requested.connect(MetaProgression.mark_seen)
 	_loadout_panel.trash_toggled.connect(MetaProgression.toggle_trash)
+	_loadout_panel.bag_open_requested.connect(_on_bag_open_requested)
 	_loadout_panel.equip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_loadout_panel.unequip_requested.connect(_sfx.play.bind(&"ui_select").unbind(1))
 	_arena_select.arena_selected.connect(_on_arena_selected)
@@ -293,9 +305,9 @@ func _fit_inventory_after_frame() -> void:
 
 
 func _refresh() -> void:
-	_refresh_stash(MetaProgression.inventory.to_dictionary())
+	_refresh_stash(_stash_override if _bag_animating else MetaProgression.inventory.to_dictionary())
 	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names, MetaProgression.ascension_caps)
-	_loadout_panel.refresh(MetaProgression.loadout)
+	_loadout_panel.refresh(MetaProgression.loadout, [], MetaProgression.bags)
 	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, _arena_level())
 	# Statistiche con l'equipaggiamento attuale: lo stesso calcolo di inizio run, sul player della piazza.
 	var equip_modifiers := MetaProgression.equipped_modifiers()
@@ -329,6 +341,8 @@ func _refresh_stash(amounts: Dictionary[StringName, int]) -> void:
 		_stash_list.remove_child(child)
 		child.queue_free()
 	_stash_label.visible = amounts.is_empty()
+	_stash_labels.clear()
+	_stash_icons.clear()
 	for id in amounts:
 		var row := HBoxContainer.new()
 		var icon := TextureRect.new()
@@ -342,6 +356,8 @@ func _refresh_stash(amounts: Dictionary[StringName, int]) -> void:
 		row.add_child(icon)
 		row.add_child(label)
 		_stash_list.add_child(row)
+		_stash_labels[id] = label
+		_stash_icons[id] = icon
 
 
 func _on_craft_requested(recipe: RecipeData) -> void:
@@ -390,3 +406,101 @@ func _on_start_pressed() -> void:
 	MetaProgression.set_hub_position(%Player.global_position)
 	get_tree().paused = false
 	get_tree().change_scene_to_file(SceneRoutes.ARENA)
+
+
+
+## Bag of Resources (M13, #86): il sacchetto si gonfia e si apre, le risorse volano verso la loro riga
+## nella lista Risorse e il contatore sale man mano che arrivano. Lo stato vero cambia subito
+## (MetaProgression.open_bag); l'animazione e' solo presentazione sopra una copia dei valori.
+
+func _on_bag_open_requested(from_global: Vector2) -> void:
+	if _bag_animating or MetaProgression.bags <= 0:
+		return
+	_bag_animating = true
+	_stash_override = MetaProgression.inventory.to_dictionary()
+	var content := MetaProgression.open_bag()
+	for id in content:
+		if not _stash_override.has(id):
+			_stash_override[id] = 0
+	_refresh()
+	_sfx.play(&"pickup_item")
+	await _play_bag_open(from_global)
+	# Aspetta il layout della lista (riga nuova) prima di leggere dove stanno le icone.
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	var arrivals: Array[Signal] = []
+	for id in content:
+		arrivals.append(_fly_resources(from_global, id, content[id]))
+	for arrival in arrivals:
+		await arrival
+	if not is_inside_tree():
+		return
+	_stash_override.clear()
+	_bag_animating = false
+	_refresh()
+
+
+## Sacchetto che si gonfia, oscilla e sparisce sul punto del clic (nodo top_level: fuori dal layout).
+func _play_bag_open(at: Vector2) -> Signal:
+	var bag := _fly_node(MetaProgression.resource_bag.icon, at, 56.0)
+	var tween := bag.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(bag, "scale", Vector2(1.35, 1.35), 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(bag, "rotation", 0.25, 0.06)
+	tween.tween_property(bag, "rotation", -0.25, 0.08)
+	tween.tween_property(bag, "rotation", 0.0, 0.06)
+	tween.parallel().tween_property(bag, "scale", Vector2(1.6, 1.6), 0.14)
+	tween.parallel().tween_property(bag, "modulate:a", 0.0, 0.14)
+	tween.tween_callback(bag.queue_free)
+	return tween.finished
+
+
+## Icone della risorsa che volano dal sacchetto alla sua riga; ogni arrivo aggiunge la sua parte al
+## contatore mostrato. Ritorna il segnale di fine dell'ultima.
+func _fly_resources(from_global: Vector2, id: StringName, amount: int) -> Signal:
+	var icon_node: TextureRect = _stash_icons.get(id)
+	var target := icon_node.get_global_rect().get_center() if icon_node else from_global
+	var pieces := mini(BAG_FLY_PIECES, maxi(amount, 1))
+	var last: Tween
+	for i in pieces:
+		var share := floori(float(amount) / pieces) + (1 if i < amount % pieces else 0)
+		var piece := _fly_node(_material_icons.get(id), from_global, 28.0)
+		var mid := from_global.lerp(target, 0.5) + Vector2(randf_range(-60.0, 60.0), randf_range(-90.0, -30.0))
+		var tween := piece.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tween.tween_interval(i * BAG_FLY_STAGGER)
+		tween.tween_method(func(t: float) -> void:
+			var a := from_global.lerp(mid, t)
+			var b := mid.lerp(target, t)
+			piece.global_position = a.lerp(b, t) - piece.size * 0.5, 0.0, 1.0, BAG_FLY_TIME).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		tween.tween_callback(_on_resource_arrived.bind(id, share))
+		tween.tween_callback(piece.queue_free)
+		last = tween
+	return last.finished
+
+
+func _on_resource_arrived(id: StringName, share: int) -> void:
+	_stash_override[id] = _stash_override.get(id, 0) + share
+	var label: Label = _stash_labels.get(id)
+	if label == null:
+		return
+	label.text = "%s × %d" % [_material_names.get(id, String(id)), _stash_override[id]]
+	label.pivot_offset = label.size * 0.5
+	var pulse := label.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	pulse.tween_property(label, "scale", Vector2(1.15, 1.15), 0.05)
+	pulse.tween_property(label, "scale", Vector2.ONE, 0.1)
+	_sfx.play(&"pickup_item")
+
+
+func _fly_node(texture: Texture2D, center: Vector2, side: float) -> TextureRect:
+	var node := TextureRect.new()
+	node.texture = texture
+	node.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	node.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	node.top_level = true
+	node.size = Vector2.ONE * side
+	node.pivot_offset = node.size * 0.5
+	node.z_index = 10
+	_inventory_window.add_child(node)
+	node.global_position = center - node.size * 0.5
+	return node

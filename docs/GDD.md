@@ -65,6 +65,8 @@ Il catalogo completo (abilità di Magicraft riadattate e originali) è in `docs/
 
 **Scelta al cap (M12, #86, #20)**: se un'abilità offerta è già al cap sbloccato, la carta mostra un **Bag of Resources** (icona sacco, niente Lv→Lv) invece della carta normale — sceglierla dà materiali, non un livello (comportamento già presente in `WandAbilities`, ora visibile anche nella scelta).
 
+**Bag of Resources come oggetto (M13, #86)**: non dà più i materiali subito. Ogni livello oltre il cap diventa un **sacchetto chiuso** (`ResourceBagData`, `data/items/resource_bag.tres`) nel loot di run, **a rischio** come il resto (si perde se muori, visibile nell'inventario di run). Con l'estrazione passa all'**inventario della piazza** (`MetaProgression.bags`, salvataggio v6): non è equipaggiamento, compare come prima casella della griglia dell'equipaggiamento con la quantità. **Clic** = si apre: il sacchetto si gonfia e sparisce, **10 di un materiale a caso** (tirato all'apertura) volano verso la loro riga nella lista **Risorse** a sinistra (prima si chiamava "Baule") e il contatore sale man mano che arrivano (`Hub._on_bag_open_requested`, solo presentazione: lo stato cambia subito con `MetaProgression.open_bag`).
+
 #### 3.3.1 Ascensione (meta, M12, #86, #16)
 
 Scheda **Ascensione** nel fabbro (quarta scheda, insieme a Crafting/Fusione/Smontaggio): per ogni abilità del catalogo mostra il **cap sbloccato** attuale (default Lv1) e il costo per alzarlo di 1, fino al tetto assoluto Lv8. Costo in materiali esistenti, crescente col livello target (`Ascension.cost_for()`, logica pura, 7 gradini Lv2→Lv8). Il cap sbloccato è per-abilità e persiste nel salvataggio (`MetaProgression.ascension_caps`); letto a inizio run per impostare `WandAbilities.caps`.

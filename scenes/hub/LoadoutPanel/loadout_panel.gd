@@ -10,6 +10,9 @@ signal unequip_requested(slot: int)
 signal seen_requested(uid: int)
 ## Tasto destro su un'icona del baule: segna/dissegna come spazzatura (M12, #86).
 signal trash_toggled(uid: int)
+## Clic sul Bag of Resources (M13, #86): centro del tile in coordinate globali, da cui parte
+## l'animazione di apertura (la gestisce la piazza).
+signal bag_open_requested(from_global: Vector2)
 
 const SLOT_SIZE := Vector2(60, 60)
 ## Posizione di ogni slot sul manichino (area 360x440).
@@ -57,6 +60,9 @@ static var filter_key: String = "all"
 var _filter_keys: Array[String] = []
 
 var _loadout: EquipmentLoadout
+var _bags: int = 0
+## Dati del sacchetto (icona, nome); se null i sacchetti non si mostrano.
+@export var resource_bag: ResourceBagData = preload("res://data/items/resource_bag.tres")
 
 @onready var _figure: Control = %Figure
 @onready var _slots: Control = %Slots
@@ -113,8 +119,11 @@ func _on_sort_pressed(mode: StashSort.Mode) -> void:
 ## dell'armadio scelto in run, a rischio finche' non si estrae con successo, mai scritto nel vero
 ## EquipmentLoadout ne' nell'uid dell'ItemInstance). Primo slot libero tra quelli del suo tipo,
 ## altrimenti sostituisce visivamente il primo (sola presentazione, sempre read_only in pratica).
-func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = []) -> void:
+## bags: Bag of Resources chiusi da mostrare in testa al baule (M13, #86; 0 = nessuno).
+func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = [], bags: int = -1) -> void:
 	_loadout = loadout
+	if bags >= 0:
+		_bags = bags
 	_refresh_ability_levels(loadout)
 	# Bug (M12, #86): queue_free() SENZA prima staccare il nodo lascia il tile nell'albero fino a fine
 	# frame - se refresh() viene richiamato nello stesso frame (equip/unequip -> segnale -> refresh) i
@@ -150,7 +159,12 @@ func refresh(loadout: EquipmentLoadout, overlay_items: Array[ItemInstance] = [])
 	var stash := StashSort.sorted(StashSort.filtered(loadout.stash_items(), filter_key), sort_mode)
 	# Sempre nel layout, solo trasparente (M13, #86): visible cambiava l'altezza del baule e con lei la
 	# dimensione della finestra (baule che si svuota/riempie equipaggiando).
-	_empty_hint.modulate.a = 1.0 if stash.is_empty() else 0.0
+	_empty_hint.modulate.a = 1.0 if stash.is_empty() and _bags <= 0 else 0.0
+	if _bags > 0 and resource_bag and not read_only:
+		var bag_tile := ItemTile.for_bag(resource_bag, _bags)
+		bag_tile.focus_mode = Control.FOCUS_ALL
+		bag_tile.pressed.connect(func() -> void: bag_open_requested.emit(bag_tile.get_global_rect().get_center()))
+		_grid.add_child(bag_tile)
 	for item in stash:
 		var tile := ItemTile.for_item(item)
 		tile.focus_mode = Control.FOCUS_ALL

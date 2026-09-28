@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ResourceBagData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resource_bag_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_bag.png" id="2"]
+[ext_resource type="Resource" path="res://data/materials/slime_gel.tres" id="m_gel"]
+[ext_resource type="Resource" path="res://data/materials/slime_core.tres" id="m_core"]
+[ext_resource type="Resource" path="res://data/materials/bone_shard.tres" id="m_bone"]
+[ext_resource type="Resource" path="res://data/materials/shadow_essence.tres" id="m_ess"]
+
+[resource]
+script = ExtResource("1")
+id = &"resource_bag"
+display_name = "BAG_NAME"
+description = "BAG_DESC"
+icon = ExtResource("2")
+materials = Array[Resource]([ExtResource("m_gel"), ExtResource("m_core"), ExtResource("m_bone"), ExtResource("m_ess")])
+amount_per_bag = 10

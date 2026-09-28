@@ -10,6 +10,7 @@ extends CanvasLayer
 
 ## Per nomi e icone del loot; id sconosciuti non mostrati.
 @export var materials: Array[MaterialData] = []
+@export var resource_bag: ResourceBagData = preload("res://data/items/resource_bag.tres")
 ## Frazione dello schermo entro cui il pannello deve stare (M13, #86: prima aveva larghezza fissa
 ## 1080px e poteva eccedere lo schermo su risoluzioni piu' piccole).
 @export_range(0.5, 1.0, 0.01) var max_viewport_fraction: float = 0.92
@@ -36,7 +37,7 @@ func close() -> void:
 	_window.hide()
 
 
-func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items: Array[ItemInstance] = [], player: Player = null, equip_modifiers: Array[StatModifier] = [], run_equipped: Array[ItemInstance] = []) -> void:
+func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items: Array[ItemInstance] = [], player: Player = null, equip_modifiers: Array[StatModifier] = [], run_equipped: Array[ItemInstance] = [], bags: int = 0) -> void:
 	_tabs.current_tab = 0
 	_mannequin.refresh(loadout, run_equipped)
 	if player:
@@ -59,6 +60,10 @@ func present(loadout: EquipmentLoadout, loot: Dictionary[StringName, int], items
 				tile.compare.append(worn)
 		_loot_grid.add_child(tile)
 		total += 1
+	# Bag of Resources chiusi (M13, #86): a rischio come il resto, si aprono nella piazza.
+	if bags > 0 and resource_bag:
+		_loot_grid.add_child(ItemTile.for_bag(resource_bag, bags))
+		total += bags
 	for material in materials:
 		var amount: int = loot.get(material.id, 0)
 		if amount > 0:

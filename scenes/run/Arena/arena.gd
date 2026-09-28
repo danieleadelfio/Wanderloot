@@ -47,10 +47,6 @@ var _run_equipped_items: Array[ItemInstance] = []
 var _bosses_spawned: bool = false
 ## Abilita' che gli eventi possono offrire (M10).
 @export var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_catalog.tres")
-## Materiali del Bag of Resources (#20): livelli oltre il cap sbloccato di un'abilita' diventano
-## una quantita' fissa di un materiale a caso, invece di andare persi o superare il cap.
-@export var over_cap_materials: Array[MaterialData] = []
-const OVER_CAP_MATERIAL_AMOUNT: int = 10
 ## Onda d'urto alla rottura della Barriera arcana (M12, #86): raggio ed entita' della spinta.
 const SHIELD_BREAK_RADIUS: float = 100.0
 const SHIELD_BREAK_KNOCKBACK: float = 260.0
@@ -547,10 +543,9 @@ func _on_material_collected(material: MaterialData, amount: int) -> void:
 ## Livelli oltre il cap sbloccato dell'abilita' (#20, Ascensione #16): Bag of Resources invece del
 ## livello, cosi' non si perde ne' si aggira il cap. Quantita' fissa per livello in eccesso.
 func _on_ability_over_cap(_ability: WandAbility, overflow: int) -> void:
-	if over_cap_materials.is_empty():
-		return
-	var material: MaterialData = over_cap_materials[_rng.randi_range(0, over_cap_materials.size() - 1)]
-	RunManager.add_loot(material, overflow * OVER_CAP_MATERIAL_AMOUNT)
+	# M13, #86: un Bag of Resources chiuso per livello in eccesso, nel loot di run (a rischio);
+	# si apre nella piazza (MetaProgression.open_bag), il contenuto si tira all'apertura.
+	RunManager.add_loot_bags(overflow)
 
 
 func _open_extraction() -> void:
@@ -806,7 +801,7 @@ func _on_pause_mode_changed(mode: PauseState.Mode) -> void:
 	_pause_menu.set_unsaved_changes(MetaProgression.has_unsaved_changes)
 	_pause_menu.show_mode(mode)
 	if mode == PauseState.Mode.INVENTORY:
-		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items(), _player, _equip_modifiers, _run_equipped_items)
+		_run_inventory.present(MetaProgression.loadout, RunManager.loot.to_dictionary(), RunManager.loot.items(), _player, _equip_modifiers, _run_equipped_items, RunManager.loot.bags())
 	else:
 		_run_inventory.close()
 	if mode == PauseState.Mode.MAP:
@@ -880,7 +875,7 @@ func _on_run_ended(result: RunManager.Result) -> void:
 	# Unico punto in cui il loot di run raggiunge MetaProgression (GDD §4).
 	var items := RunManager.loot.items()
 	var amounts: Dictionary = RunManager.loot.to_dictionary()
-	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot, MetaProgression.deposit_run_items)
+	var loot_amount := LootTransfer.resolve(extracted, RunManager.loot, MetaProgression.deposit_run_loot, MetaProgression.deposit_run_items, MetaProgression.deposit_run_bags)
 	_run_end_screen.present(
 		extracted, RunManager.level, RunManager.elapsed, RunManager.kills,
 		loot_amount, MetaProgression.inventory.total(), items, amounts

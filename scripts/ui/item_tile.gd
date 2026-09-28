@@ -13,6 +13,8 @@ const TRASH_ICON: Texture2D = preload("res://assets/sprites/icon_trash.png")
 
 var item: ItemInstance
 var item_material: MaterialData
+## Bag of Resources (M13, #86): tile del sacchetto, `amount` = quanti chiusi.
+var bag: ResourceBagData
 var amount: int = 0
 ## Oggetti equipaggiati nello stesso slot, mostrati accanto nel tooltip (M11.3, #70).
 var compare: Array[ItemInstance] = []
@@ -93,12 +95,29 @@ func _on_gui_input(event: InputEvent) -> void:
 
 
 static func for_material(value: MaterialData, count: int) -> ItemTile:
-	var tile := ItemTile.new()
+	var tile := ItemTile.for_material_like(value.icon, count, "%s × %d" % [TranslationServer.translate(value.display_name), count])
 	tile.item_material = value
+	return tile
+
+
+## Bag of Resources chiusi (M13, #86): icona del sacchetto con quantita', bordo dorato.
+static func for_bag(value: ResourceBagData, count: int) -> ItemTile:
+	var tile := ItemTile.for_material_like(value.icon, count, "%s × %d\n%s" % [TranslationServer.translate(value.display_name), count, TranslationServer.translate(value.description)])
+	tile.bag = value
+	return tile
+
+
+static func for_material_like(texture: Texture2D, count: int, tooltip: String) -> ItemTile:
+	var tile := ItemTile.new()
 	tile.amount = count
-	tile.icon = value.icon
-	tile.tooltip_text = "%s × %d" % [TranslationServer.translate(value.display_name), count]
+	tile.icon = texture
+	tile.tooltip_text = tooltip
 	tile._style(Color(1, 0.8, 0.35))
+	tile._add_amount_label(count)
+	return tile
+
+
+func _add_amount_label(count: int) -> void:
 	var label := Label.new()
 	label.text = "×%d" % count
 	label.add_theme_font_size_override("font_size", 14)
@@ -108,8 +127,7 @@ static func for_material(value: MaterialData, count: int) -> ItemTile:
 	label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	label.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tile.add_child(label)
-	return tile
+	add_child(label)
 
 
 func _make_custom_tooltip(_for_text: String) -> Object:

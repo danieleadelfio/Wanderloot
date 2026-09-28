@@ -13,8 +13,9 @@ const LEGACY_SAVE_PATH: String = "user://meta_progression.cfg"
 ## v1 (M2): solo materiali. v2 (M3): + equipaggiamento. v3 (M7): + estrazioni per arena e arena scelta.
 ## v4 (M9): + posizione del player nella piazza (solo se si e' salvato dall'hub).
 ## v5 (M11): oggetti come istanze (sezione items, uid -> dizionario) e slot indossati per uid.
+## v6 (M13, #86): + Bag of Resources chiusi (sezione bags, chiave count).
 ## Ogni versione carica le precedenti (sezioni mancanti = valori iniziali).
-const SAVE_VERSION: int = 5
+const SAVE_VERSION: int = 6
 const SECTION_META: String = "meta"
 const SECTION_MATERIALS: String = "materials"
 const SECTION_EQUIPMENT: String = "equipment"
@@ -25,6 +26,7 @@ const SECTION_ITEMS: String = "items"
 const SECTION_ASCENSION: String = "ascension"
 const SECTION_DISCOVERED: String = "discovered"
 const SECTION_TUTORIALS: String = "tutorials"
+const SECTION_BAGS: String = "bags"
 
 var inventory: MetaInventory = MetaInventory.new()
 var loadout: EquipmentLoadout = EquipmentLoadout.new()
@@ -37,6 +39,7 @@ var ability_catalog: AbilityCatalog = preload("res://data/abilities/ability_cata
 var rarity_table: RarityTable = preload("res://data/equipment/rarity_table.tres")
 var affix_table: AffixTable = preload("res://data/equipment/affix_table.tres")
 var recipe_book: RecipeBook = preload("res://data/recipes/recipe_book.tres")
+var resource_bag: ResourceBagData = preload("res://data/items/resource_bag.tres")
 var _rng := RandomNumberGenerator.new()
 ## Estrazioni riuscite per id di arena.
 var extractions: Dictionary[StringName, int] = {}
@@ -63,6 +66,8 @@ var discovered_equipment: Dictionary[StringName, bool] = {}
 ## Tutorial gia' visti (M12, #86), per chiave: "hub_intro" (tour della piazza), "first_run" (obiettivo
 ## della run), "first_event" (evento), "first_overtime" (overtime). Mostrato finche' non e' qui.
 var tutorials_seen: Dictionary[StringName, bool] = {}
+## Bag of Resources chiusi nell'inventario della piazza (M13, #86). Si aprono con open_bag().
+var bags: int = 0
 
 
 func _ready() -> void:
@@ -83,6 +88,7 @@ func new_game() -> void:
 	ascension_caps.clear()
 	discovered_equipment.clear()
 	tutorials_seen.clear()
+	bags = 0
 	has_unsaved_changes = false
 	_has_hub_position = false
 	_has_pending_hub_position = false
@@ -152,6 +158,27 @@ func deposit_run_loot(loot: Dictionary[StringName, int]) -> void:
 	inventory.deposit(loot)
 	_mark_changed()
 
+
+
+## Bag of Resources portati a casa con un'estrazione riuscita (M13, #86).
+func deposit_run_bags(count: int) -> void:
+	if count <= 0:
+		return
+	bags += count
+	_mark_changed()
+
+
+## Apre un Bag of Resources (M13, #86): il contenuto si tira ora e va nelle risorse. Ritorna il
+## contenuto (vuoto se non ci sono sacchetti).
+func open_bag() -> Dictionary[StringName, int]:
+	var content: Dictionary[StringName, int] = {}
+	if bags <= 0:
+		return content
+	content = resource_bag.roll(_rng)
+	bags -= 1
+	inventory.deposit(content)
+	_mark_changed()
+	return content
 
 
 ## Oggetti trovati in run, dopo un'estrazione riuscita: entrano nel baule con un uid nuovo.
@@ -366,6 +393,8 @@ func save_to_disk() -> Error:
 		config.set_value(SECTION_DISCOVERED, String(equip_id), true)
 	for tutorial_key in tutorials_seen:
 		config.set_value(SECTION_TUTORIALS, String(tutorial_key), true)
+	if bags > 0:
+		config.set_value(SECTION_BAGS, "count", bags)
 	if _has_hub_position:
 		config.set_value(SECTION_HUB, "player_position", _hub_position)
 	var error := config.save(save_path)
@@ -386,7 +415,9 @@ func load_from_disk() -> Error:
 	ascension_caps.clear()
 	discovered_equipment.clear()
 	tutorials_seen.clear()
+	bags = 0
 	if error == OK:
+		bags = maxi(int(config.get_value(SECTION_BAGS, "count", 0)), 0)
 		if config.has_section(SECTION_EXTRACTIONS):
 			for key in config.get_section_keys(SECTION_EXTRACTIONS):
 				extractions[StringName(key)] = int(config.get_value(SECTION_EXTRACTIONS, key, 0))
