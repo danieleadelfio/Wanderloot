@@ -45,6 +45,10 @@ static func progress(elapsed: float, duration: float) -> float:
 
 
 func start(center: Vector2, area_radius: float, duration: float, damage: int = 0, knockback: float = 0.0, direction: Vector2 = Vector2.ZERO, segment_length: float = 0.0) -> void:
+	# Bug (M13, #86): riavviato durante il proprio impulso di danno, il telegraph si spostava sul nuovo
+	# centro con la Hitbox ancora attiva (e _pulse_left azzerato: attiva per tutto il nuovo preavviso),
+	# colpendo subito chi stava nel nuovo cerchio. Un cerchio appena avviato e' sempre innocuo.
+	_set_hitbox(false)
 	global_position = center
 	radius = area_radius
 	_shape.radius = area_radius

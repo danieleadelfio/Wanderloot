@@ -45,6 +45,10 @@ var _repeat_index: int = 0
 var _chain_left: int = 0
 var _leap_from: Vector2 = Vector2.ZERO
 var _leap_to: Vector2 = Vector2.ZERO
+## Cerchio del balzo in corso (M13, #86): nei balzi a catena si alterna tra _impact e un telegraph
+## extra, cosi' l'impulso del balzo appena atterrato finisce sul suo cerchio invece di essere
+## spostato (ancora attivo) sul cerchio successivo, centrato sul player.
+var _leap_telegraph: Telegraph
 var _charge_direction: Vector2 = Vector2.ZERO
 var _charge_left: float = 0.0
 var _extra: Array[Telegraph] = []
@@ -164,6 +168,7 @@ func start_attack(attack: BossAttack) -> void:
 			# Il bersaglio e' fissato ora: il player ha telegraph_time + leap_time per uscire dal cerchio.
 			_chain_left = maxi(_attack.repeats, 1) - 1
 			_leap_to = aim
+			_leap_telegraph = _impact
 			_impact.start(_leap_to, _attack.radius, _attack.telegraph_time + _attack.leap_time, _attack.damage, _attack.knockback)
 		BossAttack.Kind.STOMP:
 			_impact.start(global_position, _attack.radius, _attack.telegraph_time, _attack.damage, _attack.knockback)
@@ -251,7 +256,10 @@ func _land() -> void:
 		state = State.WINDUP
 		_timer = _attack.repeat_interval
 		_leap_to = target.global_position
-		_impact.start(_leap_to, _attack.radius, _attack.repeat_interval + _attack.leap_time, _attack.damage, _attack.knockback)
+		var next: Telegraph = _extra[0] if _leap_telegraph == _impact and not _extra.is_empty() else _impact
+		next.color = _impact.color
+		next.start(_leap_to, _attack.radius, _attack.repeat_interval + _attack.leap_time, _attack.damage, _attack.knockback)
+		_leap_telegraph = next
 		return
 	_recover()
 

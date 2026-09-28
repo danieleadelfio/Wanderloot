@@ -71,3 +71,61 @@ func test_chain_leap_repeats_before_recovering() -> void:
 	_boss._execute()
 	_boss._land()
 	assert_int(_boss.state).is_equal(Boss.State.RECOVER)
+
+
+func _chain_leap() -> BossAttack:
+	var leap := BossAttack.new()
+	leap.kind = BossAttack.Kind.LEAP_SLAM
+	leap.repeats = 3
+	leap.radius = 100.0
+	leap.damage = 200
+	leap.telegraph_time = 0.8
+	leap.leap_time = 0.35
+	leap.repeat_interval = 0.55
+	return leap
+
+
+## Bug (M13, #86, video Regina dei Ghoul): all'atterraggio di un balzo a catena il cerchio successivo
+## (centrato sul player) riusava lo stesso telegraph mentre stava infliggendo l'impulso di danno:
+## colpiva subito il player anche fuori dal cerchio in cui il boss era atterrato.
+func test_chain_leap_next_circle_is_harmless_and_landing_pulse_stays_on_the_old_circle() -> void:
+	_boss.start_attack(_chain_leap())
+	var first: Telegraph = _boss._impact
+	first._process(1.2)  # fine del preavviso: impulso di danno sul primo cerchio
+	assert_bool(first._hitbox.active).is_true()
+	_boss._execute()
+	_target.global_position = Vector2(700, 0)  # il player e' scappato dal cerchio
+	_boss._land()
+	# L'impulso resta sul cerchio d'atterraggio, non segue il player.
+	assert_vector(first.global_position).is_equal(Vector2(300, 0))
+	assert_bool(first._hitbox.active).is_true()
+	# Il nuovo cerchio sul player e' un altro telegraph e nasce innocuo.
+	var next: Telegraph = _boss._leap_telegraph
+	assert_object(next).is_not_same(first)
+	assert_vector(next.global_position).is_equal(Vector2(700, 0))
+	assert_bool(next.is_running()).is_true()
+	assert_bool(next._hitbox.active).is_false()
+
+
+## Ogni balzo della catena alterna i due telegraph, anche al terzo.
+func test_chain_leap_alternates_telegraphs() -> void:
+	_boss.start_attack(_chain_leap())
+	var seen: Array[Telegraph] = [_boss._leap_telegraph]
+	for i in 2:
+		_boss._execute()
+		_boss._land()
+		seen.append(_boss._leap_telegraph)
+	assert_object(seen[0]).is_not_same(seen[1])
+	assert_object(seen[1]).is_not_same(seen[2])
+	assert_object(seen[0]).is_same(seen[2])
+
+
+## Qualunque telegraph riavviato (anche fuori dai balzi, es. pestone) non tiene la Hitbox accesa.
+func test_restarted_telegraph_never_keeps_a_live_hitbox() -> void:
+	var telegraph: Telegraph = auto_free(load("res://scenes/run/Telegraph/Telegraph.tscn").instantiate())
+	add_child(telegraph)
+	telegraph.start(Vector2.ZERO, 80.0, 0.1, 100)
+	telegraph._process(0.2)
+	assert_bool(telegraph._hitbox.active).is_true()
+	telegraph.start(Vector2(500, 0), 80.0, 1.0, 100)
+	assert_bool(telegraph._hitbox.active).is_false()

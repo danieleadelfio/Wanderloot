@@ -117,3 +117,33 @@ func test_window_size_does_not_depend_on_gear_in_any_language() -> void:
 		get_tree().paused = false
 		remove_child(hub)
 		await get_tree().process_frame
+
+
+## Bug (M13, #86): tornando nella piazza, la prima apertura dell'inventario (scheda Statistiche, tasto C)
+## mostrava una finestra alta e stretta o nessuna finestra (solo lo sfondo scurito). Il baule, mai
+## disposto finche' la finestra era nascosta, calcolava le label a capo automatico con larghezza zero
+## (altezza enorme) e la scala restava quella di quel primo frame. Ora la dimensione e' la stessa da
+## qualunque scheda si apra per prima e la finestra resta sempre dentro lo schermo.
+func test_first_open_on_the_stats_tab_has_the_same_size_as_the_inventory_tab() -> void:
+	_add_full_set()
+	var hub: Node2D = auto_free(load("res://scenes/hub/Hub/Hub.tscn").instantiate())
+	add_child(hub)
+	await get_tree().process_frame
+	hub._toggle_inventory(1)
+	await _settle()
+	var panel: Control = hub.get_node("%Panel")
+	var window: Control = hub.get_node("%InventoryWindow")
+	var stats_first := panel.get_combined_minimum_size()
+	var scale_first := window.scale
+	_assert_window_unchanged(hub, panel.size, window.scale, "prima apertura sulle Statistiche")
+	hub._toggle_inventory(0)
+	await _settle()
+	# Tolleranza di pochi pixel: una label a capo si assesta quando la scheda viene disposta davvero.
+	assert_float(absf(panel.get_combined_minimum_size().y - stats_first.y)).is_less(8.0)
+	assert_float(absf(window.scale.x - scale_first.x)).is_less(0.02)
+	_assert_window_unchanged(hub, panel.size, window.scale, "passaggio all'Inventario")
+	# Centro della finestra visibile = centro dello schermo.
+	var rect := panel.get_global_rect()
+	var screen := hub.get_viewport().get_visible_rect().size
+	assert_float(absf(rect.get_center().x - screen.x * 0.5)).is_less(2.0)
+	assert_float(absf(rect.get_center().y - screen.y * 0.5)).is_less(2.0)

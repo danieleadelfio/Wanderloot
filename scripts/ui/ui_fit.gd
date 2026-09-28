@@ -20,5 +20,7 @@ static func scale_factor(content: Vector2, available: Vector2) -> float:
 
 ## window: Control a schermo intero che centra panel; viewport_size: area visibile.
 static func fit(window: Control, panel: Control, viewport_size: Vector2, fraction: float) -> void:
-	window.pivot_offset = window.size * 0.5
+	# Centro dello schermo, non window.size * 0.5 (M13, #86): se per un frame il pannello e' piu' alto dello
+	# schermo il CenterContainer si allunga, e un pivot preso da li' spostava la finestra fuori schermo.
+	window.pivot_offset = viewport_size * 0.5
 	window.scale = Vector2.ONE * scale_factor(panel.get_combined_minimum_size(), viewport_size * fraction)

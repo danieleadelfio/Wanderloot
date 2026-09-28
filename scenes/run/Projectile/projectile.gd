@@ -95,31 +95,40 @@ func _set_enabled(enabled: bool) -> void:
 
 
 func _on_hit(hurtbox: Hurtbox) -> void:
-	# Perforazione: attraversa pierce nemici prima di sparire; i muri lo fermano sempre.
+	# Ordine (M13, #86): prima il Ricochet, poi la Perforazione. Il proiettile rimbalza finche' ha
+	# rimbalzi e un altro bersaglio vivo; esauriti i rimbalzi (o senza bersagli) attraversa fino a
+	# pierce nemici; poi sparisce. I muri lo fermano sempre (_on_body_entered).
+	if _try_ricochet(hurtbox):
+		return
 	if _pierce_left > 0:
 		_pierce_left -= 1
 		return
-	# Ricochet: dopo il primo bersaglio, si ridirige sul nemico/boss vivo piu' vicino (mai quello
-	# appena colpito), fino a ricochet_bounces volte; nessun altro in giro = sparisce come sempre.
-	if _bounces_left > 0 and targets.is_valid():
-		var hit_node := hurtbox.get_parent()
-		var nearest: Node2D = null
-		var nearest_distance := INF
-		for target: Node2D in targets.call():
-			if target == hit_node or not is_instance_valid(target):
-				continue
-			var distance := global_position.distance_squared_to(target.global_position)
-			if distance < nearest_distance:
-				nearest_distance = distance
-				nearest = target
-		if nearest:
-			_bounces_left -= 1
-			var direction := global_position.direction_to(nearest.global_position)
-			if direction != Vector2.ZERO:
-				_velocity = direction * _velocity.length()
-				rotation = direction.angle()
-			return
 	deactivate()
+
+
+## Si ridirige sul nemico/boss vivo piu' vicino (mai quello appena colpito), conservando la velocita'.
+## false = niente rimbalzi rimasti, nessuna lista di bersagli (pool dei nemici) o nessun altro bersaglio.
+func _try_ricochet(hurtbox: Hurtbox) -> bool:
+	if _bounces_left <= 0 or not targets.is_valid():
+		return false
+	var hit_node := hurtbox.get_parent() if hurtbox else null
+	var nearest: Node2D = null
+	var nearest_distance := INF
+	for target: Node2D in targets.call():
+		if target == hit_node or not is_instance_valid(target):
+			continue
+		var distance := global_position.distance_squared_to(target.global_position)
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest = target
+	if nearest == null:
+		return false
+	_bounces_left -= 1
+	var direction := global_position.direction_to(nearest.global_position)
+	if direction != Vector2.ZERO:
+		_velocity = direction * _velocity.length()
+		rotation = direction.angle()
+	return true
 
 
 func _on_body_entered(_body: Node2D) -> void:

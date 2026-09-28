@@ -81,3 +81,74 @@ func test_arcane_ring_projectiles_inherit_ricochet_from_current_weapon() -> void
 	for projectile in fired:
 		projectile._on_hit(hurtbox)
 		assert_bool(projectile._active).is_true()
+
+
+## Ordine (M13, #86): prima tutti i rimbalzi, poi la perforazione, poi sparisce.
+func test_ricochet_comes_before_pierce() -> void:
+	var hit_enemy := _target(Vector2(50.0, 0.0))
+	var other := _target(Vector2(0.0, 40.0))
+	var hurtbox := _hurtbox_on(hit_enemy)
+	var pool := _pool_with_targets(hit_enemy, other)
+	var weapon := WeaponData.new()
+	weapon.ricochet_bounces = 1
+	weapon.pierce = 1
+	pool.spawn(Vector2.ZERO, Vector2.RIGHT, weapon)
+	var projectile: Projectile = _active_projectiles(pool)[0]
+	projectile._on_hit(hurtbox)
+	assert_int(projectile._bounces_left).is_equal(0)
+	assert_int(projectile._pierce_left).is_equal(1)  # la perforazione non e' stata toccata dal rimbalzo
+	projectile._on_hit(hurtbox)
+	assert_bool(projectile._active).is_true()
+	assert_int(projectile._pierce_left).is_equal(0)
+	projectile._on_hit(hurtbox)
+	assert_bool(projectile._active).is_false()
+
+
+## Senza altri bersagli vivi il rimbalzo non si spreca: passa subito alla perforazione.
+func test_no_other_target_falls_back_to_pierce() -> void:
+	var hit_enemy := _target(Vector2(50.0, 0.0))
+	var hurtbox := _hurtbox_on(hit_enemy)
+	var pool: ProjectilePool = auto_free(ProjectilePool.new())
+	pool.projectile_scene = load("res://scenes/run/Projectile/Projectile.tscn")
+	add_child(pool)
+	pool.targets = func() -> Array[Node2D]: return [hit_enemy]
+	var weapon := WeaponData.new()
+	weapon.ricochet_bounces = 2
+	weapon.pierce = 1
+	pool.spawn(Vector2.ZERO, Vector2.RIGHT, weapon)
+	var projectile: Projectile = _active_projectiles(pool)[0]
+	projectile._on_hit(hurtbox)
+	assert_bool(projectile._active).is_true()
+	assert_int(projectile._bounces_left).is_equal(2)
+	assert_int(projectile._pierce_left).is_equal(0)
+
+
+## Anello arcano con i veri potenziamenti di run (Ricochet e Perforazione presi al level-up, non valori
+## scritti a mano): ogni proiettile dell'anello rimbalza e poi perfora come lo sparo base.
+func test_arcane_ring_bounces_then_pierces_with_real_upgrades() -> void:
+	var hit_enemy := _target(Vector2(50.0, 0.0))
+	var other := _target(Vector2(0.0, 40.0))
+	var hurtbox := _hurtbox_on(hit_enemy)
+	var pool := _pool_with_targets(hit_enemy, other)
+	var player: Player = auto_free(load("res://scenes/run/Player/Player.tscn").instantiate())
+	add_child(player)
+	player.apply_upgrade(load("res://data/upgrades/ricochet_up.tres"))
+	player.apply_upgrade(load("res://data/upgrades/pierce_up.tres"))
+	var wand: WandAbilities = auto_free(WandAbilities.new())
+	add_child(wand)
+	wand.setup(player, pool, pool.targets)
+	wand.spawn_ring(6, 1.0)
+	var fired := _active_projectiles(pool)
+	assert_int(fired.size()).is_equal(6)
+	for projectile in fired:
+		assert_int(projectile._bounces_left).is_equal(1)
+		assert_int(projectile._pierce_left).is_equal(1)
+		projectile._on_hit(hurtbox)  # rimbalzo
+		projectile._on_hit(hurtbox)  # perforazione
+		assert_bool(projectile._active).is_true()
+		projectile._on_hit(hurtbox)
+		assert_bool(projectile._active).is_false()
+
+
+func test_ricochet_can_be_picked_at_most_four_times() -> void:
+	assert_int((load("res://data/upgrades/ricochet_up.tres") as UpgradeData).max_picks).is_equal(4)

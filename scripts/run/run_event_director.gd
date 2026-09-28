@@ -62,11 +62,12 @@ func _ready() -> void:
 		strike.finished.connect(_on_strike_finished)
 		add_child(strike)
 		_strikes.append(strike)
+	# Niente top_level (M13, #86): in Godot 4 un top_level si disegna sopra tutto il resto, e il player
+	# finiva sotto pentagramma, candele e statua. Il direttore sta all'origine (trasformazione identita')
+	# ed e' prima del player nell'albero dell'arena: pentagramma e statua sono oggetti a terra.
 	_pentagram = PENTAGRAM.instantiate()
-	_pentagram.top_level = true
 	add_child(_pentagram)
 	_statue = PENTAGRAM_STATUE.instantiate()
-	_statue.top_level = true
 	_statue.interacted.connect(_on_statue_interacted)
 	add_child(_statue)
 	_skeleton_target = Node2D.new()

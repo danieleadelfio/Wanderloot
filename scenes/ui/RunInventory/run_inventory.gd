@@ -29,6 +29,7 @@ func _ready() -> void:
 	_tabs.set_tab_title(0, tr("TAB_INVENTORY"))
 	_tabs.set_tab_title(1, tr("TAB_STATS"))
 	get_viewport().size_changed.connect(_fit_to_viewport)
+	_panel.minimum_size_changed.connect(_fit_to_viewport, CONNECT_DEFERRED)
 
 
 func close() -> void:

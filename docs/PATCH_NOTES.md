@@ -153,3 +153,18 @@ Note in linguaggio semplice per i beta tester. Ogni versione elenca solo cosa ca
 
 ### Novità
 - Nuova veste grafica di tutta l'interfaccia: cornici dorate in stile gotico per finestre, HUD, inventario, bottoni e scelte di level-up, nuovi caratteri per titoli e testi.
+
+## In lavorazione (17) — 28/09/2026
+
+### Correzioni
+- Inventario nella piazza: la prima apertura dopo una run (o al primo avvio sulla scheda Statistiche) mostrava una finestra alta e stretta o solo lo sfondo sfocato. Ora ha sempre la dimensione giusta.
+- Balzi della Regina dei Ghoul e del Colosso d'ossa: l'atterraggio non colpisce più fuori dal cerchio rosso.
+- Portale: cambiando arena tra Ossario e Cripta ora si vede subito il livello giusto, non il livello 1.
+- Pentagramma, candele e statua del demone ora stanno sotto il personaggio e i nemici.
+
+### Bilanciamento
+- Ricochet ora rimbalza prima e perfora dopo (era il contrario). Si può scegliere al massimo 4 volte.
+- Anche i proiettili dell'Anello arcano rimbalzano con Ricochet e attraversano con Perforazione.
+
+### Novità
+- Tour della piazza: nuovo passo che spiega a cosa serve l'Ascensione.

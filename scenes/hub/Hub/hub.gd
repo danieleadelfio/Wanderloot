@@ -75,6 +75,9 @@ func _ready() -> void:
 	_pause_menu.load_requested.connect(GameSession.load_saved.bind(get_tree()))
 	_pause_menu.menu_requested.connect(GameSession.quit_to_menu.bind(get_tree()))
 	get_viewport().size_changed.connect(_fit_inventory_to_viewport)
+	# Anche quando il contenuto cambia misura a finestra aperta (M13, #86): prima la scala restava quella
+	# calcolata al primo frame, gonfia, e al primo avvio la finestra finiva fuori schermo o minuscola.
+	_inventory_panel.minimum_size_changed.connect(_fit_inventory_after_frame)
 	_refresh()
 	_restore_saved_position()
 	if MetaProgression.take_pending_autosave_notice():
@@ -111,6 +114,13 @@ func _start_hub_tutorial() -> void:
 			"body": tr(spot.tutorial_description),
 			"position": spot.global_position,
 		})
+		# Subito dopo il fabbro: a cosa serve l'Ascensione delle abilita' (M13, #86).
+		if spot.window and spot.window.is_ancestor_of(_blacksmith):
+			steps.append({
+				"title": tr("TUTORIAL_HUB_ASCENSION_TITLE"),
+				"body": tr("TUTORIAL_HUB_ASCENSION_BODY"),
+				"position": spot.global_position,
+			})
 	steps.append({
 		"title": tr("TUTORIAL_HUB_END_TITLE"),
 		"body": tr("TUTORIAL_HUB_END_BODY"),
@@ -243,7 +253,7 @@ func _open(window: Control) -> void:
 	# Livello arena (§6.3b, M12 #86): ricalcolato qui (non solo nel refresh reattivo) cosi' l'hint
 	# "prima volta" si segna visto solo quando il pannello e' davvero visibile, non in background.
 	if window == _portal_window:
-		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, ArenaLevel.level_for(MetaProgression.loadout.equipped_items()))
+		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, _arena_level())
 	elif window == _inventory_window:
 		_fit_inventory_after_frame()
 	_dim.show()
@@ -286,7 +296,7 @@ func _refresh() -> void:
 	_refresh_stash(MetaProgression.inventory.to_dictionary())
 	_blacksmith.refresh(MetaProgression.inventory, MetaProgression.loadout, _material_names, MetaProgression.ascension_caps)
 	_loadout_panel.refresh(MetaProgression.loadout)
-	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, ArenaLevel.level_for(MetaProgression.loadout.equipped_items()))
+	_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, _arena_level())
 	# Statistiche con l'equipaggiamento attuale: lo stesso calcolo di inizio run, sul player della piazza.
 	var equip_modifiers := MetaProgression.equipped_modifiers()
 	_player.begin_run(equip_modifiers)
@@ -359,12 +369,19 @@ func _on_ascend_requested(id: StringName) -> void:
 		_sfx.play(&"craft")
 
 
+## Livello arena dalla potenza dell'equip indossato (§6.3b): unico punto di calcolo per il pannello Portale.
+func _arena_level() -> int:
+	return ArenaLevel.level_for(MetaProgression.loadout.equipped_items())
+
+
 ## Ricostruisce il pannello con la nuova scelta evidenziata (M12, #86): senza, il testo/evidenziazione
 ## di ARENA_SELECTED restava sull'arena di refresh() iniziale finche' l'hub non veniva ricreato.
 func _on_arena_selected(id: StringName) -> void:
 	if MetaProgression.select_arena(id):
 		_sfx.play(&"ui_select")
-		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id)
+		# Anche il livello arena (M13, #86): senza, dopo aver cambiato arena il pannello mostrava Livello 1
+		# (valore di default del parametro) finche' non lo si riapriva.
+		_arena_select.refresh(MetaProgression.arena_catalog, MetaProgression.extractions, MetaProgression.current_arena().id, _arena_level())
 
 
 ## Posizione aggiornata prima di entrare in run (M12, #86): senza, l'autosave a fine run
