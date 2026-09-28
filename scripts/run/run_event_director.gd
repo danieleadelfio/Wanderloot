@@ -50,6 +50,9 @@ var _rng := RandomNumberGenerator.new()
 ## scheletri attivi, ripuliti a fine evento (successo o fallimento).
 var _skeleton_target: Node2D
 var _skeletons: Array[Enemy] = []
+## Boss pre-overtime vivi (M13, #86): il conto alla rovescia verso il prossimo evento (tempi fissi ed
+## evento accodato) resta fermo, come l'overtime; un evento gia' in corso finisce normalmente.
+var held: bool = false
 
 
 func _ready() -> void:
@@ -135,7 +138,7 @@ func _physics_process(delta: float) -> void:
 			RunEventData.Kind.SKELETONS_CLOSET:
 				_tick_timed(delta)
 		return
-	if events.is_empty():
+	if events.is_empty() or held:
 		return
 	_elapsed += delta
 	if _queued_left >= 0.0:

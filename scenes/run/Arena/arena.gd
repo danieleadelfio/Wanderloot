@@ -558,6 +558,8 @@ func _open_extraction() -> void:
 		_boss_timer.start(arena.boss_delay)
 	_refresh_overtime_bosses()
 	overtime.start(arena.overtime)
+	# Avviso "overtime tra 30 s" alla morte del boss pre-overtime, non insieme alla sua comparsa (M13, #86).
+	overtime.defer_warnings = arena.has_boss() and arena.overtime != null and arena.boss_delay < arena.overtime.start_after
 
 
 func _physics_process(delta: float) -> void:
@@ -614,8 +616,22 @@ func _spawn_boss() -> void:
 ## stessi secondi di prima (il boss arriva a 30 s dall'overtime) per estrarre invece di finire in
 ## overtime durante la lotta. Da overtime x1 in poi non blocca piu' nulla.
 func _apply_pre_overtime_boss_rule() -> void:
+	var was_held := overtime.held
 	_wave_spawner.update_boss_block(bosses.size(), overtime.level)
 	overtime.hold_for_bosses(bosses.size())
+	# Anche il conto alla rovescia degli eventi resta fermo (M13, #86); riparte alla morte del boss.
+	_events.held = overtime.held
+	if overtime.held and not was_held:
+		_announce_boss_hold()
+
+
+## Boss pre-overtime appena comparso (M13, #86): scritta "Boss in arrivo"; la prima volta in assoluto
+## una spiegazione in pausa (niente nuovi nemici, overtime ed eventi fermi, i nemici gia' in campo restano).
+func _announce_boss_hold() -> void:
+	if not MetaProgression.has_seen_tutorial(&"first_boss_hold"):
+		_show_first_time_notice(&"first_boss_hold", tr("TUTORIAL_BOSS_HOLD_TITLE"), tr("TUTORIAL_BOSS_HOLD_BODY"))
+	else:
+		_hud.announce(tr("BOSS_INCOMING_TITLE"), tr("BOSS_INCOMING_SUB"))
 
 
 func _spawn_bosses(count: int) -> void:

@@ -19,6 +19,11 @@ var _boss_left: float = 0.0
 ## Conto alla rovescia verso l'overtime x1 fermo (M13, #86): boss pre-overtime vivi. Solo prima del
 ## livello 1: una volta in overtime il tempo non si ferma piu'.
 var held: bool = false
+## Avvisi rimandati alla morte del boss pre-overtime (M13, #86): il boss arriva proprio a 30 s
+## dall'overtime, e l'avviso "overtime tra 30 s" usciva insieme al boss. Con questo acceso, prima del
+## livello 1 nessun avviso: il primo esce alla morte dell'ultimo boss (vedi hold_for_bosses()).
+## Lo accende la composition root dopo start(), solo se l'arena ha un boss.
+var defer_warnings: bool = false
 
 
 func start(overtime: OvertimeData) -> void:
@@ -27,6 +32,7 @@ func start(overtime: OvertimeData) -> void:
 	elapsed = 0.0
 	_warned.clear()
 	held = false
+	defer_warnings = false
 	_running = data != null
 
 
@@ -47,11 +53,12 @@ func tick(delta: float) -> void:
 		return
 	elapsed += delta
 	var left := time_to_next_level()
-	for seconds in data.warnings:
-		var key := "%d/%d" % [level + 1, roundi(seconds)]
-		if left <= seconds and left > 0.0 and not _warned.has(key):
-			_warned[key] = true
-			warned.emit(roundi(seconds), level + 1)
+	if not (defer_warnings and level == 0):
+		for seconds in data.warnings:
+			var key := "%d/%d" % [level + 1, roundi(seconds)]
+			if left <= seconds and left > 0.0 and not _warned.has(key):
+				_warned[key] = true
+				warned.emit(roundi(seconds), level + 1)
 	if left <= 0.0:
 		level += 1
 		_boss_left = 0.0
@@ -65,9 +72,29 @@ func tick(delta: float) -> void:
 
 
 ## Boss pre-overtime vivi: ferma il conto alla rovescia del livello 1 finche' non muore l'ultimo. Dal
-## livello 1 in poi non ha effetto (overtime gia' iniziato).
+## livello 1 in poi non ha effetto (overtime gia' iniziato). Alla morte dell'ultimo boss (fermo -> non
+## fermo) esce subito l'avviso delle soglie gia' passate e non ancora annunciate (M13, #86).
 func hold_for_bosses(alive_bosses: int) -> void:
+	var was_held := held
 	held = level == 0 and alive_bosses > 0
+	if was_held and not held and level == 0:
+		defer_warnings = false
+		_announce_passed_warnings()
+
+
+## Un solo avviso per le soglie gia' superate e non ancora annunciate: coi secondi reali rimasti.
+func _announce_passed_warnings() -> void:
+	if data == null or not _running:
+		return
+	var left := time_to_next_level()
+	var pending := false
+	for seconds in data.warnings:
+		var key := "%d/%d" % [level + 1, roundi(seconds)]
+		if left <= seconds and not _warned.has(key):
+			_warned[key] = true
+			pending = true
+	if pending and left > 0.0:
+		warned.emit(roundi(left), level + 1)
 
 
 func speed_multiplier() -> float:

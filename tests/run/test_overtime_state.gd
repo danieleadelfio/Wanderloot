@@ -145,3 +145,35 @@ func test_start_clears_a_previous_hold() -> void:
 	_state.hold_for_bosses(1)
 	_state.start(DATA)
 	assert_bool(_state.held).is_false()
+
+
+## Boss pre-overtime (M13, #86): con gli avvisi rimandati, "overtime tra 30 s" esce alla morte del
+## boss e non insieme alla sua comparsa; il "10 s" resta normale.
+func test_deferred_warning_comes_when_the_boss_dies() -> void:
+	_state.defer_warnings = true
+	_run(20.0)
+	_state.hold_for_bosses(1)
+	_run(60.0)
+	assert_array(_warnings).is_empty()
+	_state.hold_for_bosses(0)
+	assert_array(_warnings).is_equal([[30, 1]])
+	_run(20.1)
+	assert_array(_warnings).is_equal([[30, 1], [10, 1]])
+
+
+## Il boss nasce di nuovo (o un secondo boss) senza morire: nessun avviso doppio.
+func test_deferred_warning_is_not_repeated() -> void:
+	_state.defer_warnings = true
+	_run(20.0)
+	_state.hold_for_bosses(1)
+	_state.hold_for_bosses(2)
+	_state.hold_for_bosses(0)
+	_state.hold_for_bosses(1)
+	_state.hold_for_bosses(0)
+	assert_array(_warnings).is_equal([[30, 1]])
+
+
+func test_start_clears_deferred_warnings() -> void:
+	_state.defer_warnings = true
+	_state.start(DATA)
+	assert_bool(_state.defer_warnings).is_false()
