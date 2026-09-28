@@ -5,7 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/it/1.1.0/). Ogni voce va 
 ## [Unreleased]
 
 ### Added
-- Numero di release in basso a sinistra in menu, piazza e arena (`VersionLabel`, `application/config/version` = 1.0.6); plugin editor `addons/release_version` che a ogni export lo alza di uno prima di impacchettare (1.0.6 → 1.0.7, 1.0.9 → 1.1.0), una volta sola per "Esporta tutto"; `ReleaseVersion` testato, verificato con `--export-pack" che il pck contiene gia' il numero nuovo (#86).
+- Numero di release in basso a sinistra in menu, piazza e arena (`VersionLabel`, `application/config/version` = 1.0.6); plugin editor `addons/release_version` che a ogni export lo alza di uno prima di impacchettare (1.0.6 → 1.0.7, 1.0.9 → 1.1.0), una volta sola per "Esporta tutto"; `ReleaseVersion` testato, verificato con `--export-pack` che il pck contiene gia' il numero nuovo (#86).
 - Scossa dello schermo quando il player viene colpito (`ScreenShake` sulla Camera2D dell'arena, collegato a `Player.hit_taken` = `Hurtbox.hurt`); non scatta per veleno/danni nel tempo ne' per colpi assorbiti dalla barriera (#86).
 - Boss pre-overtime: scritta "BOSS IN ARRIVO" alla comparsa, con spiegazione in pausa la prima volta (tutorial `first_boss_hold`); mentre e' vivo si ferma anche il conto alla rovescia del prossimo evento (`RunEventDirector.held`, prima non si fermava); l'avviso "overtime tra 30 s" esce alla morte del boss invece che insieme alla comparsa (`OvertimeState.defer_warnings`, testato); Codex dell'overtime aggiornato (#86).
 - Indicatore dei boss fuori schermo: freccia rossa a bordo schermo con teschio dagli occhi rossi verso ogni boss vivo fuori vista (`BossIndicator`, nuova icona `icon_boss_skull` in `tools/sprites.py`) (#86).
